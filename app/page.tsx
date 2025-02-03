@@ -1,7 +1,15 @@
+import { Features } from "@/components/landing/Features";
+import { Hero } from "@/components/landing/Hero";
+import { Sponsors } from "@/components/landing/Sponsors";
+import { WorkshopCards } from "@/components/landing/WorkshopCard";
+
 export default function Home() {
   return (
     <>
-      <h1>Techno Bharati</h1>
+      <Hero />
+      <WorkshopCards />
+      <Sponsors />
+      <Features />
     </>
   );
 }
