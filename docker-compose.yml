@@ -1,6 +1,6 @@
 version: "1.0"
 services:
-  webextract-db:
+  techno-db:
     image: postgres
     restart: always
     container_name: techno-db
