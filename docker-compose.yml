@@ -1,0 +1,16 @@
+version: "1.0"
+services:
+  webextract-db:
+    image: postgres
+    restart: always
+    container_name: techno-db
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=techno
+      - PGDATA=/data/postgres-techno
+    volumes:
+      - postgres-techno:/data/postgres-techno
+
+volumes:
+  postgres-techno:
