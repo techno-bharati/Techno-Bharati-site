@@ -21,62 +21,50 @@ export async function createRegistration(
       amount: getEventAmount(formData.events),
     };
 
-    let eventSpecificData = {};
-
-    switch (formData.events) {
-      case "Face To Face":
-      case "Python Worriors":
-      case "AI Tales":
-        eventSpecificData = {
-          studentName: formData.studentName,
-          contactNumber: formData.contactNumber,
-          email: formData.email,
-        };
-        break;
-
-      case "Startup Sphere":
-        eventSpecificData = {
-          startupCategory: formData.startupCategory,
-          numberOfTeamMembers: formData.numberOfTeamMembers,
-          teamName: formData.teamName,
-          teamLeader: {
-            create: {
-              studentName: formData.teamLeader.studentName,
-              contactNumber: formData.teamLeader.contactNumber,
-              email: formData.teamLeader.email,
-            },
-          },
-          ...(formData.teamMembers && {
-            teamMembers: {
-              create: formData.teamMembers.map((member) => ({
-                studentName: member.studentName!,
-                contactNumber: member.contactNumber!,
-                email: member.email!,
-              })),
-            },
-          }),
-        };
-        break;
-
-      case "FireFire Battleship":
-        eventSpecificData = {
-          squadName: formData.squadName,
-          players: {
-            create: formData.players!.map((player) => ({
-              playerName: player.playerName,
-              freeFireId: player.freeFireId,
-              contactNumber: player.contactNumber,
-            })),
-          },
-        };
-        break;
-    }
-
+    // Create registration based on event type
     const registration = await prisma.registration.create({
-      data: {
-        ...baseData,
-        ...eventSpecificData,
-      },
+      data:
+        formData.events === "Startup Sphere"
+          ? {
+              ...baseData,
+              startupCategory: formData.startupCategory,
+              numberOfTeamMembers: formData.numberOfTeamMembers,
+              teamName: formData.teamName,
+              teamLeader: {
+                create: {
+                  studentName: formData.teamLeader.studentName,
+                  contactNumber: formData.teamLeader.contactNumber,
+                  email: formData.teamLeader.email,
+                },
+              },
+              ...(formData.teamMembers && {
+                teamMembers: {
+                  create: formData.teamMembers.map((member) => ({
+                    studentName: member.studentName!,
+                    contactNumber: member.contactNumber!,
+                    email: member.email!,
+                  })),
+                },
+              }),
+            }
+          : formData.events === "FireFire Battleship"
+          ? {
+              ...baseData,
+              squadName: formData.squadName,
+              players: {
+                create: formData.players!.map((player) => ({
+                  playerName: player.playerName,
+                  freeFireId: player.freeFireId,
+                  contactNumber: player.contactNumber,
+                })),
+              },
+            }
+          : {
+              ...baseData,
+              studentName: formData.studentName,
+              contactNumber: formData.contactNumber,
+              email: formData.email,
+            },
     });
 
     return { success: true, data: registration };
