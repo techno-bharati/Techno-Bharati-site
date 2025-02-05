@@ -32,21 +32,11 @@ const RegistrationForm = () => {
     defaultValues: {
       collegeName: "",
       events: undefined,
+      payss: undefined,
     },
   });
 
   const onSubmit = (data: z.infer<typeof userRegistrationFormSchema>) => {
-    if (data.events === "Startup Sphere") {
-      if (!data.teamLeader || !data.teamMembers) {
-        console.error("Team leader and team members are required");
-        return;
-      }
-    } else if (data.events === "FireFire Battleship") {
-      if (!data.players || data.players.length !== 4) {
-        console.error("Exactly 4 players are required for FireFire Battleship");
-        return;
-      }
-    }
     console.log("Form Data:", data);
   };
 
@@ -55,6 +45,17 @@ const RegistrationForm = () => {
   };
 
   const selectedEvent = form.watch("events");
+
+  // Helper function to convert string to number
+  const handleNumberInput = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    onChange: (...event: any[]) => void
+  ) => {
+    const value = parseInt(e.target.value, 10);
+    if (!isNaN(value) && value >= 1 && value <= 4) {
+      onChange(value);
+    }
+  };
 
   return (
     <Form {...form}>
@@ -82,7 +83,7 @@ const RegistrationForm = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Select Event</FormLabel>
-              <Select onValueChange={field.onChange} value={field.value || ""}>
+              <Select onValueChange={field.onChange} value={field.value}>
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Choose an event" />
@@ -105,6 +106,7 @@ const RegistrationForm = () => {
           )}
         />
 
+        {/* Face To Face, Python Warriors, and AI Tales Form */}
         {(selectedEvent === "Face To Face" ||
           selectedEvent === "Python Worriors" ||
           selectedEvent === "AI Tales") && (
@@ -151,167 +153,7 @@ const RegistrationForm = () => {
           </>
         )}
 
-        {selectedEvent === "Startup Sphere" && (
-          <>
-            <FormField
-              control={form.control}
-              name="numberOfTeamMembers"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Number of Team Members</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      placeholder="Enter number of team members"
-                      {...field}
-                      onChange={(e) => {
-                        const value = parseInt(e.target.value, 10);
-                        if (value >= 1 && value <= 4) {
-                          field.onChange(value);
-                        }
-                      }}
-                    />
-                  </FormControl>
-                  <FormDescription>
-                    Maximum of 4 team members allowed (including team leader)
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            {(form.watch("numberOfTeamMembers") || 0) > 0 && (
-              <>
-                <FormField
-                  control={form.control}
-                  name="teamLeader.studentName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Team Leader Name</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Enter team leader name"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="teamLeader.contactNumber"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Team Leader Contact Number</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Enter team leader contact number"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="teamLeader.email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Team Leader Email</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Enter team leader email"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                {Array.from({
-                  length: Math.max(
-                    (form.watch("numberOfTeamMembers") || 0) - 1,
-                    0
-                  ),
-                }).map((_, index) => (
-                  <div key={index}>
-                    <FormField
-                      control={form.control}
-                      name={`teamMembers.${index}.studentName`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Team Member {index + 1} Name</FormLabel>
-                          <FormControl>
-                            <Input
-                              placeholder={`Enter team member ${
-                                index + 1
-                              } name`}
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name={`teamMembers.${index}.contactNumber`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>
-                            Team Member {index + 1} Contact Number
-                          </FormLabel>
-                          <FormControl>
-                            <Input
-                              placeholder={`Enter team member ${
-                                index + 1
-                              } contact number`}
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name={`teamMembers.${index}.email`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Team Member {index + 1} Email</FormLabel>
-                          <FormControl>
-                            <Input
-                              placeholder={`Enter team member ${
-                                index + 1
-                              } email`}
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                ))}
-                <FormField
-                  control={form.control}
-                  name="teamName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Team Name</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Enter team name" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </>
-            )}
-          </>
-        )}
-
+        {/* FireFire Battleship Form */}
         {selectedEvent === "FireFire Battleship" && (
           <>
             <FormField
@@ -327,67 +169,241 @@ const RegistrationForm = () => {
                 </FormItem>
               )}
             />
-            {Array.from({ length: 4 }).map((_, index) => (
-              <div key={index}>
-                <FormField
-                  control={form.control}
-                  name={`players.${index}.playerName`}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Player {index + 1} Name</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder={`Enter player ${index + 1} name`}
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name={`players.${index}.freeFireId`}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Player {index + 1} Free Fire ID</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder={`Enter player ${index + 1} Free Fire ID`}
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name={`players.${index}.contactNumber`}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Player {index + 1} Contact Number</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder={`Enter player ${
-                            index + 1
-                          } contact number`}
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+            <div className="space-y-6">
+              <h3 className="font-semibold">Squad Players</h3>
+              {Array.from({ length: 4 }).map((_, index) => (
+                <div key={index} className="space-y-4 p-4 border rounded-lg">
+                  <h4 className="font-medium">Player {index + 1}</h4>
+                  <FormField
+                    control={form.control}
+                    name={`players.${index}.playerName`}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Name</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Enter player name" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name={`players.${index}.freeFireId`}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Free Fire ID</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Enter Free Fire ID" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name={`players.${index}.contactNumber`}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Contact Number</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Enter contact number"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+
+        {selectedEvent === "Startup Sphere" && (
+          <>
+            <FormField
+              control={form.control}
+              name="startupCategory"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Select Category</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Category" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="Idea Presentation">
+                        Idea Presentation
+                      </SelectItem>
+                      <SelectItem value="Project Exibition">
+                        Project Exhibition
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="numberOfTeamMembers"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Number of Team Members</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      min={1}
+                      max={4}
+                      placeholder="Enter number of team members"
+                      onChange={(e) => handleNumberInput(e, field.onChange)}
+                      value={field.value || ""}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Maximum of 4 team members allowed
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="teamName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Team Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter team name" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <div className="space-y-4">
+              <h3 className="font-semibold">Team Leader Details</h3>
+              <FormField
+                control={form.control}
+                name="teamLeader.studentName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Team Leader Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter team leader name" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="teamLeader.contactNumber"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Team Leader Contact Number</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter contact number" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="teamLeader.email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Team Leader Email</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="email"
+                        placeholder="Enter email"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            {form.watch("numberOfTeamMembers") > 1 && (
+              <div className="space-y-6">
+                <h3 className="font-semibold">Team Members</h3>
+                {Array.from({
+                  length: form.watch("numberOfTeamMembers") - 1,
+                }).map((_, index) => (
+                  <div key={index} className="space-y-4 p-4 border rounded-lg">
+                    <h4>Team Member {index + 1}</h4>
+                    <FormField
+                      control={form.control}
+                      name={`teamMembers.${index}.studentName`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Name</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Enter name" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name={`teamMembers.${index}.contactNumber`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Contact Number</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="Enter contact number"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name={`teamMembers.${index}.email`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Email</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="email"
+                              placeholder="Enter email"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                ))}
               </div>
-            ))}
+            )}
           </>
         )}
 
         <FormField
           control={form.control}
           name="payss"
-          render={({ field: { onChange } }) => (
+          render={({ field: { onChange, value, ...field } }) => (
             <FormItem>
               <FormLabel>Upload Payment Screenshot</FormLabel>
               <FormControl>
@@ -401,6 +417,8 @@ const RegistrationForm = () => {
                       onChange(file);
                     }
                   }}
+                  {...field}
+                  value={undefined}
                 />
               </FormControl>
               <FormDescription>
