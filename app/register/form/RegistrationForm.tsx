@@ -23,6 +23,9 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { createRegistration } from "@/app/actions/registration";
+import { toast } from "sonner";
 
 const RegistrationForm = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -36,8 +39,35 @@ const RegistrationForm = () => {
     },
   });
 
-  const onSubmit = (data: z.infer<typeof userRegistrationFormSchema>) => {
-    console.log("Form Data:", data);
+  const { mutate, isPending } = useMutation({
+    mutationFn: createRegistration,
+    onSuccess: (data) => {
+      if (data.success) {
+        toast.success("Registration successful!");
+        form.reset();
+      } else {
+        toast.error(data.error || "Something went wrong");
+      }
+    },
+    onError: (error) => {
+      toast.error("Failed to submit registration");
+      console.error(error);
+    },
+  });
+
+  const onSubmit = async (data: z.infer<typeof userRegistrationFormSchema>) => {
+    try {
+      if (!data.payss) {
+        toast.error("Please upload a payment screenshot");
+        return;
+      }
+      toast.loading("Submitting..");
+      mutate(data);
+      toast.dismiss();
+    } catch (error) {
+      console.error("Submission error:", error);
+      toast.error("Failed to submit form");
+    }
   };
 
   const onError = (errors: any) => {
@@ -46,7 +76,6 @@ const RegistrationForm = () => {
 
   const selectedEvent = form.watch("events");
 
-  // Helper function to convert string to number
   const handleNumberInput = (
     e: React.ChangeEvent<HTMLInputElement>,
     onChange: (...event: any[]) => void
@@ -432,8 +461,8 @@ const RegistrationForm = () => {
           )}
         />
 
-        <Button type="submit" className="w-full">
-          Submit
+        <Button type="submit" className="w-full" disabled={isPending}>
+          {isPending ? "Submitting..." : "Submit"}
         </Button>
       </form>
     </Form>
