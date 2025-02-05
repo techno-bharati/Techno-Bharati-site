@@ -1,6 +1,6 @@
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
 
@@ -92,12 +92,10 @@ model Registration {
   amount            Float              @default(0)
   registrationDate  DateTime           @default(now())
 
-  // Individual registrtion fields (Face To Face, Python Warriors, AI Tales)
   studentName   String?
   contactNumber String?
   email         String?
 
-  //Startup Sphere Fields
   startupCategory     String?
   numberOfTeamMembers Int?
   teamName            String?
@@ -105,19 +103,17 @@ model Registration {
   teamLeaderId        String?      @unique
   teamMembers         TeamMember[] @relation("TeamMembers")
 
-  // FireFire Battleship Fields
   squadName String?
   players   Player[]
 
-  // Relations
+  // relations
   user   User?   @relation(fields: [userId], references: [id])
   userId String?
 
-  // Audit fields
   verifiedBy   User?     @relation("VerifiedRegistrations", fields: [verifiedById], references: [id])
   verifiedById String?
   verifiedAt   DateTime?
-  notes        String? // For admin notes/comments
+  notes        String?
 
   @@index([eventType])
   @@index([status])
@@ -126,6 +122,7 @@ model Registration {
   @@index([userId])
 }
 
+// only create these records for team-based events
 model TeamMember {
   id            String   @id @default(cuid())
   studentName   String
@@ -133,7 +130,6 @@ model TeamMember {
   email         String
   createdAt     DateTime @default(now())
 
-  // Relations
   registrationAsLeader Registration? @relation("TeamLeader")
   registrationAsMember Registration? @relation("TeamMembers", fields: [registrationId], references: [id])
   registrationId       String?
@@ -141,6 +137,7 @@ model TeamMember {
   @@index([registrationId])
 }
 
+// create these records only for FireFire Battleship
 model Player {
   id            String   @id @default(cuid())
   playerName    String
@@ -148,7 +145,6 @@ model Player {
   contactNumber String
   createdAt     DateTime @default(now())
 
-  // Relation
   registration   Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
   registrationId String
 
