@@ -94,7 +94,7 @@ export const events = [
       ],
       queries: {
         "shahid shaikh": "8484877820",
-        "siddhi salgaonkar": "7744864910",
+        "kaif nadaf": "7774073477",
       },
     },
   },
@@ -191,7 +191,7 @@ export const events = [
         "Late registrations will not be entertained after the cutoff time.",
       ],
       queries: {
-        "sawali babar": "9579303132",
+        "anurag patole": "7058503010",
         "prajwal gujare": "7276298205",
       },
     },
