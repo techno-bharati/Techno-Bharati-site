@@ -1,51 +1,82 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
-const Countdown = () => {
-  const targetDate = new Date('2025-02-28T00:00:00'); // Target date
-  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+interface TimeLeft {
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+}
 
-  const calculateTimeLeft = () => {
-    const now = new Date();
-    const difference = targetDate.getTime() - now.getTime();
-    
-    if (difference > 0) {
-      const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-      setTimeLeft({ days, hours, minutes, seconds });
-    } else {
-      setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-    }
-  };
+export default function Countdown() {
+  const [timeLeft, setTimeLeft] = useState<TimeLeft>({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
 
   useEffect(() => {
+    const targetDate = new Date("2025-02-28T00:00:00");
+
+    const calculateTimeLeft = () => {
+      const difference = +targetDate - +new Date();
+
+      if (difference > 0) {
+        setTimeLeft({
+          days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+          hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+          minutes: Math.floor((difference / 1000 / 60) % 60),
+          seconds: Math.floor((difference / 1000) % 60),
+        });
+      }
+    };
+
+    calculateTimeLeft();
     const timer = setInterval(calculateTimeLeft, 1000);
+
     return () => clearInterval(timer);
   }, []);
 
+  const timeBlocks = [
+    { label: "Days", value: timeLeft.days },
+    { label: "Hours", value: timeLeft.hours },
+    { label: "Minutes", value: timeLeft.minutes },
+    { label: "Seconds", value: timeLeft.seconds },
+  ];
+
   return (
-    <div className="flex justify-center space-x-4">
-      <div className="bg-primary p-4 rounded-lg text-white text-center">
-        <h2 className="text-4xl font-bold">{timeLeft.days}</h2>
-        <p>Days</p>
-      </div>
-      <div className="bg-primary p-4 rounded-lg text-white text-center">
-        <h2 className="text-4xl font-bold">{timeLeft.hours}</h2>
-        <p>Hours</p>
-      </div>
-      <div className="bg-primary p-4 rounded-lg text-white text-center">
-        <h2 className="text-4xl font-bold">{timeLeft.minutes}</h2>
-        <p>Minutes</p>
-      </div>
-      <div className="bg-primary p-4 rounded-lg text-white text-center">
-        <h2 className="text-4xl font-bold">{timeLeft.seconds}</h2>
-        <p>Seconds</p>
-      </div>
+    <div className="flex justify-center gap-4 sm:gap-8">
+      {timeBlocks.map(({ label, value }) => (
+        <motion.div
+          key={label}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex flex-col items-center"
+        >
+          <div className="relative">
+            <div className="w-16 sm:w-24 h-16 sm:h-24 bg-white/5 backdrop-blur-sm rounded-lg border border-white/10 flex items-center justify-center">
+              <motion.span
+                key={value}
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                className="font-mono text-2xl sm:text-4xl font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent"
+              >
+                {value.toString().padStart(2, "0")}
+              </motion.span>
+            </div>
+            <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-full">
+              <div className="h-1 w-12 sm:w-16 mx-auto rounded-full bg-gradient-to-r from-emerald-400/50 to-cyan-400/50" />
+            </div>
+          </div>
+          <span className="text-xs sm:text-sm text-gray-400 mt-4 uppercase tracking-wider">
+            {label}
+          </span>
+        </motion.div>
+      ))}
     </div>
   );
-};
-
-export default Countdown;
+}

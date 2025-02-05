@@ -1,8 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
-import React from "react";
+import { motion, useAnimationControls } from "framer-motion";
+import React, { useEffect } from "react";
 
 const events = [
   {
@@ -28,29 +28,44 @@ const events = [
 ];
 
 export function WorkshopCards() {
+  const controls = useAnimationControls();
+
+  useEffect(() => {
+    const startAnimation = async () => {
+      await controls.start({
+        x: "-50%",
+        transition: { duration: 20, ease: "linear" },
+      });
+      controls.set({ x: "0%" });
+      startAnimation();
+    };
+
+    startAnimation();
+
+    return () => {
+      controls.stop();
+    };
+  }, [controls]);
+
   return (
-    <section className="relative py-20 px-4 overflow-hidden">
-      <div className="container mx-auto relative">
-        <h2 className="text-3xl font-bold text-center mb-12">
-          Featured Events
-        </h2>
+    <section className="relative py-12">
+      <div className="container mx-auto">
+        <h2 className="text-3xl font-bold text-center mb-8">Featured Events</h2>
 
         <div className="relative w-full overflow-hidden">
-          <motion.div
-            className="flex gap-12 min-w-max"
-            animate={{ x: "-50%" }}
-            transition={{
-              repeat: Infinity,
-              duration: 15,
-              ease: "linear",
-            }}
-          >
-            {[...events, ...events, ...events].map((event, index) => (
+          {/* Left Gradient Mask */}
+          <div className="absolute left-0 top-0 w-32 h-full bg-gradient-to-r from-background to-transparent z-10" />
+
+          {/* Right Gradient Mask */}
+          <div className="absolute right-0 top-0 w-32 h-full bg-gradient-to-l from-background to-transparent z-10" />
+
+          <motion.div className="flex gap-8 min-w-max px-4" animate={controls}>
+            {[...events, ...events].map((event, index) => (
               <div
                 key={index}
-                className="bg-neutral-900 border border-white/10 rounded-3xl p-6 w-[300px] flex-shrink-0"
+                className="bg-neutral-900 border border-white/10 rounded-2xl p-4 w-[280px] flex-shrink-0 hover:border-white/20 transition-all duration-300"
               >
-                <div className="relative w-full h-56 overflow-hidden rounded-lg">
+                <div className="relative w-full h-48 overflow-hidden rounded-lg">
                   <Image
                     src={event.image}
                     alt={event.alt}
@@ -58,7 +73,9 @@ export function WorkshopCards() {
                     className="object-contain"
                   />
                 </div>
-                <h3 className="text-xl text-center mt-6">{event.title}</h3>
+                <h3 className="text-lg font-medium text-center mt-4">
+                  {event.title}
+                </h3>
               </div>
             ))}
           </motion.div>
