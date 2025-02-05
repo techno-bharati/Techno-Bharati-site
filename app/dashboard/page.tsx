@@ -17,33 +17,71 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { VerifyDialog } from "@/components/dashboard/VerifyDialog";
 
 export default function DashboardPage() {
+  const [search, setSearch] = useState("");
+  const [eventFilter, setEventFilter] = useState("all");
+  const [selectedRegistration, setSelectedRegistration] = useState<any>(null);
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["registrations"],
+    queryFn: async () => {
+      const res = await fetch("/api/registrations");
+      if (!res.ok) throw new Error("Failed to fetch");
+      return res.json();
+    },
+  });
+
+  const filteredRegistrations = data?.registrations?.filter((reg: any) => {
+    const matchesSearch =
+      reg.collegeName.toLowerCase().includes(search.toLowerCase()) ||
+      reg.studentName?.toLowerCase().includes(search.toLowerCase());
+    const matchesEvent =
+      eventFilter === "all" ||
+      reg.eventType.toLowerCase() === eventFilter.toLowerCase();
+    return matchesSearch && matchesEvent;
+  });
+
+  if (isLoading) return <div>Loading...</div>;
+
   return (
-    <div className="flex-1 space-y-4 p-8 pt-6">
-      <div className="flex items-center justify-between space-y-2">
+    <div className="container mx-auto px-4 py-6 space-y-5">
+      <div className="flex items-center justify-between mb-6">
         <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
       </div>
 
-      {/* Filters */}
       <div className="flex items-center space-x-4">
-        <Select defaultValue="all">
+        <Select
+          defaultValue="all"
+          onValueChange={(value) => setEventFilter(value)}
+        >
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Filter by event" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Events</SelectItem>
-            <SelectItem value="startup">Startup Sphere</SelectItem>
-            <SelectItem value="face">Face To Face</SelectItem>
-            <SelectItem value="python">Python Warriors</SelectItem>
-            <SelectItem value="fire">FireFire Battleship</SelectItem>
-            <SelectItem value="ai">AI Tales</SelectItem>
+            <SelectItem value="STARTUP_SPHERE">Startup Sphere</SelectItem>
+            <SelectItem value="FACE_TO_FACE">Face To Face</SelectItem>
+            <SelectItem value="PYTHON_WARRIORS">Python Warriors</SelectItem>
+            <SelectItem value="FIREFIRE_BATTLESHIP">
+              FireFire Battleship
+            </SelectItem>
+            <SelectItem value="AI_TALES">AI Tales</SelectItem>
           </SelectContent>
         </Select>
-        <Input placeholder="Search registrations..." className="max-w-sm" />
+        <Input
+          placeholder="Search registrations..."
+          className="max-w-sm"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
       </div>
 
-      {/* Stats Cards */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -52,7 +90,9 @@ export default function DashboardPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">123</div>
+            <div className="text-2xl font-bold">
+              {data?.stats.totalRegistrations}
+            </div>
           </CardContent>
         </Card>
         <Card>
@@ -60,7 +100,9 @@ export default function DashboardPage() {
             <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">₹12,345</div>
+            <div className="text-2xl font-bold">
+              ₹{data?.stats.totalRevenue}
+            </div>
           </CardContent>
         </Card>
         <Card>
@@ -68,7 +110,7 @@ export default function DashboardPage() {
             <CardTitle className="text-sm font-medium">Active Events</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">5</div>
+            <div className="text-2xl font-bold">{data?.stats.activeEvents}</div>
           </CardContent>
         </Card>
         <Card>
@@ -78,12 +120,13 @@ export default function DashboardPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">12</div>
+            <div className="text-2xl font-bold">
+              {data?.stats.todayRegistrations}
+            </div>
           </CardContent>
         </Card>
       </div>
 
-      {/* Recent Registrations Table */}
       <Card>
         <CardHeader>
           <CardTitle>Recent Registrations</CardTitle>
@@ -92,24 +135,58 @@ export default function DashboardPage() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Name</TableHead>
+                <TableHead>Name/Team</TableHead>
                 <TableHead>Event</TableHead>
                 <TableHead>College</TableHead>
                 <TableHead>Date</TableHead>
                 <TableHead>Status</TableHead>
+                <TableHead>Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {[1, 2, 3].map((_, i) => (
-                <TableRow key={i}>
-                  <TableCell>John Doe</TableCell>
-                  <TableCell>Startup Sphere</TableCell>
-                  <TableCell>ABC College</TableCell>
-                  <TableCell>{new Date().toLocaleDateString()}</TableCell>
+              {filteredRegistrations?.map((registration: any) => (
+                <TableRow
+                  key={registration.id}
+                  className="cursor-pointer hover:bg-muted/50"
+                  onClick={() => setSelectedRegistration(registration)}
+                >
                   <TableCell>
-                    <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-green-100 text-green-800">
-                      Confirmed
-                    </span>
+                    {registration.studentName ||
+                      registration.teamName ||
+                      registration.squadName}
+                  </TableCell>
+                  <TableCell>
+                    {registration.eventType.replace(/_/g, " ")}
+                  </TableCell>
+                  <TableCell>{registration.collegeName}</TableCell>
+                  <TableCell>
+                    {new Date(registration.createdAt).toLocaleDateString()}
+                  </TableCell>
+                  <TableCell>
+                    <Badge
+                      variant={
+                        registration.status === "CONFIRMED"
+                          ? "success"
+                          : registration.status === "PENDING"
+                          ? "warning"
+                          : "destructive"
+                      }
+                    >
+                      {registration.status}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedRegistration(registration);
+                      }}
+                      disabled={registration.status === "CONFIRMED"}
+                    >
+                      Verify
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))}
@@ -117,6 +194,12 @@ export default function DashboardPage() {
           </Table>
         </CardContent>
       </Card>
+
+      <VerifyDialog
+        open={!!selectedRegistration}
+        onOpenChange={(open) => !open && setSelectedRegistration(null)}
+        registration={selectedRegistration}
+      />
     </div>
   );
 }
