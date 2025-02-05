@@ -22,17 +22,24 @@ import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { VerifyDialog } from "@/components/dashboard/VerifyDialog";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { LogOut } from "lucide-react";
 
 export default function DashboardPage() {
+  const router = useRouter();
   const [search, setSearch] = useState("");
   const [eventFilter, setEventFilter] = useState("all");
   const [selectedRegistration, setSelectedRegistration] = useState<any>(null);
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["registrations"],
     queryFn: async () => {
       const res = await fetch("/api/registrations");
-      if (!res.ok) throw new Error("Failed to fetch");
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.error || "Failed to fetch registrations");
+      }
       return res.json();
     },
   });
@@ -47,12 +54,37 @@ export default function DashboardPage() {
     return matchesSearch && matchesEvent;
   });
 
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/admin/logout", { method: "POST" });
+      toast.success("Logged out successfully");
+      router.push("/admin/login");
+    } catch (error) {
+      toast.error("Error logging out");
+    }
+  };
+
+  if (error) {
+    console.error("Dashboard error:", error);
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <p className="text-red-500">
+          Error loading registrations: {error.message}
+        </p>
+      </div>
+    );
+  }
+
   if (isLoading) return <div>Loading...</div>;
 
   return (
     <div className="container mx-auto px-4 py-6 space-y-5">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
+        <Button variant="outline" onClick={handleLogout} className="gap-2">
+          <LogOut className="h-4 w-4" />
+          Logout
+        </Button>
       </div>
 
       <div className="flex items-center space-x-4">
