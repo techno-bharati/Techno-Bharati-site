@@ -18,18 +18,18 @@ export async function POST(req: Request) {
       );
     }
 
-    // Create JWT payload
+    // Create JWT payload with all required fields
     const jwtPayload = {
       sub: admin.id,
       email: admin.email,
       role: admin.role,
       eventType: admin.eventType,
+      iat: Math.floor(Date.now() / 1000),
+      exp: Math.floor(Date.now() / 1000) + 24 * 60 * 60, // 24 hours
     };
 
     const token = await new SignJWT(jwtPayload)
-      .setProtectedHeader({ alg: "HS256" })
-      .setIssuedAt()
-      .setExpirationTime("24h")
+      .setProtectedHeader({ alg: "HS256", typ: "JWT" })
       .sign(new TextEncoder().encode(process.env.JWT_SECRET));
 
     const cookieStore = await cookies();
