@@ -22,7 +22,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { createRegistration } from "@/app/actions/registration";
 import { toast } from "sonner";
@@ -43,32 +43,34 @@ const RegistrationForm = () => {
     mutationFn: createRegistration,
     onSuccess: (data) => {
       if (data.success) {
-        toast.success("Registration successful!");
+        toast.success("Registration successful!", { id: "form-submit" });
         form.reset();
       } else {
         toast.error(data.error || "Something went wrong");
       }
     },
     onError: (error) => {
-      toast.error("Failed to submit registration");
+      toast.error("Failed to submit registration", { id: "form-submit" });
       console.error(error);
     },
   });
 
-  const onSubmit = async (data: z.infer<typeof userRegistrationFormSchema>) => {
-    try {
-      if (!data.payss) {
-        toast.error("Please upload a payment screenshot");
-        return;
+  const onSubmit = useCallback(
+    async (data: z.infer<typeof userRegistrationFormSchema>) => {
+      try {
+        if (!data.payss) {
+          toast.error("Please upload a payment screenshot");
+          return;
+        }
+        toast.loading("Submitting..", { id: "form-submit" });
+        mutate(data);
+      } catch (error) {
+        console.error("Submission error:", error);
+        toast.error("Failed to submit form", { id: "form-submit" });
       }
-      toast.loading("Submitting..");
-      mutate(data);
-      toast.dismiss();
-    } catch (error) {
-      console.error("Submission error:", error);
-      toast.error("Failed to submit form");
-    }
-  };
+    },
+    [mutate]
+  );
 
   const onError = (errors: any) => {
     console.log("Form Errors:", errors);
