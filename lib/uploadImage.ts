@@ -25,7 +25,6 @@ export async function uploadImage(file: File) {
     }
 
     const data = await response.json();
-    console.log("Upload response:", data); // For debugging
 
     return { url: data.secure_url, success: true };
   } catch (error) {
