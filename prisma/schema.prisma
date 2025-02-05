@@ -172,3 +172,19 @@ enum PaymentStatus {
   FAILED
   REFUNDED
 }
+
+model Admin {
+  id        String     @id @default(cuid())
+  email     String     @unique
+  password  String // Hashed password
+  name      String
+  role      AdminRole  @default(EVENT_ADMIN)
+  eventType EventType? // null for SUPER_ADMIN
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+enum AdminRole {
+  SUPER_ADMIN
+  EVENT_ADMIN
+}
