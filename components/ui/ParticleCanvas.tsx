@@ -23,9 +23,11 @@ export function ParticleCanvas() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    const canvasEl = canvas; // Store non-null reference
+
     const resizeCanvas = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      canvasEl.width = window.innerWidth;
+      canvasEl.height = window.innerHeight;
     };
     resizeCanvas();
     window.addEventListener("resize", resizeCanvas);
@@ -40,7 +42,7 @@ export function ParticleCanvas() {
     // Create particles
     const particles: Particle[] = [];
     const particleCount = Math.min(
-      Math.floor(window.innerWidth * particleDensity), 
+      Math.floor(window.innerWidth * particleDensity),
       isMobile ? 150 : 250
     );
     const connectionDistance = baseConnectionDistance;
@@ -48,15 +50,16 @@ export function ParticleCanvas() {
 
     for (let i = 0; i < particleCount; i++) {
       const side = i < particleCount / 2 ? "left" : "right";
-      const sideWidth = canvas.width * sideWidthPercentage;
-      
-      const x = side === "left"
-        ? Math.random() * sideWidth // Left side
-        : canvas.width - (Math.random() * sideWidth); // Right side
+      const sideWidth = canvasEl.width * sideWidthPercentage;
+
+      const x =
+        side === "left"
+          ? Math.random() * sideWidth // Left side
+          : canvasEl.width - Math.random() * sideWidth; // Right side
 
       particles.push({
         x,
-        y: Math.random() * canvas.height,
+        y: Math.random() * canvasEl.height,
         vx: (Math.random() - 0.5) * 0.4, // Faster movement
         vy: (Math.random() - 0.5) * 0.4, // Faster movement
         size: Math.random() * baseParticleSize + (isMobile ? 1 : 2), // Adjusted size
@@ -92,7 +95,8 @@ export function ParticleCanvas() {
           const distance = Math.sqrt(dx * dx + dy * dy);
 
           if (distance < connectionDistance) {
-            const opacity = (1 - distance / connectionDistance) * (isMobile ? 0.4 : 0.3);
+            const opacity =
+              (1 - distance / connectionDistance) * (isMobile ? 0.4 : 0.3);
             ctx!.strokeStyle = `rgba(0, 255, 255, ${opacity})`;
             ctx!.beginPath();
             ctx!.moveTo(particles[i].x, particles[i].y);
@@ -123,38 +127,38 @@ export function ParticleCanvas() {
         particle.y += particle.vy;
 
         // Keep particles in their respective sides
-        const sideWidth = canvas.width * sideWidthPercentage;
+        const sideWidth = canvasEl.width * sideWidthPercentage;
         if (particle.side === "left") {
           if (particle.x < 0) particle.x = sideWidth;
           if (particle.x > sideWidth) particle.x = 0;
         } else {
-          const minX = canvas.width - sideWidth;
-          if (particle.x < minX) particle.x = canvas.width;
-          if (particle.x > canvas.width) particle.x = minX;
+          const minX = canvasEl.width - sideWidth;
+          if (particle.x < minX) particle.x = canvasEl.width;
+          if (particle.x > canvasEl.width) particle.x = minX;
         }
 
         // Bounce off top and bottom with more randomness
-        if (particle.y < 0 || particle.y > canvas.height) {
+        if (particle.y < 0 || particle.y > canvasEl.height) {
           particle.vy *= -1;
           particle.vy += (Math.random() - 0.5) * 0.2; // More random bouncing
           particle.vx += (Math.random() - 0.5) * 0.2; // Add some horizontal variation
         }
 
         // Keep particles within vertical bounds
-        particle.y = Math.max(0, Math.min(canvas.height, particle.y));
+        particle.y = Math.max(0, Math.min(canvasEl.height, particle.y));
       });
     }
 
     function animate() {
-      ctx!.clearRect(0, 0, canvas.width, canvas.height);
+      ctx!.clearRect(0, 0, canvasEl.width, canvasEl.height);
 
       // Enhanced gradient background
-      const gradient = ctx!.createLinearGradient(0, 0, 0, canvas.height);
+      const gradient = ctx!.createLinearGradient(0, 0, 0, canvasEl.height);
       gradient.addColorStop(0, "#000000");
       gradient.addColorStop(0.5, "#001a1a");
       gradient.addColorStop(1, "#002a2a");
       ctx!.fillStyle = gradient;
-      ctx!.fillRect(0, 0, canvas.width, canvas.height);
+      ctx!.fillRect(0, 0, canvasEl.width, canvasEl.height);
 
       updateParticles();
       drawConnections();
@@ -163,26 +167,26 @@ export function ParticleCanvas() {
     }
 
     const handleMouseMove = (e: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect();
+      const rect = canvasEl.getBoundingClientRect();
       mouseRef.current.x = e.clientX - rect.left;
       mouseRef.current.y = e.clientY - rect.top;
     };
 
     const handleTouchMove = (e: TouchEvent) => {
       e.preventDefault(); // Prevent scrolling while interacting
-      const rect = canvas.getBoundingClientRect();
+      const rect = canvasEl.getBoundingClientRect();
       mouseRef.current.x = e.touches[0].clientX - rect.left;
       mouseRef.current.y = e.touches[0].clientY - rect.top;
     };
 
-    canvas.addEventListener("mousemove", handleMouseMove);
-    canvas.addEventListener("touchmove", handleTouchMove, { passive: false });
+    canvasEl.addEventListener("mousemove", handleMouseMove);
+    canvasEl.addEventListener("touchmove", handleTouchMove, { passive: false });
     animate();
 
     return () => {
       window.removeEventListener("resize", resizeCanvas);
-      canvas.removeEventListener("mousemove", handleMouseMove);
-      canvas.removeEventListener("touchmove", handleTouchMove);
+      canvasEl.removeEventListener("mousemove", handleMouseMove);
+      canvasEl.removeEventListener("touchmove", handleTouchMove);
     };
   }, []);
 

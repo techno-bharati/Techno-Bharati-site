@@ -61,7 +61,10 @@ export function Footer() {
         <div className="mt-2 flex justify-center space-x-8 text-sm text-muted-foreground">
           <span className="text-[18px] tracking-tight font-bold ">
             Develped & Managed by{" "}
-            <Link href={"/"} className="hover:underline hover:text-primary">
+            <Link
+              href={"https://github.com/InfusionAI-24"}
+              className="hover:underline hover:text-primary"
+            >
               Team InfusionAI
             </Link>
           </span>
