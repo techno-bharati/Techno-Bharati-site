@@ -4,8 +4,8 @@ import { jwtVerify } from "jose";
 
 export async function GET() {
   try {
-    const cookieStore = cookies();
-    const token = cookieStore.get("admin-token");
+    const cookiesList = await cookies();
+    const token = cookiesList.get("admin-token");
 
     if (!token) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

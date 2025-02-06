@@ -33,38 +33,56 @@ export function VerifyDialog({
     mutationFn: async () => {
       if (!registration) return;
 
-      // First verify the registration
-      const verifyRes = await fetch(
-        `/api/registrations/${registration.id}/verify`,
-        {
-          method: "PATCH",
+      try {
+        // First verify the registration
+        const verifyRes = await fetch(`/api/registrations/verify`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ registrationId: registration.id }),
+        });
+
+        console.log("Verify Response:", verifyRes);
+
+        if (!verifyRes.ok) {
+          throw new Error("Failed to verify registration");
         }
-      );
-      if (!verifyRes.ok) throw new Error("Failed to verify");
 
-      // Then send confirmation email
-      const emailRes = await fetch("/api/send-email", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ registration }),
-      });
+        const verifiedRegistration = await verifyRes.json();
 
-      if (!emailRes.ok) {
-        console.error("Failed to send email");
-        // We don't throw here because the verification was successful
+        // Then send confirmation email
+        const emailRes = await fetch("/api/send-email", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ registration: verifiedRegistration }),
+        });
+
+        if (!emailRes.ok) {
+          // Log the error but don't throw since verification was successful
+          console.error("Failed to send confirmation email");
+          toast.error(
+            "Registration verified but failed to send confirmation email"
+          );
+          return verifiedRegistration;
+        }
+
+        return verifiedRegistration;
+      } catch (error) {
+        console.error("Verification error:", error);
+        throw error;
       }
-
-      return verifyRes.json();
     },
     onSuccess: () => {
       toast.success("Registration verified and confirmation email sent");
       queryClient.invalidateQueries({ queryKey: ["registrations"] });
       onOpenChange(false);
     },
-    onError: () => {
-      toast.error("Verification failed");
+    onError: (error) => {
+      console.error("Verification error:", error);
+      toast.error("Failed to verify registration. Please try again.");
     },
   });
 

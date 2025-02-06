@@ -169,7 +169,7 @@ export default function DashboardPage() {
                   {Object.entries(data?.stats.eventBreakdown || {}).map(
                     ([event, count]) => (
                       <div key={event}>
-                        {event.replace(/_/g, " ")}: {count}
+                        {event.replace(/_/g, " ")}: {count as number}
                       </div>
                     )
                   )}

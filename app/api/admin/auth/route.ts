@@ -3,12 +3,33 @@ import { NextResponse } from "next/server";
 import { SignJWT } from "jose";
 import { cookies } from "next/headers";
 
+const validateEmail = (email: string) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+
 export async function POST(req: Request) {
   try {
     const { email, password } = await req.json();
 
+    if (!email || !password) {
+      return NextResponse.json(
+        { error: "Email and password are required" },
+        { status: 400 }
+      );
+    }
+
+    if (!validateEmail(email)) {
+      return NextResponse.json(
+        { error: "Invalid email format" },
+        { status: 400 }
+      );
+    }
+
+    const normalizedEmail = email.toLowerCase().trim();
+
     const admin = await prisma.admin.findUnique({
-      where: { email },
+      where: { email: normalizedEmail },
     });
 
     if (!admin || admin.password !== password) {
@@ -51,6 +72,9 @@ export async function POST(req: Request) {
     });
   } catch (error) {
     console.error("Auth error:", error);
-    return NextResponse.json({ error: "Server error" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to authenticate" },
+      { status: 500 }
+    );
   }
 }

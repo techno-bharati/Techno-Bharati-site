@@ -20,7 +20,9 @@ interface ModalData {
   description: string;
   rules: string[];
   registration: string[];
-  queries: { string: string };
+  queries: {
+    [key: string]: string | undefined;
+  };
 }
 
 export default function Page() {
