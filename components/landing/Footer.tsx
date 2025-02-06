@@ -57,17 +57,17 @@ export function Footer() {
           {/* College Logo and Name */}
           <div className="flex items-center justify-center md:justify-end space-x-4">
             <Image
-              src="/bvcoe_logo.png"
+              src="/bvcoek.png"
               alt="BVCOE Logo"
-              width={48}
-              height={48}
-              className="h-12 w-auto"
+              width={100}
+              height={100}
+              className="h-full w-auto"
             />
             <div className="text-muted-foreground">
               <p className="font-semibold">
                 Bharati Vidyapeeth's College of Engineering
               </p>
-              <p className="text-sm">New Delhi</p>
+              <p className="text-sm">Kolhapur</p>
             </div>
           </div>
         </div>

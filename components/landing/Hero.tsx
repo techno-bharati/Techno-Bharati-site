@@ -71,7 +71,7 @@ export function Hero() {
           transition={{ delay: 1.1 }}
           className="space-y-4"
         >
-          <h2 className="text-2xl md:text-3xl font-mono bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent font-primary animate-pulse">
+          <h2 className="text-2xl md:text-3xl bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent animate-pulse font-bold tracking-tighter">
             Events are Live Now!
           </h2>
         </motion.div>
