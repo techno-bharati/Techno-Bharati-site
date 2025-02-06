@@ -86,10 +86,10 @@ export default function ContactUsPage() {
                     <Phone className="h-10 w-10 text-primary" />
                   </div>
                   <h3 className="text-xl font-semibold mb-4">
-                    Event Coordinators
+                    Event Coordinator
                   </h3>
                   <div className="space-y-2 text-muted-foreground">
-                    <p>Prof. Mayuri Potdar: +91 99232 26932</p>
+                    <p>Prof. Anjali Yadav: +91 86692 77638</p>
                   </div>
                 </CardContent>
               </Card>
@@ -97,7 +97,6 @@ export default function ContactUsPage() {
           </div>
         </div>
       </section>
-
     </div>
   );
 }

@@ -220,7 +220,7 @@ export default function AboutUsPage() {
                         fill
                         className="rounded-full object-cover"
                       />
-                    </div>
+                  </div>
                     <h3 className="text-lg font-semibold mb-2">
                       {coordinator.name}
                     </h3>
