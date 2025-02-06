@@ -75,8 +75,6 @@ export default function DashboardPage() {
     );
   }
 
-  if (isLoading) return <div>Loading...</div>;
-
   return (
     <div className="container mx-auto px-4 py-6 space-y-5">
       <div className="flex items-center justify-between mb-6">
