@@ -64,7 +64,7 @@ export default function ContactUsPage() {
                   </div>
                   <h3 className="text-xl font-semibold mb-4">Address</h3>
                   <p className="text-muted-foreground">
-                    Bharati Vidyapeeth's College of Engineering
+                    Bharati Vidyapeeth&apos;s College of Engineering
                     <br />
                     Kolhapur, Maharashtra
                     <br />

@@ -15,7 +15,6 @@ export async function createRegistration(
       return { success: false, error: "Failed to upload payment screenshot" };
     }
 
-    // Map form event names to database enum values
     const eventTypeMap = {
       "Startup Sphere": "STARTUP_SPHERE",
       "Face To Face": "FACE_TO_FACE",
@@ -133,13 +132,3 @@ export async function createRegistration(
   }
 }
 
-function getEventAmount(event: string): number {
-  switch (event) {
-    case "Startup Sphere":
-      return 500;
-    case "FreeFire Battleship":
-      return 400;
-    default:
-      return 200;
-  }
-}

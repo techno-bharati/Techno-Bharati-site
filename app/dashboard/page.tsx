@@ -25,8 +25,6 @@ import { VerifyDialog } from "@/components/dashboard/VerifyDialog";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { LogOut } from "lucide-react";
-import { jwtVerify } from "jose";
-import { cookies } from "next/headers";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -38,7 +36,6 @@ export default function DashboardPage() {
   >(null);
   const [adminEventType, setAdminEventType] = useState<string | null>(null);
 
-  // Fetch admin details on component mount
   useQuery({
     queryKey: ["adminDetails"],
     queryFn: async () => {
@@ -54,7 +51,7 @@ export default function DashboardPage() {
     },
   });
 
-  const { data, isLoading, error } = useQuery({
+  const { data, error } = useQuery({
     queryKey: ["registrations"],
     queryFn: async () => {
       const res = await fetch("/api/registrations");
@@ -141,7 +138,6 @@ export default function DashboardPage() {
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         {adminRole === "EVENT_ADMIN" ? (
-          // Event Admin Stats
           <Card className="md:col-span-2">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">
@@ -158,7 +154,6 @@ export default function DashboardPage() {
             </CardContent>
           </Card>
         ) : (
-          // Super Admin Stats
           <>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -208,7 +203,7 @@ export default function DashboardPage() {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
-                  Today's Registrations
+                  Today&apos;s Registrations
                 </CardTitle>
               </CardHeader>
               <CardContent>

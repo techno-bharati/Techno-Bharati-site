@@ -3,7 +3,6 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 
 const teamMembers = [
   {
@@ -65,7 +64,7 @@ export default function AboutUsPage() {
           >
             <h1 className="text-4xl md:text-6xl font-bold mb-6">About Us</h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Bharati Vidyapeeth's College of Engineering, Kolhapur presents
+              Bharati Vidyapeeth&apos;s College of Engineering, Kolhapur presents
               Techno Bharati 2025 - a celebration of technology and innovation.
             </p>
           </motion.div>
@@ -97,7 +96,7 @@ export default function AboutUsPage() {
             >
               <h2 className="text-3xl font-bold mb-6">Our Institution</h2>
               <p className="text-muted-foreground mb-4">
-                Bharati Vidyapeeth's College of Engineering, Kolhapur is a
+                Bharati Vidyapeeth&apos;s College of Engineering, Kolhapur is a
                 premier institution dedicated to excellence in technical
                 education. With state-of-the-art facilities and experienced
                 faculty, we strive to nurture the next generation of engineers
@@ -139,7 +138,7 @@ export default function AboutUsPage() {
               <CardContent className="pt-6">
                 <h3 className="text-xl font-semibold mb-4">Our Mission</h3>
                 <p className="text-muted-foreground">
-                  To organize events that challenge students' technical
+                  To organize events that challenge students&apos; technical
                   abilities, promote teamwork, and provide exposure to
                   real-world problems and solutions.
                 </p>

@@ -1,10 +1,6 @@
 import {
-  Facebook,
   Instagram,
   Linkedin,
-  Twitter,
-  Youtube,
-  DiscIcon as Discord,
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -39,7 +35,7 @@ export function Footer() {
             />
             <div className="text-muted-foreground">
               <p className="font-semibold">
-                Bharati Vidyapeeth's College of Engineering
+                Bharati Vidyapeeth&apos;s College of Engineering
               </p>
               <p className="text-sm">Kolhapur</p>
             </div>

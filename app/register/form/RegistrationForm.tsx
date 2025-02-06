@@ -1,6 +1,6 @@
 "use client";
 
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { userRegistrationFormSchema } from "@/schema/userRegistrationForm";
@@ -98,7 +98,12 @@ const RegistrationForm = () => {
       const fee = getEventFeeByName(selectedEvent, teamSize);
       setTotalFee(fee || 0);
     }
-  }, [form.watch("events"), form.watch("numberOfTeamMembers")]);
+  }, [
+    form.watch("events"),
+    form.watch("numberOfTeamMembers"),
+    form,
+    selectedEvent,
+  ]);
 
   const handleNumberInput = (
     e: React.ChangeEvent<HTMLInputElement>,

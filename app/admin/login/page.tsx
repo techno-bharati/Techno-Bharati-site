@@ -30,8 +30,6 @@ export default function AdminLoginPage() {
         body: JSON.stringify({ email, password }),
       });
 
-      console.log("##########", res);
-
       if (!res.ok) {
         throw new Error("Invalid credentials");
       }
