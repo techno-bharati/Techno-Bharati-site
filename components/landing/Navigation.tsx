@@ -42,18 +42,6 @@ export function Navigation() {
             >
               CONTACT US
             </Link>
-            <Link
-              href="/profile"
-              className="text-sm hover:text-primary transition-colors"
-            >
-              PROFILE
-            </Link>
-            <Button
-              variant="outline"
-              className="bg-primary text-primary-foreground hover:bg-primary/90"
-            >
-              SIGN IN
-            </Button>
           </div>
 
           <Button

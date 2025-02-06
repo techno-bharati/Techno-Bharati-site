@@ -14,7 +14,6 @@ export function Footer() {
     <footer className="border-t border-muted bg-background">
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center mb-8">
-          {/* Social Links */}
           <div className="flex justify-center md:justify-start space-x-6">
             <Link
               href="https://instagram.com"
@@ -23,38 +22,13 @@ export function Footer() {
               <Instagram className="h-6 w-6" />
             </Link>
             <Link
-              href="https://facebook.com"
-              className="text-muted-foreground hover:text-primary"
-            >
-              <Facebook className="h-6 w-6" />
-            </Link>
-            <Link
-              href="https://twitter.com"
-              className="text-muted-foreground hover:text-primary"
-            >
-              <Twitter className="h-6 w-6" />
-            </Link>
-            <Link
-              href="https://youtube.com"
-              className="text-muted-foreground hover:text-primary"
-            >
-              <Youtube className="h-6 w-6" />
-            </Link>
-            <Link
               href="https://linkedin.com"
               className="text-muted-foreground hover:text-primary"
             >
               <Linkedin className="h-6 w-6" />
             </Link>
-            <Link
-              href="https://discord.com"
-              className="text-muted-foreground hover:text-primary"
-            >
-              <Discord className="h-6 w-6" />
-            </Link>
           </div>
 
-          {/* College Logo and Name */}
           <div className="flex items-center justify-center md:justify-end space-x-4">
             <Image
               src="/bvcoek.png"
@@ -72,7 +46,6 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Navigation Links */}
         <div className="flex justify-center space-x-8 text-sm text-muted-foreground">
           <Link href="/contact" className="hover:text-primary">
             CONTACT US
@@ -83,6 +56,15 @@ export function Footer() {
           <Link href="/about" className="hover:text-primary">
             ABOUT US
           </Link>
+        </div>
+
+        <div className="mt-2 flex justify-center space-x-8 text-sm text-muted-foreground">
+          <span className="text-[18px] tracking-tight font-bold ">
+            Develped & Managed by{" "}
+            <Link href={"/"} className="hover:underline hover:text-primary">
+              Team InfusionAI
+            </Link>
+          </span>
         </div>
       </div>
     </footer>

@@ -1,14 +1,14 @@
+import { EventCards } from "@/components/landing/EventCards";
 import { Features } from "@/components/landing/Features";
 import { Footer } from "@/components/landing/Footer";
 import { Hero } from "@/components/landing/Hero";
 import { Sponsors } from "@/components/landing/Sponsors";
-import { WorkshopCards } from "@/components/landing/WorkshopCard";
 
 export default function Home() {
   return (
     <>
       <Hero />
-      <WorkshopCards />
+      <EventCards/>
       <Sponsors />
       <Features />
       <Footer />
