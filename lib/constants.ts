@@ -1,3 +1,39 @@
+type EventFee = {
+  amount: number;
+  type: "per person" | "per team";
+} & (
+  | {
+      baseAmount: number;
+      additionalMemberFee: number;
+    }
+  | {}
+);
+
+export const EVENT_FEES: Record<string, EventFee> = {
+  STARTUP_SPHERE: {
+    amount: 100,
+    type: "per person",
+    baseAmount: 100,
+    additionalMemberFee: 100,
+  },
+  FACE_TO_FACE: {
+    amount: 100,
+    type: "per person",
+  },
+  PYTHON_WARRIORS: {
+    amount: 100,
+    type: "per person",
+  },
+  FREEFIRE_BATTLESHIP: {
+    amount: 200,
+    type: "per team",
+  },
+  AI_TALES: {
+    amount: 100,
+    type: "per person",
+  },
+} as const;
+
 export const events = [
   {
     id: 1,
@@ -5,7 +41,8 @@ export const events = [
     date: "28th Feb 2025",
     time: "10:00 AM - 12:00 PM",
     venue: "Bharati Vidyapeeth College of Engineering, Kolahpur",
-    entryFee: 100,
+    entryFee: EVENT_FEES.STARTUP_SPHERE.amount,
+    type: EVENT_FEES.STARTUP_SPHERE.type,
     modalData: {
       eventName: "Startup Sphere",
       description:
@@ -71,11 +108,12 @@ export const events = [
     date: "28th Feb 2025",
     time: "9:00 AM - 6:00 PM",
     venue: "Bharati Vidyapeeth College of Engineering, Kolahpur",
-    entryFee: 100,
+    entryFee: EVENT_FEES.FACE_TO_FACE.amount,
+    type: EVENT_FEES.FACE_TO_FACE.type,
     modalData: {
       eventName: "AI Tales: Animate Your Imagination!",
       description:
-        "The AIML Department of Bharati Vidyapeeth’s College of Engineering, Kolhapur presents Face to Face, an engaging competition as part of Techno Bharti 2025- Infusion AI! ",
+        "The AIML Department of Bharati Vidyapeeth's College of Engineering, Kolhapur presents Face to Face, an engaging competition as part of Techno Bharti 2025- Infusion AI! ",
       rules: [
         "Time Limit - Each participant gets 2 minutes to speak.",
         "Topic Announcement - The GD topic will be given at the time of discussion.",
@@ -104,7 +142,8 @@ export const events = [
     date: "28th Feb 2025",
     time: "2:00 PM - 5:00 PM",
     venue: "Bharati Vidyapeeth College of Engineering, Kolahpur",
-    entryFee: 100,
+    entryFee: EVENT_FEES.PYTHON_WARRIORS.amount,
+    type: EVENT_FEES.PYTHON_WARRIORS.type,
     modalData: {
       eventName: "AI Tales: Animate Your Imagination!",
       description:
@@ -133,7 +172,8 @@ export const events = [
     date: "28th Feb 2025",
     time: "11:00 AM - 3:00 PM",
     venue: "Bharati Vidyapeeth College of Engineering, Kolahpur",
-    entryFee: 200,
+    entryFee: EVENT_FEES.FREEFIRE_BATTLESHIP.amount,
+    type: EVENT_FEES.FREEFIRE_BATTLESHIP.type,
     modalData: {
       eventName: "AI Tales: Animate Your Imagination!",
       description:
@@ -168,7 +208,8 @@ export const events = [
     date: "28th Feb 2025",
     time: "7:00 PM - 10:00 PM",
     venue: "Bharati Vidyapeeth College of Engineering, Kolahpur",
-    entryFee: 100,
+    entryFee: EVENT_FEES.AI_TALES.amount,
+    type: EVENT_FEES.AI_TALES.type,
     modalData: {
       eventName: "AI Tales: Animate Your Imagination!",
       description:
@@ -197,3 +238,37 @@ export const events = [
     },
   },
 ];
+
+export const calculateEventFee = (
+  eventType: keyof typeof EVENT_FEES,
+  numberOfMembers?: number
+) => {
+  const eventFee = EVENT_FEES[eventType];
+
+  if (
+    eventType === "STARTUP_SPHERE" &&
+    numberOfMembers &&
+    "baseAmount" in eventFee
+  ) {
+    return (
+      eventFee.baseAmount + (numberOfMembers - 1) * eventFee.additionalMemberFee
+    );
+  }
+
+  return eventFee.amount;
+};
+
+export const getEventFeeByName = (eventName: string, teamSize?: number) => {
+  const eventMap = {
+    "Startup Sphere": "STARTUP_SPHERE",
+    "Face To Face": "FACE_TO_FACE",
+    "Python Worriors": "PYTHON_WARRIORS",
+    "FreeFire Battleship": "FREEFIRE_BATTLESHIP",
+    "AI Tales": "AI_TALES",
+  } as const;
+
+  const eventType = eventMap[eventName as keyof typeof eventMap];
+  if (!eventType) return null;
+
+  return calculateEventFee(eventType, teamSize);
+};
