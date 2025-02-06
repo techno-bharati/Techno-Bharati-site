@@ -28,32 +28,53 @@ const faceToFaceSchema = z.object({
 });
 
 const fireFireBattleshipSchema = z.object({
-  squadName: z.string(),
-  players: z.array(
-    z.object({
-      playerName: z.string(),
-      freeFireId: z.string(),
-      contactNumber: z.string(),
-    })
-  ),
+  squadName: z.string().min(1, "Squad name is required"),
+  players: z
+    .array(
+      z.object({
+        playerName: z.string().min(1, "Player name is required"),
+        freeFireId: z.string().min(1, "Free Fire ID is required"),
+        contactNumber: z
+          .string()
+          .min(10, "Contact number must be at least 10 digits"),
+        email: z.string().email("Invalid email address").optional(),
+      })
+    )
+    .length(4, "Exactly 4 players are required")
+    .refine((players) => players[0].email !== undefined, {
+      message: "Squad leader's email is required",
+      path: ["players", 0, "email"],
+    }),
 });
 
-const pythonWorriorsSchema = faceToFaceSchema; // Same as Python Worriors
-const aiTalesSchema = faceToFaceSchema; // Same as Face to Face
+const pythonWorriorsSchema = z.object({
+  studentName: z.string().min(1, "Name is required"),
+  contactNumber: z
+    .string()
+    .min(10, "Contact number must be at least 10 digits"),
+  email: z.string().email("Invalid email address"),
+});
+
+const aiTalesSchema = pythonWorriorsSchema; // Same as Python Warriors
 
 // Main schema with event selection
 export const userRegistrationFormSchema = z
   .object({
-    collegeName: z.string(),
-    events: z.enum([
-      "Startup Sphere",
-      "Face To Face",
-      "Python Worriors",
-      "FireFire Battleship",
-      "AI Tales",
-    ]),
+    collegeName: z.string().min(1, "College name is required"),
+    events: z.enum(
+      [
+        "Startup Sphere",
+        "Face To Face",
+        "Python Worriors",
+        "FreeFire Battleship",
+        "AI Tales",
+      ],
+      {
+        required_error: "Please select an event",
+      }
+    ),
     payss: z
-      .instanceof(File)
+      .instanceof(File, { message: "Payment screenshot is required" })
       .refine(
         (file) => file.size <= 250 * 1024,
         "Image must be 250kb or smaller"
@@ -74,7 +95,7 @@ export const userRegistrationFormSchema = z
         .object({ events: z.literal("Python Worriors") })
         .merge(pythonWorriorsSchema),
       z
-        .object({ events: z.literal("FireFire Battleship") })
+        .object({ events: z.literal("FreeFire Battleship") })
         .merge(fireFireBattleshipSchema),
       z.object({ events: z.literal("AI Tales") }).merge(aiTalesSchema),
     ])

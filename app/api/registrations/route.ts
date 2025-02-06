@@ -16,8 +16,6 @@ export async function GET() {
     const cookieStore = await cookies();
     const token = cookieStore.get("admin-token");
 
-    console.log("Token:", token); // Debug token
-
     if (!token) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
@@ -29,14 +27,10 @@ export async function GET() {
 
     const payload = verified.payload as unknown as JWTPayload;
 
-    console.log("Payload:", payload); // Debug payload
-
     const where =
       payload.role === AdminRole.EVENT_ADMIN && payload.eventType
         ? { eventType: payload.eventType }
         : {};
-
-    console.log("Query where:", where); // Debug query
 
     const [registrations, stats] = await Promise.all([
       prisma.registration.findMany({
@@ -46,6 +40,12 @@ export async function GET() {
           teamLeader: true,
           teamMembers: true,
           players: true,
+          verifiedBy: {
+            select: {
+              name: true,
+              email: true,
+            },
+          },
         },
       }),
       prisma.$transaction([
@@ -57,6 +57,9 @@ export async function GET() {
         prisma.registration.groupBy({
           by: ["eventType"],
           where,
+          _count: {
+            _all: true,
+          },
           orderBy: {
             eventType: "asc",
           },
@@ -72,8 +75,6 @@ export async function GET() {
       ]),
     ]);
 
-    console.log("Registrations found:", registrations.length); // Debug results
-
     return NextResponse.json({
       registrations,
       stats: {
@@ -81,10 +82,16 @@ export async function GET() {
         totalRevenue: stats[1]._sum.amount || 0,
         activeEvents: stats[2].length,
         todayRegistrations: stats[3],
+        eventBreakdown: stats[2].reduce((acc, curr) => {
+          if (curr._count && typeof curr._count === "object") {
+            acc[curr.eventType] = curr._count._all ?? 0;
+          }
+          return acc;
+        }, {} as Record<string, number>),
       },
     });
   } catch (error) {
-    console.error("Registration error:", error); // Debug errors
+    console.error("Registration fetch error:", error);
     return NextResponse.json(
       { error: "Failed to fetch registrations" },
       { status: 500 }

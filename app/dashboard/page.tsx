@@ -47,10 +47,10 @@ export default function DashboardPage() {
   const filteredRegistrations = data?.registrations?.filter((reg: any) => {
     const matchesSearch =
       reg.collegeName.toLowerCase().includes(search.toLowerCase()) ||
-      reg.studentName?.toLowerCase().includes(search.toLowerCase());
-    const matchesEvent =
-      eventFilter === "all" ||
-      reg.eventType.toLowerCase() === eventFilter.toLowerCase();
+      reg.studentName?.toLowerCase().includes(search.toLowerCase()) ||
+      reg.teamName?.toLowerCase().includes(search.toLowerCase()) ||
+      reg.squadName?.toLowerCase().includes(search.toLowerCase());
+    const matchesEvent = eventFilter === "all" || reg.eventType === eventFilter;
     return matchesSearch && matchesEvent;
   });
 
@@ -100,8 +100,8 @@ export default function DashboardPage() {
             <SelectItem value="STARTUP_SPHERE">Startup Sphere</SelectItem>
             <SelectItem value="FACE_TO_FACE">Face To Face</SelectItem>
             <SelectItem value="PYTHON_WARRIORS">Python Warriors</SelectItem>
-            <SelectItem value="FIREFIRE_BATTLESHIP">
-              FireFire Battleship
+            <SelectItem value="FREEFIRE_BATTLESHIP">
+              FreeFire Battleship
             </SelectItem>
             <SelectItem value="AI_TALES">AI Tales</SelectItem>
           </SelectContent>
@@ -124,6 +124,15 @@ export default function DashboardPage() {
           <CardContent>
             <div className="text-2xl font-bold">
               {data?.stats.totalRegistrations}
+            </div>
+            <div className="text-xs text-muted-foreground mt-1">
+              {Object.entries(data?.stats.eventBreakdown || {}).map(
+                ([event, count]) => (
+                  <div key={event}>
+                    {event.replace(/_/g, " ")}: {count}
+                  </div>
+                )
+              )}
             </div>
           </CardContent>
         </Card>
@@ -170,6 +179,7 @@ export default function DashboardPage() {
                 <TableHead>Name/Team</TableHead>
                 <TableHead>Event</TableHead>
                 <TableHead>College</TableHead>
+                <TableHead>Contact</TableHead>
                 <TableHead>Date</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Actions</TableHead>
@@ -191,6 +201,13 @@ export default function DashboardPage() {
                     {registration.eventType.replace(/_/g, " ")}
                   </TableCell>
                   <TableCell>{registration.collegeName}</TableCell>
+                  <TableCell>
+                    {registration.contactNumber ||
+                      (registration.teamLeader &&
+                        registration.teamLeader.contactNumber) ||
+                      (registration.players &&
+                        registration.players[0]?.contactNumber)}
+                  </TableCell>
                   <TableCell>
                     {new Date(registration.createdAt).toLocaleDateString()}
                   </TableCell>

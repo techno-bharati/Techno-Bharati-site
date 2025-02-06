@@ -159,7 +159,10 @@ export function VerifyDialog({
                           (player: any, index: number) => (
                             <div key={player.id} className="text-sm mb-2">
                               <p>
-                                Player {index + 1}: {player.playerName}
+                                {index === 0
+                                  ? "Squad Leader"
+                                  : `Player ${index + 1}`}
+                                : {player.playerName}
                               </p>
                               <p className="ml-4">
                                 FreeFire ID: {player.freeFireId}
@@ -167,6 +170,9 @@ export function VerifyDialog({
                               <p className="ml-4">
                                 Contact: {player.contactNumber}
                               </p>
+                              {index === 0 && player.email && (
+                                <p className="ml-4">Email: {player.email}</p>
+                              )}
                             </div>
                           )
                         )}

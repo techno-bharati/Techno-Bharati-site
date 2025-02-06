@@ -22,15 +22,17 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { createRegistration } from "@/app/actions/registration";
 import { toast } from "sonner";
 import { SuccessDialog } from "@/components/register/SuccessDialog";
+import { getEventFeeByName } from "@/lib/constants";
 
 const RegistrationForm = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
+  const [totalFee, setTotalFee] = useState<number>(0);
 
   const form = useForm<z.infer<typeof userRegistrationFormSchema>>({
     resolver: zodResolver(userRegistrationFormSchema),
@@ -46,7 +48,13 @@ const RegistrationForm = () => {
     onSuccess: (data) => {
       if (data.success) {
         toast.success("Registration successful!", { id: "form-submit" });
-        form.reset();
+        form.reset({
+          collegeName: "",
+          events: undefined,
+          payss: undefined,
+        });
+        setSelectedFile(null);
+        setTotalFee(0);
         setShowSuccessDialog(true);
       } else {
         toast.error(data.error || "Something went wrong");
@@ -80,6 +88,15 @@ const RegistrationForm = () => {
   };
 
   const selectedEvent = form.watch("events");
+
+  useEffect(() => {
+    const teamSize = form.watch("numberOfTeamMembers");
+
+    if (selectedEvent) {
+      const fee = getEventFeeByName(selectedEvent, teamSize);
+      setTotalFee(fee || 0);
+    }
+  }, [form.watch("events"), form.watch("numberOfTeamMembers")]);
 
   const handleNumberInput = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -132,8 +149,8 @@ const RegistrationForm = () => {
                     <SelectItem value="Python Worriors">
                       Python Warriors
                     </SelectItem>
-                    <SelectItem value="FireFire Battleship">
-                      FireFire Battleship
+                    <SelectItem value="FreeFire Battleship">
+                      FreeFire Battleship
                     </SelectItem>
                     <SelectItem value="AI Tales">AI Tales</SelectItem>
                   </SelectContent>
@@ -193,8 +210,8 @@ const RegistrationForm = () => {
             </>
           )}
 
-          {/* FireFire Battleship Form */}
-          {selectedEvent === "FireFire Battleship" && (
+          {/* FreeFire Battleship Form */}
+          {selectedEvent === "FreeFire Battleship" && (
             <>
               <FormField
                 control={form.control}
@@ -211,9 +228,12 @@ const RegistrationForm = () => {
               />
               <div className="space-y-6">
                 <h3 className="font-semibold">Squad Players</h3>
+                <FormDescription>All 4 players are required</FormDescription>
                 {Array.from({ length: 4 }).map((_, index) => (
                   <div key={index} className="space-y-4 p-4 border rounded-lg">
-                    <h4 className="font-medium">Player {index + 1}</h4>
+                    <h4 className="font-medium">
+                      {index === 0 ? "Squad Leader" : `Player ${index + 1}`}
+                    </h4>
                     <FormField
                       control={form.control}
                       name={`players.${index}.playerName`}
@@ -252,6 +272,7 @@ const RegistrationForm = () => {
                           <FormControl>
                             <Input
                               placeholder="Enter contact number"
+                              type="tel"
                               {...field}
                             />
                           </FormControl>
@@ -259,6 +280,25 @@ const RegistrationForm = () => {
                         </FormItem>
                       )}
                     />
+                    {index === 0 && (
+                      <FormField
+                        control={form.control}
+                        name={`players.${index}.email`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Email (Squad Leader Only)</FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="Enter squad leader's email"
+                                type="email"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    )}
                   </div>
                 ))}
               </div>
@@ -480,6 +520,17 @@ const RegistrationForm = () => {
               </FormItem>
             )}
           />
+
+          <div className="mt-4 p-4 bg-primary/5 rounded-lg">
+            <p className="text-lg font-semibold">
+              Total Registration Fee: ₹{totalFee}
+            </p>
+            <p className="text-sm text-muted-foreground">
+              {selectedEvent === "Startup Sphere"
+                ? "Includes team leader and additional members"
+                : "Per participant fee"}
+            </p>
+          </div>
 
           <Button type="submit" className="w-full" disabled={isPending}>
             {isPending ? "Submitting..." : "Submit"}

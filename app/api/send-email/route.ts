@@ -44,6 +44,44 @@ export async function POST(req: Request) {
         <p>Name: ${registration.teamLeader?.studentName}</p>
         <p>Email: ${registration.teamLeader?.email}</p>
         <p>Contact: ${registration.teamLeader?.contactNumber}</p>
+
+        ${
+          registration.teamMembers?.length > 0
+            ? `
+          <h3>Team Members:</h3>
+          ${registration.teamMembers
+            .map(
+              (member: any, index: number) => `
+            <div style="margin-left: 20px; margin-bottom: 10px;">
+              <p>Member ${index + 1}: ${member.studentName}</p>
+              <p>Email: ${member.email}</p>
+              <p>Contact: ${member.contactNumber}</p>
+            </div>
+          `
+            )
+            .join("")}
+        `
+            : ""
+        }
+      `;
+    } else if (registration.eventType === "FREEFIRE_BATTLESHIP") {
+      participantDetails = `
+        <h3>Squad Information:</h3>
+        <p>Squad Name: ${registration.squadName}</p>
+        ${registration.players
+          ?.map(
+            (player: any, index: number) => `
+          <div style="margin-left: 20px; margin-bottom: 10px;">
+            <p><strong>${
+              index === 0 ? "Squad Leader" : `Player ${index + 1}`
+            }:</strong> ${player.playerName}</p>
+            <p>FreeFire ID: ${player.freeFireId}</p>
+            <p>Contact: ${player.contactNumber}</p>
+            ${index === 0 ? `<p>Email: ${player.email}</p>` : ""}
+          </div>
+        `
+          )
+          .join("")}
       `;
     } else {
       participantDetails = `
