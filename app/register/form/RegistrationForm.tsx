@@ -28,6 +28,8 @@ import { createRegistration } from "@/app/actions/registration";
 import { toast } from "sonner";
 import { SuccessDialog } from "@/components/register/SuccessDialog";
 import { getEventFeeByName } from "@/lib/constants";
+import Image from "next/image";
+import { Separator } from "@/components/ui/separator";
 
 const RegistrationForm = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -521,15 +523,27 @@ const RegistrationForm = () => {
             )}
           />
 
-          <div className="mt-4 p-4 bg-primary/5 rounded-lg">
-            <p className="text-lg font-semibold">
-              Total Registration Fee: ₹{totalFee}
-            </p>
-            <p className="text-sm text-muted-foreground">
-              {selectedEvent === "Startup Sphere"
-                ? "Includes team leader and additional members"
-                : "Per participant fee"}
-            </p>
+          <div className="mt-4 p-4 bg-primary/5 rounded-lg flex items-start gap-2 justify-between">
+            <div>
+              <p className="text-lg font-semibold">
+                Total Registration Fee: ₹{totalFee}
+              </p>
+              <p className="text-sm text-muted-foreground">
+                {selectedEvent === "Startup Sphere"
+                  ? "Includes team leader and additional members"
+                  : "Per participant fee"}
+              </p>
+            </div>
+            <Separator orientation="vertical" />
+            <div>
+              <h3 className="text-md text-white flex-1">Payment QR</h3>
+              <Image
+                alt="payment qr"
+                src={"/qr.jpeg"}
+                width={100}
+                height={100}
+              />
+            </div>
           </div>
 
           <Button type="submit" className="w-full" disabled={isPending}>
