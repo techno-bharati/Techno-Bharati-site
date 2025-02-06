@@ -40,7 +40,7 @@ async function main() {
       password: "admin@freefire",
       name: "FireFire Admin",
       role: AdminRole.EVENT_ADMIN,
-      eventType: "FIREFIRE_BATTLESHIP",
+      eventType: "FREEFIRE_BATTLESHIP",
     },
     {
       email: "ai@technobharati.com",
