@@ -25,12 +25,34 @@ import { VerifyDialog } from "@/components/dashboard/VerifyDialog";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { LogOut } from "lucide-react";
+import { jwtVerify } from "jose";
+import { cookies } from "next/headers";
 
 export default function DashboardPage() {
   const router = useRouter();
   const [search, setSearch] = useState("");
   const [eventFilter, setEventFilter] = useState("all");
   const [selectedRegistration, setSelectedRegistration] = useState<any>(null);
+  const [adminRole, setAdminRole] = useState<
+    "SUPER_ADMIN" | "EVENT_ADMIN" | null
+  >(null);
+  const [adminEventType, setAdminEventType] = useState<string | null>(null);
+
+  // Fetch admin details on component mount
+  useQuery({
+    queryKey: ["adminDetails"],
+    queryFn: async () => {
+      const res = await fetch("/api/admin/me");
+      if (!res.ok) throw new Error("Failed to fetch admin details");
+      const data = await res.json();
+      setAdminRole(data.role);
+      setAdminEventType(data.eventType);
+      if (data.role === "EVENT_ADMIN" && data.eventType) {
+        setEventFilter(data.eventType);
+      }
+      return data;
+    },
+  });
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["registrations"],
@@ -50,7 +72,10 @@ export default function DashboardPage() {
       reg.studentName?.toLowerCase().includes(search.toLowerCase()) ||
       reg.teamName?.toLowerCase().includes(search.toLowerCase()) ||
       reg.squadName?.toLowerCase().includes(search.toLowerCase());
-    const matchesEvent = eventFilter === "all" || reg.eventType === eventFilter;
+    const matchesEvent =
+      adminRole === "EVENT_ADMIN"
+        ? reg.eventType === adminEventType
+        : eventFilter === "all" || reg.eventType === eventFilter;
     return matchesSearch && matchesEvent;
   });
 
@@ -86,24 +111,26 @@ export default function DashboardPage() {
       </div>
 
       <div className="flex items-center space-x-4">
-        <Select
-          defaultValue="all"
-          onValueChange={(value) => setEventFilter(value)}
-        >
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Filter by event" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Events</SelectItem>
-            <SelectItem value="STARTUP_SPHERE">Startup Sphere</SelectItem>
-            <SelectItem value="FACE_TO_FACE">Face To Face</SelectItem>
-            <SelectItem value="PYTHON_WARRIORS">Python Warriors</SelectItem>
-            <SelectItem value="FREEFIRE_BATTLESHIP">
-              FreeFire Battleship
-            </SelectItem>
-            <SelectItem value="AI_TALES">AI Tales</SelectItem>
-          </SelectContent>
-        </Select>
+        {adminRole === "SUPER_ADMIN" && (
+          <Select
+            defaultValue="all"
+            onValueChange={(value) => setEventFilter(value)}
+          >
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Filter by event" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Events</SelectItem>
+              <SelectItem value="STARTUP_SPHERE">Startup Sphere</SelectItem>
+              <SelectItem value="FACE_TO_FACE">Face To Face</SelectItem>
+              <SelectItem value="PYTHON_WARRIORS">Python Warriors</SelectItem>
+              <SelectItem value="FREEFIRE_BATTLESHIP">
+                FreeFire Battleship
+              </SelectItem>
+              <SelectItem value="AI_TALES">AI Tales</SelectItem>
+            </SelectContent>
+          </Select>
+        )}
         <Input
           placeholder="Search registrations..."
           className="max-w-sm"
@@ -113,57 +140,85 @@ export default function DashboardPage() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Total Registrations
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {data?.stats.totalRegistrations}
-            </div>
-            <div className="text-xs text-muted-foreground mt-1">
-              {Object.entries(data?.stats.eventBreakdown || {}).map(
-                ([event, count]) => (
-                  <div key={event}>
-                    {event.replace(/_/g, " ")}: {count}
-                  </div>
-                )
-              )}
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              ₹{data?.stats.totalRevenue}
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Events</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{data?.stats.activeEvents}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Today's Registrations
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {data?.stats.todayRegistrations}
-            </div>
-          </CardContent>
-        </Card>
+        {adminRole === "EVENT_ADMIN" ? (
+          // Event Admin Stats
+          <Card className="md:col-span-2">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">
+                {adminEventType?.replace(/_/g, " ")} Registrations
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">
+                {data?.stats.eventBreakdown?.[adminEventType || ""] || 0}
+              </div>
+              <p className="text-xs text-muted-foreground mt-1">
+                Total registrations for your event
+              </p>
+            </CardContent>
+          </Card>
+        ) : (
+          // Super Admin Stats
+          <>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">
+                  Total Registrations
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">
+                  {data?.stats.totalRegistrations}
+                </div>
+                <div className="text-xs text-muted-foreground mt-1">
+                  {Object.entries(data?.stats.eventBreakdown || {}).map(
+                    ([event, count]) => (
+                      <div key={event}>
+                        {event.replace(/_/g, " ")}: {count}
+                      </div>
+                    )
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">
+                  Total Revenue
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">
+                  ₹{data?.stats.totalRevenue}
+                </div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">
+                  Active Events
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">
+                  {data?.stats.activeEvents}
+                </div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">
+                  Today's Registrations
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">
+                  {data?.stats.todayRegistrations}
+                </div>
+              </CardContent>
+            </Card>
+          </>
+        )}
       </div>
 
       <Card>
