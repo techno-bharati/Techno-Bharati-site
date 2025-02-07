@@ -4,16 +4,29 @@ import { Button } from "../ui/button";
 import Countdown from "./Countdown";
 import { ParticleCanvas } from "../ui/ParticleCanvas";
 import { useRouter } from "next/navigation";
+import { useState, Suspense } from "react";
 
 export function Hero() {
   const router = useRouter();
+  const [isNavigating, setIsNavigating] = useState(false);
+
+  const handleNavigation = () => {
+    if (!isNavigating) {
+      setIsNavigating(true);
+      router.push("/events");
+    }
+  };
 
   return (
     <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* ParticleCanvas Background */}
-      <div className="absolute inset-0 z-0">
-        <ParticleCanvas />
-      </div>
+      {/* ParticleCanvas Background with conditional rendering */}
+      {!isNavigating && (
+        <div className="absolute inset-0 z-0">
+          <Suspense fallback={null}>
+            <ParticleCanvas />
+          </Suspense>
+        </div>
+      )}
 
       {/* Gradient Overlay */}
       <div className="absolute inset-0 bg-gradient-to-br from-black/50 via-black/30 to-transparent z-10" />
@@ -56,9 +69,10 @@ export function Hero() {
           <Button
             size="lg"
             className="bg-gradient-to-b from-primary to-primary/50 text-white hover:opacity-90"
-            onClick={() => router.push("/events")}
+            onClick={handleNavigation}
+            disabled={isNavigating}
           >
-            EXPLORE
+            {isNavigating ? "Loading..." : "EXPLORE"}
           </Button>
         </div>
       </div>
