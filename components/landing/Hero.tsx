@@ -1,11 +1,13 @@
 "use client";
 
-import Link from "next/link";
 import { Button } from "../ui/button";
 import Countdown from "./Countdown";
 import { ParticleCanvas } from "../ui/ParticleCanvas";
+import { useRouter } from "next/navigation";
 
 export function Hero() {
+  const router = useRouter();
+
   return (
     <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* ParticleCanvas Background */}
@@ -54,11 +56,9 @@ export function Hero() {
           <Button
             size="lg"
             className="bg-gradient-to-b from-primary to-primary/50 text-white hover:opacity-90"
-            asChild
+            onClick={() => router.push("/events")}
           >
-            <Link href="/events" replace>
-              EXPLORE
-            </Link>
+            EXPLORE
           </Button>
         </div>
       </div>
