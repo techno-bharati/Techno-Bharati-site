@@ -111,7 +111,7 @@ export const events = [
     entryFee: `${EVENT_FEES.FACE_TO_FACE.amount} (per person)`,
     type: EVENT_FEES.FACE_TO_FACE.type,
     modalData: {
-      eventName: "AI Tales: Animate Your Imagination!",
+      eventName: "Face To Face",
       description:
         "The AIML Department of Bharati Vidyapeeth's College of Engineering, Kolhapur presents Face to Face, an engaging competition as part of Techno Bharti 2025- Infusion AI! ",
       rules: [
@@ -145,7 +145,7 @@ export const events = [
     entryFee: `${EVENT_FEES.PYTHON_WARRIORS.amount} (per person)`,
     type: EVENT_FEES.PYTHON_WARRIORS.type,
     modalData: {
-      eventName: "AI Tales: Animate Your Imagination!",
+      eventName: "Python Warriors",
       description:
         "A high-intensity inter-college coding battle designed to push your Python skills to the limit. Solve real-world challenges, optimize your code, and prove your supremacy in the coding arena!",
       rules: [
@@ -175,7 +175,7 @@ export const events = [
     entryFee: `${EVENT_FEES.FREEFIRE_BATTLESHIP.amount} (per team)`,
     type: EVENT_FEES.FREEFIRE_BATTLESHIP.type,
     modalData: {
-      eventName: "AI Tales: Animate Your Imagination!",
+      eventName: "FreeFire",
       description:
         "Welcome to the ultimate Free Fire Battle Ship Squad Tournament! Get ready to showcase your skills, strategy, and teamwork in an intense no gun attributes battle. Compete against top squads and fight for glory and exciting rewards!",
       rules: [
