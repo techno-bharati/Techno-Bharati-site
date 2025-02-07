@@ -4,11 +4,9 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
-  const router = useRouter();
 
   return (
     <nav className="sticky top-0 w-full z-50 bg-background/80 backdrop-blur-sm border-b border-muted">
@@ -22,28 +20,28 @@ export function Navigation() {
             <Link
               href="/aboutus"
               className="text-sm hover:text-primary transition-colors"
-              prefetch={true}
+              replace
             >
               ABOUT US
             </Link>
             <Link
               href="/events"
               className="text-sm hover:text-primary transition-colors"
-              prefetch={true}
+              replace
             >
               EVENTS
             </Link>
             <Link
               href="/register"
               className="text-sm hover:text-primary transition-colors"
-              prefetch={true}
+              replace
             >
               REGISTER
             </Link>
             <Link
               href="/contactus"
               className="text-sm hover:text-primary transition-colors"
-              prefetch={true}
+              replace
             >
               CONTACT US
             </Link>
@@ -67,7 +65,7 @@ export function Navigation() {
               href="/aboutus"
               className="block text-sm hover:text-primary transition-colors"
               onClick={() => setIsOpen(false)}
-              prefetch={true}
+              replace
             >
               ABOUT US
             </Link>
@@ -75,7 +73,7 @@ export function Navigation() {
               href="/events"
               className="block text-sm hover:text-primary transition-colors"
               onClick={() => setIsOpen(false)}
-              prefetch={true}
+              replace
             >
               EVENTS
             </Link>
@@ -83,7 +81,7 @@ export function Navigation() {
               href="/register"
               className="block text-sm hover:text-primary transition-colors"
               onClick={() => setIsOpen(false)}
-              prefetch={true}
+              replace
             >
               REGISTER
             </Link>
@@ -91,7 +89,7 @@ export function Navigation() {
               href="/contactus"
               className="block text-sm hover:text-primary transition-colors"
               onClick={() => setIsOpen(false)}
-              prefetch={true}
+              replace
             >
               CONTACT US
             </Link>
