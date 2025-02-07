@@ -1,37 +1,19 @@
 "use client";
 
+import Link from "next/link";
 import { Button } from "../ui/button";
 import Countdown from "./Countdown";
 import { ParticleCanvas } from "../ui/ParticleCanvas";
-import { useRouter } from "next/navigation";
-import { useState, Suspense } from "react";
 
 export function Hero() {
-  const router = useRouter();
-  const [isNavigating, setIsNavigating] = useState(false);
-
-  const handleNavigation = () => {
-    if (!isNavigating) {
-      setIsNavigating(true);
-      router.push("/events");
-    }
-  };
-
   return (
     <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* ParticleCanvas Background with conditional rendering */}
-      {!isNavigating && (
-        <div className="absolute inset-0 z-0">
-          <Suspense fallback={null}>
-            <ParticleCanvas />
-          </Suspense>
-        </div>
-      )}
+      <div className="absolute inset-0 z-0">
+        <ParticleCanvas />
+      </div>
 
-      {/* Gradient Overlay */}
       <div className="absolute inset-0 bg-gradient-to-br from-black/50 via-black/30 to-transparent z-10" />
 
-      {/* Content */}
       <div className="relative z-20 text-center space-y-8 px-4">
         <div className="space-y-4">
           <h1 className="text-4xl md:text-6xl lg:text-8xl font-bold tracking-tighter">
@@ -69,10 +51,11 @@ export function Hero() {
           <Button
             size="lg"
             className="bg-gradient-to-b from-primary to-primary/50 text-white hover:opacity-90"
-            onClick={handleNavigation}
-            disabled={isNavigating}
+            asChild
           >
-            {isNavigating ? "Loading..." : "EXPLORE"}
+            <Link href="/events" passHref>
+              EXPLORE
+            </Link>
           </Button>
         </div>
       </div>
