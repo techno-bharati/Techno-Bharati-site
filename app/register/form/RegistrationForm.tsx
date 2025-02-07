@@ -167,7 +167,6 @@ const RegistrationForm = () => {
             )}
           />
 
-          {/* Face To Face, Python Warriors, and AI Tales Form */}
           {(selectedEvent === "Face To Face" ||
             selectedEvent === "Python Worriors" ||
             selectedEvent === "AI Tales") && (
@@ -216,8 +215,7 @@ const RegistrationForm = () => {
               />
             </>
           )}
-
-          {/* FreeFire Battleship Form */}
+          
           {selectedEvent === "FreeFire Battleship" && (
             <>
               <FormField

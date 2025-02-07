@@ -53,7 +53,7 @@ export default function Page() {
               <CardContent>
                 <div className="flex items-center gap-2 text-gray-300">
                   <Coins className="h-5 w-5 text-gray-400" />
-                  <p>Entry: {`${event.entryFee}`} &#8377;</p>
+                  <p>Entry: &#8377; {`${event.entryFee}`}</p>
                 </div>
                 <div className="flex items-center gap-2 text-gray-300">
                   <Calendar className="h-5 w-5 text-gray-400" />
@@ -76,7 +76,7 @@ export default function Page() {
                     }
                   }}
                 >
-                  Learn More
+                  Know More
                 </Button>
               </CardContent>
             </Card>

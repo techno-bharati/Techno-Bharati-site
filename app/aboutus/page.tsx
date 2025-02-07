@@ -4,51 +4,9 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 
-const teamMembers = [
-  {
-    name: "Dr. S. M. Khot",
-    role: "Principal",
-    image: "/team/principal.jpg",
-  },
-  {
-    name: "Prof. S. T. Patil",
-    role: "HOD - AI&DS",
-    image: "/team/hod.jpg",
-  },
-  {
-    name: "Prof. Mayuri Potdar",
-    role: "Event Coordinator",
-    image: "/team/coordinator.jpg",
-  },
-];
+const teamMembers = [];
 
-const studentCoordinators = [
-  {
-    name: "Affan Tamboli",
-    role: "Python Warriors",
-    image: "/team/student1.jpg",
-  },
-  {
-    name: "Shahid Shaikh",
-    role: "Face to Face",
-    image: "/team/student2.jpg",
-  },
-  {
-    name: "Jayesh Jadhav",
-    role: "Startup Sphere",
-    image: "/team/student3.jpg",
-  },
-  {
-    name: "Om Kurlekar",
-    role: "FreeFire Battleship",
-    image: "/team/student4.jpg",
-  },
-  {
-    name: "Anurag Patole",
-    role: "AI Tales",
-    image: "/team/student5.jpg",
-  },
-];
+const studentCoordinators = [];
 
 export default function AboutUsPage() {
   return (
@@ -64,8 +22,9 @@ export default function AboutUsPage() {
           >
             <h1 className="text-4xl md:text-6xl font-bold mb-6">About Us</h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Bharati Vidyapeeth&apos;s College of Engineering, Kolhapur presents
-              Techno Bharati 2025 - a celebration of technology and innovation.
+              Bharati Vidyapeeth&apos;s College of Engineering, Kolhapur
+              presents <br />Techno Bharati 2025 - a celebration of technology and
+              innovation.
             </p>
           </motion.div>
         </div>
@@ -103,7 +62,7 @@ export default function AboutUsPage() {
                 and innovators.
               </p>
               <p className="text-muted-foreground">
-                Our AI&DS department is at the forefront of technological
+                Our AI&ML department is at the forefront of technological
                 advancement, preparing students for the challenges of tomorrow
                 through cutting-edge curriculum and practical exposure.
               </p>
