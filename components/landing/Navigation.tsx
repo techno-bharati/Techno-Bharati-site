@@ -4,9 +4,11 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
 
   return (
     <nav className="sticky top-0 w-full z-50 bg-background/80 backdrop-blur-sm border-b border-muted">
@@ -20,24 +22,28 @@ export function Navigation() {
             <Link
               href="/aboutus"
               className="text-sm hover:text-primary transition-colors"
+              prefetch={true}
             >
               ABOUT US
             </Link>
             <Link
               href="/events"
               className="text-sm hover:text-primary transition-colors"
+              prefetch={true}
             >
               EVENTS
             </Link>
             <Link
               href="/register"
               className="text-sm hover:text-primary transition-colors"
+              prefetch={true}
             >
               REGISTER
             </Link>
             <Link
               href="/contactus"
               className="text-sm hover:text-primary transition-colors"
+              prefetch={true}
             >
               CONTACT US
             </Link>
@@ -60,39 +66,35 @@ export function Navigation() {
             <Link
               href="/aboutus"
               className="block text-sm hover:text-primary transition-colors"
+              onClick={() => setIsOpen(false)}
+              prefetch={true}
             >
               ABOUT US
             </Link>
             <Link
               href="/events"
               className="block text-sm hover:text-primary transition-colors"
+              onClick={() => setIsOpen(false)}
+              prefetch={true}
             >
               EVENTS
             </Link>
             <Link
               href="/register"
               className="block text-sm hover:text-primary transition-colors"
+              onClick={() => setIsOpen(false)}
+              prefetch={true}
             >
               REGISTER
             </Link>
             <Link
               href="/contactus"
               className="block text-sm hover:text-primary transition-colors"
+              onClick={() => setIsOpen(false)}
+              prefetch={true}
             >
               CONTACT US
             </Link>
-            <Link
-              href="/profile"
-              className="block text-sm hover:text-primary transition-colors"
-            >
-              PROFILE
-            </Link>
-            <Button
-              variant="outline"
-              className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
-            >
-              SIGN IN
-            </Button>
           </div>
         </div>
       )}
