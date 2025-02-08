@@ -105,12 +105,18 @@ const RegistrationForm = () => {
     selectedEvent,
   ]);
 
+  useEffect(() => {
+    if (selectedEvent === "Startup Sphere") {
+      form.setValue("numberOfTeamMembers", 1);
+    }
+  }, [selectedEvent, form]);
+
   const handleNumberInput = (
     e: React.ChangeEvent<HTMLInputElement>,
     onChange: (...event: any[]) => void
   ) => {
     const value = parseInt(e.target.value, 10);
-    if (!isNaN(value) && value >= 1 && value <= 4) {
+    if (!isNaN(value) && value >= 1 && value <= 5) {
       onChange(value);
     }
   };
@@ -215,7 +221,7 @@ const RegistrationForm = () => {
               />
             </>
           )}
-          
+
           {selectedEvent === "FreeFire Battleship" && (
             <>
               <FormField
@@ -348,14 +354,15 @@ const RegistrationForm = () => {
                       <Input
                         type="number"
                         min={1}
-                        max={4}
+                        max={5}
                         placeholder="Enter number of team members"
                         onChange={(e) => handleNumberInput(e, field.onChange)}
-                        value={field.value || ""}
+                        value={field.value || "1"}
                       />
                     </FormControl>
                     <FormDescription>
-                      Maximum of 4 team members allowed
+                      Minimum 1 (Team Leader) and maximum of 5 team members
+                      allowed
                     </FormDescription>
                     <FormMessage />
                   </FormItem>

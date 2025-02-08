@@ -3,7 +3,7 @@ import { z } from "zod";
 // Define event-specific schemas
 const startupSphereSchema = z.object({
   startupCategory: z.string(),
-  numberOfTeamMembers: z.number().min(1).max(4),
+  numberOfTeamMembers: z.number().min(1).max(5),
   teamLeader: z.object({
     studentName: z.string(),
     contactNumber: z.string(),

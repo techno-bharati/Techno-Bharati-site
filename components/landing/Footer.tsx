@@ -55,10 +55,10 @@ export function Footer() {
         </div>
 
         <div className="mt-2 flex justify-center space-x-8 text-sm text-muted-foreground">
-          <span className="text-[18px] tracking-tight font-bold ">
+          <span className="text-sm md:text-baseuse lg:text-[18px] tracking-tight font-bold ">
             Develped & Managed by{" "}
             <Link
-              href={"https://github.com/InfusionAI-24"}
+              href={"/"}
               className="hover:underline hover:text-primary"
             >
               Team InfusionAI
