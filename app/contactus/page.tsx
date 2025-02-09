@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import Link from "next/link";
-import Image from "next/image";
 
 export default function ContactUsPage() {
   return (
@@ -28,7 +27,7 @@ export default function ContactUsPage() {
 
       <section className="py-16">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -64,12 +63,33 @@ export default function ContactUsPage() {
                   </div>
                   <h3 className="text-xl font-semibold mb-4">Address</h3>
                   <p className="text-muted-foreground">
+                    Second Floor AIML Department
+                    <br />
                     Bharati Vidyapeeth&apos;s College of Engineering
                     <br />
                     Kolhapur, Maharashtra
                     <br />
                     India - 416013
                   </p>
+                </CardContent>
+              </Card>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              viewport={{ once: true }}
+            >
+              <Card className="text-center h-full">
+                <CardContent className="pt-6">
+                  <div className="mb-4 flex justify-center">
+                    <Phone className="h-10 w-10 text-primary" />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-4">HOD AIML</h3>
+                  <div className="space-y-2 text-muted-foreground">
+                    <p>Prof. S.M. Mulla : +91 98601 51986</p>
+                  </div>
                 </CardContent>
               </Card>
             </motion.div>
