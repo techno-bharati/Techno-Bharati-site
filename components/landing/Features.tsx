@@ -1,25 +1,39 @@
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
+import {
+  CalendarSearch,
+  Swords,
+  SquareKanban,
+  PhoneOutgoing,
+} from "lucide-react";
 
 const features = [
   {
     title: "Events",
-    icon: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Screenshot%202025-02-01%20165216-2WkQ9t9pazWrjy4cAinYelP3k482pO.png",
+    icon: (
+      <CalendarSearch className="w-16 h-16 text-primary group-hover:text-primary/80 transition-colors" />
+    ),
     description: "Exciting tech events and competitions",
   },
   {
     title: "Competitions",
-    icon: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Screenshot%202025-02-01%20165216-2WkQ9t9pazWrjy4cAinYelP3k482pO.png",
+    icon: (
+      <Swords className="w-16 h-16 text-primary group-hover:text-primary/80 transition-colors" />
+    ),
     description: "Showcase your skills and win prizes",
   },
   {
     title: "Workshops",
-    icon: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Screenshot%202025-02-01%20165216-2WkQ9t9pazWrjy4cAinYelP3k482pO.png",
+    icon: (
+      <SquareKanban className="w-16 h-16 text-primary group-hover:text-primary/80 transition-colors" />
+    ),
     description: "Learn from industry experts",
   },
   {
     title: "Contact Us",
-    icon: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Screenshot%202025-02-01%20165216-2WkQ9t9pazWrjy4cAinYelP3k482pO.png",
+    icon: (
+      <PhoneOutgoing className="w-16 h-16 text-primary group-hover:text-primary/80 transition-colors" />
+    ),
     description: "Get in touch with our team",
   },
 ];
@@ -40,16 +54,11 @@ export function Features() {
           {features.map((feature) => (
             <Card
               key={feature.title}
-              className="bg-muted border-none hover:bg-muted/80 transition-colors"
+              className="group bg-muted border-none hover:bg-muted/80 transition-colors"
             >
               <CardContent className="p-6 text-center">
-                <div className="relative h-16 w-16 mx-auto mb-4">
-                  <Image
-                    src={feature.icon || "/placeholder.svg"}
-                    alt={feature.title}
-                    fill
-                    className="object-contain"
-                  />
+                <div className="relative flex items-center justify-center mb-4 p-2 rounded-xl">
+                  {feature.icon}
                 </div>
                 <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
                 <p className="text-sm text-muted-foreground">
