@@ -35,6 +35,80 @@ export default function Page() {
     setOpenDialog(true);
   };
 
+  const renderRules = (rules: string[], eventName: string) => {
+    if (eventName === "Startup Sphere") {
+      let currentCategory = "";
+      return (
+        <div className="text-gray-300 text-sm md:text-base space-y-2">
+          {rules.map((rule, index) => {
+            if (rule.startsWith("Category")) {
+              currentCategory = rule;
+              return (
+                <div key={index} className="mt-8 mb-4">
+                  <h4 className="text-lg font-semibold text-primary/80">
+                    {rule}
+                  </h4>
+                </div>
+              );
+            }
+
+            if (rule.trim() === "") {
+              return <div key={index} className="my-2" />;
+            }
+
+            if (/^\d+\./.test(rule)) {
+              return (
+                <div key={index} className="ml-4 flex gap-2">
+                  <span className="text-muted-foreground">
+                    {rule.split(".")[0]}.
+                  </span>
+                  <span>{rule.split(".").slice(1).join(".").trim()}</span>
+                </div>
+              );
+            }
+
+            const getIndentationClass = () => {
+              if (rule.startsWith("   •")) return "ml-8";
+              if (rule.startsWith("     ○")) return "ml-12";
+              if (rule.startsWith("   ")) return "ml-8";
+              if (rule.startsWith("     ")) return "ml-12";
+              if (rule.startsWith("•")) return "ml-4";
+              if (rule.startsWith("○")) return "ml-8";
+              return "ml-4";
+            };
+
+            const cleanRule = rule.replace(/^[\s•○]+/, "").trim();
+            const indentClass = getIndentationClass();
+            const bulletType = rule.includes("•")
+              ? "•"
+              : rule.includes("○")
+              ? "○"
+              : "";
+
+            return (
+              <div key={index} className={`${indentClass} flex gap-2`}>
+                {bulletType && (
+                  <span className="text-muted-foreground">{bulletType}</span>
+                )}
+                <span>{cleanRule}</span>
+              </div>
+            );
+          })}
+        </div>
+      );
+    }
+
+    return (
+      <ol className="list-decimal pl-6 text-gray-300 text-sm md:text-base">
+        {rules.map((rule, index) => (
+          <li key={index} className="mt-1">
+            {rule}
+          </li>
+        ))}
+      </ol>
+    );
+  };
+
   return (
     <div className="min-h-screen p-4 md:p-10 bg-black">
       <h1 className="text-4xl md:text-5xl font-bold text-center mb-8 md:mb-10 text-white">
@@ -98,23 +172,8 @@ export default function Page() {
           </p>
 
           <h3 className="text-lg md:text-xl text-white mt-6">Rules:</h3>
-          {modalContent?.eventName === "Startup Sphere" ? (
-            <div className="text-gray-300 text-sm md:text-base">
-              {modalContent.rules.map((rule, index) => (
-                <p key={index} className="mt-1">
-                  {rule}
-                </p>
-              ))}
-            </div>
-          ) : (
-            <ol className="list-decimal pl-6 text-gray-300 text-sm md:text-base">
-              {modalContent?.rules.map((rule, index) => (
-                <li key={index} className="mt-1">
-                  {rule}
-                </li>
-              ))}
-            </ol>
-          )}
+          {modalContent &&
+            renderRules(modalContent.rules, modalContent.eventName)}
 
           <h3 className="text-lg md:text-xl text-white mt-6">
             Registration Steps:
