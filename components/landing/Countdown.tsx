@@ -57,22 +57,22 @@ export default function Countdown() {
           className="flex flex-col items-center"
         >
           <div className="relative">
-            <div className="w-16 sm:w-24 h-16 sm:h-24 bg-white/5 backdrop-blur-sm rounded-lg border border-white/10 flex items-center justify-center">
+            <div className="w-16 sm:w-24 h-16 sm:h-24 bg-card/50 backdrop-blur-sm rounded-lg border border-border flex items-center justify-center">
               <motion.span
                 key={value}
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 10 }}
-                className="text-2xl sm:text-4xl font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent"
+                className="text-2xl sm:text-4xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent"
               >
                 {value.toString().padStart(2, "0")}
               </motion.span>
             </div>
             <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-full">
-              <div className="h-1 w-12 sm:w-16 mx-auto rounded-full bg-gradient-to-r from-emerald-400/50 to-cyan-400/50" />
+              <div className="h-1 w-12 sm:w-16 mx-auto rounded-full bg-gradient-to-r from-primary/50 to-primary/30" />
             </div>
           </div>
-          <span className="text-xs sm:text-sm text-gray-400 mt-4 uppercase tracking-wider">
+          <span className="text-xs sm:text-sm text-muted-foreground mt-4 uppercase tracking-wider">
             {label}
           </span>
         </motion.div>

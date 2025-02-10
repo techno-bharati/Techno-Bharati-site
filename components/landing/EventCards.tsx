@@ -53,22 +53,23 @@ export function EventCards() {
   }, [controls]);
 
   return (
-    <section className="relative py-12">
+    <section className="relative py-12 bg-background">
       <div className="container mx-auto">
-        <h2 className="text-3xl font-bold text-center mb-8">Featured Events</h2>
+        <h2 className="text-3xl font-bold text-center mb-8 text-foreground">
+          Featured Events
+        </h2>
 
         <div className="relative w-full overflow-hidden">
           <div className="absolute left-0 top-0 w-32 h-full bg-gradient-to-r from-background to-transparent z-10" />
-
           <div className="absolute right-0 top-0 w-32 h-full bg-gradient-to-l from-background to-transparent z-10" />
 
           <motion.div className="flex gap-8 min-w-max px-4" animate={controls}>
             {[...events, ...events].map((event, index) => (
               <div
                 key={index}
-                className="bg-neutral-900 border border-white/10 rounded-2xl p-4 w-[280px] flex-shrink-0 hover:border-white/20 transition-all duration-300"
+                className="bg-card border border-border rounded-2xl p-4 w-[280px] flex-shrink-0 hover:border-primary/50 transition-all duration-300 shadow-sm"
               >
-                <div className="relative w-full h-32 overflow-hidden rounded-lg">
+                <div className="relative w-full h-32 overflow-hidden rounded-lg bg-muted">
                   <Image
                     src={event.image}
                     alt={event.alt}
@@ -76,7 +77,7 @@ export function EventCards() {
                     className="object-contain rounded-md"
                   />
                 </div>
-                <h3 className="text-lg font-medium text-center mt-4 capitalize">
+                <h3 className="text-lg font-medium text-center mt-4 capitalize text-foreground">
                   {event.title}
                 </h3>
               </div>

@@ -19,8 +19,7 @@ export function Hero2() {
   if (!mounted) return null;
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black">
-      {/* Animated Background */}
+    <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -32,17 +31,14 @@ export function Hero2() {
         }}
       />
 
-      {/* Gradient Overlays */}
-      <div className="absolute inset-0 bg-gradient-to-br from-black/50 via-black/30 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-br from-background/50 via-background/30 to-transparent" />
 
-      {/* Content */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
         className="relative z-20 text-center space-y-8 px-4 max-w-4xl mx-auto"
       >
-        {/* Title */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -66,7 +62,7 @@ export function Hero2() {
               transition={{ delay: 0.6 }}
               className="inline-block"
             >
-              <span className="bg-gradient-to-r from-white via-gray-100 to-gray-300 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-foreground via-foreground/80 to-foreground/60 bg-clip-text text-transparent">
                 Bharati
               </span>
             </motion.span>
@@ -76,23 +72,16 @@ export function Hero2() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.8 }}
-            className="text-xl md:text-2xl text-gray-300 font-light"
+            className="text-xl md:text-2xl text-muted-foreground font-light"
           >
             28th February, 2025
           </motion.p>
         </motion.div>
 
-        {/* Countdown */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1 }}
-          className="transform hover:scale-105 transition-transform duration-300"
-        >
+        <div>
           <Countdown />
-        </motion.div>
+        </div>
 
-        {/* Events Live Section */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -105,7 +94,6 @@ export function Hero2() {
           </h2>
         </motion.div>
 
-        {/* CTA Button */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -116,7 +104,7 @@ export function Hero2() {
             <Button
               size="lg"
               onClick={handleExplore}
-              className="bg-gradient-to-b from-primary to-primary/50 text-white hover:opacity-90 transition-all duration-300 px-8 py-6 text-lg"
+              className="bg-gradient-to-b from-primary to-primary/50 text-primary-foreground hover:opacity-90 transition-all duration-300 px-8 py-6 text-lg rounded-lg text-white dark:text-foreground/90"
             >
               EXPLORE
             </Button>
