@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { jwtVerify } from "jose";
+import prisma from "@/lib/prisma";
 
 export async function GET() {
   try {
@@ -18,11 +19,27 @@ export async function GET() {
 
     const payload = verified.payload as any;
 
+    const admin = await prisma.admin.findUnique({
+      where: { id: payload.sub },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        role: true,
+        eventType: true,
+      },
+    });
+
+    if (!admin) {
+      return NextResponse.json({ error: "Admin not found" }, { status: 404 });
+    }
+
     return NextResponse.json({
-      id: payload.sub,
-      email: payload.email,
-      role: payload.role,
-      eventType: payload.eventType,
+      id: admin.id,
+      email: admin.email,
+      name: admin.name,
+      role: admin.role,
+      eventType: admin.eventType,
     });
   } catch (error) {
     console.error("Error fetching admin details:", error);

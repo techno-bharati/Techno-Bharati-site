@@ -36,6 +36,7 @@ export default function DashboardPage() {
     "SUPER_ADMIN" | "EVENT_ADMIN" | null
   >(null);
   const [adminEventType, setAdminEventType] = useState<string | null>(null);
+  const [adminName, setAdminName] = useState<string>("");
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [registrationToDelete, setRegistrationToDelete] = useState<{
     id: string;
@@ -51,6 +52,7 @@ export default function DashboardPage() {
       const data = await res.json();
       setAdminRole(data.role);
       setAdminEventType(data.eventType);
+      setAdminName(data.name || "");
       if (data.role === "EVENT_ADMIN" && data.eventType) {
         setEventFilter(data.eventType);
       }
@@ -191,7 +193,10 @@ export default function DashboardPage() {
   return (
     <div className="container mx-auto px-4 py-6 space-y-5">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
+        <div className="space-y-1">
+          <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
+          <p className="text-muted-foreground">Welcome back, {adminName}</p>
+        </div>
         <div className="flex items-center gap-2">
           <Button
             variant="outline"
