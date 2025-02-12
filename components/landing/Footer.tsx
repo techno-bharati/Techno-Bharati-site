@@ -56,7 +56,7 @@ export function Footer() {
 
         <div className="mt-2 flex justify-center space-x-8 text-sm text-muted-foreground">
           <span className="text-sm md:text-baseuse lg:text-[18px] tracking-tight font-bold ">
-            Develped & Managed by{" "}
+            Developed & Managed by{" "}
             <Link
               href={"/"}
               className="hover:underline hover:text-primary"
