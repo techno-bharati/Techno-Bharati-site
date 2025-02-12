@@ -24,8 +24,9 @@ import { Button } from "@/components/ui/button";
 import { VerifyDialog } from "@/components/dashboard/VerifyDialog";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { LogOut, Trash2, Download } from "lucide-react";
+import { LogOut, Trash2, Download, Lock } from "lucide-react";
 import { DeleteConfirmDialog } from "@/components/dashboard/DeleteConfirmDialog";
+import { ChangePasswordDialog } from "@/components/dashboard/ChangePasswordDialog";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -43,6 +44,8 @@ export default function DashboardPage() {
     name: string;
     event: string;
   } | null>(null);
+  const [changePasswordDialogOpen, setChangePasswordDialogOpen] =
+    useState(false);
 
   useQuery({
     queryKey: ["adminDetails"],
@@ -206,6 +209,14 @@ export default function DashboardPage() {
           >
             <Download className="h-4 w-4" />
             {exportMutation.isPending ? "Exporting..." : "Export to Excel"}
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => setChangePasswordDialogOpen(true)}
+            className="gap-2"
+          >
+            <Lock className="h-4 w-4" />
+            Change Password
           </Button>
           <Button variant="outline" onClick={handleLogout} className="gap-2">
             <LogOut className="h-4 w-4" />
@@ -428,6 +439,11 @@ export default function DashboardPage() {
         onOpenChange={setDeleteDialogOpen}
         onConfirm={confirmDelete}
         registrationDetails={registrationToDelete}
+      />
+
+      <ChangePasswordDialog
+        open={changePasswordDialogOpen}
+        onOpenChange={setChangePasswordDialogOpen}
       />
     </div>
   );
