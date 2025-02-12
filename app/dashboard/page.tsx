@@ -17,14 +17,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { VerifyDialog } from "@/components/dashboard/VerifyDialog";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { LogOut, Trash2 } from "lucide-react";
+import { LogOut, Trash2, Download } from "lucide-react";
 import { DeleteConfirmDialog } from "@/components/dashboard/DeleteConfirmDialog";
 
 export default function DashboardPage() {
@@ -126,11 +126,11 @@ export default function DashboardPage() {
 
       if (data.success) {
         toast.success("Registration deleted successfully");
-       
+
         setDeleteDialogOpen(false);
-      
+
         setRegistrationToDelete(null);
-        
+
         await refetch();
       } else {
         throw new Error(data.error || "Failed to delete registration");
@@ -139,6 +139,42 @@ export default function DashboardPage() {
       toast.error("Failed to delete registration");
       console.error("Delete error:", error);
     }
+  };
+
+  const exportMutation = useMutation({
+    mutationFn: async () => {
+      const res = await fetch("/api/registrations/export");
+      if (!res.ok) {
+        throw new Error("Export failed");
+      }
+      return res.blob();
+    },
+    onMutate: () => {
+      toast.loading("Exporting data...", { id: "export-toast" });
+    },
+    onSuccess: (blob) => {
+      // Create download link
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `registrations-${new Date().toLocaleDateString()}.xlsx`;
+      document.body.appendChild(a);
+      a.click();
+
+      // Cleanup
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+
+      toast.success("Data exported successfully!", { id: "export-toast" });
+    },
+    onError: (error) => {
+      console.error("Export error:", error);
+      toast.error("Failed to export data", { id: "export-toast" });
+    },
+  });
+
+  const handleExport = () => {
+    exportMutation.mutate();
   };
 
   if (error) {
@@ -156,10 +192,21 @@ export default function DashboardPage() {
     <div className="container mx-auto px-4 py-6 space-y-5">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
-        <Button variant="outline" onClick={handleLogout} className="gap-2">
-          <LogOut className="h-4 w-4" />
-          Logout
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            onClick={handleExport}
+            className="gap-2"
+            disabled={exportMutation.isPending}
+          >
+            <Download className="h-4 w-4" />
+            {exportMutation.isPending ? "Exporting..." : "Export to Excel"}
+          </Button>
+          <Button variant="outline" onClick={handleLogout} className="gap-2">
+            <LogOut className="h-4 w-4" />
+            Logout
+          </Button>
+        </div>
       </div>
 
       <div className="flex items-center space-x-4">
