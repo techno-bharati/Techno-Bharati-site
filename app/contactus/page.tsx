@@ -42,7 +42,7 @@ export default function ContactUsPage() {
                   <h3 className="text-xl font-semibold mb-4">Email</h3>
                   <Link
                     href="mailto:technobharati2025@gmail.com"
-                    className="text-muted-foreground hover:text-primary transition-colors"
+                    className="text-muted-foreground hover:text-primary transition-colors break-all"
                   >
                     technobharati2025@gmail.com
                   </Link>
