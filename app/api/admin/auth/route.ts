@@ -2,7 +2,6 @@ import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { SignJWT } from "jose";
 import { cookies } from "next/headers";
-import bcrypt from "bcryptjs";
 
 const validateEmail = (email: string) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -40,7 +39,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const isPasswordValid = await bcrypt.compare(password, admin.password);
+    const isPasswordValid = password === admin.password;
 
     if (!isPasswordValid) {
       return NextResponse.json(

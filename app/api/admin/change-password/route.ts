@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import bcrypt from "bcryptjs";
 import { cookies } from "next/headers";
 import { jwtVerify } from "jose";
 
@@ -40,10 +39,7 @@ export async function POST(req: Request) {
     }
 
     // Verify current password
-    const isCurrentPasswordValid = await bcrypt.compare(
-      currentPassword,
-      admin.password
-    );
+    const isCurrentPasswordValid = currentPassword === admin.password;
 
     if (!isCurrentPasswordValid) {
       return NextResponse.json(
@@ -52,13 +48,10 @@ export async function POST(req: Request) {
       );
     }
 
-    // Hash new password
-    const hashedNewPassword = await bcrypt.hash(newPassword, 10);
-
     // Update password
     await prisma.admin.update({
       where: { id: adminId },
-      data: { password: hashedNewPassword },
+      data: { password: newPassword },
     });
 
     return NextResponse.json({ message: "Password updated successfully" });
