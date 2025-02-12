@@ -51,7 +51,10 @@ export async function GET() {
       prisma.$transaction([
         prisma.registration.count({ where }),
         prisma.registration.aggregate({
-          where,
+          where: {
+            ...where,
+            status: "CONFIRMED",
+          },
           _sum: { amount: true },
         }),
         prisma.registration.groupBy({

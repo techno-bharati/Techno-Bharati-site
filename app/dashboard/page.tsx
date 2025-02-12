@@ -24,7 +24,8 @@ import { Button } from "@/components/ui/button";
 import { VerifyDialog } from "@/components/dashboard/VerifyDialog";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { LogOut } from "lucide-react";
+import { LogOut, Trash2 } from "lucide-react";
+import { DeleteConfirmDialog } from "@/components/dashboard/DeleteConfirmDialog";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -35,6 +36,12 @@ export default function DashboardPage() {
     "SUPER_ADMIN" | "EVENT_ADMIN" | null
   >(null);
   const [adminEventType, setAdminEventType] = useState<string | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [registrationToDelete, setRegistrationToDelete] = useState<{
+    id: string;
+    name: string;
+    event: string;
+  } | null>(null);
 
   useQuery({
     queryKey: ["adminDetails"],
@@ -51,7 +58,7 @@ export default function DashboardPage() {
     },
   });
 
-  const { data, error } = useQuery({
+  const { data, error, refetch } = useQuery({
     queryKey: ["registrations"],
     queryFn: async () => {
       const res = await fetch("/api/registrations");
@@ -83,6 +90,54 @@ export default function DashboardPage() {
       router.push("/admin/login");
     } catch (error) {
       toast.error("Error logging out");
+    }
+  };
+
+  const handleDelete = async (registration: any, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setRegistrationToDelete({
+      id: registration.id,
+      name:
+        registration.studentName ||
+        registration.teamName ||
+        registration.squadName,
+      event: registration.eventType.replace(/_/g, " "),
+    });
+    setDeleteDialogOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!registrationToDelete) return;
+
+    try {
+      const res = await fetch("/api/registrations/delete", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ registrationId: registrationToDelete.id }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to delete registration");
+      }
+
+      const data = await res.json();
+
+      if (data.success) {
+        toast.success("Registration deleted successfully");
+       
+        setDeleteDialogOpen(false);
+      
+        setRegistrationToDelete(null);
+        
+        await refetch();
+      } else {
+        throw new Error(data.error || "Failed to delete registration");
+      }
+    } catch (error) {
+      toast.error("Failed to delete registration");
+      console.error("Delete error:", error);
     }
   };
 
@@ -179,13 +234,19 @@ export default function DashboardPage() {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
-                  Total Revenue
+                  Verified Revenue
                 </CardTitle>
+                <span className="text-xs text-muted-foreground">
+                  (From verified entries only)
+                </span>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">
+                <div className="text-2xl font-bold text-white">
                   ₹{data?.stats.totalRevenue}
                 </div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Total revenue from verified registrations
+                </p>
               </CardContent>
             </Card>
             <Card>
@@ -230,7 +291,7 @@ export default function DashboardPage() {
                 <TableHead>Contact</TableHead>
                 <TableHead>Date</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead>Actions</TableHead>
+                <TableHead className="w-[140px]">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -273,17 +334,29 @@ export default function DashboardPage() {
                     </Badge>
                   </TableCell>
                   <TableCell>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setSelectedRegistration(registration);
-                      }}
-                      disabled={registration.status === "CONFIRMED"}
-                    >
-                      Verify
-                    </Button>
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedRegistration(registration);
+                        }}
+                        disabled={registration.status === "CONFIRMED"}
+                      >
+                        Verify
+                      </Button>
+                      {adminRole === "SUPER_ADMIN" && (
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          onClick={(e) => handleDelete(registration, e)}
+                          className="px-2"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      )}
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}
@@ -296,6 +369,13 @@ export default function DashboardPage() {
         open={!!selectedRegistration}
         onOpenChange={(open) => !open && setSelectedRegistration(null)}
         registration={selectedRegistration}
+      />
+
+      <DeleteConfirmDialog
+        open={deleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
+        onConfirm={confirmDelete}
+        registrationDetails={registrationToDelete}
       />
     </div>
   );
