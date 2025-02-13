@@ -354,7 +354,9 @@ export default function DashboardPage() {
                 <TableHead>Contact</TableHead>
                 <TableHead>Date</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead className="w-[140px]">Actions</TableHead>
+                {adminRole === "SUPER_ADMIN" && (
+                  <TableHead className="w-[140px]">Actions</TableHead>
+                )}
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -396,20 +398,20 @@ export default function DashboardPage() {
                       {registration.status}
                     </Badge>
                   </TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setSelectedRegistration(registration);
-                        }}
-                        disabled={registration.status === "CONFIRMED"}
-                      >
-                        Verify
-                      </Button>
-                      {adminRole === "SUPER_ADMIN" && (
+                  {adminRole === "SUPER_ADMIN" && (
+                    <TableCell>
+                      <div className="flex items-center gap-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedRegistration(registration);
+                          }}
+                          disabled={registration.status === "CONFIRMED"}
+                        >
+                          Verify
+                        </Button>
                         <Button
                           variant="destructive"
                           size="sm"
@@ -418,9 +420,9 @@ export default function DashboardPage() {
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>
-                      )}
-                    </div>
-                  </TableCell>
+                      </div>
+                    </TableCell>
+                  )}
                 </TableRow>
               ))}
             </TableBody>

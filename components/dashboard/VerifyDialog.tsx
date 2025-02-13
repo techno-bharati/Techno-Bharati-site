@@ -13,7 +13,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface VerifyDialogProps {
   open: boolean;
@@ -28,6 +28,25 @@ export function VerifyDialog({
 }: VerifyDialogProps) {
   const queryClient = useQueryClient();
   const [showImageDialog, setShowImageDialog] = useState(false);
+  const [adminRole, setAdminRole] = useState<
+    "SUPER_ADMIN" | "EVENT_ADMIN" | null
+  >(null);
+
+  // Fetch admin role when component mounts
+  useEffect(() => {
+    const fetchAdminRole = async () => {
+      try {
+        const res = await fetch("/api/admin/me");
+        if (res.ok) {
+          const data = await res.json();
+          setAdminRole(data.role);
+        }
+      } catch (error) {
+        console.error("Failed to fetch admin role:", error);
+      }
+    };
+    fetchAdminRole();
+  }, []);
 
   const { mutate: verifyRegistration, isPending } = useMutation({
     mutationFn: async () => {
@@ -223,12 +242,14 @@ export function VerifyDialog({
               <Button variant="outline" onClick={() => onOpenChange(false)}>
                 Close
               </Button>
-              <Button
-                onClick={() => verifyRegistration()}
-                disabled={isPending || registration.status === "CONFIRMED"}
-              >
-                {isPending ? "Verifying..." : "Verify Registration"}
-              </Button>
+              {adminRole === "SUPER_ADMIN" && (
+                <Button
+                  onClick={() => verifyRegistration()}
+                  disabled={isPending || registration.status === "CONFIRMED"}
+                >
+                  {isPending ? "Verifying..." : "Verify Registration"}
+                </Button>
+              )}
             </DialogFooter>
           </div>
         </DialogContent>
