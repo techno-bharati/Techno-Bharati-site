@@ -304,7 +304,7 @@ export default function DashboardPage() {
                 </span>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-white">
+                <div className="text-2xl font-bold text-black dark:text-white">
                   ₹{data?.stats.totalRevenue}
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">
