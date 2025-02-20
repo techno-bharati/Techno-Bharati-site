@@ -335,7 +335,7 @@ export default function DashboardPage() {
                     </div>
                     <div className="mt-2 pt-2 border-t">
                       <div className="text-sm text-muted-foreground">Offline Payments</div>
-                      <div className="text-xl font-semibold">
+                      <div className="text-xl font-semibold text-black dark:text-white">
                         ₹{registrationsData?.stats.offlineRevenue || 0}
                       </div>
                     </div>
