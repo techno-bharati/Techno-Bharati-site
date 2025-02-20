@@ -27,6 +27,9 @@ import { toast } from "sonner";
 import { LogOut, Trash2, Download, Lock } from "lucide-react";
 import { DeleteConfirmDialog } from "@/components/dashboard/DeleteConfirmDialog";
 import { ChangePasswordDialog } from "@/components/dashboard/ChangePasswordDialog";
+import { Skeleton } from "@/components/ui/skeleton";
+import DashboardLoading, { StatsCardSkeleton, RegistrationsTableSkeleton } from "./loading";
+import { Suspense } from "react";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -47,7 +50,7 @@ export default function DashboardPage() {
   const [changePasswordDialogOpen, setChangePasswordDialogOpen] =
     useState(false);
 
-  useQuery({
+  const { data: adminData, isLoading: isLoadingAdmin } = useQuery({
     queryKey: ["adminDetails"],
     queryFn: async () => {
       const res = await fetch("/api/admin/me");
@@ -63,7 +66,12 @@ export default function DashboardPage() {
     },
   });
 
-  const { data, error, refetch } = useQuery({
+  const { 
+    data: registrationsData, 
+    isLoading: isLoadingRegistrations, 
+    error: registrationsError,
+    refetch 
+  } = useQuery({
     queryKey: ["registrations"],
     queryFn: async () => {
       const res = await fetch("/api/registrations");
@@ -75,7 +83,7 @@ export default function DashboardPage() {
     },
   });
 
-  const filteredRegistrations = data?.registrations?.filter((reg: any) => {
+  const filteredRegistrations = registrationsData?.registrations?.filter((reg: any) => {
     const matchesSearch =
       reg.collegeName.toLowerCase().includes(search.toLowerCase()) ||
       reg.studentName?.toLowerCase().includes(search.toLowerCase()) ||
@@ -182,12 +190,12 @@ export default function DashboardPage() {
     exportMutation.mutate();
   };
 
-  if (error) {
-    console.error("Dashboard error:", error);
+  if (registrationsError) {
+    console.error("Dashboard error:", registrationsError);
     return (
       <div className="flex items-center justify-center min-h-screen">
         <p className="text-red-500">
-          Error loading registrations: {error.message}
+          Error loading registrations: {registrationsError.message}
         </p>
       </div>
     );
@@ -196,33 +204,42 @@ export default function DashboardPage() {
   return (
     <div className="container mx-auto px-4 py-6 space-y-5">
       <div className="flex items-center justify-between mb-6">
-        <div className="space-y-1">
-          <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
-          <p className="text-muted-foreground">Welcome back, {adminName}</p>
-        </div>
-        <div className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            onClick={handleExport}
-            className="gap-2"
-            disabled={exportMutation.isPending}
-          >
-            <Download className="h-4 w-4" />
-            {exportMutation.isPending ? "Exporting..." : "Export to Excel"}
-          </Button>
-          <Button
-            variant="outline"
-            onClick={() => setChangePasswordDialogOpen(true)}
-            className="gap-2"
-          >
-            <Lock className="h-4 w-4" />
-            Change Password
-          </Button>
-          <Button variant="outline" onClick={handleLogout} className="gap-2">
-            <LogOut className="h-4 w-4" />
-            Logout
-          </Button>
-        </div>
+        {isLoadingAdmin ? (
+          <>
+            <Skeleton className="h-8 w-32" />
+            <Skeleton className="h-10 w-24" />
+          </>
+        ) : (
+          <>
+            <div className="space-y-1">
+              <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
+              <p className="text-muted-foreground">Welcome back, {adminName}</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                onClick={handleExport}
+                className="gap-2"
+                disabled={exportMutation.isPending}
+              >
+                <Download className="h-4 w-4" />
+                {exportMutation.isPending ? "Exporting..." : "Export to Excel"}
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => setChangePasswordDialogOpen(true)}
+                className="gap-2"
+              >
+                <Lock className="h-4 w-4" />
+                Change Password
+              </Button>
+              <Button variant="outline" onClick={handleLogout} className="gap-2">
+                <LogOut className="h-4 w-4" />
+                Logout
+              </Button>
+            </div>
+          </>
+        )}
       </div>
 
       <div className="flex items-center space-x-4">
@@ -255,196 +272,211 @@ export default function DashboardPage() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {adminRole === "EVENT_ADMIN" ? (
-          <Card className="md:col-span-2">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                {adminEventType?.replace(/_/g, " ")} Registrations
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                {data?.stats.eventBreakdown?.[adminEventType || ""] || 0}
-              </div>
-              <p className="text-xs text-muted-foreground mt-1">
-                Total registrations for your event
-              </p>
-            </CardContent>
-          </Card>
+        {isLoadingRegistrations ? (
+          <>
+            <StatsCardSkeleton />
+            <StatsCardSkeleton />
+            <StatsCardSkeleton />
+            <StatsCardSkeleton />
+          </>
         ) : (
           <>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Total Registrations
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">
-                  {data?.stats.totalRegistrations}
-                </div>
-                <div className="text-xs text-muted-foreground mt-1">
-                  {Object.entries(data?.stats.eventBreakdown || {}).map(
-                    ([event, count]) => (
-                      <div key={event}>
-                        {event.replace(/_/g, " ")}: {count as number}
-                      </div>
-                    )
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Verified Revenue
-                </CardTitle>
-                <span className="text-xs text-muted-foreground">
-                  (From verified entries only)
-                </span>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-black dark:text-white">
-                  ₹{data?.stats.totalRevenue}
-                </div>
-                <p className="text-xs text-muted-foreground mt-1">
-                  Total revenue from verified registrations
-                </p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Active Events
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">
-                  {data?.stats.activeEvents}
-                </div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Registration Stats
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="border-b pb-3">
-                  <div className="text-sm font-medium text-muted-foreground">Today's Registrations</div>
+            {adminRole === "EVENT_ADMIN" ? (
+              <Card className="md:col-span-2">
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">
+                    {adminEventType?.replace(/_/g, " ")} Registrations
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
                   <div className="text-2xl font-bold">
-                    {data?.stats.todayRegistrations}
-                  </div>
-                </div>
-                <div>
-                  <div className="text-sm font-medium text-muted-foreground">Total Participants</div>
-                  <div className="text-2xl font-bold">
-                    {data?.stats.totalParticipants}
+                    {registrationsData?.stats.eventBreakdown?.[adminEventType || ""] || 0}
                   </div>
                   <p className="text-xs text-muted-foreground mt-1">
-                    Across all events
+                    Total registrations for your event
                   </p>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            ) : (
+              <>
+                <Card>
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">
+                      Total Registrations
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold">
+                      {registrationsData?.stats.totalRegistrations}
+                    </div>
+                    <div className="text-xs text-muted-foreground mt-1">
+                      {Object.entries(registrationsData?.stats.eventBreakdown || {}).map(
+                        ([event, count]) => (
+                          <div key={event}>
+                            {event.replace(/_/g, " ")}: {count as number}
+                          </div>
+                        )
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">
+                      Verified Revenue
+                    </CardTitle>
+                    <span className="text-xs text-muted-foreground">
+                      (From verified entries only)
+                    </span>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold text-black dark:text-white">
+                      ₹{registrationsData?.stats.totalRevenue}
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Total revenue from verified registrations
+                    </p>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">
+                      Active Events
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold">
+                      {registrationsData?.stats.activeEvents}
+                    </div>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">
+                      Registration Stats
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="border-b pb-3">
+                      <div className="text-sm font-medium text-muted-foreground">Today's Registrations</div>
+                      <div className="text-2xl font-bold">
+                        {registrationsData?.stats.todayRegistrations}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-sm font-medium text-muted-foreground">Total Participants</div>
+                      <div className="text-2xl font-bold">
+                        {registrationsData?.stats.totalParticipants}
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Across all events
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </>
+            )}
           </>
         )}
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Recent Registrations</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name/Team</TableHead>
-                <TableHead>Event</TableHead>
-                <TableHead>College</TableHead>
-                <TableHead>Contact</TableHead>
-                <TableHead>Payment Mode</TableHead>
-                <TableHead>Date</TableHead>
-                <TableHead>Status</TableHead>
-                {adminRole === "SUPER_ADMIN" && (
-                  <TableHead className="w-[140px]">Actions</TableHead>
-                )}
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredRegistrations?.map((registration: any) => (
-                <TableRow
-                  key={registration.id}
-                  className="cursor-pointer hover:bg-muted/50"
-                  onClick={() => setSelectedRegistration(registration)}
-                >
-                  <TableCell>
-                    {registration.studentName ||
-                      registration.teamName ||
-                      registration.squadName}
-                  </TableCell>
-                  <TableCell>
-                    {registration.eventType.replace(/_/g, " ")}
-                  </TableCell>
-                  <TableCell>{registration.collegeName}</TableCell>
-                  <TableCell>
-                    {registration.contactNumber ||
-                      (registration.teamLeader &&
-                        registration.teamLeader.contactNumber) ||
-                      (registration.players &&
-                        registration.players[0]?.contactNumber)}
-                  </TableCell>
-                  <TableCell>
-                    {registration.paymentMode || "N/A"}
-                  </TableCell>
-                  <TableCell>
-                    {new Date(registration.createdAt).toLocaleDateString()}
-                  </TableCell>
-                  <TableCell>
-                    <Badge
-                      variant={
-                        registration.status === "CONFIRMED"
-                          ? "success"
-                          : registration.status === "PENDING"
-                          ? "warning"
-                          : "destructive"
-                      }
-                    >
-                      {registration.status}
-                    </Badge>
-                  </TableCell>
+      {isLoadingRegistrations ? (
+        <RegistrationsTableSkeleton />
+      ) : (
+        <Card>
+          <CardHeader>
+            <CardTitle>Recent Registrations</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Name/Team</TableHead>
+                  <TableHead>Event</TableHead>
+                  <TableHead>College</TableHead>
+                  <TableHead>Contact</TableHead>
+                  <TableHead>Payment Mode</TableHead>
+                  <TableHead>Date</TableHead>
+                  <TableHead>Status</TableHead>
                   {adminRole === "SUPER_ADMIN" && (
-                    <TableCell>
-                      <div className="flex items-center gap-2">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setSelectedRegistration(registration);
-                          }}
-                          disabled={registration.status === "CONFIRMED"}
-                        >
-                          Verify
-                        </Button>
-                        <Button
-                          variant="destructive"
-                          size="sm"
-                          onClick={(e) => handleDelete(registration, e)}
-                          className="px-2"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </TableCell>
+                    <TableHead className="w-[140px]">Actions</TableHead>
                   )}
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+              </TableHeader>
+              <TableBody>
+                {filteredRegistrations?.map((registration: any) => (
+                  <TableRow
+                    key={registration.id}
+                    className="cursor-pointer hover:bg-muted/50"
+                    onClick={() => setSelectedRegistration(registration)}
+                  >
+                    <TableCell>
+                      {registration.studentName ||
+                        registration.teamName ||
+                        registration.squadName}
+                    </TableCell>
+                    <TableCell>
+                      {registration.eventType.replace(/_/g, " ")}
+                    </TableCell>
+                    <TableCell>{registration.collegeName}</TableCell>
+                    <TableCell>
+                      {registration.contactNumber ||
+                        (registration.teamLeader &&
+                          registration.teamLeader.contactNumber) ||
+                        (registration.players &&
+                          registration.players[0]?.contactNumber)}
+                    </TableCell>
+                    <TableCell>
+                      {registration.paymentMode || "N/A"}
+                    </TableCell>
+                    <TableCell>
+                      {new Date(registration.createdAt).toLocaleDateString()}
+                    </TableCell>
+                    <TableCell>
+                      <Badge
+                        variant={
+                          registration.status === "CONFIRMED"
+                            ? "success"
+                            : registration.status === "PENDING"
+                            ? "warning"
+                            : "destructive"
+                        }
+                      >
+                        {registration.status}
+                      </Badge>
+                    </TableCell>
+                    {adminRole === "SUPER_ADMIN" && (
+                      <TableCell>
+                        <div className="flex items-center gap-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedRegistration(registration);
+                            }}
+                            disabled={registration.status === "CONFIRMED"}
+                          >
+                            Verify
+                          </Button>
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            onClick={(e) => handleDelete(registration, e)}
+                            className="px-2"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    )}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+      )}
 
       <VerifyDialog
         open={!!selectedRegistration}
