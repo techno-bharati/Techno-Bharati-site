@@ -92,6 +92,14 @@ export async function GET() {
           },
         }),
         prisma.player.count(),
+        prisma.registration.aggregate({
+          where: {
+            ...where,
+            status: "CONFIRMED",
+            paymentMode: "OFFLINE"
+          },
+          _sum: { amount: true },
+        }),
       ]),
     ]);
 
@@ -100,11 +108,14 @@ export async function GET() {
       stats[5] + // Individual participants
       stats[6]; // FreeFire players
 
+    const offlineRevenue = stats[7]._sum.amount || 0;
+
     return NextResponse.json({
       registrations,
       stats: {
         totalRegistrations: stats[0],
         totalRevenue: stats[1]._sum.amount || 0,
+        offlineRevenue: offlineRevenue,
         activeEvents: stats[2].length,
         todayRegistrations: stats[3],
         eventBreakdown: stats[2].reduce((acc, curr) => {

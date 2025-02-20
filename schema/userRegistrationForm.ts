@@ -80,7 +80,9 @@ export const userRegistrationFormSchema = z
         required_error: "Please select an event",
       }
     ),
-    paymentMode: z.enum(['ONLINE', 'OFFLINE']),
+    paymentMode: z.enum(['ONLINE', 'OFFLINE'], {
+      required_error: "Please select a payment mode",
+    }),
     payss: z
       .instanceof(File, { message: "Payment screenshot/receipt is required" })
       .refine(

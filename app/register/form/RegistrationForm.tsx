@@ -56,6 +56,7 @@ const RegistrationForm = () => {
           collegeName: "",
           events: undefined,
           payss: undefined,
+          paymentMode: "ONLINE",
         });
         setSelectedFile(null);
         setTotalFee(0);
@@ -78,7 +79,10 @@ const RegistrationForm = () => {
           return;
         }
         toast.loading("Submitting..", { id: "form-submit" });
-        mutate(data);
+        mutate({
+          ...data,
+          paymentMode: data.paymentMode
+        });
       } catch (error) {
         console.error("Submission error:", error);
         toast.error("Failed to submit form", { id: "form-submit" });
@@ -509,7 +513,13 @@ const RegistrationForm = () => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Payment Mode</FormLabel>
-                <Select onValueChange={field.onChange} value={field.value}>
+                <Select 
+                  onValueChange={(value) => {
+                    field.onChange(value);
+                    setPaymentMode(value as 'ONLINE' | 'OFFLINE');
+                  }} 
+                  value={field.value}
+                >
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Select payment mode" />

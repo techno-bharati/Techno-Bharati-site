@@ -46,6 +46,7 @@ export async function createRegistration(
       collegeName: formData.collegeName,
       eventType: eventTypeMap[formData.events],
       paymentScreenshot: uploadResult.url!,
+      paymentMode: formData.paymentMode,
       amount,
     };
 
