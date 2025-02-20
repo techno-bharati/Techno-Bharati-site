@@ -75,8 +75,30 @@ export async function GET() {
             },
           },
         }),
+        prisma.registration.aggregate({
+          where,
+          _sum: {
+            numberOfTeamMembers: true,
+          },
+        }),
+        prisma.registration.count({
+          where: {
+            ...where,
+            OR: [
+              { eventType: "FACE_TO_FACE" },
+              { eventType: "PYTHON_WARRIORS" },
+              { eventType: "AI_TALES" },
+            ],
+          },
+        }),
+        prisma.player.count(),
       ]),
     ]);
+
+    const totalParticipants = 
+      (stats[4]._sum.numberOfTeamMembers || 0) + // Startup Sphere members
+      stats[5] + // Individual participants
+      stats[6]; // FreeFire players
 
     return NextResponse.json({
       registrations,
@@ -91,6 +113,7 @@ export async function GET() {
           }
           return acc;
         }, {} as Record<string, number>),
+        totalParticipants,
       },
     });
   } catch (error) {

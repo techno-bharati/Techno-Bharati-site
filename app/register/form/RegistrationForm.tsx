@@ -35,6 +35,7 @@ const RegistrationForm = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const [totalFee, setTotalFee] = useState<number>(0);
+  const [paymentMode, setPaymentMode] = useState<'ONLINE' | 'OFFLINE'>('ONLINE');
 
   const form = useForm<z.infer<typeof userRegistrationFormSchema>>({
     resolver: zodResolver(userRegistrationFormSchema),
@@ -42,6 +43,7 @@ const RegistrationForm = () => {
       collegeName: "",
       events: undefined,
       payss: undefined,
+      paymentMode: "ONLINE",
     },
   });
 
@@ -503,10 +505,36 @@ const RegistrationForm = () => {
 
           <FormField
             control={form.control}
+            name="paymentMode"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Payment Mode</FormLabel>
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select payment mode" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="ONLINE">Online Payment</SelectItem>
+                    <SelectItem value="OFFLINE">Offline Payment</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
             name="payss"
             render={({ field: { onChange, value, ...field } }) => (
               <FormItem>
-                <FormLabel>Upload Payment Screenshot</FormLabel>
+                <FormLabel>
+                  {form.watch("paymentMode") === "ONLINE" 
+                    ? "Upload Payment Screenshot" 
+                    : "Upload Receipt Photo"}
+                </FormLabel>
                 <FormControl>
                   <Input
                     type="file"

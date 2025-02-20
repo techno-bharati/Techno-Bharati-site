@@ -8,46 +8,11 @@ async function main() {
 
   const admins = [
     {
-      email: "admin@technobharati.com",
-      password: "admin@super",
-      name: "Super Admin",
-      role: AdminRole.SUPER_ADMIN,
-      eventType: null,
-    },
-    {
-      email: "startup@technobharati.com",
-      password: "admin@startup",
-      name: "Startup Admin",
+      email: "jjadhav799@gmail.com",
+      password: "j@jadhav",
+      name: "Jayesh Jadhav",
       role: AdminRole.EVENT_ADMIN,
       eventType: "STARTUP_SPHERE",
-    },
-    {
-      email: "face@technobharati.com",
-      password: "admin@f2f",
-      name: "Face to Face Admin",
-      role: AdminRole.EVENT_ADMIN,
-      eventType: "FACE_TO_FACE",
-    },
-    {
-      email: "python@technobharati.com",
-      password: "admin@python",
-      name: "Python Admin",
-      role: AdminRole.EVENT_ADMIN,
-      eventType: "PYTHON_WARRIORS",
-    },
-    {
-      email: "fire@technobharati.com",
-      password: "admin@freefire",
-      name: "FireFire Admin",
-      role: AdminRole.EVENT_ADMIN,
-      eventType: "FREEFIRE_BATTLESHIP",
-    },
-    {
-      email: "ai@technobharati.com",
-      password: "admin@ai",
-      name: "AI Admin",
-      role: AdminRole.EVENT_ADMIN,
-      eventType: "AI_TALES",
     },
   ];
 

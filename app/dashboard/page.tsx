@@ -327,12 +327,24 @@ export default function DashboardPage() {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
-                  Today&apos;s Registrations
+                  Registration Stats
                 </CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">
-                  {data?.stats.todayRegistrations}
+              <CardContent className="space-y-4">
+                <div className="border-b pb-3">
+                  <div className="text-sm font-medium text-muted-foreground">Today's Registrations</div>
+                  <div className="text-2xl font-bold">
+                    {data?.stats.todayRegistrations}
+                  </div>
+                </div>
+                <div>
+                  <div className="text-sm font-medium text-muted-foreground">Total Participants</div>
+                  <div className="text-2xl font-bold">
+                    {data?.stats.totalParticipants}
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Across all events
+                  </p>
                 </div>
               </CardContent>
             </Card>
@@ -352,6 +364,7 @@ export default function DashboardPage() {
                 <TableHead>Event</TableHead>
                 <TableHead>College</TableHead>
                 <TableHead>Contact</TableHead>
+                <TableHead>Payment Mode</TableHead>
                 <TableHead>Date</TableHead>
                 <TableHead>Status</TableHead>
                 {adminRole === "SUPER_ADMIN" && (
@@ -381,6 +394,9 @@ export default function DashboardPage() {
                         registration.teamLeader.contactNumber) ||
                       (registration.players &&
                         registration.players[0]?.contactNumber)}
+                  </TableCell>
+                  <TableCell>
+                    {registration.paymentMode || "N/A"}
                   </TableCell>
                   <TableCell>
                     {new Date(registration.createdAt).toLocaleDateString()}

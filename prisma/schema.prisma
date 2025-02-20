@@ -91,6 +91,7 @@ model Registration {
   paymentStatus     PaymentStatus      @default(PENDING)
   amount            Float              @default(0)
   registrationDate  DateTime           @default(now())
+  paymentMode       String             @default("ONLINE")
 
   studentName   String?
   contactNumber String?

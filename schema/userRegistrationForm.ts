@@ -57,6 +57,13 @@ const pythonWorriorsSchema = z.object({
 
 const aiTalesSchema = pythonWorriorsSchema; // Same as Python Warriors
 
+// Add this before the main schema
+const paymentModeSchema = z.object({
+  paymentMode: z.enum(['ONLINE', 'OFFLINE'], {
+    required_error: "Please select a payment mode",
+  }),
+});
+
 // Main schema with event selection
 export const userRegistrationFormSchema = z
   .object({
@@ -73,8 +80,9 @@ export const userRegistrationFormSchema = z
         required_error: "Please select an event",
       }
     ),
+    paymentMode: z.enum(['ONLINE', 'OFFLINE']),
     payss: z
-      .instanceof(File, { message: "Payment screenshot is required" })
+      .instanceof(File, { message: "Payment screenshot/receipt is required" })
       .refine(
         (file) => file.size <= 250 * 1024,
         "Image must be 250kb or smaller"
