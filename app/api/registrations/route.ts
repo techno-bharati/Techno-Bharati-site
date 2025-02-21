@@ -11,7 +11,10 @@ interface JWTPayload {
   eventType: EventType | null;
 }
 
-export async function GET() {
+export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url);
+  const eventType = searchParams.get("eventType") || null;
+
   try {
     const cookieStore = await cookies();
     const token = cookieStore.get("admin-token");
@@ -27,10 +30,12 @@ export async function GET() {
 
     const payload = verified.payload as unknown as JWTPayload;
 
-    const where =
-      payload.role === AdminRole.EVENT_ADMIN && payload.eventType
+    const where = {
+      ...(eventType && eventType !== "all" ? { eventType: eventType as EventType } : {}),
+      ...(payload.role === AdminRole.EVENT_ADMIN && payload.eventType
         ? { eventType: payload.eventType }
-        : {};
+        : {}),
+    };
 
     const [registrations, stats] = await Promise.all([
       prisma.registration.findMany({

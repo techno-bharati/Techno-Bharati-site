@@ -49,6 +49,7 @@ export default function DashboardPage() {
   } | null>(null);
   const [changePasswordDialogOpen, setChangePasswordDialogOpen] =
     useState(false);
+  const [selectedEvent, setSelectedEvent] = useState<string | null>("all");
 
   const { data: adminData, isLoading: isLoadingAdmin } = useQuery({
     queryKey: ["adminDetails"],
@@ -72,9 +73,9 @@ export default function DashboardPage() {
     error: registrationsError,
     refetch 
   } = useQuery({
-    queryKey: ["registrations"],
+    queryKey: ["registrations", selectedEvent],
     queryFn: async () => {
-      const res = await fetch("/api/registrations");
+      const res = await fetch(`/api/registrations${selectedEvent === "all" ? "" : `?eventType=${selectedEvent}`}`);
       if (!res.ok) {
         const error = await res.json();
         throw new Error(error.error || "Failed to fetch registrations");
@@ -243,26 +244,25 @@ export default function DashboardPage() {
       </div>
 
       <div className="flex items-center space-x-4">
-        {adminRole === "SUPER_ADMIN" && (
-          <Select
-            defaultValue="all"
-            onValueChange={(value) => setEventFilter(value)}
-          >
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Filter by event" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Events</SelectItem>
-              <SelectItem value="STARTUP_SPHERE">Startup Sphere</SelectItem>
-              <SelectItem value="FACE_TO_FACE">Face To Face</SelectItem>
-              <SelectItem value="PYTHON_WARRIORS">Python Warriors</SelectItem>
-              <SelectItem value="FREEFIRE_BATTLESHIP">
-                FreeFire Battleship
-              </SelectItem>
-              <SelectItem value="AI_TALES">AI Tales</SelectItem>
-            </SelectContent>
-          </Select>
-        )}
+        <Select
+          defaultValue="all"
+          onValueChange={(value) => {
+            setEventFilter(value);
+            setSelectedEvent(value === "all" ? "all" : value);
+          }}
+        >
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Filter by event" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Events</SelectItem>
+            <SelectItem value="STARTUP_SPHERE">Startup Sphere</SelectItem>
+            <SelectItem value="FACE_TO_FACE">Face To Face</SelectItem>
+            <SelectItem value="PYTHON_WARRIORS">Python Warriors</SelectItem>
+            <SelectItem value="FREEFIRE_BATTLESHIP">FreeFire Battleship</SelectItem>
+            <SelectItem value="AI_TALES">AI Tales</SelectItem>
+          </SelectContent>
+        </Select>
         <Input
           placeholder="Search registrations..."
           className="max-w-sm"
@@ -333,7 +333,7 @@ export default function DashboardPage() {
                     <div className="text-2xl font-bold text-black dark:text-white">
                       ₹{registrationsData?.stats.totalRevenue}
                     </div>
-                    <div className="mt-2 pt-2 border-t">
+                    <div className="mt-3 pt-3 border-t">
                       <div className="text-sm text-muted-foreground">Offline Payments</div>
                       <div className="text-xl font-semibold text-black dark:text-white">
                         ₹{registrationsData?.stats.offlineRevenue || 0}
