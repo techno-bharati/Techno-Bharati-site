@@ -43,13 +43,13 @@ export function Footer() {
         </div>
 
         <div className="flex justify-center space-x-8 text-sm text-muted-foreground">
-          <Link href="/contact" className="hover:text-primary">
+          <Link href="/contactus" className="hover:text-primary">
             CONTACT US
           </Link>
-          <Link href="/sponsors" className="hover:text-primary">
+          <Link href="/" className="hover:text-primary">
             SPONSORS
           </Link>
-          <Link href="/about" className="hover:text-primary">
+          <Link href="/aboutus" className="hover:text-primary">
             ABOUT US
           </Link>
         </div>
