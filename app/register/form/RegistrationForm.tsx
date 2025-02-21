@@ -141,7 +141,7 @@ const RegistrationForm = () => {
               <FormItem>
                 <FormLabel>College Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter your college name" {...field} />
+                  <Input placeholder="Enter your college name" {...field} disabled={isPending} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -154,7 +154,7 @@ const RegistrationForm = () => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Select Event</FormLabel>
-                <Select onValueChange={field.onChange} value={field.value}>
+                <Select onValueChange={field.onChange} value={field.value} disabled={isPending}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Choose an event" />
@@ -190,7 +190,7 @@ const RegistrationForm = () => {
                   <FormItem>
                     <FormLabel>Student Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter your name" {...field} />
+                      <Input placeholder="Enter your name" {...field} disabled={isPending} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -206,6 +206,7 @@ const RegistrationForm = () => {
                       <Input
                         placeholder="Enter your contact number"
                         {...field}
+                        disabled={isPending}
                       />
                     </FormControl>
                     <FormMessage />
@@ -219,7 +220,7 @@ const RegistrationForm = () => {
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter your email" {...field} />
+                      <Input placeholder="Enter your email" {...field} disabled={isPending} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -237,7 +238,7 @@ const RegistrationForm = () => {
                   <FormItem>
                     <FormLabel>Squad Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter squad name" {...field} />
+                      <Input placeholder="Enter squad name" {...field} disabled={isPending} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -258,7 +259,7 @@ const RegistrationForm = () => {
                         <FormItem>
                           <FormLabel>Name</FormLabel>
                           <FormControl>
-                            <Input placeholder="Enter player name" {...field} />
+                            <Input placeholder="Enter player name" {...field} disabled={isPending} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -274,6 +275,7 @@ const RegistrationForm = () => {
                             <Input
                               placeholder="Enter Free Fire ID"
                               {...field}
+                              disabled={isPending}
                             />
                           </FormControl>
                           <FormMessage />
@@ -291,6 +293,7 @@ const RegistrationForm = () => {
                               placeholder="Enter contact number"
                               type="tel"
                               {...field}
+                              disabled={isPending}
                             />
                           </FormControl>
                           <FormMessage />
@@ -309,6 +312,7 @@ const RegistrationForm = () => {
                                 placeholder="Enter squad leader's email"
                                 type="email"
                                 {...field}
+                                disabled={isPending}
                               />
                             </FormControl>
                             <FormMessage />
@@ -330,7 +334,7 @@ const RegistrationForm = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Select Category</FormLabel>
-                    <Select onValueChange={field.onChange} value={field.value}>
+                    <Select onValueChange={field.onChange} value={field.value} disabled={isPending}>
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Category" />
@@ -357,18 +361,25 @@ const RegistrationForm = () => {
                   <FormItem>
                     <FormLabel>Number of Team Members</FormLabel>
                     <FormControl>
-                      <Input
-                        type="number"
-                        min={1}
-                        max={5}
-                        placeholder="Enter number of team members"
-                        onChange={(e) => handleNumberInput(e, field.onChange)}
-                        value={field.value || "1"}
-                      />
+                      <Select 
+                        onValueChange={(value) => field.onChange(Number(value))}
+                        value={field.value ? String(field.value) : "1"}
+                        disabled={isPending}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select number of team members" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {Array.from({ length: 5 }, (_, index) => (
+                            <SelectItem key={index + 1} value={`${index + 1}`}>
+                              {index + 1}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </FormControl>
                     <FormDescription>
-                      Minimum 1 (Team Leader) and maximum of 5 team members
-                      allowed
+                      Minimum 1 (Team Leader) and maximum of 5 team members allowed
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -382,7 +393,7 @@ const RegistrationForm = () => {
                   <FormItem>
                     <FormLabel>Team Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter team name" {...field} />
+                      <Input placeholder="Enter team name" {...field} disabled={isPending} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -401,6 +412,7 @@ const RegistrationForm = () => {
                         <Input
                           placeholder="Enter team leader name"
                           {...field}
+                          disabled={isPending}
                         />
                       </FormControl>
                       <FormMessage />
@@ -415,7 +427,7 @@ const RegistrationForm = () => {
                     <FormItem>
                       <FormLabel>Team Leader Contact Number</FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter contact number" {...field} />
+                        <Input placeholder="Enter contact number" {...field} disabled={isPending} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -433,6 +445,7 @@ const RegistrationForm = () => {
                           type="email"
                           placeholder="Enter email"
                           {...field}
+                          disabled={isPending}
                         />
                       </FormControl>
                       <FormMessage />
@@ -459,7 +472,7 @@ const RegistrationForm = () => {
                           <FormItem>
                             <FormLabel>Name</FormLabel>
                             <FormControl>
-                              <Input placeholder="Enter name" {...field} />
+                              <Input placeholder="Enter name" {...field} disabled={isPending} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -476,6 +489,7 @@ const RegistrationForm = () => {
                               <Input
                                 placeholder="Enter contact number"
                                 {...field}
+                                disabled={isPending}
                               />
                             </FormControl>
                             <FormMessage />
@@ -494,6 +508,7 @@ const RegistrationForm = () => {
                                 type="email"
                                 placeholder="Enter email"
                                 {...field}
+                                disabled={isPending}
                               />
                             </FormControl>
                             <FormMessage />
@@ -519,6 +534,7 @@ const RegistrationForm = () => {
                     setPaymentMode(value as 'ONLINE' | 'OFFLINE');
                   }} 
                   value={field.value}
+                  disabled={isPending}
                 >
                   <FormControl>
                     <SelectTrigger>
@@ -558,6 +574,7 @@ const RegistrationForm = () => {
                     }}
                     {...field}
                     value={undefined}
+                    disabled={isPending}
                   />
                 </FormControl>
                 <FormDescription>
