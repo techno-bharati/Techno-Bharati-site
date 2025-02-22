@@ -14,6 +14,9 @@ import { toast } from "sonner";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { useState, useEffect } from "react";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Edit } from "lucide-react";
 
 interface VerifyDialogProps {
   open: boolean;
@@ -31,6 +34,7 @@ export function VerifyDialog({
   const [adminRole, setAdminRole] = useState<
     "SUPER_ADMIN" | "EVENT_ADMIN" | null
   >(null);
+  const [selectedPaymentMode, setSelectedPaymentMode] = useState<string>("");
 
   // Fetch admin role when component mounts
   useEffect(() => {
@@ -47,6 +51,13 @@ export function VerifyDialog({
     };
     fetchAdminRole();
   }, []);
+
+  // Update selectedPaymentMode when registration changes
+  useEffect(() => {
+    if (registration) {
+      setSelectedPaymentMode(registration.paymentMode);
+    }
+  }, [registration]);
 
   const { mutate: verifyRegistration, isPending } = useMutation({
     mutationFn: async () => {
@@ -105,6 +116,36 @@ export function VerifyDialog({
     },
   });
 
+  const { mutate: updatePaymentMode, isPending: isUpdating } = useMutation({
+    mutationFn: async () => {
+      const res = await fetch("/api/registrations/updatePaymentMode", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          registrationId: registration.id,
+          paymentMode: selectedPaymentMode,
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to update payment mode");
+      }
+
+      return res.json();
+    },
+    onSuccess: () => {
+      toast.success("Payment mode updated successfully");
+      queryClient.invalidateQueries({ queryKey: ["registrations"] });
+      onOpenChange(false);
+    },
+    onError: (error) => {
+      console.error("Error updating payment mode:", error);
+      toast.error("Failed to update payment mode");
+    },
+  });
+
   if (!registration || !open) return null;
 
   const isSoloEvent = ["FACE_TO_FACE", "PYTHON_WARRIORS", "AI_TALES"].includes(
@@ -132,6 +173,18 @@ export function VerifyDialog({
                       Date:{" "}
                       {new Date(registration.createdAt).toLocaleDateString()}
                     </p>
+                    <div className="flex items-center">
+                      <p className="mr-2">Payment Mode:</p>
+                      <Select value={selectedPaymentMode} onValueChange={setSelectedPaymentMode}>
+                        <SelectTrigger className="w-32">
+                          <SelectValue placeholder="Select Payment Mode" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="ONLINE">ONLINE</SelectItem>
+                          <SelectItem value="OFFLINE">OFFLINE</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </div>
                 </div>
 
@@ -250,6 +303,12 @@ export function VerifyDialog({
                   {isPending ? "Verifying..." : "Verify Registration"}
                 </Button>
               )}
+              <Button
+                onClick={() => updatePaymentMode()}
+                disabled={isUpdating || registration.status === "CONFIRMED"}
+              >
+                {isUpdating ? "Updating..." : "Update Details"}
+              </Button>
             </DialogFooter>
           </div>
         </DialogContent>
