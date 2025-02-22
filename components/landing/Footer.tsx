@@ -12,7 +12,8 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center mb-8">
           <div className="flex justify-center md:justify-start space-x-6">
             <Link
-              href="https://instagram.com"
+              href="https://www.instagram.com/bvcoek_aiml/"
+              target="_blank"
               className="text-muted-foreground hover:text-primary"
             >
               <Instagram className="h-6 w-6" />
