@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { Button } from "../ui/button";
 import Countdown from "./Countdown";
 import { motion } from "framer-motion";
@@ -37,15 +38,21 @@ export function Hero2() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="relative z-20 text-center space-y-8 px-4 max-w-4xl mx-auto"
+        className="relative z-20 text-center space-y-8 px-4 max-w-4xl mx-auto flex flex-col items-center"
       >
+        <Image
+          src={"/bvcoek.png"}
+          width={180}
+          height={180}
+          alt={"Bharati Vidyapeeth Logo"}
+        />
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
           className="space-y-4"
         >
-          <h1 className="text-4xl md:text-6xl lg:text-8xl font-bold tracking-tighter">
+          <h1 className="text-5xl md:text-6xl lg:text-8xl font-bold tracking-tighter">
             <motion.span
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -53,7 +60,7 @@ export function Hero2() {
               className="inline-block"
             >
               <span className="bg-gradient-to-b from-primary to-primary/50 bg-clip-text text-transparent">
-                Techno{" "}
+                Techno
               </span>
             </motion.span>
             <motion.span
@@ -88,7 +95,7 @@ export function Hero2() {
           transition={{ delay: 1.2 }}
         >
           <h2 className="text-2xl md:text-3xl">
-            <span className="bg-gradient-to-r from-primary to-primary/40 bg-clip-text text-transparent font-bold tracking-tighter">
+            <span className="bg-gradient-to-r from-primary to-primary/50 bg-clip-text text-transparent font-bold tracking-tighter animate-pulse">
               Events are Live Now!
             </span>
           </h2>
