@@ -53,6 +53,7 @@ export default function DashboardPage() {
   const [changePasswordDialogOpen, setChangePasswordDialogOpen] =
     useState(false);
   const [selectedEvent, setSelectedEvent] = useState<string | null>("all");
+  const [paymentModeFilter, setPaymentModeFilter] = useState<string>("all");
 
   const { data: adminData, isLoading: isLoadingAdmin } = useQuery({
     queryKey: ["adminDetails"],
@@ -110,7 +111,14 @@ export default function DashboardPage() {
         adminRole === "EVENT_ADMIN"
           ? reg.eventType === adminEventType
           : eventFilter === "all" || reg.eventType === eventFilter;
-      return matchesSearch && matchesEvent;
+
+      // Add payment mode filter
+      const matchesPaymentMode =
+        paymentModeFilter === "all" ||
+        (paymentModeFilter === "ONLINE" && reg.paymentMode === "ONLINE") ||
+        (paymentModeFilter === "OFFLINE" && reg.paymentMode === "OFFLINE");
+
+      return matchesSearch && matchesEvent && matchesPaymentMode;
     }
   );
 
@@ -293,6 +301,21 @@ export default function DashboardPage() {
             </SelectContent>
           </Select>
         )}
+        <Select
+          defaultValue="all"
+          onValueChange={(value) => {
+            setPaymentModeFilter(value);
+          }}
+        >
+          <SelectTrigger className="w-full sm:w-[180px]">
+            <SelectValue placeholder="Filter by payment mode" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Payment Modes</SelectItem>
+            <SelectItem value="ONLINE">Online Payments</SelectItem>
+            <SelectItem value="OFFLINE">Offline Payments</SelectItem>
+          </SelectContent>
+        </Select>
         <Input
           placeholder="Search registrations..."
           className="w-full sm:max-w-sm"
