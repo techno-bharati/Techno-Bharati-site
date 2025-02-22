@@ -75,7 +75,21 @@ export default function DashboardPage() {
   } = useQuery({
     queryKey: ["registrations", selectedEvent],
     queryFn: async () => {
-      const res = await fetch(`/api/registrations${selectedEvent === "all" ? "" : `?eventType=${selectedEvent}`}`);
+     
+      const params = new URLSearchParams();
+      if (selectedEvent && selectedEvent !== "all") {
+        params.append("eventType", selectedEvent);
+      }
+     
+      if (selectedEvent === "all") {
+        params.append("fetchAll", "true");
+      }
+
+      const queryString = params.toString();
+      const url = `/api/registrations${queryString ? `?${queryString}` : ''}`;
+
+
+      const res = await fetch(url);
       if (!res.ok) {
         const error = await res.json();
         throw new Error(error.error || "Failed to fetch registrations");

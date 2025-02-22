@@ -108,13 +108,26 @@ export async function GET(req: Request) {
       ]),
     ]);
 
-    const totalParticipants = 
-      (stats[4]._sum.numberOfTeamMembers || 0) + // Startup Sphere members
-      stats[5] + // Individual participants
-      stats[6]; // FreeFire players
+    // Calculate total participants based on event type
+    let totalParticipants = 0;
+
+    if (!eventType || eventType === "all") {
+      totalParticipants = 
+        (stats[4]._sum.numberOfTeamMembers || 0) + // Total team members from STARTUP_SPHERE
+        stats[5] + // Individual participants from other events
+        stats[6]; // FreeFire players
+    } else if (eventType === "STARTUP_SPHERE") {
+      totalParticipants = stats[4]._sum.numberOfTeamMembers || 0;
+    } else if (eventType === "FREEFIRE_BATTLESHIP") {
+      totalParticipants = stats[0] * 4; // Each FreeFire registration has 4 players
+    } else {
+      // For FACE_TO_FACE, PYTHON_WARRIORS, AI_TALES
+      totalParticipants = stats[0]; // Each registration represents one participant
+    }
 
     const offlineRevenue = stats[7]._sum.amount || 0;
 
+    // Prepare response
     return NextResponse.json({
       registrations,
       stats: {
