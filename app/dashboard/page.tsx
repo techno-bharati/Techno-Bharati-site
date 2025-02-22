@@ -334,10 +334,19 @@ export default function DashboardPage() {
                       ₹{registrationsData?.stats.totalRevenue}
                     </div>
                     <div className="mt-3 pt-3 border-t">
-                      <div className="text-sm text-muted-foreground">Offline Payments</div>
-                      <div className="text-xl font-semibold text-black dark:text-white">
-                        ₹{registrationsData?.stats.offlineRevenue || 0}
+                    <div className="flex justify-between mt-2">
+                        <div className="text-sm text-muted-foreground">Online Payments</div>
+                        <div className="text-xl font-semibold text-black dark:text-white">
+                          ₹{(registrationsData?.stats.totalRevenue || 0) - (registrationsData?.stats.offlineRevenue || 0)}
+                        </div>
                       </div>
+                      <div className="flex justify-between">
+                        <div className="text-sm text-muted-foreground">Offline Payments</div>
+                        <div className="text-xl font-semibold text-black dark:text-white">
+                          ₹{registrationsData?.stats.offlineRevenue || 0}
+                        </div>
+                      </div>
+                      
                     </div>
                     <p className="text-xs text-muted-foreground mt-1">
                       Total revenue from verified registrations
