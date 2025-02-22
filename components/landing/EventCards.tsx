@@ -55,7 +55,7 @@ export function EventCards() {
   return (
     <section className="relative py-12 bg-background">
       <div className="container mx-auto">
-        <h2 className="text-3xl font-bold text-center mb-8 text-foreground">
+        <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center mb-8">
           Featured Events
         </h2>
 
