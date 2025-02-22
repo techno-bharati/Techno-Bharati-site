@@ -2,12 +2,14 @@
 
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 
 export function Navigation2() {
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -24,6 +26,19 @@ export function Navigation2() {
     setIsOpen(false);
     window.location.href = path;
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   if (!mounted) return null;
 
@@ -42,6 +57,7 @@ export function Navigation2() {
             onClick={() => handleNavigation("/")}
             className="flex items-center space-x-2"
           >
+            <Image src={"/logo.png"} width={30} height={30} alt=""/>
             <span className="font-mono text-xl">INFUSION AI</span>
           </motion.button>
 
@@ -76,6 +92,7 @@ export function Navigation2() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
+            ref={menuRef}
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
