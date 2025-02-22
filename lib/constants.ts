@@ -282,3 +282,17 @@ export const getEventFeeByName = (eventName: string, teamSize?: number) => {
 
   return calculateEventFee(eventType, teamSize);
 };
+
+export const eventImages = [
+  "/event/event-1.jpeg",
+  "/event/event-2.jpeg",
+  "/event/event-3.jpeg",
+  "/event/event-4.jpeg",
+  "/event/event-5.jpeg",
+  "/event/event-6.jpeg",
+  "/event/event-7.jpeg",
+  "/event/event-8.jpeg",
+  "/event/event-9.jpeg",
+  "/event/event-10.jpeg",
+  "/event/event-11.jpeg",
+];
