@@ -28,7 +28,10 @@ import { LogOut, Trash2, Download, Lock } from "lucide-react";
 import { DeleteConfirmDialog } from "@/components/dashboard/DeleteConfirmDialog";
 import { ChangePasswordDialog } from "@/components/dashboard/ChangePasswordDialog";
 import { Skeleton } from "@/components/ui/skeleton";
-import DashboardLoading, { StatsCardSkeleton, RegistrationsTableSkeleton } from "./loading";
+import DashboardLoading, {
+  StatsCardSkeleton,
+  RegistrationsTableSkeleton,
+} from "./loading";
 import { Suspense } from "react";
 
 export default function DashboardPage() {
@@ -67,27 +70,25 @@ export default function DashboardPage() {
     },
   });
 
-  const { 
-    data: registrationsData, 
-    isLoading: isLoadingRegistrations, 
+  const {
+    data: registrationsData,
+    isLoading: isLoadingRegistrations,
     error: registrationsError,
-    refetch 
+    refetch,
   } = useQuery({
     queryKey: ["registrations", selectedEvent],
     queryFn: async () => {
-     
       const params = new URLSearchParams();
       if (selectedEvent && selectedEvent !== "all") {
         params.append("eventType", selectedEvent);
       }
-     
+
       if (selectedEvent === "all") {
         params.append("fetchAll", "true");
       }
 
       const queryString = params.toString();
-      const url = `/api/registrations${queryString ? `?${queryString}` : ''}`;
-
+      const url = `/api/registrations${queryString ? `?${queryString}` : ""}`;
 
       const res = await fetch(url);
       if (!res.ok) {
@@ -98,18 +99,20 @@ export default function DashboardPage() {
     },
   });
 
-  const filteredRegistrations = registrationsData?.registrations?.filter((reg: any) => {
-    const matchesSearch =
-      reg.collegeName.toLowerCase().includes(search.toLowerCase()) ||
-      reg.studentName?.toLowerCase().includes(search.toLowerCase()) ||
-      reg.teamName?.toLowerCase().includes(search.toLowerCase()) ||
-      reg.squadName?.toLowerCase().includes(search.toLowerCase());
-    const matchesEvent =
-      adminRole === "EVENT_ADMIN"
-        ? reg.eventType === adminEventType
-        : eventFilter === "all" || reg.eventType === eventFilter;
-    return matchesSearch && matchesEvent;
-  });
+  const filteredRegistrations = registrationsData?.registrations?.filter(
+    (reg: any) => {
+      const matchesSearch =
+        reg.collegeName.toLowerCase().includes(search.toLowerCase()) ||
+        reg.studentName?.toLowerCase().includes(search.toLowerCase()) ||
+        reg.teamName?.toLowerCase().includes(search.toLowerCase()) ||
+        reg.squadName?.toLowerCase().includes(search.toLowerCase());
+      const matchesEvent =
+        adminRole === "EVENT_ADMIN"
+          ? reg.eventType === adminEventType
+          : eventFilter === "all" || reg.eventType === eventFilter;
+      return matchesSearch && matchesEvent;
+    }
+  );
 
   const handleLogout = async () => {
     try {
@@ -218,7 +221,7 @@ export default function DashboardPage() {
 
   return (
     <div className="container mx-auto px-4 py-6 space-y-5">
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex flex-col gap-6 mb-6 sm:flex-row sm:items-center sm:justify-between">
         {isLoadingAdmin ? (
           <>
             <Skeleton className="h-8 w-32" />
@@ -230,56 +233,69 @@ export default function DashboardPage() {
               <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
               <p className="text-muted-foreground">Welcome back, {adminName}</p>
             </div>
-            <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                onClick={handleExport}
-                className="gap-2"
-                disabled={exportMutation.isPending}
-              >
-                <Download className="h-4 w-4" />
-                {exportMutation.isPending ? "Exporting..." : "Export to Excel"}
-              </Button>
+            <div className="flex flex-wrap items-center gap-2">
+              {adminRole === "SUPER_ADMIN" && (
+                <Button
+                  variant="outline"
+                  onClick={handleExport}
+                  className="w-full sm:w-auto gap-2"
+                  disabled={exportMutation.isPending}
+                >
+                  <Download className="h-4 w-4" />
+                  <span className="hidden sm:inline">
+                    {exportMutation.isPending ? "Exporting..." : "Export to Excel"}
+                  </span>
+                  <span className="sm:hidden">Export</span>
+                </Button>
+              )}
               <Button
                 variant="outline"
                 onClick={() => setChangePasswordDialogOpen(true)}
-                className="gap-2"
+                className="w-full sm:w-auto gap-2"
               >
                 <Lock className="h-4 w-4" />
-                Change Password
+                <span className="hidden sm:inline">Change Password</span>
+                <span className="sm:hidden">Password</span>
               </Button>
-              <Button variant="outline" onClick={handleLogout} className="gap-2">
+              <Button 
+                variant="outline" 
+                onClick={handleLogout} 
+                className="w-full sm:w-auto gap-2"
+              >
                 <LogOut className="h-4 w-4" />
-                Logout
+                <span>Logout</span>
+                {/* <span className="sm:hidden">Exit</span> */}
               </Button>
             </div>
           </>
         )}
       </div>
 
-      <div className="flex items-center space-x-4">
-        <Select
-          defaultValue="all"
-          onValueChange={(value) => {
-            setEventFilter(value);
-            setSelectedEvent(value === "all" ? "all" : value);
-          }}
-        >
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Filter by event" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Events</SelectItem>
-            <SelectItem value="STARTUP_SPHERE">Startup Sphere</SelectItem>
-            <SelectItem value="FACE_TO_FACE">Face To Face</SelectItem>
-            <SelectItem value="PYTHON_WARRIORS">Python Warriors</SelectItem>
-            <SelectItem value="FREEFIRE_BATTLESHIP">FreeFire Battleship</SelectItem>
-            <SelectItem value="AI_TALES">AI Tales</SelectItem>
-          </SelectContent>
-        </Select>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:space-x-4">
+        {adminRole === "SUPER_ADMIN" && (
+          <Select
+            defaultValue="all"
+            onValueChange={(value) => {
+              setEventFilter(value);
+              setSelectedEvent(value === "all" ? "all" : value);
+            }}
+          >
+            <SelectTrigger className="w-full sm:w-[180px]">
+              <SelectValue placeholder="Filter by event" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Events</SelectItem>
+              <SelectItem value="STARTUP_SPHERE">Startup Sphere</SelectItem>
+              <SelectItem value="FACE_TO_FACE">Face To Face</SelectItem>
+              <SelectItem value="PYTHON_WARRIORS">Python Warriors</SelectItem>
+              <SelectItem value="FREEFIRE_BATTLESHIP">FreeFire Battleship</SelectItem>
+              <SelectItem value="AI_TALES">AI Tales</SelectItem>
+            </SelectContent>
+          </Select>
+        )}
         <Input
           placeholder="Search registrations..."
-          className="max-w-sm"
+          className="w-full sm:max-w-sm"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
@@ -290,27 +306,42 @@ export default function DashboardPage() {
           <>
             <StatsCardSkeleton />
             <StatsCardSkeleton />
-            <StatsCardSkeleton />
-            <StatsCardSkeleton />
           </>
         ) : (
           <>
             {adminRole === "EVENT_ADMIN" ? (
-              <Card className="md:col-span-2">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">
-                    {adminEventType?.replace(/_/g, " ")} Registrations
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">
-                    {registrationsData?.stats.eventBreakdown?.[adminEventType || ""] || 0}
-                  </div>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    Total registrations for your event
-                  </p>
-                </CardContent>
-              </Card>
+              <div className="grid gap-4 col-span-full lg:grid-cols-2">
+                <Card className="lg:col-span-1">
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">
+                      {adminEventType?.replace(/_/g, " ")} Registrations
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold">
+                      {registrationsData?.stats.eventBreakdown?.[
+                        adminEventType || ""
+                      ] || 0}
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Total registrations for your event
+                    </p>
+                  </CardContent>
+                </Card>
+                <Card className="lg:col-span-1">
+                  <CardHeader>
+                    <CardTitle>Total Revenue</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold">
+                      ₹{registrationsData?.stats.totalRevenueForEvent}
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Total revenue from confirmed registrations for this event
+                    </p>
+                  </CardContent>
+                </Card>
+              </div>
             ) : (
               <>
                 <Card>
@@ -324,13 +355,13 @@ export default function DashboardPage() {
                       {registrationsData?.stats.totalRegistrations}
                     </div>
                     <div className="text-xs text-muted-foreground mt-1">
-                      {Object.entries(registrationsData?.stats.eventBreakdown || {}).map(
-                        ([event, count]) => (
-                          <div key={event}>
-                            {event.replace(/_/g, " ")}: {count as number}
-                          </div>
-                        )
-                      )}
+                      {Object.entries(
+                        registrationsData?.stats.eventBreakdown || {}
+                      ).map(([event, count]) => (
+                        <div key={event}>
+                          {event.replace(/_/g, " ")}: {count as number}
+                        </div>
+                      ))}
                     </div>
                   </CardContent>
                 </Card>
@@ -348,19 +379,24 @@ export default function DashboardPage() {
                       ₹{registrationsData?.stats.totalRevenue}
                     </div>
                     <div className="mt-3 pt-3 border-t">
-                    <div className="flex justify-between mt-2">
-                        <div className="text-sm text-muted-foreground">Online Payments</div>
+                      <div className="flex justify-between mt-2">
+                        <div className="text-sm text-muted-foreground">
+                          Online Payments
+                        </div>
                         <div className="text-xl font-semibold text-black dark:text-white">
-                          ₹{(registrationsData?.stats.totalRevenue || 0) - (registrationsData?.stats.offlineRevenue || 0)}
+                          ₹
+                          {(registrationsData?.stats.totalRevenue || 0) -
+                            (registrationsData?.stats.offlineRevenue || 0)}
                         </div>
                       </div>
                       <div className="flex justify-between">
-                        <div className="text-sm text-muted-foreground">Offline Payments</div>
+                        <div className="text-sm text-muted-foreground">
+                          Offline Payments
+                        </div>
                         <div className="text-xl font-semibold text-black dark:text-white">
                           ₹{registrationsData?.stats.offlineRevenue || 0}
                         </div>
                       </div>
-                      
                     </div>
                     <p className="text-xs text-muted-foreground mt-1">
                       Total revenue from verified registrations
@@ -387,13 +423,17 @@ export default function DashboardPage() {
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="border-b pb-3">
-                      <div className="text-sm font-medium text-muted-foreground">Today's Registrations</div>
+                      <div className="text-sm font-medium text-muted-foreground">
+                        Today's Registrations
+                      </div>
                       <div className="text-2xl font-bold">
                         {registrationsData?.stats.todayRegistrations}
                       </div>
                     </div>
                     <div>
-                      <div className="text-sm font-medium text-muted-foreground">Total Participants</div>
+                      <div className="text-sm font-medium text-muted-foreground">
+                        Total Participants
+                      </div>
                       <div className="text-2xl font-bold">
                         {registrationsData?.stats.totalParticipants}
                       </div>
@@ -455,9 +495,7 @@ export default function DashboardPage() {
                         (registration.players &&
                           registration.players[0]?.contactNumber)}
                     </TableCell>
-                    <TableCell>
-                      {registration.paymentMode || "N/A"}
-                    </TableCell>
+                    <TableCell>{registration.paymentMode || "N/A"}</TableCell>
                     <TableCell>
                       {new Date(registration.createdAt).toLocaleDateString()}
                     </TableCell>
