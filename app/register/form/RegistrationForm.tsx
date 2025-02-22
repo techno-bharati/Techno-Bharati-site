@@ -43,7 +43,7 @@ const RegistrationForm = () => {
       collegeName: "",
       events: undefined,
       payss: undefined,
-      paymentMode: "ONLINE",
+      paymentMode: "",
     },
   });
 
