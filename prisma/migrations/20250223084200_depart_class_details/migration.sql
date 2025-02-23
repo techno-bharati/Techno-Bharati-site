@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Registration" ADD COLUMN     "class" TEXT NOT NULL DEFAULT 'YEAR_NOT_SET',
+ADD COLUMN     "department" TEXT NOT NULL DEFAULT 'UNASSIGNED';

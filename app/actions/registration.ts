@@ -48,6 +48,8 @@ export async function createRegistration(
       paymentScreenshot: uploadResult.url!,
       paymentMode: formData.paymentMode,
       amount,
+      department: formData.department,
+      class: formData.class,
     };
 
     try {

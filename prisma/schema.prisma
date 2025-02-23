@@ -92,6 +92,8 @@ model Registration {
   amount            Float              @default(0)
   registrationDate  DateTime           @default(now())
   paymentMode       String             @default("ONLINE")
+  department        String             @default("UNASSIGNED")
+  class             String             @default("YEAR_NOT_SET")
 
   studentName   String?
   contactNumber String?

@@ -36,6 +36,8 @@ const RegistrationForm = () => {
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const [totalFee, setTotalFee] = useState<number>(0);
   const [paymentMode, setPaymentMode] = useState<'ONLINE' | 'OFFLINE'>('ONLINE');
+  const [selectedDepartment, setSelectedDepartment] = useState<string>("");
+  const [otherDepartment, setOtherDepartment] = useState<string>("");
 
   const form = useForm<z.infer<typeof userRegistrationFormSchema>>({
     resolver: zodResolver(userRegistrationFormSchema),
@@ -44,6 +46,8 @@ const RegistrationForm = () => {
       events: undefined,
       payss: undefined,
       paymentMode: undefined,
+      department: undefined,
+      class: undefined,
     },
   });
 
@@ -57,6 +61,8 @@ const RegistrationForm = () => {
           events: undefined,
           payss: undefined,
           paymentMode: "ONLINE",
+          department: undefined,
+          class: undefined,
         });
         setSelectedFile(null);
         setTotalFee(0);
@@ -143,6 +149,77 @@ const RegistrationForm = () => {
                 <FormControl>
                   <Input placeholder="Enter your college name" {...field} disabled={isPending} />
                 </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+<FormField
+            control={form.control}
+            name="department"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Enter Department</FormLabel>
+                <Select
+                  onValueChange={(value) => {
+                    field.onChange(value);
+                    if (value === "OTHER") {
+                      setOtherDepartment(""); // Reset other department input
+                    }
+                  }}
+                  value={field.value}
+                  disabled={isPending}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Department" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="AIML">AIML</SelectItem>
+                    <SelectItem value="CSE">CSE</SelectItem>
+                    <SelectItem value="MECHANICAL">MECHANICAL</SelectItem>
+                    <SelectItem value="CIVIL">CIVIL</SelectItem>
+                    <SelectItem value="ENTC">ENTC</SelectItem>
+                    <SelectItem value="OTHER">OTHER</SelectItem>
+                  </SelectContent>
+                </Select>
+                {field.value === "OTHER" && (
+                  <Input
+                    placeholder="Enter your department"
+                    value={otherDepartment}
+                    onChange={(e) => setOtherDepartment(e.target.value)}
+                    disabled={isPending}
+                  />
+                )}
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="class"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Enter Class</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  value={field.value}
+                  disabled={isPending}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Class" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="first year">First Year</SelectItem>
+                    <SelectItem value="second year">Second Year</SelectItem>
+                    <SelectItem value="third year">Third Year</SelectItem>
+                    <SelectItem value="final year">Final Year</SelectItem>
+                  </SelectContent>
+                </Select>
                 <FormMessage />
               </FormItem>
             )}
@@ -587,6 +664,8 @@ const RegistrationForm = () => {
               </FormItem>
             )}
           />
+
+          
 
           <div className="mt-4 p-4 bg-primary/5 rounded-lg flex items-start gap-2 justify-between">
             <div>

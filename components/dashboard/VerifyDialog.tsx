@@ -185,6 +185,8 @@ export function VerifyDialog({
                         </SelectContent>
                       </Select>
                     </div>
+                    <p>Department: {registration.department}</p>
+                    <p>Class: {registration.class}</p>
                   </div>
                 </div>
 

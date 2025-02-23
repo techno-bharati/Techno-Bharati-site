@@ -216,6 +216,10 @@ export default function DashboardPage() {
     exportMutation.mutate();
   };
 
+  const handleRowClick = (registration: any) => {
+    setSelectedRegistration(registration);
+  };
+
   if (registrationsError) {
     console.error("Dashboard error:", registrationsError);
     return (
@@ -501,7 +505,7 @@ export default function DashboardPage() {
                   <TableRow
                     key={registration.id}
                     className="cursor-pointer hover:bg-muted/50"
-                    onClick={() => setSelectedRegistration(registration)}
+                    onClick={() => handleRowClick(registration)}
                   >
                     <TableCell>
                       {registration.studentName ||
@@ -545,7 +549,7 @@ export default function DashboardPage() {
                             size="sm"
                             onClick={(e) => {
                               e.stopPropagation();
-                              setSelectedRegistration(registration);
+                              handleRowClick(registration);
                             }}
                             disabled={registration.status === "CONFIRMED"}
                           >
