@@ -246,20 +246,20 @@ export default function DashboardPage() {
               <p className="text-muted-foreground">Welcome back, {adminName}</p>
             </div>
             <div className="flex flex-wrap items-center gap-2">
-              {adminRole === "SUPER_ADMIN" && (
-                <Button
-                  variant="outline"
-                  onClick={handleExport}
-                  className="w-full sm:w-auto gap-2"
-                  disabled={exportMutation.isPending}
-                >
-                  <Download className="h-4 w-4" />
-                  <span className="hidden sm:inline">
-                    {exportMutation.isPending ? "Exporting..." : "Export to Excel"}
-                  </span>
-                  <span className="sm:hidden">Export</span>
-                </Button>
-              )}
+              <Button
+                variant="outline"
+                onClick={handleExport}
+                className="w-full sm:w-auto gap-2"
+                disabled={exportMutation.isPending}
+              >
+                <Download className="h-4 w-4" />
+                <span className="hidden sm:inline">
+                  {exportMutation.isPending
+                    ? "Exporting..."
+                    : "Export to Excel"}
+                </span>
+                <span className="sm:hidden">Export</span>
+              </Button>
               <Button
                 variant="outline"
                 onClick={() => setChangePasswordDialogOpen(true)}
@@ -269,14 +269,13 @@ export default function DashboardPage() {
                 <span className="hidden sm:inline">Change Password</span>
                 <span className="sm:hidden">Password</span>
               </Button>
-              <Button 
-                variant="outline" 
-                onClick={handleLogout} 
+              <Button
+                variant="outline"
+                onClick={handleLogout}
                 className="w-full sm:w-auto gap-2"
               >
                 <LogOut className="h-4 w-4" />
                 <span>Logout</span>
-                {/* <span className="sm:hidden">Exit</span> */}
               </Button>
             </div>
           </>
@@ -300,7 +299,9 @@ export default function DashboardPage() {
               <SelectItem value="STARTUP_SPHERE">Startup Sphere</SelectItem>
               <SelectItem value="FACE_TO_FACE">Face To Face</SelectItem>
               <SelectItem value="PYTHON_WARRIORS">Python Warriors</SelectItem>
-              <SelectItem value="FREEFIRE_BATTLESHIP">FreeFire Battleship</SelectItem>
+              <SelectItem value="FREEFIRE_BATTLESHIP">
+                FreeFire Battleship
+              </SelectItem>
               <SelectItem value="AI_TALES">AI Tales</SelectItem>
             </SelectContent>
           </Select>
