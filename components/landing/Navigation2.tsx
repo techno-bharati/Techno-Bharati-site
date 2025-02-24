@@ -57,7 +57,6 @@ export function Navigation2() {
             onClick={() => handleNavigation("/")}
             className="flex items-center space-x-2"
           >
-            <Image src={"/logo.png"} width={30} height={30} alt=""/>
             <span className="font-mono text-xl">INFUSION AI</span>
           </motion.button>
 

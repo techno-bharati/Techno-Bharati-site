@@ -41,9 +41,9 @@ export function Hero2() {
         className="relative z-20 text-center space-y-8 px-4 max-w-4xl mx-auto flex flex-col items-center"
       >
         <Image
-          src={"/bvcoek.png"}
-          width={180}
-          height={180}
+          src={"/logo.png"}
+        width={100}
+          height={100}
           alt={"Bharati Vidyapeeth Logo"}
         />
         <motion.div
