@@ -245,9 +245,9 @@ const RegistrationForm = () => {
                     <SelectItem value="Python Worriors">
                       Python Warriors
                     </SelectItem>
-                    <SelectItem value="FreeFire Battleship">
+                    {/* <SelectItem value="FreeFire Battleship">
                       FreeFire Battleship
-                    </SelectItem>
+                    </SelectItem> */}
                     <SelectItem value="AI Tales">AI Tales</SelectItem>
                   </SelectContent>
                 </Select>
