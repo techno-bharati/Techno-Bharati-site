@@ -34,10 +34,32 @@ export const EVENT_FEES: Record<string, EventFee> = {
   },
 } as const;
 
-export const events = [
+export interface Event {
+  id: number;
+  name: string;
+  slug: string;
+  department: string;
+  date: string;
+  time: string;
+  venue: string;
+  entryFee: string;
+  type: string;
+  modalData: {
+    eventName: string;
+    description: string;
+    rules: string[];
+    registration: string[];
+    queries: Record<string, string>;
+  };
+}
+
+// CSE (AIML) department events
+export const CSE_AIML_EVENTS: Event[] = [
   {
     id: 1,
     name: "Startup Sphere",
+    slug: "startup-sphere",
+    department: "CSE (AIML)",
     date: "28th Feb 2025",
     time: "10:00 AM - 12:00 PM",
     venue: "Bharati Vidyapeeth College of Engineering, Kolahpur",
@@ -115,6 +137,8 @@ export const events = [
   {
     id: 2,
     name: "Face To Face",
+    slug: "face-to-face",
+    department: "CSE (AIML)",
     date: "28th Feb 2025",
     time: "9:00 AM - 6:00 PM",
     venue: "Bharati Vidyapeeth College of Engineering, Kolahpur",
@@ -149,6 +173,8 @@ export const events = [
   {
     id: 3,
     name: "Python Warriors: Code. Battle. Conquer!",
+    slug: "python-warriors",
+    department: "CSE (AIML)",
     date: "28th Feb 2025",
     time: "2:00 PM - 5:00 PM",
     venue: "Bharati Vidyapeeth College of Engineering, Kolahpur",
@@ -179,6 +205,8 @@ export const events = [
   {
     id: 4,
     name: "FreeFire",
+    slug: "freefire",
+    department: "CSE (AIML)",
     date: "28th Feb 2025",
     time: "11:00 AM - 3:00 PM",
     venue: "Bharati Vidyapeeth College of Engineering, Kolahpur",
@@ -215,6 +243,8 @@ export const events = [
   {
     id: 5,
     name: "AI Tales: Animate Your Imagination!",
+    slug: "ai-tales",
+    department: "CSE (AIML)",
     date: "28th Feb 2025",
     time: "7:00 PM - 10:00 PM",
     venue: "Bharati Vidyapeeth College of Engineering, Kolahpur",
@@ -248,6 +278,55 @@ export const events = [
     },
   },
 ];
+
+export const CSE_EVENTS: Event[] = [
+  {
+    id: 1,
+    name: "C-PRO Master",
+    slug: "c-pro-master",
+    department: "CSE",
+    date: "2026-02-28",
+    time: "10:00 AM",
+    venue: "Bharati Vidyapeeth College of Engineering, Kolahpur",
+    entryFee: "100",
+    type: "Event",
+    modalData: {
+      eventName: "C-PRO Master",
+      description: "C-PRO Master is a competition where participants will compete to solve the most complex problems using the C programming language. The competition will be held on 28th February 2026 at Bharati Vidyapeeth College of Engineering, Kolahpur.",
+      rules: [
+        "1. The competition will be held on 28th February 2026 at Bharati Vidyapeeth College of Engineering, Kolahpur.",
+        "2. The competition will be held from 10:00 AM to 12:00 PM.",
+        "3. The competition will be held in the CSE department.",
+        "4. The competition will be held in the CSE department.",
+        "5. The competition will be held in the CSE department.",
+      ],
+      registration: ["Registration 1", "Registration 2"],
+      queries: {
+        "anjali": "7420949831"
+      },
+    },
+  }
+];
+export const MECH_EVENTS: Event[] = [];
+export const ECE_EVENTS: Event[] = [];
+export const CIVIL_EVENTS: Event[] = [];
+
+export const EVENTS_BY_DEPARTMENT: Record<string, Event[]> = {
+  "CSE (AIML)": CSE_AIML_EVENTS,
+  "CSE": CSE_EVENTS,
+  // "MECH": MECH_EVENTS,
+  // "ECE": ECE_EVENTS,
+  // "CIVIL": CIVIL_EVENTS,
+};
+
+// Other departments can define their own arrays similarly:
+// export const CSE_EVENTS = [ ... ];
+// export const MECH_EVENTS = [ ... ];
+// export const ECE_EVENTS = [ ... ];
+// export const CIVIL_EVENTS = [ ... ];
+
+// Combined list of all events (kept for backwards compatibility)
+export const events = [...CSE_AIML_EVENTS, ...CSE_EVENTS];
 
 export const calculateEventFee = (
   eventType: keyof typeof EVENT_FEES,

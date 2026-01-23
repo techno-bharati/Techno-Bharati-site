@@ -24,7 +24,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useCallback, useState, useEffect } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { createRegistration } from "@/app/actions/registration";
+import { createRegistration } from "@/app/(main)/actions/registration";
 import { toast } from "sonner";
 import { SuccessDialog } from "@/components/register/SuccessDialog";
 import { getEventFeeByName } from "@/lib/constants";

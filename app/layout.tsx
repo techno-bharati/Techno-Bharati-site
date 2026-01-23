@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AppProvider } from "@/components/providers/AppProvider";
-import { Navigation2 } from "@/components/landing/Navigation2";
 import { LoadingScreen } from "@/components/ui/loading-screen";
 import { Suspense } from "react";
 
@@ -37,7 +36,6 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <LoadingScreen />
-        <Navigation2 />
         <Suspense fallback={null}>
           <AppProvider>{children}</AppProvider>
         </Suspense>
