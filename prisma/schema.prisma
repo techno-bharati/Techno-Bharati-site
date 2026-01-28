@@ -1,11 +1,11 @@
-datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
-}
 
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
+  output   = "./generated/prisma"
+}
+
+datasource db {
+  provider  = "postgresql"
 }
 
 model User {
@@ -182,12 +182,17 @@ model Admin {
   password  String // Hashed password
   name      String
   role      AdminRole  @default(EVENT_ADMIN)
-  eventType EventType? // null for SUPER_ADMIN
+  /// For EVENT_ADMIN this scopes access to a single event.
+  eventType EventType?
+  /// For department-level admins, this scopes access to a single department.
+  department String?
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
 }
 
 enum AdminRole {
   SUPER_ADMIN
+  /// Department-level super admin, limited to a single department
+  DEPARTMENT_ADMIN
   EVENT_ADMIN
 }
