@@ -2,13 +2,14 @@ import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { jwtVerify } from "jose";
 import { cookies } from "next/headers";
-import { AdminRole, EventType } from "@prisma/client";
+import { AdminRole, EventType } from "@/prisma/generated/prisma/client";
 
 interface JWTPayload {
   sub: string;
   email: string;
   role: AdminRole;
   eventType: EventType | null;
+  department: string | null;
 }
 
 export async function GET(req: Request) {
@@ -30,12 +31,25 @@ export async function GET(req: Request) {
 
     const payload = verified.payload as unknown as JWTPayload;
 
-    const where = {
-      ...(eventType && eventType !== "all" ? { eventType: eventType as EventType } : {}),
-      ...(payload.role === AdminRole.EVENT_ADMIN && payload.eventType
-        ? { eventType: payload.eventType }
-        : {}),
-    };
+    const where: Record<string, unknown> = {};
+
+    // Optional filter by eventType from query param
+    if (eventType && eventType !== "all") {
+      where.eventType = eventType as EventType;
+    }
+
+    // EVENT_ADMIN is always locked to a single event, regardless of query param
+    if (payload.role === AdminRole.EVENT_ADMIN && payload.eventType) {
+      where.eventType = payload.eventType;
+    }
+
+    // Department-level admins can see all registrations for their department
+    if (
+      payload.role === AdminRole.DEPARTMENT_ADMIN &&
+      payload.department
+    ) {
+      where.department = payload.department;
+    }
 
     const [registrations, stats] = await Promise.all([
       prisma.registration.findMany({

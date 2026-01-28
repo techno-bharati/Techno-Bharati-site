@@ -27,6 +27,7 @@ export async function GET() {
         name: true,
         role: true,
         eventType: true,
+        department: true,
       },
     });
 
@@ -40,6 +41,7 @@ export async function GET() {
       name: admin.name,
       role: admin.role,
       eventType: admin.eventType,
+      department: admin.department ?? null,
     });
   } catch (error) {
     console.error("Error fetching admin details:", error);

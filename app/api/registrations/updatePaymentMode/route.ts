@@ -1,7 +1,6 @@
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { jwtVerify } from "jose";
 
 export async function PUT(req: Request) {
   try {

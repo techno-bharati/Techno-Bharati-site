@@ -32,6 +32,8 @@ export async function POST(req: Request) {
       where: { email: normalizedEmail },
     });
 
+    console.log("admin found::::1")
+
     if (!admin) {
       return NextResponse.json(
         { error: "Invalid credentials" },
@@ -53,6 +55,7 @@ export async function POST(req: Request) {
       email: admin.email,
       role: admin.role,
       eventType: admin.eventType,
+      department: admin.department ?? null,
       iat: Math.floor(Date.now() / 1000),
       exp: Math.floor(Date.now() / 1000) + 24 * 60 * 60, // 24 hours
     };
@@ -60,6 +63,8 @@ export async function POST(req: Request) {
     const token = await new SignJWT(jwtPayload)
       .setProtectedHeader({ alg: "HS256", typ: "JWT" })
       .sign(new TextEncoder().encode(process.env.JWT_SECRET));
+
+      console.log("admin-fourned:::2")
 
     const cookieStore = await cookies();
     cookieStore.set("admin-token", token, {
@@ -70,6 +75,8 @@ export async function POST(req: Request) {
       maxAge: 86400, // 24 hours
     });
 
+    console.log("admin-fourned:::3")
+
     return NextResponse.json({
       message: "Logged in successfully",
       admin: {
@@ -77,6 +84,7 @@ export async function POST(req: Request) {
         name: admin.name,
         role: admin.role,
         eventType: admin.eventType,
+        department: admin.department ?? null,
       },
     });
   } catch (error) {
