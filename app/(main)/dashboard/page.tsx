@@ -251,7 +251,7 @@ export default function DashboardPage() {
               <Button
                 variant="outline"
                 onClick={handleExport}
-                className="w-full sm:w-auto gap-2"
+                className="w-full sm:w-auto gap-2 rounded-xl"
                 disabled={exportMutation.isPending}
               >
                 <Download className="h-4 w-4" />
@@ -265,7 +265,7 @@ export default function DashboardPage() {
               <Button
                 variant="outline"
                 onClick={() => setChangePasswordDialogOpen(true)}
-                className="w-full sm:w-auto gap-2"
+                className="w-full sm:w-auto gap-2 rounded-xl"
               >
                 <Lock className="h-4 w-4" />
                 <span className="hidden sm:inline">Change Password</span>
@@ -274,7 +274,7 @@ export default function DashboardPage() {
               <Button
                 variant="outline"
                 onClick={handleLogout}
-                className="w-full sm:w-auto gap-2"
+                className="w-full sm:w-auto gap-2 rounded-xl"
               >
                 <LogOut className="h-4 w-4" />
                 <span>Logout</span>
@@ -284,7 +284,7 @@ export default function DashboardPage() {
         )}
       </div>
 
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:space-x-4">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:space-x-4">
         {adminRole === "SUPER_ADMIN" && (
           <Select
             defaultValue="all"
@@ -293,10 +293,10 @@ export default function DashboardPage() {
               setSelectedEvent(value === "all" ? "all" : value);
             }}
           >
-            <SelectTrigger className="w-full sm:w-[180px]">
+            <SelectTrigger className="w-full sm:w-[180px] rounded-xl">
               <SelectValue placeholder="Filter by event" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="rounded-xl">
               <SelectItem value="all">All Events</SelectItem>
               <SelectItem value="STARTUP_SPHERE">Startup Sphere</SelectItem>
               <SelectItem value="FACE_TO_FACE">Face To Face</SelectItem>
@@ -314,10 +314,10 @@ export default function DashboardPage() {
             setPaymentModeFilter(value);
           }}
         >
-          <SelectTrigger className="w-full sm:w-[180px]">
+          <SelectTrigger className="w-full sm:w-[180px] rounded-xl">
             <SelectValue placeholder="Filter by payment mode" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="rounded-xl">
             <SelectItem value="all">All Payment Modes</SelectItem>
             <SelectItem value="ONLINE">Online Payments</SelectItem>
             <SelectItem value="OFFLINE">Offline Payments</SelectItem>
@@ -325,7 +325,7 @@ export default function DashboardPage() {
         </Select>
         <Input
           placeholder="Search registrations..."
-          className="w-full sm:max-w-sm"
+          className="w-full sm:max-w-sm rounded-xl"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
@@ -341,7 +341,7 @@ export default function DashboardPage() {
           <>
             {adminRole === "EVENT_ADMIN" ? (
               <div className="grid gap-4 col-span-full lg:grid-cols-2">
-                <Card className="lg:col-span-1">
+                <Card className="lg:col-span-1 rounded-xl">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">
                       {adminEventType?.replace(/_/g, " ")} Registrations
@@ -358,7 +358,7 @@ export default function DashboardPage() {
                     </p>
                   </CardContent>
                 </Card>
-                <Card className="lg:col-span-1">
+                <Card className="lg:col-span-1 rounded-xl">
                   <CardHeader>
                     <CardTitle>Total Revenue</CardTitle>
                   </CardHeader>
@@ -374,8 +374,8 @@ export default function DashboardPage() {
               </div>
             ) : (
               <>
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <Card className="rounded-xl">
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 rounded-xl">
                     <CardTitle className="text-sm font-medium">
                       Total Registrations
                     </CardTitle>
@@ -395,7 +395,7 @@ export default function DashboardPage() {
                     </div>
                   </CardContent>
                 </Card>
-                <Card>
+                <Card className="rounded-xl">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">
                       Verified Revenue
@@ -433,7 +433,7 @@ export default function DashboardPage() {
                     </p>
                   </CardContent>
                 </Card>
-                <Card>
+                <Card className="rounded-xl">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">
                       Active Events
@@ -445,7 +445,7 @@ export default function DashboardPage() {
                     </div>
                   </CardContent>
                 </Card>
-                <Card>
+                <Card className="rounded-xl">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">
                       Registration Stats
@@ -482,9 +482,9 @@ export default function DashboardPage() {
       {isLoadingRegistrations ? (
         <RegistrationsTableSkeleton />
       ) : (
-        <Card>
+        <Card className="rounded-xl">
           <CardHeader>
-            <CardTitle>Recent Registrations</CardTitle>
+            <CardTitle>Registrations</CardTitle>
           </CardHeader>
           <CardContent>
             <Table>
