@@ -15,7 +15,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="w-full h-screen flex flex-col">
       <Navigation2 />
-      <div className="flex-1 py-10">{children}</div>
+      <div className="flex-1">{children}</div>
       <Footer />
     </div>
   );
