@@ -1,14 +1,8 @@
-import React from "react";
-import RegistrationForm from "./form/RegistrationForm";
+import { redirect } from "next/navigation";
 
-const page = () => {
-  return (
-    <div className="w-full flex justify-center items-center">
-      <div className="border p-6 max-w-4xl w-full rounded-lg flex justify-center">
-        <RegistrationForm />
-      </div>
-    </div>
-  );
-};
+export default function Page() {
+  // Legacy /register route – send users to the events list
+  // so they can pick a specific event and register there.
+  redirect("/events");
+}
 
-export default page;

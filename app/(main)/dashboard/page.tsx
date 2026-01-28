@@ -40,9 +40,10 @@ export default function DashboardPage() {
   const [eventFilter, setEventFilter] = useState("all");
   const [selectedRegistration, setSelectedRegistration] = useState<any>(null);
   const [adminRole, setAdminRole] = useState<
-    "SUPER_ADMIN" | "EVENT_ADMIN" | null
+    "SUPER_ADMIN" | "DEPARTMENT_ADMIN" | "EVENT_ADMIN" | null
   >(null);
   const [adminEventType, setAdminEventType] = useState<string | null>(null);
+  const [adminDepartment, setAdminDepartment] = useState<string | null>(null);
   const [adminName, setAdminName] = useState<string>("");
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [registrationToDelete, setRegistrationToDelete] = useState<{
@@ -63,6 +64,7 @@ export default function DashboardPage() {
       const data = await res.json();
       setAdminRole(data.role);
       setAdminEventType(data.eventType);
+      setAdminDepartment(data.department || null);
       setAdminName(data.name || "");
       if (data.role === "EVENT_ADMIN" && data.eventType) {
         setEventFilter(data.eventType);

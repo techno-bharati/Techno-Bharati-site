@@ -45,8 +45,8 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center">
-      <Card className="w-full max-w-md mx-4">
+    <div className="h-full w-full bg-background flex items-center justify-center">
+      <Card className="w-full max-w-md mx-4 rounded-xl">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl">Admin Login</CardTitle>
           <CardDescription>
@@ -77,7 +77,7 @@ export default function AdminLoginPage() {
                 required
               />
             </div>
-            <Button type="submit" className="w-full" disabled={isLoading}>
+            <Button type="submit" className="w-full rounded-xl" disabled={isLoading}>
               {isLoading ? "Signing in..." : "Sign in"}
             </Button>
           </form>

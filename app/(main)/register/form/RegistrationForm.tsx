@@ -31,7 +31,22 @@ import { getEventFeeByName } from "@/lib/constants";
 import Image from "next/image";
 import { Separator } from "@/components/ui/separator";
 
-const RegistrationForm = () => {
+export type EventNameOption =
+  | "Startup Sphere"
+  | "Face To Face"
+  | "Python Worriors"
+  | "FreeFire Battleship"
+  | "AI Tales"
+
+interface RegistrationFormProps {
+  /**
+   * Fixed event name for per-event registration pages.
+   * When provided, the event select is hidden and this value is used.
+   */
+  initialEvent?: EventNameOption;
+}
+
+const RegistrationForm = ({ initialEvent }: RegistrationFormProps) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const [totalFee, setTotalFee] = useState<number>(0);
@@ -43,7 +58,7 @@ const RegistrationForm = () => {
     resolver: zodResolver(userRegistrationFormSchema),
     defaultValues: {
       collegeName: "",
-      events: undefined,
+      events: initialEvent,
       payss: undefined,
       paymentMode: undefined,
       department: undefined,
@@ -225,36 +240,38 @@ const RegistrationForm = () => {
             )}
           />
 
-          <FormField
-            control={form.control}
-            name="events"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Select Event</FormLabel>
-                <Select onValueChange={field.onChange} value={field.value} disabled={isPending}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Choose an event" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="Startup Sphere">
-                      Startup Sphere
-                    </SelectItem>
-                    <SelectItem value="Face To Face">Face To Face</SelectItem>
-                    <SelectItem value="Python Worriors">
-                      Python Warriors
-                    </SelectItem>
-                    {/* <SelectItem value="FreeFire Battleship">
-                      FreeFire Battleship
-                    </SelectItem> */}
-                    <SelectItem value="AI Tales">AI Tales</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          {!initialEvent && (
+            <FormField
+              control={form.control}
+              name="events"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Select Event</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value} disabled={isPending}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Choose an event" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="Startup Sphere">
+                        Startup Sphere
+                      </SelectItem>
+                      <SelectItem value="Face To Face">Face To Face</SelectItem>
+                      <SelectItem value="Python Worriors">
+                        Python Warriors
+                      </SelectItem>
+                      {/* <SelectItem value="FreeFire Battleship">
+                        FreeFire Battleship
+                      </SelectItem> */}
+                      <SelectItem value="AI Tales">AI Tales</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
 
           {(selectedEvent === "Face To Face" ||
             selectedEvent === "Python Worriors" ||

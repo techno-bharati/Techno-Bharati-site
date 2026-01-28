@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React from 'react'
-import { PhoneCall, Calendar, MapPin, Clock, Coins } from "lucide-react";
+import { PhoneCall, Calendar, MapPin, Clock, Coins, ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { events, type Event } from "@/lib/constants";
@@ -83,7 +83,8 @@ const EventDetailsPageContent = ({slug}: {slug: string}) => {
           <h1 className="text-2xl md:text-3xl font-bold mb-4 text-foreground">
             Event not found
           </h1>
-          <Button variant="outline" onClick={() => router.push("/events")}>
+          <Button variant="outline" className='rounded-lg' onClick={() => router.push("/events")}>
+            
             Back to Events
           </Button>
         </div>
@@ -95,11 +96,12 @@ const EventDetailsPageContent = ({slug}: {slug: string}) => {
     return (
       <div className="p-4 md:p-8 bg-background">
         <div className="max-w-5xl mx-auto space-y-6">
-          <Button variant="outline" onClick={() => router.push("/events")}>
+          <Button variant="outline" className='rounded-lg group' onClick={() => router.push("/events")}>
+          <ArrowLeft className='-mr-1 group-hover:-translate-x-1 transition-transform'/>
             Back to Events
           </Button>
   
-          <Card className="shadow-lg border bg-card rounded-lg">
+          <Card className="shadow-md border bg-card rounded-2xl">
             <CardHeader>
               <CardTitle className="text-2xl md:text-3xl font-bold text-foreground">
                 {event.name}
@@ -149,7 +151,7 @@ const EventDetailsPageContent = ({slug}: {slug: string}) => {
                 </ul>
               </div>
   
-              <div className="flex flex-col md:flex-row md:gap-8 lg:gap-16 mt-4">
+              <div className="w-full flex flex-col justify-between md:flex-row md:gap-8 lg:gap-16 mt-4">
                 <div className="mb-6 md:mb-0">
                   <h3 className="text-lg md:text-xl text-foreground">Queries</h3>
                   <div className="text-muted-foreground text-sm md:text-base mt-2 space-y-1">
@@ -182,10 +184,11 @@ const EventDetailsPageContent = ({slug}: {slug: string}) => {
               <div className="flex flex-col gap-3 mt-6">
                 <Button
                   variant="default"
-                  className="w-full bg-primary text-primary-foreground hover:bg-primary/70"
-                  onClick={() => router.push("/register")}
+                  className="w-full bg-primary text-primary-foreground hover:bg-primary/95 rounded-xl group"
+                  onClick={() => router.push(`/events/${slug}/register`)}
                 >
                   Register
+                  <ArrowRight className='-ml-1 group-hover:translate-x-1 transition-transform'/>
                 </Button>
               </div>
             </CardContent>
