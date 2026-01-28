@@ -44,10 +44,7 @@ export async function GET(req: Request) {
     }
 
     // Department-level admins can see all registrations for their department
-    if (
-      payload.role === AdminRole.DEPARTMENT_ADMIN &&
-      payload.department
-    ) {
+    if (payload.role === AdminRole.DEPARTMENT_ADMIN && payload.department) {
       where.department = payload.department;
     }
 
@@ -115,33 +112,29 @@ export async function GET(req: Request) {
           where: {
             ...where,
             status: "CONFIRMED",
-            paymentMode: "OFFLINE"
+            paymentMode: "OFFLINE",
           },
           _sum: { amount: true },
         }),
       ]),
     ]);
 
-    
     let totalParticipants = 0;
 
     if (!eventType || eventType === "all") {
-      totalParticipants = 
-        (stats[4]._sum.numberOfTeamMembers || 0) + 
-        stats[5] + 
-        stats[6]; 
+      totalParticipants =
+        (stats[4]._sum.numberOfTeamMembers || 0) + stats[5] + stats[6];
     } else if (eventType === "STARTUP_SPHERE") {
       totalParticipants = stats[4]._sum.numberOfTeamMembers || 0;
     } else if (eventType === "FREEFIRE_BATTLESHIP") {
-      totalParticipants = stats[0] * 4; 
+      totalParticipants = stats[0] * 4;
     } else {
-      
-      totalParticipants = stats[0]; 
+      totalParticipants = stats[0];
     }
 
     const offlineRevenue = stats[7]._sum.amount || 0;
 
-    const totalRevenueForEvent = stats[1]._sum.amount || 0; 
+    const totalRevenueForEvent = stats[1]._sum.amount || 0;
 
     return NextResponse.json({
       registrations,
@@ -152,12 +145,15 @@ export async function GET(req: Request) {
         offlineRevenue: offlineRevenue,
         activeEvents: stats[2].length,
         todayRegistrations: stats[3],
-        eventBreakdown: stats[2].reduce((acc, curr) => {
-          if (curr._count && typeof curr._count === "object") {
-            acc[curr.eventType] = curr._count._all ?? 0;
-          }
-          return acc;
-        }, {} as Record<string, number>),
+        eventBreakdown: stats[2].reduce(
+          (acc, curr) => {
+            if (curr._count && typeof curr._count === "object") {
+              acc[curr.eventType] = curr._count._all ?? 0;
+            }
+            return acc;
+          },
+          {} as Record<string, number>
+        ),
         totalParticipants,
       },
     });

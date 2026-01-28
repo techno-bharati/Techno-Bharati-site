@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
 const SponsorsPage = () => {
-  return (
-    <div>SponsorsPage</div>
-  )
-}
+  return <div>SponsorsPage</div>;
+};
 
-export default SponsorsPage
+export default SponsorsPage;

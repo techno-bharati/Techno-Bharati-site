@@ -59,7 +59,7 @@ const aiTalesSchema = pythonWorriorsSchema; // Same as Python Warriors
 
 // Add this before the main schema
 const paymentModeSchema = z.object({
-  paymentMode: z.enum(['ONLINE', 'OFFLINE'], {
+  paymentMode: z.enum(["ONLINE", "OFFLINE"], {
     required_error: "Please select a payment mode",
   }),
 });
@@ -80,7 +80,7 @@ export const userRegistrationFormSchema = z
         required_error: "Please select an event",
       }
     ),
-    paymentMode: z.enum(['ONLINE', 'OFFLINE'], {
+    paymentMode: z.enum(["ONLINE", "OFFLINE"], {
       required_error: "Please select a payment mode",
     }),
     department: z.enum(
@@ -89,12 +89,9 @@ export const userRegistrationFormSchema = z
         required_error: "Please select a department",
       }
     ),
-    class: z.enum(
-      ["first year", "second year", "third year", "final year"],
-      {
-        required_error: "Please select a class",
-      }
-    ),
+    class: z.enum(["first year", "second year", "third year", "final year"], {
+      required_error: "Please select a class",
+    }),
     payss: z
       .instanceof(File, { message: "Payment screenshot/receipt is required" })
       .refine(

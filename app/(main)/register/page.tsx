@@ -5,4 +5,3 @@ export default function Page() {
   // so they can pick a specific event and register there.
   redirect("/events");
 }
-

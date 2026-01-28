@@ -1,7 +1,4 @@
-import {
-  Instagram,
-  Linkedin,
-} from "lucide-react";
+import { Instagram, Linkedin } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -58,10 +55,7 @@ export function Footer() {
         <div className="mt-2 flex justify-center space-x-8 text-sm text-muted-foreground">
           <span className="text-sm md:text-base tracking-tight">
             Developed & Managed by{" "}
-            <Link
-              href={"/"}
-              className="hover:underline hover:text-primary"
-            >
+            <Link href={"/"} className="hover:underline hover:text-primary">
               Team InfusionAI
             </Link>
           </span>

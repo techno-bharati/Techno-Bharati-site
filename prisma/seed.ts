@@ -1,11 +1,15 @@
-import { PrismaClient, AdminRole, EventType } from "@/prisma/generated/prisma/client";
-import { PrismaPg } from '@prisma/adapter-pg'
+import {
+  PrismaClient,
+  AdminRole,
+  EventType,
+} from "@/prisma/generated/prisma/client";
+import { PrismaPg } from "@prisma/adapter-pg";
 
 const adapter = new PrismaPg({
-  connectionString: process.env.DATABASE_URL
-})
+  connectionString: process.env.DATABASE_URL,
+});
 
-const db = new PrismaClient({adapter})
+const db = new PrismaClient({ adapter });
 
 // const db = new PrismaClient();
 
@@ -41,7 +45,7 @@ async function main() {
     await db.admin.upsert({
       where: { email: admin.email },
       update: {},
-      create: admin
+      create: admin,
     });
   }
 }

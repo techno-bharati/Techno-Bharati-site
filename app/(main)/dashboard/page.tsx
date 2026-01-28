@@ -537,8 +537,8 @@ export default function DashboardPage() {
                           registration.status === "CONFIRMED"
                             ? "success"
                             : registration.status === "PENDING"
-                            ? "warning"
-                            : "destructive"
+                              ? "warning"
+                              : "destructive"
                         }
                       >
                         {registration.status}

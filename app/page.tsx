@@ -9,7 +9,7 @@ import { Navigation2 } from "@/components/landing/Navigation2";
 export default function Home() {
   return (
     <>
-    <Navigation2 />
+      <Navigation2 />
       <Hero2 />
       <ImageCarousel />
       <EventCards />

@@ -77,7 +77,11 @@ export default function AdminLoginPage() {
                 required
               />
             </div>
-            <Button type="submit" className="w-full rounded-xl" disabled={isLoading}>
+            <Button
+              type="submit"
+              className="w-full rounded-xl"
+              disabled={isLoading}
+            >
               {isLoading ? "Signing in..." : "Sign in"}
             </Button>
           </form>

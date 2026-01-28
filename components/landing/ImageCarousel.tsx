@@ -31,9 +31,9 @@ export default function ImageCarousel() {
     });
   }, [api]);
 
-  const plugin = Autoplay({ 
-    delay: 3000, 
-    stopOnInteraction: false 
+  const plugin = Autoplay({
+    delay: 3000,
+    stopOnInteraction: false,
   });
 
   return (
@@ -55,10 +55,7 @@ export default function ImageCarousel() {
         >
           <CarouselContent className="rounded-xl">
             {duplicatedImages.map((image, index) => (
-              <CarouselItem
-                key={`${image}-${index}`}
-                className="basis-full"
-              >
+              <CarouselItem key={`${image}-${index}`} className="basis-full">
                 <div className="aspect-[16/9] max-w-4xl mx-auto">
                   <img
                     src={image}

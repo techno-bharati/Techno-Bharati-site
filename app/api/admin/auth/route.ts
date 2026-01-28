@@ -32,7 +32,7 @@ export async function POST(req: Request) {
       where: { email: normalizedEmail },
     });
 
-    console.log("admin found::::1")
+    console.log("admin found::::1");
 
     if (!admin) {
       return NextResponse.json(
@@ -64,7 +64,7 @@ export async function POST(req: Request) {
       .setProtectedHeader({ alg: "HS256", typ: "JWT" })
       .sign(new TextEncoder().encode(process.env.JWT_SECRET));
 
-      console.log("admin-fourned:::2")
+    console.log("admin-fourned:::2");
 
     const cookieStore = await cookies();
     cookieStore.set("admin-token", token, {
@@ -75,7 +75,7 @@ export async function POST(req: Request) {
       maxAge: 86400, // 24 hours
     });
 
-    console.log("admin-fourned:::3")
+    console.log("admin-fourned:::3");
 
     return NextResponse.json({
       message: "Logged in successfully",

@@ -6,7 +6,13 @@
     "dev": "next dev",
     "build": "npx prisma generate && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "tsc": "tsc --noemit",
+    "format": "prettier \"**/*.{ts,tsx,js,json}\" --ignore-path .gitignore",
+    "format:check": "pnpm format --check",
+    "format:write": "pnpm format --write",
+    "validate": "pnpm format:write && pnpm lint && pnpm tsc",
+    "prepare": "husky"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.7.4",
@@ -31,6 +37,7 @@
     "embla-carousel-autoplay": "^8.5.2",
     "embla-carousel-react": "^8.5.2",
     "framer-motion": "^12.0.11",
+    "husky": "^9.1.7",
     "jose": "^5.9.6",
     "lucide-react": "^0.474.0",
     "next": "15.1.6",
@@ -38,6 +45,7 @@
     "next-cloudinary": "^6.16.0",
     "next-themes": "^0.4.4",
     "nodemailer": "^6.10.0",
+    "prettier": "^3.8.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.54.2",

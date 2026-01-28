@@ -88,25 +88,25 @@ export async function createRegistration(
                 }),
               }
             : formData.events === "FreeFire Battleship"
-            ? {
-                ...baseData,
-                squadName: formData.squadName,
-                email: formData.players[0].email,
-                contactNumber: formData.players[0].contactNumber,
-                players: {
-                  create: formData.players.map((player) => ({
-                    playerName: player.playerName,
-                    freeFireId: player.freeFireId,
-                    contactNumber: player.contactNumber,
-                  })),
+              ? {
+                  ...baseData,
+                  squadName: formData.squadName,
+                  email: formData.players[0].email,
+                  contactNumber: formData.players[0].contactNumber,
+                  players: {
+                    create: formData.players.map((player) => ({
+                      playerName: player.playerName,
+                      freeFireId: player.freeFireId,
+                      contactNumber: player.contactNumber,
+                    })),
+                  },
+                }
+              : {
+                  ...baseData,
+                  studentName: formData.studentName,
+                  contactNumber: formData.contactNumber,
+                  email: formData.email,
                 },
-              }
-            : {
-                ...baseData,
-                studentName: formData.studentName,
-                contactNumber: formData.contactNumber,
-                email: formData.email,
-              },
         include: {
           players: true,
           teamLeader: true,
@@ -134,4 +134,3 @@ export async function createRegistration(
     return { success: false, error: "Failed to process registration" };
   }
 }
-

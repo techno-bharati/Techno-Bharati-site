@@ -42,7 +42,7 @@ export function Hero2() {
       >
         <Image
           src={"/logo.png"}
-        width={100}
+          width={100}
           height={100}
           alt={"Bharati Vidyapeeth Logo"}
         />

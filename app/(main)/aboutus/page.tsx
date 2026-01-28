@@ -23,8 +23,8 @@ export default function AboutUsPage() {
             <h1 className="text-4xl md:text-6xl font-bold mb-6">About Us</h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Bharati Vidyapeeth&apos;s College of Engineering, Kolhapur
-              presents <br />Techno Bharati 2025 - a celebration of technology and
-              innovation.
+              presents <br />
+              Techno Bharati 2025 - a celebration of technology and innovation.
             </p>
           </motion.div>
         </div>

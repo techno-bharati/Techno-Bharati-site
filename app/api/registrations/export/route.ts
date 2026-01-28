@@ -23,13 +23,16 @@ export async function GET() {
 
     const wb = XLSX.utils.book_new();
 
-    const groupedRegistrations = registrations.reduce((acc, reg) => {
-      if (!acc[reg.eventType]) {
-        acc[reg.eventType] = [];
-      }
-      acc[reg.eventType].push(reg);
-      return acc;
-    }, {} as Record<string, typeof registrations>);
+    const groupedRegistrations = registrations.reduce(
+      (acc, reg) => {
+        if (!acc[reg.eventType]) {
+          acc[reg.eventType] = [];
+        }
+        acc[reg.eventType].push(reg);
+        return acc;
+      },
+      {} as Record<string, typeof registrations>
+    );
 
     if (groupedRegistrations.STARTUP_SPHERE?.length) {
       const startupData = groupedRegistrations.STARTUP_SPHERE.map((reg) => ({

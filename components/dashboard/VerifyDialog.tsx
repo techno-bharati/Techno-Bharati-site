@@ -15,7 +15,13 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Edit } from "lucide-react";
 
 interface VerifyDialogProps {
@@ -175,7 +181,10 @@ export function VerifyDialog({
                     </p>
                     <div className="flex items-center">
                       <p className="mr-2">Payment Mode:</p>
-                      <Select value={selectedPaymentMode} onValueChange={setSelectedPaymentMode}>
+                      <Select
+                        value={selectedPaymentMode}
+                        onValueChange={setSelectedPaymentMode}
+                      >
                         <SelectTrigger className="w-32">
                           <SelectValue placeholder="Select Payment Mode" />
                         </SelectTrigger>

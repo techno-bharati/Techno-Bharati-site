@@ -36,7 +36,7 @@ export type EventNameOption =
   | "Face To Face"
   | "Python Worriors"
   | "FreeFire Battleship"
-  | "AI Tales"
+  | "AI Tales";
 
 interface RegistrationFormProps {
   /**
@@ -50,7 +50,9 @@ const RegistrationForm = ({ initialEvent }: RegistrationFormProps) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const [totalFee, setTotalFee] = useState<number>(0);
-  const [paymentMode, setPaymentMode] = useState<'ONLINE' | 'OFFLINE'>('ONLINE');
+  const [paymentMode, setPaymentMode] = useState<"ONLINE" | "OFFLINE">(
+    "ONLINE"
+  );
   const [selectedDepartment, setSelectedDepartment] = useState<string>("");
   const [otherDepartment, setOtherDepartment] = useState<string>("");
 
@@ -102,7 +104,7 @@ const RegistrationForm = ({ initialEvent }: RegistrationFormProps) => {
         toast.loading("Submitting..", { id: "form-submit" });
         mutate({
           ...data,
-          paymentMode: data.paymentMode
+          paymentMode: data.paymentMode,
         });
       } catch (error) {
         console.error("Submission error:", error);
@@ -162,14 +164,18 @@ const RegistrationForm = ({ initialEvent }: RegistrationFormProps) => {
               <FormItem>
                 <FormLabel>College Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter your college name" {...field} disabled={isPending} />
+                  <Input
+                    placeholder="Enter your college name"
+                    {...field}
+                    disabled={isPending}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
 
-<FormField
+          <FormField
             control={form.control}
             name="department"
             render={({ field }) => (
@@ -247,7 +253,11 @@ const RegistrationForm = ({ initialEvent }: RegistrationFormProps) => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Select Event</FormLabel>
-                  <Select onValueChange={field.onChange} value={field.value} disabled={isPending}>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    disabled={isPending}
+                  >
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Choose an event" />
@@ -284,7 +294,11 @@ const RegistrationForm = ({ initialEvent }: RegistrationFormProps) => {
                   <FormItem>
                     <FormLabel>Student Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter your name" {...field} disabled={isPending} />
+                      <Input
+                        placeholder="Enter your name"
+                        {...field}
+                        disabled={isPending}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -314,7 +328,11 @@ const RegistrationForm = ({ initialEvent }: RegistrationFormProps) => {
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter your email" {...field} disabled={isPending} />
+                      <Input
+                        placeholder="Enter your email"
+                        {...field}
+                        disabled={isPending}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -332,7 +350,11 @@ const RegistrationForm = ({ initialEvent }: RegistrationFormProps) => {
                   <FormItem>
                     <FormLabel>Squad Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter squad name" {...field} disabled={isPending} />
+                      <Input
+                        placeholder="Enter squad name"
+                        {...field}
+                        disabled={isPending}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -353,7 +375,11 @@ const RegistrationForm = ({ initialEvent }: RegistrationFormProps) => {
                         <FormItem>
                           <FormLabel>Name</FormLabel>
                           <FormControl>
-                            <Input placeholder="Enter player name" {...field} disabled={isPending} />
+                            <Input
+                              placeholder="Enter player name"
+                              {...field}
+                              disabled={isPending}
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -428,7 +454,11 @@ const RegistrationForm = ({ initialEvent }: RegistrationFormProps) => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Select Category</FormLabel>
-                    <Select onValueChange={field.onChange} value={field.value} disabled={isPending}>
+                    <Select
+                      onValueChange={field.onChange}
+                      value={field.value}
+                      disabled={isPending}
+                    >
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Category" />
@@ -455,7 +485,7 @@ const RegistrationForm = ({ initialEvent }: RegistrationFormProps) => {
                   <FormItem>
                     <FormLabel>Number of Team Members</FormLabel>
                     <FormControl>
-                      <Select 
+                      <Select
                         onValueChange={(value) => field.onChange(Number(value))}
                         value={field.value ? String(field.value) : "1"}
                         disabled={isPending}
@@ -473,7 +503,8 @@ const RegistrationForm = ({ initialEvent }: RegistrationFormProps) => {
                       </Select>
                     </FormControl>
                     <FormDescription>
-                      Minimum 1 (Team Leader) and maximum of 5 team members allowed
+                      Minimum 1 (Team Leader) and maximum of 5 team members
+                      allowed
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -487,7 +518,11 @@ const RegistrationForm = ({ initialEvent }: RegistrationFormProps) => {
                   <FormItem>
                     <FormLabel>Team Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter team name" {...field} disabled={isPending} />
+                      <Input
+                        placeholder="Enter team name"
+                        {...field}
+                        disabled={isPending}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -521,7 +556,11 @@ const RegistrationForm = ({ initialEvent }: RegistrationFormProps) => {
                     <FormItem>
                       <FormLabel>Team Leader Contact Number</FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter contact number" {...field} disabled={isPending} />
+                        <Input
+                          placeholder="Enter contact number"
+                          {...field}
+                          disabled={isPending}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -566,7 +605,11 @@ const RegistrationForm = ({ initialEvent }: RegistrationFormProps) => {
                           <FormItem>
                             <FormLabel>Name</FormLabel>
                             <FormControl>
-                              <Input placeholder="Enter name" {...field} disabled={isPending} />
+                              <Input
+                                placeholder="Enter name"
+                                {...field}
+                                disabled={isPending}
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -622,11 +665,11 @@ const RegistrationForm = ({ initialEvent }: RegistrationFormProps) => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Payment Mode</FormLabel>
-                <Select 
+                <Select
                   onValueChange={(value) => {
                     field.onChange(value);
-                    setPaymentMode(value as 'ONLINE' | 'OFFLINE');
-                  }} 
+                    setPaymentMode(value as "ONLINE" | "OFFLINE");
+                  }}
                   value={field.value}
                   disabled={isPending}
                 >
@@ -651,8 +694,8 @@ const RegistrationForm = ({ initialEvent }: RegistrationFormProps) => {
             render={({ field: { onChange, value, ...field } }) => (
               <FormItem>
                 <FormLabel>
-                  {form.watch("paymentMode") === "ONLINE" 
-                    ? "Upload Payment Screenshot" 
+                  {form.watch("paymentMode") === "ONLINE"
+                    ? "Upload Payment Screenshot"
                     : "Upload Receipt Photo"}
                 </FormLabel>
                 <FormControl>
@@ -681,8 +724,6 @@ const RegistrationForm = ({ initialEvent }: RegistrationFormProps) => {
               </FormItem>
             )}
           />
-
-          
 
           <div className="mt-4 p-4 bg-primary/5 rounded-lg flex items-start gap-2 justify-between">
             <div>

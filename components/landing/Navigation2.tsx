@@ -19,7 +19,7 @@ export function Navigation2() {
     { href: "/events", label: "EVENTS" },
     // Route all registration traffic through the events list,
     // where users can pick a specific event and register.
-    {href: "/sponsors", label: "SPONSORS"},
+    { href: "/sponsors", label: "SPONSORS" },
     { href: "/contactus", label: "CONTACT US" },
   ];
 

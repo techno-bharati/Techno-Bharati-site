@@ -1,11 +1,7 @@
-import React from 'react'
+import React from "react";
 
-const DashboardLayout = ({children}: {children: React.ReactNode}) => {
-  return (
-    <div className='w-full'>
-      {children}
-    </div>
-  )
-}
+const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
+  return <div className="w-full">{children}</div>;
+};
 
-export default DashboardLayout
+export default DashboardLayout;

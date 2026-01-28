@@ -1,4 +1,6 @@
-import RegistrationForm, { EventNameOption } from "@/app/(main)/register/form/RegistrationForm";
+import RegistrationForm, {
+  EventNameOption,
+} from "@/app/(main)/register/form/RegistrationForm";
 import { notFound } from "next/navigation";
 
 interface PageProps {
@@ -32,4 +34,3 @@ export default async function EventRegisterPage({ params }: PageProps) {
     </div>
   );
 }
-

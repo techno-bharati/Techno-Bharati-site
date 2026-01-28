@@ -292,7 +292,8 @@ export const CSE_EVENTS: Event[] = [
     type: "Event",
     modalData: {
       eventName: "C-PRO Master",
-      description: "C-PRO Master is a competition where participants will compete to solve the most complex problems using the C programming language. The competition will be held on 28th February 2026 at Bharati Vidyapeeth College of Engineering, Kolahpur.",
+      description:
+        "C-PRO Master is a competition where participants will compete to solve the most complex problems using the C programming language. The competition will be held on 28th February 2026 at Bharati Vidyapeeth College of Engineering, Kolahpur.",
       rules: [
         "1. The competition will be held on 28th February 2026 at Bharati Vidyapeeth College of Engineering, Kolahpur.",
         "2. The competition will be held from 10:00 AM to 12:00 PM.",
@@ -302,10 +303,10 @@ export const CSE_EVENTS: Event[] = [
       ],
       registration: ["Registration 1", "Registration 2"],
       queries: {
-        "anjali": "7420949831"
+        anjali: "7420949831",
       },
     },
-  }
+  },
 ];
 export const MECH_EVENTS: Event[] = [];
 export const ECE_EVENTS: Event[] = [];
@@ -322,20 +323,21 @@ export const GENERAL_ENGINEERING_EVENTS: Event[] = [
     type: "Technical Event",
     modalData: {
       eventName: "Techno Science Quiz",
-      description: "A MCQ-based quiz testing scientific and technical knowledge. Quiz will be accessed via link shared in classroom.",
+      description:
+        "A MCQ-based quiz testing scientific and technical knowledge. Quiz will be accessed via link shared in classroom.",
       rules: [
-        'The quiz is MCQ-based and will be accessed using the link shared in the classroom',
+        "The quiz is MCQ-based and will be accessed using the link shared in the classroom",
         "Only for first year students",
         "Participants must use their own mobile phones and remain seated in their assigned places",
         "Any malpractice or unfair activity will lead to immediate disqualification",
-        "The Judge's decision final and scores will not be disclosed"
+        "The Judge's decision final and scores will not be disclosed",
       ],
       registration: [""],
       queries: {
         "mr. ali shaikh": "8788559792",
-        "miss. sidhi kadam": "9226804220"
-      }
-    }
+        "miss. sidhi kadam": "9226804220",
+      },
+    },
   },
   {
     id: 2,
@@ -349,22 +351,23 @@ export const GENERAL_ENGINEERING_EVENTS: Event[] = [
     type: "Technical Event",
     modalData: {
       eventName: "Poster Competition",
-      description: "Create innovative posters on scientific and technological themes. Topics include: Indian Knowledge Systems (IKS) in Agriculture, Future of Education, Artificial Intelligence in Daily Life, Digital India, Science in Everyday Life, Water for a Sustainable Future, Utilization of Solar Energy, The Role of AI in Climate Change Predictions, Scientific Innovations That Changed the World, AI in Disaster Management & Rescue.",
+      description:
+        "Create innovative posters on scientific and technological themes. Topics include: Indian Knowledge Systems (IKS) in Agriculture, Future of Education, Artificial Intelligence in Daily Life, Digital India, Science in Everyday Life, Water for a Sustainable Future, Utilization of Solar Energy, The Role of AI in Climate Change Predictions, Scientific Innovations That Changed the World, AI in Disaster Management & Rescue.",
       rules: [
-        'Participation can be individual or team (max 2 students',
+        "Participation can be individual or team (max 2 students",
         "Posters must be original and based on science, technology, or innovation",
         "Standard size: 18X24 (1.5 X 2 Ft.); include title, concept, and illustrations",
         "Use safe and eco-friendly materials & colours",
         "Presentation time: 3-5 minutes per participant/team",
         "1st and 2nd year degree/diploma students participate only",
-        "Judge's decision is final"
+        "Judge's decision is final",
       ],
       registration: [""],
       queries: {
         "mr. gaurav andhale": "9356517617",
-        "mr. shaunak kulkarni": "9529820151"
-      }
-    }
+        "mr. shaunak kulkarni": "9529820151",
+      },
+    },
   },
   {
     id: 3,
@@ -384,14 +387,14 @@ export const GENERAL_ENGINEERING_EVENTS: Event[] = [
         "Both working and static models are allowed; readymade models are not permitted.",
         "Participants must clearly explain the model’s principle and application.",
         "Use of safe, low-cost, and eco-friendly materials is encouraged.",
-        "Only 1st and 2nd year Degree and Diploma students are eligible to participate"
+        "Only 1st and 2nd year Degree and Diploma students are eligible to participate",
       ],
       registration: [""],
       queries: {
         "miss. gaouri jangale": "9730875796",
-        "mr. suyash more": "9765152033"
-      }
-    }
+        "mr. suyash more": "9765152033",
+      },
+    },
   },
   {
     id: 4,
@@ -405,20 +408,21 @@ export const GENERAL_ENGINEERING_EVENTS: Event[] = [
     type: "Non-Technical Event",
     modalData: {
       eventName: "Free Fire Challenge",
-      description: "Virtual challenge game where players complete predetermined targets in a controlled gaming environment.",
+      description:
+        "Virtual challenge game where players complete predetermined targets in a controlled gaming environment.",
       rules: [
         "Participation: Individual or team.",
         "Each player completes a predetermined challenge/target (like point collection, movement task, or virtual quiz simulation).",
         "Follow safety rules: no running or rough play indoors.",
         "Judges will assign points based on performance and speed.",
-        "All decisions by the judges will be final."
+        "All decisions by the judges will be final.",
       ],
       registration: [""],
       queries: {
         "Mr. Tejas Kadam": "8625961194",
-        "Mr. Soham Humbre": "8007267372"
-      }
-    }
+        "Mr. Soham Humbre": "8007267372",
+      },
+    },
   },
   {
     id: 5,
@@ -432,20 +436,21 @@ export const GENERAL_ENGINEERING_EVENTS: Event[] = [
     type: "Non-Technical Event",
     modalData: {
       eventName: "Coin Drop Challenge",
-      description: "Precision-based game where participants drop a coin into a target from a height.",
+      description:
+        "Precision-based game where participants drop a coin into a target from a height.",
       rules: [
         "Participants drop a ₹1 coin from a height into a water bowl / target circle.",
         "Each player gets 3 attempts.",
         "Scoring: Coin lands in target → 10 points; touches target → 5 points; miss → 0 points.",
         "Players must stand at the marked line; no leaning or moving forward.",
-        "Judges' decision will be final in case of any disputes."
+        "Judges' decision will be final in case of any disputes.",
       ],
       registration: [""],
       queries: {
         "Mr. Tejas Kadam": "8625961194",
-        "Mr. Soham Humbre": "8007267372"
-      }
-    }
+        "Mr. Soham Humbre": "8007267372",
+      },
+    },
   },
   {
     id: 6,
@@ -459,20 +464,21 @@ export const GENERAL_ENGINEERING_EVENTS: Event[] = [
     type: "Non-Technical Event",
     modalData: {
       eventName: "Funny Walk Race",
-      description: "A hilarious race where participants walk in funny styles from start to finish line.",
+      description:
+        "A hilarious race where participants walk in funny styles from start to finish line.",
       rules: [
         "Participants walk from start to finish line in a funny style (animal walk, robot walk, or silly pose).",
         "Only one participant at a time.",
         "Disqualification: Running or touching the floor with hands unless part of the style.",
         "Winner is the participant who reaches the finish line first while maintaining the funny walk.",
-        "Judges' decision regarding style maintenance is final."
+        "Judges' decision regarding style maintenance is final.",
       ],
       registration: [""],
       queries: {
         "Mr. Tejas Kadam": "8625961194",
-        "Mr. Soham Humbre": "8007267372"
-      }
-    }
+        "Mr. Soham Humbre": "8007267372",
+      },
+    },
   },
   {
     id: 7,
@@ -486,21 +492,22 @@ export const GENERAL_ENGINEERING_EVENTS: Event[] = [
     type: "Non-Technical Event",
     modalData: {
       eventName: "Pass the Balloon",
-      description: "Team coordination game where members pass a balloon without using hands.",
+      description:
+        "Team coordination game where members pass a balloon without using hands.",
       rules: [
         "Teams of 2 members sit or stand in a line.",
         "Pass a balloon to the end without using hands (e.g., head, elbows, knees).",
         "Balloon must not touch the floor.",
         "Team completing the task fastest without dropping wins.",
         "If balloon touches the floor, team must start over.",
-        "Judges' timing and decisions are final."
+        "Judges' timing and decisions are final.",
       ],
       registration: [""],
       queries: {
         "Mr. Tejas Kadam": "8625961194",
-        "Mr. Soham Humbre": "8007267372"
-      }
-    }
+        "Mr. Soham Humbre": "8007267372",
+      },
+    },
   },
   {
     id: 8,
@@ -514,23 +521,24 @@ export const GENERAL_ENGINEERING_EVENTS: Event[] = [
     type: "Non-Technical Event",
     modalData: {
       eventName: "Emoji Expression Game",
-      description: "A fun guessing game where participants express words or phrases using only facial expressions and gestures.",
+      description:
+        "A fun guessing game where participants express words or phrases using only facial expressions and gestures.",
       rules: [
         "Participants are given a word, emoji, or phrase.",
         "They must express it using facial expressions and gestures only; no speaking.",
         "Other participants or teams guess the emoji/word within 30 seconds.",
         "Correct guesses earn points; most points at the end wins.",
         "No verbal hints or sounds allowed.",
-        "Judges' decisions on acceptable expressions are final."
+        "Judges' decisions on acceptable expressions are final.",
       ],
       registration: [""],
       queries: {
         "Mr. Tejas Kadam": "8625961194",
-        "Mr. Soham Humbre": "8007267372"
-      }
-    }
-  }
-]
+        "Mr. Soham Humbre": "8007267372",
+      },
+    },
+  },
+];
 export const CIVIL_EVENTS: Event[] = [
   {
     id: 1,
@@ -545,15 +553,13 @@ export const CIVIL_EVENTS: Event[] = [
     modalData: {
       eventName: "Model Making",
       description: "ask for the event description",
-      rules: [
-        'ask for rules'
-      ],
+      rules: ["ask for rules"],
       registration: [""],
       queries: {
         "atharv vishnu patil": "9146205055",
-        "vedant rajesh chavan": "9607082006"
-      }
-    }
+        "vedant rajesh chavan": "9607082006",
+      },
+    },
   },
   {
     id: 2,
@@ -568,15 +574,13 @@ export const CIVIL_EVENTS: Event[] = [
     modalData: {
       eventName: "CAD Master",
       description: "ask for the event description",
-      rules: [
-        'ask for rules'
-      ],
+      rules: ["ask for rules"],
       registration: [""],
       queries: {
         "atharv somnath thakare": "9021200969",
-        "pratik dattatray patil": "7058785354"
-      }
-    } 
+        "pratik dattatray patil": "7058785354",
+      },
+    },
   },
   {
     id: 3,
@@ -591,27 +595,23 @@ export const CIVIL_EVENTS: Event[] = [
     modalData: {
       eventName: "Videography",
       description: "ask for the event description",
-      rules: [
-        'ask for rules'
-      ],
+      rules: ["ask for rules"],
       registration: [""],
       queries: {
         "akansha vitthal shinde": "9850876630",
-        "vedant rajesh chavan": "9175201261"
-      }
-    }
-  }
+        "vedant rajesh chavan": "9175201261",
+      },
+    },
+  },
 ];
-
-
 
 export const EVENTS_BY_DEPARTMENT: Record<string, Event[]> = {
   "CSE (AIML)": CSE_AIML_EVENTS,
-  "CSE": CSE_EVENTS,
+  CSE: CSE_EVENTS,
   // "MECH": MECH_EVENTS,
   // "ECE": ECE_EVENTS,
-  "CIVIL": CIVIL_EVENTS,
-  "General Engineering": GENERAL_ENGINEERING_EVENTS
+  CIVIL: CIVIL_EVENTS,
+  "General Engineering": GENERAL_ENGINEERING_EVENTS,
 };
 
 // Other departments can define their own arrays similarly:
@@ -621,7 +621,12 @@ export const EVENTS_BY_DEPARTMENT: Record<string, Event[]> = {
 // export const CIVIL_EVENTS = [ ... ];
 
 // Combined list of all events (kept for backwards compatibility)
-export const events = [...CSE_AIML_EVENTS, ...CSE_EVENTS, ...CIVIL_EVENTS, ...GENERAL_ENGINEERING_EVENTS];
+export const events = [
+  ...CSE_AIML_EVENTS,
+  ...CSE_EVENTS,
+  ...CIVIL_EVENTS,
+  ...GENERAL_ENGINEERING_EVENTS,
+];
 
 export const calculateEventFee = (
   eventType: keyof typeof EVENT_FEES,

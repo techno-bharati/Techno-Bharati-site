@@ -19,7 +19,7 @@ export default function Page() {
 
   const nonTechnicalEvents = isGeneralEngineering
     ? filteredEvents.filter((event) => event.type === "Non-Technical Event")
-    : []; 
+    : [];
 
   return (
     <div className="bg-background max-w-screen-2xl mx-auto">
@@ -29,13 +29,26 @@ export default function Page() {
 
       {/* department events filter */}
       <div className="p-2 flex flex-wrap gap-2">
-        {["CSE (AIML)", "CSE", "MECH", "ECE", "CIVIL", "General Engineering"].map((dept) => (
+        {[
+          "CSE (AIML)",
+          "CSE",
+          "MECH",
+          "ECE",
+          "CIVIL",
+          "General Engineering",
+        ].map((dept) => (
           <button
             key={dept}
             type="button"
             onClick={() =>
               setSelectedDepartment(
-                dept as "CSE (AIML)" | "CSE" | "MECH" | "ECE" | "CIVIL" | "General Engineering"
+                dept as
+                  | "CSE (AIML)"
+                  | "CSE"
+                  | "MECH"
+                  | "ECE"
+                  | "CIVIL"
+                  | "General Engineering"
               )
             }
             className={`border border-border px-3 py-2 rounded-full text-sm md:text-base transition-colors ${
@@ -58,7 +71,7 @@ export default function Page() {
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                 {technicalEvents.map((event) => (
-                 <EventCard key={event.id} event={event}/>
+                  <EventCard key={event.id} event={event} />
                 ))}
               </div>
             </section>
@@ -71,7 +84,7 @@ export default function Page() {
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                 {nonTechnicalEvents.map((event) => (
-                  <EventCard key={event.id} event={event}/>
+                  <EventCard key={event.id} event={event} />
                 ))}
               </div>
             </section>
@@ -80,7 +93,7 @@ export default function Page() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {filteredEvents.map((event) => (
-              <EventCard key={event.id} event={event}/>
+            <EventCard key={event.id} event={event} />
           ))}
         </div>
       )}
