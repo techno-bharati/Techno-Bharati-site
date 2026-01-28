@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Image from "next/image";
 
 export function Navigation2() {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,7 +17,9 @@ export function Navigation2() {
   const navLinks = [
     { href: "/aboutus", label: "ABOUT US" },
     { href: "/events", label: "EVENTS" },
-    { href: "/register", label: "REGISTER" },
+    // Route all registration traffic through the events list,
+    // where users can pick a specific event and register.
+    {href: "/sponsors", label: "SPONSORS"},
     { href: "/contactus", label: "CONTACT US" },
   ];
 

@@ -44,19 +44,19 @@ export function Footer() {
         </div>
 
         <div className="flex justify-center space-x-8 text-sm text-muted-foreground">
-          <Link href="/contactus" className="hover:text-primary">
+          <Link href="/contactus" className="hover:text-primary font-semibold">
             CONTACT US
           </Link>
-          <Link href="/" className="hover:text-primary">
+          <Link href="/sponsors" className="hover:text-primary font-semibold">
             SPONSORS
           </Link>
-          <Link href="/aboutus" className="hover:text-primary">
+          <Link href="/aboutus" className="hover:text-primary font-semibold">
             ABOUT US
           </Link>
         </div>
 
         <div className="mt-2 flex justify-center space-x-8 text-sm text-muted-foreground">
-          <span className="text-sm md:text-baseuse lg:text-[18px] tracking-tight font-bold ">
+          <span className="text-sm md:text-base tracking-tight">
             Developed & Managed by{" "}
             <Link
               href={"/"}
