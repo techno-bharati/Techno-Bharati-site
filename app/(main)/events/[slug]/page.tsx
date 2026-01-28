@@ -1,7 +1,7 @@
 import EventDetailsPageContent from "./_components/EventDetailsPageContent";
 
 interface PageProps {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 export default async function EventDetailsPage({ params }: PageProps) {
