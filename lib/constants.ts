@@ -287,23 +287,119 @@ export const CSE_EVENTS: Event[] = [
     department: "CSE",
     date: "2026-02-28",
     time: "10:00 AM",
-    venue: "Bharati Vidyapeeth College of Engineering, Kolahpur",
+    venue: "Bharati Vidyapeeth College of Engineering, Kolhapur",
     entryFee: "100",
-    type: "Event",
+    type: "Technical Event",
     modalData: {
       eventName: "C-PRO Master",
       description:
-        "C-PRO Master is a competition where participants will compete to solve the most complex problems using the C programming language. The competition will be held on 28th February 2026 at Bharati Vidyapeeth College of Engineering, Kolahpur.",
+        "C-PRO Master is a competitive programming challenge designed to test participants' expertise in C programming. Participants will solve complex algorithmic problems within a time limit, demonstrating their coding efficiency, logical thinking, and problem-solving skills.",
       rules: [
-        "1. The competition will be held on 28th February 2026 at Bharati Vidyapeeth College of Engineering, Kolahpur.",
-        "2. The competition will be held from 10:00 AM to 12:00 PM.",
-        "3. The competition will be held in the CSE department.",
-        "4. The competition will be held in the CSE department.",
-        "5. The competition will be held in the CSE department.",
+        "Participants must solve given programming problems using C language only.",
+        "No external libraries or pre-built code snippets are allowed.",
+        "Each participant/team will have access to a computer with a C compiler.",
+        "The competition duration is 2 hours (10:00 AM - 12:00 PM).",
+        "Solutions will be judged on correctness, efficiency, and code quality.",
+        "Any form of plagiarism will lead to immediate disqualification.",
+        "The judges' decision will be final and binding."
       ],
-      registration: ["Registration 1", "Registration 2"],
+      registration: ["Online registration through college portal", "On-spot registration available until 9:30 AM"],
       queries: {
-        anjali: "7420949831",
+        "Anjali": "7420949831",
+        "Event Coordinator": "CSE Department Office"
+      },
+    },
+  },
+  {
+    id: 2,
+    name: "CODEFUSION",
+    slug: "codefusion",
+    department: "CSE",
+    date: "2026-02-28",
+    time: "10:00 AM",
+    venue: "Bharati Vidyapeeth College of Engineering, Kolhapur",
+    entryFee: "100",
+    type: "Technical Event",
+    modalData: {
+      eventName: "CODEFUSION",
+      description:
+        "CODEFUSION is a multi-language coding competition where participants can choose their preferred programming language (C, C++, Java, Python) to solve algorithmic challenges. The event focuses on problem-solving versatility and coding efficiency across different programming paradigms.",
+      rules: [
+        "Participants can use any of the allowed languages: C, C++, Java, or Python.",
+        "Each problem has specific language constraints that must be followed.",
+        "Teams of maximum 2 members are allowed.",
+        "Duration: 3 hours (10:00 AM - 1:00 PM).",
+        "Internet access is prohibited during the competition.",
+        "Participants must bring their own laptops with required compilers/IDEs installed.",
+        "Scoring is based on number of problems solved and time taken.",
+        "The decision of the judges will be final."
+      ],
+      registration: ["Register through department website", "Team registration must include both members' details"],
+      queries: {
+        "Avinash": "8080263597",
+        "Technical Support": "CSE Lab In-charge"
+      },
+    },
+  },
+  {
+    id: 3,
+    name: "Project Expo",
+    slug: "project-expo",
+    department: "CSE",
+    date: "2026-02-28",
+    time: "10:00 AM",
+    venue: "Bharati Vidyapeeth College of Engineering, Kolhapur",
+    entryFee: "100",
+    type: "Technical Event",
+    modalData: {
+      eventName: "Project Expo",
+      description:
+        "Project Expo showcases innovative software and hardware projects developed by students. This event provides a platform for students to demonstrate their technical skills, creativity, and practical implementation of computer science concepts in real-world applications.",
+      rules: [
+        "Projects can be software-based, hardware-based, or IoT applications.",
+        "Teams of 2-4 members are allowed.",
+        "Each team gets 10 minutes for presentation and 5 minutes for Q&A.",
+        "Projects must be original work of the participating students.",
+        "All necessary equipment must be arranged by participants.",
+        "Project documentation must be submitted during registration.",
+        "Judging criteria: Innovation (40%), Implementation (30%), Presentation (20%), Documentation (10%).",
+        "Final year projects are not eligible for participation."
+      ],
+      registration: ["Submit project abstract by 25th February", "Final registration at CSE department"],
+      queries: {
+        "Nikhil": "8484894757",
+        "Project Coordinator": "CSE HOD Office"
+      },
+    },
+  },
+  {
+    id: 4,
+    name: "Treasure Hunt",
+    slug: "treasure-hunt",
+    department: "CSE",
+    date: "2026-02-28",
+    time: "10:00 AM",
+    venue: "Bharati Vidyapeeth College of Engineering, Kolhapur",
+    entryFee: "100",
+    type: "Non-Technical Event",
+    modalData: {
+      eventName: "Treasure Hunt",
+      description:
+        "Treasure Hunt is an exciting puzzle-solving game where participants follow clues, solve riddles, and complete challenges to find hidden treasures. The event combines logical thinking, teamwork, and creativity in a fun and engaging format.",
+      rules: [
+        "Teams of 3-5 members must register together.",
+        "The hunt begins at 10:00 AM sharp from the CSE department.",
+        "Clues will lead to various locations across the campus.",
+        "No mobile phones or external help is allowed during the hunt.",
+        "All team members must stay together throughout the event.",
+        "The first team to find all treasures and return to starting point wins.",
+        "Any form of cheating will result in disqualification.",
+        "Participants must respect college property and rules."
+      ],
+      registration: ["Team registration at CSE department counter", "Registration closes at 9:30 AM"],
+      queries: {
+        "Dipali": "8446343302",
+        "Event Head": "Sports & Cultural Committee"
       },
     },
   },

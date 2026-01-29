@@ -104,7 +104,7 @@ const EventDetailsPageContent = ({ slug }: { slug: string }) => {
 
   return (
     <div className="p-4 md:p-8 bg-background">
-      <div className="max-w-5xl mx-auto space-y-6">
+      <div className="max-w-7xl mx-auto space-y-6">
         <Button
           variant="outline"
           className="rounded-lg group"
@@ -177,7 +177,7 @@ const EventDetailsPageContent = ({ slug }: { slug: string }) => {
                   ))}
                 </div>
               </div>
-              <div className="flex-shrink-0">
+              {/* <div className="flex-shrink-0">
                 <h3 className="text-lg md:text-xl text-foreground mb-2">
                   Payment QR
                 </h3>
@@ -189,7 +189,7 @@ const EventDetailsPageContent = ({ slug }: { slug: string }) => {
                     alt="Payment QR"
                   />
                 </div>
-              </div>
+              </div> */}
             </div>
 
             <div className="flex flex-col gap-3 mt-6">
