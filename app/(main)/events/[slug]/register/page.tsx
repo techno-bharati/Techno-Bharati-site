@@ -53,10 +53,10 @@ export default async function EventRegisterPage({ params }: PageProps) {
 
   return (
     <div className="w-full p-6">
-        <RegistrationForm
-          initialEvent={eventName}
-          initialSelectedGames={initialSelectedGames}
-        />
+      <RegistrationForm
+        initialEvent={eventName}
+        initialSelectedGames={initialSelectedGames}
+      />
     </div>
   );
 }
