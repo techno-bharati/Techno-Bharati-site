@@ -32,8 +32,6 @@ export async function POST(req: Request) {
       where: { email: normalizedEmail },
     });
 
-    console.log("admin found::::1");
-
     if (!admin) {
       return NextResponse.json(
         { error: "Invalid credentials" },
@@ -64,8 +62,6 @@ export async function POST(req: Request) {
       .setProtectedHeader({ alg: "HS256", typ: "JWT" })
       .sign(new TextEncoder().encode(process.env.JWT_SECRET));
 
-    console.log("admin-fourned:::2");
-
     const cookieStore = await cookies();
     cookieStore.set("admin-token", token, {
       httpOnly: true,
@@ -74,8 +70,6 @@ export async function POST(req: Request) {
       path: "/",
       maxAge: 86400, // 24 hours
     });
-
-    console.log("admin-fourned:::3");
 
     return NextResponse.json({
       message: "Logged in successfully",
