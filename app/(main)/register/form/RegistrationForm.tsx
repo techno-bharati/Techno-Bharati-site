@@ -200,9 +200,9 @@ const RegistrationForm = ({
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit, onError)}
-          className="max-w-lg w-full p-6 shadow-lg rounded-lg space-y-6"
+          className="w-full max-w-4xl mx-auto p-6 rounded-lg grid grid-cols-1 md:grid-cols-2 gap-6"
         >
-          <div className="space-y-1">
+          <div className="space-y-1 md:col-span-2">
             <h2 className="text-xl md:text-2xl font-semibold text-foreground">
               {formTitle}
             </h2>
@@ -412,7 +412,7 @@ const RegistrationForm = ({
 
           {selectedEvent === "General Engineering Games" && (
             <>
-              <div className="space-y-2">
+              <div className="space-y-2 md:col-span-2">
                 <FormLabel>Select Games (choose exactly 3 or 5)</FormLabel>
                 <p className="text-sm text-muted-foreground">
                   3 games → ₹100, 5 games → ₹150 (per participant/groups)
@@ -552,7 +552,7 @@ const RegistrationForm = ({
                   </FormItem>
                 )}
               />
-              <div className="space-y-6">
+              <div className="space-y-6 md:col-span-2">
                 <h3 className="font-semibold">Squad Players</h3>
                 <FormDescription>All 4 players are required</FormDescription>
                 {Array.from({ length: 4 }).map((_, index) => (
@@ -917,7 +917,7 @@ const RegistrationForm = ({
             )}
           />
 
-          <div className="mt-4 p-4 bg-primary/5 rounded-lg flex items-start gap-2 justify-between">
+          <div className="mt-4 p-4 bg-primary/5 rounded-lg flex items-start gap-2 justify-between md:col-span-2">
             <div>
               <p className="text-lg font-semibold">
                 Total Registration Fee: ₹{totalFee}
@@ -942,7 +942,11 @@ const RegistrationForm = ({
             </div>
           </div>
 
-          <Button type="submit" className="w-full" disabled={isPending}>
+          <Button
+            type="submit"
+            className="w-full md:col-span-2"
+            disabled={isPending}
+          >
             {isPending ? "Submitting..." : "Submit"}
           </Button>
         </form>
