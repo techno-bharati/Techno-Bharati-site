@@ -106,6 +106,37 @@ async function main() {
       eventType: EventType.GE_GAMES_BUNDLE,
       department: Department.GENERAL_ENGINEERING,
     },
+    {
+      email: "civil.admin@technobharati.com",
+      password: "civil@admin",
+      name: "Civil Department Admin",
+      role: AdminRole.DEPARTMENT_ADMIN,
+      department: Department.CIVIL,
+    },
+    {
+      email: "civil.modelmaking@technobharati.com",
+      password: "civil@modelmaking",
+      name: "Civil Model Making Admin",
+      role: AdminRole.EVENT_ADMIN,
+      eventType: EventType.CE_MODEL_MAKING,
+      department: Department.CIVIL,
+    },
+    {
+      email: "civil.cadmaster@technobharati.com",
+      password: "civil@cadmaster",
+      name: "Civil CAD Master Admin",
+      role: AdminRole.EVENT_ADMIN,
+      eventType: EventType.CE_CAD_MASTER,
+      department: Department.CIVIL,
+    },
+    {
+      email: "civil.videography@technobharati.com",
+      password: "civil@videography",
+      name: "Civil Videography Admin",
+      role: AdminRole.EVENT_ADMIN,
+      eventType: EventType.CE_VIDEOGRAPHY,
+      department: Department.CIVIL,
+    },
   ];
 
   for (const admin of admins) {
@@ -116,7 +147,6 @@ async function main() {
     });
   }
 
-  // Seed sample registrations for AIML department events
   await db.registration.createMany({
     data: [
       {
@@ -233,6 +263,47 @@ async function main() {
         contactNumber: "8888880004",
         email: "ge4@example.com",
         notes: "Seed: GE Games bundle registration",
+      },
+    ],
+  });
+
+  await db.registration.createMany({
+    data: [
+      {
+        collegeName: "Bharati Vidyapeeth College of Engineering, Kolhapur",
+        eventType: EventType.CE_MODEL_MAKING,
+        paymentScreenshot: "https://example.com/seed/civil-model-making.png",
+        amount: 100,
+        paymentMode: "ONLINE",
+        department: Department.CIVIL,
+        class: "second year",
+        studentName: "Civil Model Making Participant 1",
+        contactNumber: "7777770001",
+        email: "civil1@example.com",
+      },
+      {
+        collegeName: "Bharati Vidyapeeth College of Engineering, Kolhapur",
+        eventType: EventType.CE_CAD_MASTER,
+        paymentScreenshot: "https://example.com/seed/civil-cad-master.png",
+        amount: 100,
+        paymentMode: "ONLINE",
+        department: Department.CIVIL,
+        class: "third year",
+        studentName: "Civil CAD Master Participant 1",
+        contactNumber: "7777770002",
+        email: "civil2@example.com",
+      },
+      {
+        collegeName: "Bharati Vidyapeeth College of Engineering, Kolhapur",
+        eventType: EventType.CE_VIDEOGRAPHY,
+        paymentScreenshot: "https://example.com/seed/civil-videography.png",
+        amount: 100,
+        paymentMode: "OFFLINE",
+        department: Department.CIVIL,
+        class: "first year",
+        studentName: "Civil Videography Participant 1",
+        contactNumber: "7777770003",
+        email: "civil3@example.com",
       },
     ],
   });

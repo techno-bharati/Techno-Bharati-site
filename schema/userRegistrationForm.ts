@@ -58,6 +58,7 @@ const pythonWorriorsSchema = z.object({
 const aiTalesSchema = pythonWorriorsSchema; // Same as Python Warriors
 
 const generalEngineeringTechnicalSchema = pythonWorriorsSchema;
+const civilTechnicalSchema = pythonWorriorsSchema; // Same as individual events: name, contact, email
 
 const generalEngineeringGamesBundleSchema = z.object({
   selectedGames: z
@@ -97,6 +98,10 @@ export const userRegistrationFormSchema = z
         "SciTech Model Expo 2K26",
         // General Engineering (Games bundle)
         "General Engineering Games",
+        // Civil Engineering
+        "Model Making",
+        "CAD Master",
+        "Videography",
       ],
       {
         required_error: "Please select an event",
@@ -151,5 +156,12 @@ export const userRegistrationFormSchema = z
       z
         .object({ events: z.literal("General Engineering Games") })
         .merge(generalEngineeringGamesBundleSchema),
+      z
+        .object({ events: z.literal("Model Making") })
+        .merge(civilTechnicalSchema),
+      z.object({ events: z.literal("CAD Master") }).merge(civilTechnicalSchema),
+      z
+        .object({ events: z.literal("Videography") })
+        .merge(civilTechnicalSchema),
     ])
   );

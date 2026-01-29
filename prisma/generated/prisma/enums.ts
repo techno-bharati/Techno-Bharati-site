@@ -18,6 +18,9 @@ export const EventType = {
   GE_POSTER_COMPETITION: "GE_POSTER_COMPETITION",
   GE_SCITECH_MODEL_EXPO: "GE_SCITECH_MODEL_EXPO",
   GE_GAMES_BUNDLE: "GE_GAMES_BUNDLE",
+  CE_MODEL_MAKING: "CE_MODEL_MAKING",
+  CE_CAD_MASTER: "CE_CAD_MASTER",
+  CE_VIDEOGRAPHY: "CE_VIDEOGRAPHY",
 } as const;
 
 export type EventType = (typeof EventType)[keyof typeof EventType];

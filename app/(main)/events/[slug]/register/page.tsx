@@ -15,16 +15,20 @@ const slugToEventName: Record<string, EventNameOption> = {
   "python-warriors": "Python Worriors",
   freefire: "FreeFire Battleship",
   "ai-tales": "AI Tales",
-  // General Engineering (technical)
+  // ge (technical)
   "techno-science-quiz": "Techno Science Quiz",
   "poster-competition": "Poster Competition",
   "scitech-model-expo": "SciTech Model Expo 2K26",
-  // General Engineering (games) -> send to bundle form
+  // General engineering (games) -> send to bundle form
   "free-fire-challenge": "General Engineering Games",
   "coin-drop-challenge": "General Engineering Games",
   "funny-walk-race": "General Engineering Games",
   "pass-the-balloon": "General Engineering Games",
   "emoji-expression-game": "General Engineering Games",
+  //civil engineering
+  "model-making": "Model Making",
+  "cad-master": "CAD Master",
+  videography: "Videography",
 };
 
 export default async function EventRegisterPage({ params }: PageProps) {

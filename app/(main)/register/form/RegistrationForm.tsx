@@ -30,6 +30,7 @@ import { SuccessDialog } from "@/components/register/SuccessDialog";
 import {
   calculateGeneralEngineeringGamesFee,
   GENERAL_ENGINEERING_TECHNICAL_FEE,
+  CIVIL_TECHNICAL_FEE,
   getEventFeeByName,
 } from "@/lib/constants";
 import Image from "next/image";
@@ -44,7 +45,10 @@ export type EventNameOption =
   | "Techno Science Quiz"
   | "Poster Competition"
   | "SciTech Model Expo 2K26"
-  | "General Engineering Games";
+  | "General Engineering Games"
+  | "Model Making"
+  | "CAD Master"
+  | "Videography";
 
 interface RegistrationFormProps {
   /**
@@ -156,6 +160,12 @@ const RegistrationForm = ({
         selectedEvent === "SciTech Model Expo 2K26"
       ) {
         setTotalFee(GENERAL_ENGINEERING_TECHNICAL_FEE);
+      } else if (
+        selectedEvent === "Model Making" ||
+        selectedEvent === "CAD Master" ||
+        selectedEvent === "Videography"
+      ) {
+        setTotalFee(CIVIL_TECHNICAL_FEE);
       } else {
         const fee = getEventFeeByName(selectedEvent, teamSize);
         setTotalFee(fee || 0);
@@ -341,6 +351,15 @@ const RegistrationForm = ({
                       <SelectItem value="General Engineering Games">
                         General Engineering Games (3 or 5)
                       </SelectItem>
+                      <SelectItem value="Model Making">
+                        Model Making (Civil)
+                      </SelectItem>
+                      <SelectItem value="CAD Master">
+                        CAD Master (Civil)
+                      </SelectItem>
+                      <SelectItem value="Videography">
+                        Videography (Civil)
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -354,7 +373,10 @@ const RegistrationForm = ({
             selectedEvent === "AI Tales" ||
             selectedEvent === "Techno Science Quiz" ||
             selectedEvent === "Poster Competition" ||
-            selectedEvent === "SciTech Model Expo 2K26") && (
+            selectedEvent === "SciTech Model Expo 2K26" ||
+            selectedEvent === "Model Making" ||
+            selectedEvent === "CAD Master" ||
+            selectedEvent === "Videography") && (
             <>
               <FormField
                 control={form.control}

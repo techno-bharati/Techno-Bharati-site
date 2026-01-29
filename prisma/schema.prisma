@@ -165,6 +165,10 @@ enum EventType {
   GE_POSTER_COMPETITION
   GE_SCITECH_MODEL_EXPO
   GE_GAMES_BUNDLE
+  // Civil Engineering department
+  CE_MODEL_MAKING
+  CE_CAD_MASTER
+  CE_VIDEOGRAPHY
 }
 
 enum RegistrationStatus {

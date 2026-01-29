@@ -32,6 +32,19 @@ export const EVENT_FEES: Record<string, EventFee> = {
     amount: 100,
     type: "per person",
   },
+  // Civil Engineering department
+  CE_MODEL_MAKING: {
+    amount: 100,
+    type: "per person",
+  },
+  CE_CAD_MASTER: {
+    amount: 100,
+    type: "per person",
+  },
+  CE_VIDEOGRAPHY: {
+    amount: 100,
+    type: "per person",
+  },
 } as const;
 
 export interface Event {
@@ -762,6 +775,9 @@ export const getEventFeeByName = (eventName: string, teamSize?: number) => {
     "Python Worriors": "PYTHON_WARRIORS",
     "FreeFire Battleship": "FREEFIRE_BATTLESHIP",
     "AI Tales": "AI_TALES",
+    "Model Making": "CE_MODEL_MAKING",
+    "CAD Master": "CE_CAD_MASTER",
+    Videography: "CE_VIDEOGRAPHY",
   } as const;
 
   const eventType = eventMap[eventName as keyof typeof eventMap];
@@ -771,6 +787,7 @@ export const getEventFeeByName = (eventName: string, teamSize?: number) => {
 };
 
 export const GENERAL_ENGINEERING_TECHNICAL_FEE = 100;
+export const CIVIL_TECHNICAL_FEE = 100;
 
 export const calculateGeneralEngineeringGamesFee = (gamesCount: number) => {
   if (gamesCount === 3) return 100;
