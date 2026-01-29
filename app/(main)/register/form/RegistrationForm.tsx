@@ -27,7 +27,11 @@ import { useMutation } from "@tanstack/react-query";
 import { createRegistration } from "@/app/(main)/actions/registration";
 import { toast } from "sonner";
 import { SuccessDialog } from "@/components/register/SuccessDialog";
-import { getEventFeeByName } from "@/lib/constants";
+import {
+  calculateGeneralEngineeringGamesFee,
+  GENERAL_ENGINEERING_TECHNICAL_FEE,
+  getEventFeeByName,
+} from "@/lib/constants";
 import Image from "next/image";
 import { Separator } from "@/components/ui/separator";
 
@@ -36,7 +40,11 @@ export type EventNameOption =
   | "Face To Face"
   | "Python Worriors"
   | "FreeFire Battleship"
-  | "AI Tales";
+  | "AI Tales"
+  | "Techno Science Quiz"
+  | "Poster Competition"
+  | "SciTech Model Expo 2K26"
+  | "General Engineering Games";
 
 interface RegistrationFormProps {
   /**
@@ -44,9 +52,17 @@ interface RegistrationFormProps {
    * When provided, the event select is hidden and this value is used.
    */
   initialEvent?: EventNameOption;
+  /**
+   * Used for General Engineering games bundle to preselect a game
+   * when the user clicks "Register" from a specific game.
+   */
+  initialSelectedGames?: string[];
 }
 
-const RegistrationForm = ({ initialEvent }: RegistrationFormProps) => {
+const RegistrationForm = ({
+  initialEvent,
+  initialSelectedGames,
+}: RegistrationFormProps) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const [totalFee, setTotalFee] = useState<number>(0);
@@ -55,12 +71,17 @@ const RegistrationForm = ({ initialEvent }: RegistrationFormProps) => {
   );
   const [selectedDepartment, setSelectedDepartment] = useState<string>("");
   const [otherDepartment, setOtherDepartment] = useState<string>("");
+  const [selectedGames, setSelectedGames] = useState<string[]>(
+    initialSelectedGames ?? []
+  );
 
   const form = useForm<z.infer<typeof userRegistrationFormSchema>>({
     resolver: zodResolver(userRegistrationFormSchema),
     defaultValues: {
       collegeName: "",
       events: initialEvent,
+      selectedGames: initialSelectedGames,
+      groupName: "",
       payss: undefined,
       paymentMode: undefined,
       department: undefined,
@@ -119,19 +140,33 @@ const RegistrationForm = ({ initialEvent }: RegistrationFormProps) => {
   };
 
   const selectedEvent = form.watch("events");
+  const formTitle = selectedEvent
+    ? `${selectedEvent} Registration`
+    : "Event Registration";
 
   useEffect(() => {
     const teamSize = form.watch("numberOfTeamMembers");
 
     if (selectedEvent) {
-      const fee = getEventFeeByName(selectedEvent, teamSize);
-      setTotalFee(fee || 0);
+      if (selectedEvent === "General Engineering Games") {
+        setTotalFee(calculateGeneralEngineeringGamesFee(selectedGames.length));
+      } else if (
+        selectedEvent === "Techno Science Quiz" ||
+        selectedEvent === "Poster Competition" ||
+        selectedEvent === "SciTech Model Expo 2K26"
+      ) {
+        setTotalFee(GENERAL_ENGINEERING_TECHNICAL_FEE);
+      } else {
+        const fee = getEventFeeByName(selectedEvent, teamSize);
+        setTotalFee(fee || 0);
+      }
     }
   }, [
     form.watch("events"),
     form.watch("numberOfTeamMembers"),
     form,
     selectedEvent,
+    selectedGames.length,
   ]);
 
   useEffect(() => {
@@ -139,6 +174,16 @@ const RegistrationForm = ({ initialEvent }: RegistrationFormProps) => {
       form.setValue("numberOfTeamMembers", 1);
     }
   }, [selectedEvent, form]);
+
+  useEffect(() => {
+    if (selectedEvent === "General Engineering Games") {
+      form.setValue("selectedGames", selectedGames as any);
+    } else {
+      // Avoid leaking games selection into other event submissions
+      setSelectedGames([]);
+      form.setValue("selectedGames", undefined as any);
+    }
+  }, [selectedEvent, selectedGames, form]);
 
   const handleNumberInput = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -157,6 +202,15 @@ const RegistrationForm = ({ initialEvent }: RegistrationFormProps) => {
           onSubmit={form.handleSubmit(onSubmit, onError)}
           className="max-w-lg w-full p-6 shadow-lg rounded-lg space-y-6"
         >
+          <div className="space-y-1">
+            <h2 className="text-xl md:text-2xl font-semibold text-foreground">
+              {formTitle}
+            </h2>
+            <p className="text-sm text-muted-foreground">
+              Fill the details below to complete your registration.
+            </p>
+          </div>
+
           <FormField
             control={form.control}
             name="collegeName"
@@ -275,6 +329,18 @@ const RegistrationForm = ({ initialEvent }: RegistrationFormProps) => {
                         FreeFire Battleship
                       </SelectItem> */}
                       <SelectItem value="AI Tales">AI Tales</SelectItem>
+                      <SelectItem value="Techno Science Quiz">
+                        Techno Science Quiz (GE)
+                      </SelectItem>
+                      <SelectItem value="Poster Competition">
+                        Poster Competition (GE)
+                      </SelectItem>
+                      <SelectItem value="SciTech Model Expo 2K26">
+                        SciTech Model Expo 2K26 (GE)
+                      </SelectItem>
+                      <SelectItem value="General Engineering Games">
+                        General Engineering Games (3 or 5)
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -285,8 +351,134 @@ const RegistrationForm = ({ initialEvent }: RegistrationFormProps) => {
 
           {(selectedEvent === "Face To Face" ||
             selectedEvent === "Python Worriors" ||
-            selectedEvent === "AI Tales") && (
+            selectedEvent === "AI Tales" ||
+            selectedEvent === "Techno Science Quiz" ||
+            selectedEvent === "Poster Competition" ||
+            selectedEvent === "SciTech Model Expo 2K26") && (
             <>
+              <FormField
+                control={form.control}
+                name="studentName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Student Name</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter your name"
+                        {...field}
+                        disabled={isPending}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="contactNumber"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Contact Number</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter your contact number"
+                        {...field}
+                        disabled={isPending}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter your email"
+                        {...field}
+                        disabled={isPending}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </>
+          )}
+
+          {selectedEvent === "General Engineering Games" && (
+            <>
+              <div className="space-y-2">
+                <FormLabel>Select Games (choose exactly 3 or 5)</FormLabel>
+                <p className="text-sm text-muted-foreground">
+                  3 games → ₹100, 5 games → ₹150 (per participant/groups)
+                </p>
+                <div className="space-y-2">
+                  {[
+                    "Free Fire Challenge",
+                    "Coin Drop Challenge",
+                    "Funny Walk Race",
+                    "Pass the Balloon",
+                    "Emoji Expression Game",
+                  ].map((game) => {
+                    const checked = selectedGames.includes(game);
+                    return (
+                      <label
+                        key={game}
+                        className="flex items-center gap-3 rounded-md border p-3 cursor-pointer select-none"
+                      >
+                        <input
+                          type="checkbox"
+                          className="h-4 w-4"
+                          checked={checked}
+                          onChange={() => {
+                            setSelectedGames((prev) =>
+                              prev.includes(game)
+                                ? prev.filter((g) => g !== game)
+                                : [...prev, game]
+                            );
+                          }}
+                          disabled={isPending}
+                        />
+                        <span className="text-sm">{game}</span>
+                      </label>
+                    );
+                  })}
+                </div>
+                {/* show schema error for selectedGames */}
+                <FormField
+                  control={form.control}
+                  name="selectedGames"
+                  render={() => (
+                    <FormItem>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <FormField
+                control={form.control}
+                name="groupName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Group Name (optional)</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter group name (if any)"
+                        {...field}
+                        disabled={isPending}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
               <FormField
                 control={form.control}
                 name="studentName"
@@ -733,7 +925,9 @@ const RegistrationForm = ({ initialEvent }: RegistrationFormProps) => {
               <p className="text-sm text-muted-foreground">
                 {selectedEvent === "Startup Sphere"
                   ? "Includes team leader and additional members"
-                  : "Per participant fee"}
+                  : selectedEvent === "General Engineering Games"
+                    ? "Bundle fee based on number of selected games"
+                    : "Per participant fee"}
               </p>
             </div>
             <Separator orientation="vertical" />

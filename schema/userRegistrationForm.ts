@@ -57,6 +57,22 @@ const pythonWorriorsSchema = z.object({
 
 const aiTalesSchema = pythonWorriorsSchema; // Same as Python Warriors
 
+const generalEngineeringTechnicalSchema = pythonWorriorsSchema;
+
+const generalEngineeringGamesBundleSchema = z.object({
+  selectedGames: z
+    .array(z.string().min(1))
+    .refine((arr) => arr.length === 3 || arr.length === 5, {
+      message: "Please select exactly 3 games (₹100) or 5 games (₹150)",
+    }),
+  groupName: z.string().optional(),
+  studentName: z.string().min(1, "Name is required"),
+  contactNumber: z
+    .string()
+    .min(10, "Contact number must be at least 10 digits"),
+  email: z.string().email("Invalid email address"),
+});
+
 // Add this before the main schema
 const paymentModeSchema = z.object({
   paymentMode: z.enum(["ONLINE", "OFFLINE"], {
@@ -75,6 +91,12 @@ export const userRegistrationFormSchema = z
         "Python Worriors",
         "FreeFire Battleship",
         "AI Tales",
+        // General Engineering (Technical)
+        "Techno Science Quiz",
+        "Poster Competition",
+        "SciTech Model Expo 2K26",
+        // General Engineering (Games bundle)
+        "General Engineering Games",
       ],
       {
         required_error: "Please select an event",
@@ -117,5 +139,17 @@ export const userRegistrationFormSchema = z
         .object({ events: z.literal("FreeFire Battleship") })
         .merge(fireFireBattleshipSchema),
       z.object({ events: z.literal("AI Tales") }).merge(aiTalesSchema),
+      z
+        .object({ events: z.literal("Techno Science Quiz") })
+        .merge(generalEngineeringTechnicalSchema),
+      z
+        .object({ events: z.literal("Poster Competition") })
+        .merge(generalEngineeringTechnicalSchema),
+      z
+        .object({ events: z.literal("SciTech Model Expo 2K26") })
+        .merge(generalEngineeringTechnicalSchema),
+      z
+        .object({ events: z.literal("General Engineering Games") })
+        .merge(generalEngineeringGamesBundleSchema),
     ])
   );

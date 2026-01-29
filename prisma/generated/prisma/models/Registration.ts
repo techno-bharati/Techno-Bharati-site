@@ -48,7 +48,7 @@ export type RegistrationMinAggregateOutputType = {
   amount: number | null;
   registrationDate: Date | null;
   paymentMode: string | null;
-  department: string | null;
+  department: $Enums.Department | null;
   class: string | null;
   studentName: string | null;
   contactNumber: string | null;
@@ -76,7 +76,7 @@ export type RegistrationMaxAggregateOutputType = {
   amount: number | null;
   registrationDate: Date | null;
   paymentMode: string | null;
-  department: string | null;
+  department: $Enums.Department | null;
   class: string | null;
   studentName: string | null;
   contactNumber: string | null;
@@ -322,7 +322,7 @@ export type RegistrationGroupByOutputType = {
   amount: number;
   registrationDate: Date;
   paymentMode: string;
-  department: string;
+  department: $Enums.Department;
   class: string;
   studentName: string | null;
   contactNumber: string | null;
@@ -375,7 +375,7 @@ export type RegistrationWhereInput = {
   amount?: Prisma.FloatFilter<"Registration"> | number;
   registrationDate?: Prisma.DateTimeFilter<"Registration"> | Date | string;
   paymentMode?: Prisma.StringFilter<"Registration"> | string;
-  department?: Prisma.StringFilter<"Registration"> | string;
+  department?: Prisma.EnumDepartmentFilter<"Registration"> | $Enums.Department;
   class?: Prisma.StringFilter<"Registration"> | string;
   studentName?: Prisma.StringNullableFilter<"Registration"> | string | null;
   contactNumber?: Prisma.StringNullableFilter<"Registration"> | string | null;
@@ -466,7 +466,9 @@ export type RegistrationWhereUniqueInput = Prisma.AtLeast<
     amount?: Prisma.FloatFilter<"Registration"> | number;
     registrationDate?: Prisma.DateTimeFilter<"Registration"> | Date | string;
     paymentMode?: Prisma.StringFilter<"Registration"> | string;
-    department?: Prisma.StringFilter<"Registration"> | string;
+    department?:
+      | Prisma.EnumDepartmentFilter<"Registration">
+      | $Enums.Department;
     class?: Prisma.StringFilter<"Registration"> | string;
     studentName?: Prisma.StringNullableFilter<"Registration"> | string | null;
     contactNumber?: Prisma.StringNullableFilter<"Registration"> | string | null;
@@ -576,7 +578,9 @@ export type RegistrationScalarWhereWithAggregatesInput = {
     | Date
     | string;
   paymentMode?: Prisma.StringWithAggregatesFilter<"Registration"> | string;
-  department?: Prisma.StringWithAggregatesFilter<"Registration"> | string;
+  department?:
+    | Prisma.EnumDepartmentWithAggregatesFilter<"Registration">
+    | $Enums.Department;
   class?: Prisma.StringWithAggregatesFilter<"Registration"> | string;
   studentName?:
     | Prisma.StringNullableWithAggregatesFilter<"Registration">
@@ -641,7 +645,7 @@ export type RegistrationCreateInput = {
   amount?: number;
   registrationDate?: Date | string;
   paymentMode?: string;
-  department?: string;
+  department?: $Enums.Department;
   class?: string;
   studentName?: string | null;
   contactNumber?: string | null;
@@ -671,7 +675,7 @@ export type RegistrationUncheckedCreateInput = {
   amount?: number;
   registrationDate?: Date | string;
   paymentMode?: string;
-  department?: string;
+  department?: $Enums.Department;
   class?: string;
   studentName?: string | null;
   contactNumber?: string | null;
@@ -705,7 +709,9 @@ export type RegistrationUpdateInput = {
   amount?: Prisma.FloatFieldUpdateOperationsInput | number;
   registrationDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   paymentMode?: Prisma.StringFieldUpdateOperationsInput | string;
-  department?: Prisma.StringFieldUpdateOperationsInput | string;
+  department?:
+    | Prisma.EnumDepartmentFieldUpdateOperationsInput
+    | $Enums.Department;
   class?: Prisma.StringFieldUpdateOperationsInput | string;
   studentName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   contactNumber?:
@@ -752,7 +758,9 @@ export type RegistrationUncheckedUpdateInput = {
   amount?: Prisma.FloatFieldUpdateOperationsInput | number;
   registrationDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   paymentMode?: Prisma.StringFieldUpdateOperationsInput | string;
-  department?: Prisma.StringFieldUpdateOperationsInput | string;
+  department?:
+    | Prisma.EnumDepartmentFieldUpdateOperationsInput
+    | $Enums.Department;
   class?: Prisma.StringFieldUpdateOperationsInput | string;
   studentName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   contactNumber?:
@@ -801,7 +809,7 @@ export type RegistrationCreateManyInput = {
   amount?: number;
   registrationDate?: Date | string;
   paymentMode?: string;
-  department?: string;
+  department?: $Enums.Department;
   class?: string;
   studentName?: string | null;
   contactNumber?: string | null;
@@ -833,7 +841,9 @@ export type RegistrationUpdateManyMutationInput = {
   amount?: Prisma.FloatFieldUpdateOperationsInput | number;
   registrationDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   paymentMode?: Prisma.StringFieldUpdateOperationsInput | string;
-  department?: Prisma.StringFieldUpdateOperationsInput | string;
+  department?:
+    | Prisma.EnumDepartmentFieldUpdateOperationsInput
+    | $Enums.Department;
   class?: Prisma.StringFieldUpdateOperationsInput | string;
   studentName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   contactNumber?:
@@ -875,7 +885,9 @@ export type RegistrationUncheckedUpdateManyInput = {
   amount?: Prisma.FloatFieldUpdateOperationsInput | number;
   registrationDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   paymentMode?: Prisma.StringFieldUpdateOperationsInput | string;
-  department?: Prisma.StringFieldUpdateOperationsInput | string;
+  department?:
+    | Prisma.EnumDepartmentFieldUpdateOperationsInput
+    | $Enums.Department;
   class?: Prisma.StringFieldUpdateOperationsInput | string;
   studentName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   contactNumber?:
@@ -1264,6 +1276,10 @@ export type FloatFieldUpdateOperationsInput = {
   divide?: number;
 };
 
+export type EnumDepartmentFieldUpdateOperationsInput = {
+  set?: $Enums.Department;
+};
+
 export type RegistrationCreateNestedOneWithoutTeamLeaderInput = {
   create?: Prisma.XOR<
     Prisma.RegistrationCreateWithoutTeamLeaderInput,
@@ -1386,7 +1402,7 @@ export type RegistrationCreateWithoutUserInput = {
   amount?: number;
   registrationDate?: Date | string;
   paymentMode?: string;
-  department?: string;
+  department?: $Enums.Department;
   class?: string;
   studentName?: string | null;
   contactNumber?: string | null;
@@ -1415,7 +1431,7 @@ export type RegistrationUncheckedCreateWithoutUserInput = {
   amount?: number;
   registrationDate?: Date | string;
   paymentMode?: string;
-  department?: string;
+  department?: $Enums.Department;
   class?: string;
   studentName?: string | null;
   contactNumber?: string | null;
@@ -1459,7 +1475,7 @@ export type RegistrationCreateWithoutVerifiedByInput = {
   amount?: number;
   registrationDate?: Date | string;
   paymentMode?: string;
-  department?: string;
+  department?: $Enums.Department;
   class?: string;
   studentName?: string | null;
   contactNumber?: string | null;
@@ -1488,7 +1504,7 @@ export type RegistrationUncheckedCreateWithoutVerifiedByInput = {
   amount?: number;
   registrationDate?: Date | string;
   paymentMode?: string;
-  department?: string;
+  department?: $Enums.Department;
   class?: string;
   studentName?: string | null;
   contactNumber?: string | null;
@@ -1571,7 +1587,7 @@ export type RegistrationScalarWhereInput = {
   amount?: Prisma.FloatFilter<"Registration"> | number;
   registrationDate?: Prisma.DateTimeFilter<"Registration"> | Date | string;
   paymentMode?: Prisma.StringFilter<"Registration"> | string;
-  department?: Prisma.StringFilter<"Registration"> | string;
+  department?: Prisma.EnumDepartmentFilter<"Registration"> | $Enums.Department;
   class?: Prisma.StringFilter<"Registration"> | string;
   studentName?: Prisma.StringNullableFilter<"Registration"> | string | null;
   contactNumber?: Prisma.StringNullableFilter<"Registration"> | string | null;
@@ -1634,7 +1650,7 @@ export type RegistrationCreateWithoutTeamLeaderInput = {
   amount?: number;
   registrationDate?: Date | string;
   paymentMode?: string;
-  department?: string;
+  department?: $Enums.Department;
   class?: string;
   studentName?: string | null;
   contactNumber?: string | null;
@@ -1663,7 +1679,7 @@ export type RegistrationUncheckedCreateWithoutTeamLeaderInput = {
   amount?: number;
   registrationDate?: Date | string;
   paymentMode?: string;
-  department?: string;
+  department?: $Enums.Department;
   class?: string;
   studentName?: string | null;
   contactNumber?: string | null;
@@ -1700,7 +1716,7 @@ export type RegistrationCreateWithoutTeamMembersInput = {
   amount?: number;
   registrationDate?: Date | string;
   paymentMode?: string;
-  department?: string;
+  department?: $Enums.Department;
   class?: string;
   studentName?: string | null;
   contactNumber?: string | null;
@@ -1729,7 +1745,7 @@ export type RegistrationUncheckedCreateWithoutTeamMembersInput = {
   amount?: number;
   registrationDate?: Date | string;
   paymentMode?: string;
-  department?: string;
+  department?: $Enums.Department;
   class?: string;
   studentName?: string | null;
   contactNumber?: string | null;
@@ -1790,7 +1806,9 @@ export type RegistrationUpdateWithoutTeamLeaderInput = {
   amount?: Prisma.FloatFieldUpdateOperationsInput | number;
   registrationDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   paymentMode?: Prisma.StringFieldUpdateOperationsInput | string;
-  department?: Prisma.StringFieldUpdateOperationsInput | string;
+  department?:
+    | Prisma.EnumDepartmentFieldUpdateOperationsInput
+    | $Enums.Department;
   class?: Prisma.StringFieldUpdateOperationsInput | string;
   studentName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   contactNumber?:
@@ -1836,7 +1854,9 @@ export type RegistrationUncheckedUpdateWithoutTeamLeaderInput = {
   amount?: Prisma.FloatFieldUpdateOperationsInput | number;
   registrationDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   paymentMode?: Prisma.StringFieldUpdateOperationsInput | string;
-  department?: Prisma.StringFieldUpdateOperationsInput | string;
+  department?:
+    | Prisma.EnumDepartmentFieldUpdateOperationsInput
+    | $Enums.Department;
   class?: Prisma.StringFieldUpdateOperationsInput | string;
   studentName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   contactNumber?:
@@ -1905,7 +1925,9 @@ export type RegistrationUpdateWithoutTeamMembersInput = {
   amount?: Prisma.FloatFieldUpdateOperationsInput | number;
   registrationDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   paymentMode?: Prisma.StringFieldUpdateOperationsInput | string;
-  department?: Prisma.StringFieldUpdateOperationsInput | string;
+  department?:
+    | Prisma.EnumDepartmentFieldUpdateOperationsInput
+    | $Enums.Department;
   class?: Prisma.StringFieldUpdateOperationsInput | string;
   studentName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   contactNumber?:
@@ -1951,7 +1973,9 @@ export type RegistrationUncheckedUpdateWithoutTeamMembersInput = {
   amount?: Prisma.FloatFieldUpdateOperationsInput | number;
   registrationDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   paymentMode?: Prisma.StringFieldUpdateOperationsInput | string;
-  department?: Prisma.StringFieldUpdateOperationsInput | string;
+  department?:
+    | Prisma.EnumDepartmentFieldUpdateOperationsInput
+    | $Enums.Department;
   class?: Prisma.StringFieldUpdateOperationsInput | string;
   studentName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   contactNumber?:
@@ -1999,7 +2023,7 @@ export type RegistrationCreateWithoutPlayersInput = {
   amount?: number;
   registrationDate?: Date | string;
   paymentMode?: string;
-  department?: string;
+  department?: $Enums.Department;
   class?: string;
   studentName?: string | null;
   contactNumber?: string | null;
@@ -2028,7 +2052,7 @@ export type RegistrationUncheckedCreateWithoutPlayersInput = {
   amount?: number;
   registrationDate?: Date | string;
   paymentMode?: string;
-  department?: string;
+  department?: $Enums.Department;
   class?: string;
   studentName?: string | null;
   contactNumber?: string | null;
@@ -2089,7 +2113,9 @@ export type RegistrationUpdateWithoutPlayersInput = {
   amount?: Prisma.FloatFieldUpdateOperationsInput | number;
   registrationDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   paymentMode?: Prisma.StringFieldUpdateOperationsInput | string;
-  department?: Prisma.StringFieldUpdateOperationsInput | string;
+  department?:
+    | Prisma.EnumDepartmentFieldUpdateOperationsInput
+    | $Enums.Department;
   class?: Prisma.StringFieldUpdateOperationsInput | string;
   studentName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   contactNumber?:
@@ -2135,7 +2161,9 @@ export type RegistrationUncheckedUpdateWithoutPlayersInput = {
   amount?: Prisma.FloatFieldUpdateOperationsInput | number;
   registrationDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   paymentMode?: Prisma.StringFieldUpdateOperationsInput | string;
-  department?: Prisma.StringFieldUpdateOperationsInput | string;
+  department?:
+    | Prisma.EnumDepartmentFieldUpdateOperationsInput
+    | $Enums.Department;
   class?: Prisma.StringFieldUpdateOperationsInput | string;
   studentName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   contactNumber?:
@@ -2183,7 +2211,7 @@ export type RegistrationCreateManyUserInput = {
   amount?: number;
   registrationDate?: Date | string;
   paymentMode?: string;
-  department?: string;
+  department?: $Enums.Department;
   class?: string;
   studentName?: string | null;
   contactNumber?: string | null;
@@ -2210,7 +2238,7 @@ export type RegistrationCreateManyVerifiedByInput = {
   amount?: number;
   registrationDate?: Date | string;
   paymentMode?: string;
-  department?: string;
+  department?: $Enums.Department;
   class?: string;
   studentName?: string | null;
   contactNumber?: string | null;
@@ -2241,7 +2269,9 @@ export type RegistrationUpdateWithoutUserInput = {
   amount?: Prisma.FloatFieldUpdateOperationsInput | number;
   registrationDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   paymentMode?: Prisma.StringFieldUpdateOperationsInput | string;
-  department?: Prisma.StringFieldUpdateOperationsInput | string;
+  department?:
+    | Prisma.EnumDepartmentFieldUpdateOperationsInput
+    | $Enums.Department;
   class?: Prisma.StringFieldUpdateOperationsInput | string;
   studentName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   contactNumber?:
@@ -2287,7 +2317,9 @@ export type RegistrationUncheckedUpdateWithoutUserInput = {
   amount?: Prisma.FloatFieldUpdateOperationsInput | number;
   registrationDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   paymentMode?: Prisma.StringFieldUpdateOperationsInput | string;
-  department?: Prisma.StringFieldUpdateOperationsInput | string;
+  department?:
+    | Prisma.EnumDepartmentFieldUpdateOperationsInput
+    | $Enums.Department;
   class?: Prisma.StringFieldUpdateOperationsInput | string;
   studentName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   contactNumber?:
@@ -2339,7 +2371,9 @@ export type RegistrationUncheckedUpdateManyWithoutUserInput = {
   amount?: Prisma.FloatFieldUpdateOperationsInput | number;
   registrationDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   paymentMode?: Prisma.StringFieldUpdateOperationsInput | string;
-  department?: Prisma.StringFieldUpdateOperationsInput | string;
+  department?:
+    | Prisma.EnumDepartmentFieldUpdateOperationsInput
+    | $Enums.Department;
   class?: Prisma.StringFieldUpdateOperationsInput | string;
   studentName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   contactNumber?:
@@ -2389,7 +2423,9 @@ export type RegistrationUpdateWithoutVerifiedByInput = {
   amount?: Prisma.FloatFieldUpdateOperationsInput | number;
   registrationDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   paymentMode?: Prisma.StringFieldUpdateOperationsInput | string;
-  department?: Prisma.StringFieldUpdateOperationsInput | string;
+  department?:
+    | Prisma.EnumDepartmentFieldUpdateOperationsInput
+    | $Enums.Department;
   class?: Prisma.StringFieldUpdateOperationsInput | string;
   studentName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   contactNumber?:
@@ -2435,7 +2471,9 @@ export type RegistrationUncheckedUpdateWithoutVerifiedByInput = {
   amount?: Prisma.FloatFieldUpdateOperationsInput | number;
   registrationDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   paymentMode?: Prisma.StringFieldUpdateOperationsInput | string;
-  department?: Prisma.StringFieldUpdateOperationsInput | string;
+  department?:
+    | Prisma.EnumDepartmentFieldUpdateOperationsInput
+    | $Enums.Department;
   class?: Prisma.StringFieldUpdateOperationsInput | string;
   studentName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   contactNumber?:
@@ -2484,7 +2522,9 @@ export type RegistrationUncheckedUpdateManyWithoutVerifiedByInput = {
   amount?: Prisma.FloatFieldUpdateOperationsInput | number;
   registrationDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   paymentMode?: Prisma.StringFieldUpdateOperationsInput | string;
-  department?: Prisma.StringFieldUpdateOperationsInput | string;
+  department?:
+    | Prisma.EnumDepartmentFieldUpdateOperationsInput
+    | $Enums.Department;
   class?: Prisma.StringFieldUpdateOperationsInput | string;
   studentName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   contactNumber?:
@@ -2791,7 +2831,7 @@ export type $RegistrationPayload<
       amount: number;
       registrationDate: Date;
       paymentMode: string;
-      department: string;
+      department: $Enums.Department;
       class: string;
       studentName: string | null;
       contactNumber: string | null;
@@ -3475,7 +3515,7 @@ export interface RegistrationFieldRefs {
   readonly amount: Prisma.FieldRef<"Registration", "Float">;
   readonly registrationDate: Prisma.FieldRef<"Registration", "DateTime">;
   readonly paymentMode: Prisma.FieldRef<"Registration", "String">;
-  readonly department: Prisma.FieldRef<"Registration", "String">;
+  readonly department: Prisma.FieldRef<"Registration", "Department">;
   readonly class: Prisma.FieldRef<"Registration", "String">;
   readonly studentName: Prisma.FieldRef<"Registration", "String">;
   readonly contactNumber: Prisma.FieldRef<"Registration", "String">;

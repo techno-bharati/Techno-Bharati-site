@@ -280,6 +280,17 @@ export type FloatFilter<$PrismaModel = never> = {
   not?: Prisma.NestedFloatFilter<$PrismaModel> | number;
 };
 
+export type EnumDepartmentFilter<$PrismaModel = never> = {
+  equals?: $Enums.Department | Prisma.EnumDepartmentFieldRefInput<$PrismaModel>;
+  in?:
+    | $Enums.Department[]
+    | Prisma.ListEnumDepartmentFieldRefInput<$PrismaModel>;
+  notIn?:
+    | $Enums.Department[]
+    | Prisma.ListEnumDepartmentFieldRefInput<$PrismaModel>;
+  not?: Prisma.NestedEnumDepartmentFilter<$PrismaModel> | $Enums.Department;
+};
+
 export type EnumEventTypeWithAggregatesFilter<$PrismaModel = never> = {
   equals?: $Enums.EventType | Prisma.EnumEventTypeFieldRefInput<$PrismaModel>;
   in?: $Enums.EventType[] | Prisma.ListEnumEventTypeFieldRefInput<$PrismaModel>;
@@ -346,6 +357,22 @@ export type FloatWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedFloatFilter<$PrismaModel>;
 };
 
+export type EnumDepartmentWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.Department | Prisma.EnumDepartmentFieldRefInput<$PrismaModel>;
+  in?:
+    | $Enums.Department[]
+    | Prisma.ListEnumDepartmentFieldRefInput<$PrismaModel>;
+  notIn?:
+    | $Enums.Department[]
+    | Prisma.ListEnumDepartmentFieldRefInput<$PrismaModel>;
+  not?:
+    | Prisma.NestedEnumDepartmentWithAggregatesFilter<$PrismaModel>
+    | $Enums.Department;
+  _count?: Prisma.NestedIntFilter<$PrismaModel>;
+  _min?: Prisma.NestedEnumDepartmentFilter<$PrismaModel>;
+  _max?: Prisma.NestedEnumDepartmentFilter<$PrismaModel>;
+};
+
 export type EnumAdminRoleFilter<$PrismaModel = never> = {
   equals?: $Enums.AdminRole | Prisma.EnumAdminRoleFieldRefInput<$PrismaModel>;
   in?: $Enums.AdminRole[] | Prisma.ListEnumAdminRoleFieldRefInput<$PrismaModel>;
@@ -371,6 +398,25 @@ export type EnumEventTypeNullableFilter<$PrismaModel = never> = {
   not?:
     | Prisma.NestedEnumEventTypeNullableFilter<$PrismaModel>
     | $Enums.EventType
+    | null;
+};
+
+export type EnumDepartmentNullableFilter<$PrismaModel = never> = {
+  equals?:
+    | $Enums.Department
+    | Prisma.EnumDepartmentFieldRefInput<$PrismaModel>
+    | null;
+  in?:
+    | $Enums.Department[]
+    | Prisma.ListEnumDepartmentFieldRefInput<$PrismaModel>
+    | null;
+  notIn?:
+    | $Enums.Department[]
+    | Prisma.ListEnumDepartmentFieldRefInput<$PrismaModel>
+    | null;
+  not?:
+    | Prisma.NestedEnumDepartmentNullableFilter<$PrismaModel>
+    | $Enums.Department
     | null;
 };
 
@@ -408,6 +454,28 @@ export type EnumEventTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntNullableFilter<$PrismaModel>;
   _min?: Prisma.NestedEnumEventTypeNullableFilter<$PrismaModel>;
   _max?: Prisma.NestedEnumEventTypeNullableFilter<$PrismaModel>;
+};
+
+export type EnumDepartmentNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?:
+    | $Enums.Department
+    | Prisma.EnumDepartmentFieldRefInput<$PrismaModel>
+    | null;
+  in?:
+    | $Enums.Department[]
+    | Prisma.ListEnumDepartmentFieldRefInput<$PrismaModel>
+    | null;
+  notIn?:
+    | $Enums.Department[]
+    | Prisma.ListEnumDepartmentFieldRefInput<$PrismaModel>
+    | null;
+  not?:
+    | Prisma.NestedEnumDepartmentNullableWithAggregatesFilter<$PrismaModel>
+    | $Enums.Department
+    | null;
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>;
+  _min?: Prisma.NestedEnumDepartmentNullableFilter<$PrismaModel>;
+  _max?: Prisma.NestedEnumDepartmentNullableFilter<$PrismaModel>;
 };
 
 export type NestedStringFilter<$PrismaModel = never> = {
@@ -680,6 +748,17 @@ export type NestedEnumPaymentStatusFilter<$PrismaModel = never> = {
     | $Enums.PaymentStatus;
 };
 
+export type NestedEnumDepartmentFilter<$PrismaModel = never> = {
+  equals?: $Enums.Department | Prisma.EnumDepartmentFieldRefInput<$PrismaModel>;
+  in?:
+    | $Enums.Department[]
+    | Prisma.ListEnumDepartmentFieldRefInput<$PrismaModel>;
+  notIn?:
+    | $Enums.Department[]
+    | Prisma.ListEnumDepartmentFieldRefInput<$PrismaModel>;
+  not?: Prisma.NestedEnumDepartmentFilter<$PrismaModel> | $Enums.Department;
+};
+
 export type NestedEnumEventTypeWithAggregatesFilter<$PrismaModel = never> = {
   equals?: $Enums.EventType | Prisma.EnumEventTypeFieldRefInput<$PrismaModel>;
   in?: $Enums.EventType[] | Prisma.ListEnumEventTypeFieldRefInput<$PrismaModel>;
@@ -749,6 +828,22 @@ export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedFloatFilter<$PrismaModel>;
 };
 
+export type NestedEnumDepartmentWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.Department | Prisma.EnumDepartmentFieldRefInput<$PrismaModel>;
+  in?:
+    | $Enums.Department[]
+    | Prisma.ListEnumDepartmentFieldRefInput<$PrismaModel>;
+  notIn?:
+    | $Enums.Department[]
+    | Prisma.ListEnumDepartmentFieldRefInput<$PrismaModel>;
+  not?:
+    | Prisma.NestedEnumDepartmentWithAggregatesFilter<$PrismaModel>
+    | $Enums.Department;
+  _count?: Prisma.NestedIntFilter<$PrismaModel>;
+  _min?: Prisma.NestedEnumDepartmentFilter<$PrismaModel>;
+  _max?: Prisma.NestedEnumDepartmentFilter<$PrismaModel>;
+};
+
 export type NestedEnumAdminRoleFilter<$PrismaModel = never> = {
   equals?: $Enums.AdminRole | Prisma.EnumAdminRoleFieldRefInput<$PrismaModel>;
   in?: $Enums.AdminRole[] | Prisma.ListEnumAdminRoleFieldRefInput<$PrismaModel>;
@@ -774,6 +869,25 @@ export type NestedEnumEventTypeNullableFilter<$PrismaModel = never> = {
   not?:
     | Prisma.NestedEnumEventTypeNullableFilter<$PrismaModel>
     | $Enums.EventType
+    | null;
+};
+
+export type NestedEnumDepartmentNullableFilter<$PrismaModel = never> = {
+  equals?:
+    | $Enums.Department
+    | Prisma.EnumDepartmentFieldRefInput<$PrismaModel>
+    | null;
+  in?:
+    | $Enums.Department[]
+    | Prisma.ListEnumDepartmentFieldRefInput<$PrismaModel>
+    | null;
+  notIn?:
+    | $Enums.Department[]
+    | Prisma.ListEnumDepartmentFieldRefInput<$PrismaModel>
+    | null;
+  not?:
+    | Prisma.NestedEnumDepartmentNullableFilter<$PrismaModel>
+    | $Enums.Department
     | null;
 };
 
@@ -813,4 +927,28 @@ export type NestedEnumEventTypeNullableWithAggregatesFilter<
   _count?: Prisma.NestedIntNullableFilter<$PrismaModel>;
   _min?: Prisma.NestedEnumEventTypeNullableFilter<$PrismaModel>;
   _max?: Prisma.NestedEnumEventTypeNullableFilter<$PrismaModel>;
+};
+
+export type NestedEnumDepartmentNullableWithAggregatesFilter<
+  $PrismaModel = never,
+> = {
+  equals?:
+    | $Enums.Department
+    | Prisma.EnumDepartmentFieldRefInput<$PrismaModel>
+    | null;
+  in?:
+    | $Enums.Department[]
+    | Prisma.ListEnumDepartmentFieldRefInput<$PrismaModel>
+    | null;
+  notIn?:
+    | $Enums.Department[]
+    | Prisma.ListEnumDepartmentFieldRefInput<$PrismaModel>
+    | null;
+  not?:
+    | Prisma.NestedEnumDepartmentNullableWithAggregatesFilter<$PrismaModel>
+    | $Enums.Department
+    | null;
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>;
+  _min?: Prisma.NestedEnumDepartmentNullableFilter<$PrismaModel>;
+  _max?: Prisma.NestedEnumDepartmentNullableFilter<$PrismaModel>;
 };

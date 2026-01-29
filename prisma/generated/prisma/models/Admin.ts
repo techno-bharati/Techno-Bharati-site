@@ -31,7 +31,7 @@ export type AdminMinAggregateOutputType = {
   name: string | null;
   role: $Enums.AdminRole | null;
   eventType: $Enums.EventType | null;
-  department: string | null;
+  department: $Enums.Department | null;
   createdAt: Date | null;
   updatedAt: Date | null;
 };
@@ -43,7 +43,7 @@ export type AdminMaxAggregateOutputType = {
   name: string | null;
   role: $Enums.AdminRole | null;
   eventType: $Enums.EventType | null;
-  department: string | null;
+  department: $Enums.Department | null;
   createdAt: Date | null;
   updatedAt: Date | null;
 };
@@ -184,7 +184,7 @@ export type AdminGroupByOutputType = {
   name: string;
   role: $Enums.AdminRole;
   eventType: $Enums.EventType | null;
-  department: string | null;
+  department: $Enums.Department | null;
   createdAt: Date;
   updatedAt: Date;
   _count: AdminCountAggregateOutputType | null;
@@ -217,7 +217,10 @@ export type AdminWhereInput = {
     | Prisma.EnumEventTypeNullableFilter<"Admin">
     | $Enums.EventType
     | null;
-  department?: Prisma.StringNullableFilter<"Admin"> | string | null;
+  department?:
+    | Prisma.EnumDepartmentNullableFilter<"Admin">
+    | $Enums.Department
+    | null;
   createdAt?: Prisma.DateTimeFilter<"Admin"> | Date | string;
   updatedAt?: Prisma.DateTimeFilter<"Admin"> | Date | string;
 };
@@ -248,7 +251,10 @@ export type AdminWhereUniqueInput = Prisma.AtLeast<
       | Prisma.EnumEventTypeNullableFilter<"Admin">
       | $Enums.EventType
       | null;
-    department?: Prisma.StringNullableFilter<"Admin"> | string | null;
+    department?:
+      | Prisma.EnumDepartmentNullableFilter<"Admin">
+      | $Enums.Department
+      | null;
     createdAt?: Prisma.DateTimeFilter<"Admin"> | Date | string;
     updatedAt?: Prisma.DateTimeFilter<"Admin"> | Date | string;
   },
@@ -288,8 +294,8 @@ export type AdminScalarWhereWithAggregatesInput = {
     | $Enums.EventType
     | null;
   department?:
-    | Prisma.StringNullableWithAggregatesFilter<"Admin">
-    | string
+    | Prisma.EnumDepartmentNullableWithAggregatesFilter<"Admin">
+    | $Enums.Department
     | null;
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Admin"> | Date | string;
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Admin"> | Date | string;
@@ -302,7 +308,7 @@ export type AdminCreateInput = {
   name: string;
   role?: $Enums.AdminRole;
   eventType?: $Enums.EventType | null;
-  department?: string | null;
+  department?: $Enums.Department | null;
   createdAt?: Date | string;
   updatedAt?: Date | string;
 };
@@ -314,7 +320,7 @@ export type AdminUncheckedCreateInput = {
   name: string;
   role?: $Enums.AdminRole;
   eventType?: $Enums.EventType | null;
-  department?: string | null;
+  department?: $Enums.Department | null;
   createdAt?: Date | string;
   updatedAt?: Date | string;
 };
@@ -329,7 +335,10 @@ export type AdminUpdateInput = {
     | Prisma.NullableEnumEventTypeFieldUpdateOperationsInput
     | $Enums.EventType
     | null;
-  department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  department?:
+    | Prisma.NullableEnumDepartmentFieldUpdateOperationsInput
+    | $Enums.Department
+    | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
@@ -344,7 +353,10 @@ export type AdminUncheckedUpdateInput = {
     | Prisma.NullableEnumEventTypeFieldUpdateOperationsInput
     | $Enums.EventType
     | null;
-  department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  department?:
+    | Prisma.NullableEnumDepartmentFieldUpdateOperationsInput
+    | $Enums.Department
+    | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
@@ -356,7 +368,7 @@ export type AdminCreateManyInput = {
   name: string;
   role?: $Enums.AdminRole;
   eventType?: $Enums.EventType | null;
-  department?: string | null;
+  department?: $Enums.Department | null;
   createdAt?: Date | string;
   updatedAt?: Date | string;
 };
@@ -371,7 +383,10 @@ export type AdminUpdateManyMutationInput = {
     | Prisma.NullableEnumEventTypeFieldUpdateOperationsInput
     | $Enums.EventType
     | null;
-  department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  department?:
+    | Prisma.NullableEnumDepartmentFieldUpdateOperationsInput
+    | $Enums.Department
+    | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
@@ -386,7 +401,10 @@ export type AdminUncheckedUpdateManyInput = {
     | Prisma.NullableEnumEventTypeFieldUpdateOperationsInput
     | $Enums.EventType
     | null;
-  department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  department?:
+    | Prisma.NullableEnumDepartmentFieldUpdateOperationsInput
+    | $Enums.Department
+    | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
@@ -433,6 +451,10 @@ export type EnumAdminRoleFieldUpdateOperationsInput = {
 
 export type NullableEnumEventTypeFieldUpdateOperationsInput = {
   set?: $Enums.EventType | null;
+};
+
+export type NullableEnumDepartmentFieldUpdateOperationsInput = {
+  set?: $Enums.Department | null;
 };
 
 export type AdminSelect<
@@ -537,7 +559,7 @@ export type $AdminPayload<
       /**
        * For department-level admins, this scopes access to a single department.
        */
-      department: string | null;
+      department: $Enums.Department | null;
       createdAt: Date;
       updatedAt: Date;
     },
@@ -1138,7 +1160,7 @@ export interface AdminFieldRefs {
   readonly name: Prisma.FieldRef<"Admin", "String">;
   readonly role: Prisma.FieldRef<"Admin", "AdminRole">;
   readonly eventType: Prisma.FieldRef<"Admin", "EventType">;
-  readonly department: Prisma.FieldRef<"Admin", "String">;
+  readonly department: Prisma.FieldRef<"Admin", "Department">;
   readonly createdAt: Prisma.FieldRef<"Admin", "DateTime">;
   readonly updatedAt: Prisma.FieldRef<"Admin", "DateTime">;
 }

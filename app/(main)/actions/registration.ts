@@ -4,7 +4,12 @@ import prisma from "@/lib/prisma";
 import { userRegistrationFormSchema } from "@/schema/userRegistrationForm";
 import { z } from "zod";
 import { uploadImage } from "@/lib/uploadImage";
-import { getEventFeeByName } from "@/lib/constants";
+import {
+  calculateGeneralEngineeringGamesFee,
+  GENERAL_ENGINEERING_TECHNICAL_FEE,
+  getEventFeeByName,
+} from "@/lib/constants";
+import { EventType, Department } from "@/prisma/generated/prisma/client";
 
 export async function createRegistration(
   formData: z.infer<typeof userRegistrationFormSchema>
@@ -16,15 +21,29 @@ export async function createRegistration(
     }
 
     const eventTypeMap = {
-      "Startup Sphere": "STARTUP_SPHERE",
-      "Face To Face": "FACE_TO_FACE",
-      "Python Worriors": "PYTHON_WARRIORS",
-      "FreeFire Battleship": "FREEFIRE_BATTLESHIP",
-      "AI Tales": "AI_TALES",
+      "Startup Sphere": EventType.STARTUP_SPHERE,
+      "Face To Face": EventType.FACE_TO_FACE,
+      "Python Worriors": EventType.PYTHON_WARRIORS,
+      "FreeFire Battleship": EventType.FREEFIRE_BATTLESHIP,
+      "AI Tales": EventType.AI_TALES,
+      "Techno Science Quiz": EventType.GE_TECHNO_SCIENCE_QUIZ,
+      "Poster Competition": EventType.GE_POSTER_COMPETITION,
+      "SciTech Model Expo 2K26": EventType.GE_SCITECH_MODEL_EXPO,
+      "General Engineering Games": EventType.GE_GAMES_BUNDLE,
     } as const;
 
     const calculateTotalFee = (data: typeof formData) => {
       const eventName = data.events;
+      if (eventName === "General Engineering Games") {
+        return calculateGeneralEngineeringGamesFee(data.selectedGames.length);
+      }
+      if (
+        eventName === "Techno Science Quiz" ||
+        eventName === "Poster Competition" ||
+        eventName === "SciTech Model Expo 2K26"
+      ) {
+        return GENERAL_ENGINEERING_TECHNICAL_FEE;
+      }
       const teamSize =
         eventName === "Startup Sphere"
           ? (data.teamMembers?.length || 0) + 1
@@ -42,15 +61,29 @@ export async function createRegistration(
 
     const amount = calculateTotalFee(formData);
 
+    const departmentMap: Record<
+      z.infer<typeof userRegistrationFormSchema>["department"],
+      string
+    > = {
+      AIML: Department.AIML,
+      CSE: Department.CSE,
+      MECHANICAL: Department.MECHANICAL,
+      CIVIL: Department.CIVIL,
+      ENTC: Department.ENTC,
+      OTHER: Department.OTHER,
+    };
+
     const baseData = {
       collegeName: formData.collegeName,
       eventType: eventTypeMap[formData.events],
       paymentScreenshot: uploadResult.url!,
       paymentMode: formData.paymentMode,
       amount,
-      department: formData.department,
+      department: departmentMap[formData.department] as Department,
       class: formData.class,
     };
+
+    console.log("Base data:", baseData);
 
     try {
       if (formData.events === "FreeFire Battleship") {
@@ -101,12 +134,24 @@ export async function createRegistration(
                     })),
                   },
                 }
-              : {
-                  ...baseData,
-                  studentName: formData.studentName,
-                  contactNumber: formData.contactNumber,
-                  email: formData.email,
-                },
+              : formData.events === "General Engineering Games"
+                ? {
+                    ...baseData,
+                    studentName: formData.studentName,
+                    contactNumber: formData.contactNumber,
+                    email: formData.email,
+                    notes: `GE Games: ${formData.selectedGames.join(", ")}${
+                      formData.groupName
+                        ? ` | Group: ${formData.groupName}`
+                        : ""
+                    }`,
+                  }
+                : {
+                    ...baseData,
+                    studentName: formData.studentName,
+                    contactNumber: formData.contactNumber,
+                    email: formData.email,
+                  },
         include: {
           players: true,
           teamLeader: true,

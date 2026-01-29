@@ -301,12 +301,15 @@ export const CSE_EVENTS: Event[] = [
         "The competition duration is 2 hours (10:00 AM - 12:00 PM).",
         "Solutions will be judged on correctness, efficiency, and code quality.",
         "Any form of plagiarism will lead to immediate disqualification.",
-        "The judges' decision will be final and binding."
+        "The judges' decision will be final and binding.",
       ],
-      registration: ["Online registration through college portal", "On-spot registration available until 9:30 AM"],
+      registration: [
+        "Online registration through college portal",
+        "On-spot registration available until 9:30 AM",
+      ],
       queries: {
-        "Anjali": "7420949831",
-        "Event Coordinator": "CSE Department Office"
+        Anjali: "7420949831",
+        "Event Coordinator": "CSE Department Office",
       },
     },
   },
@@ -332,12 +335,15 @@ export const CSE_EVENTS: Event[] = [
         "Internet access is prohibited during the competition.",
         "Participants must bring their own laptops with required compilers/IDEs installed.",
         "Scoring is based on number of problems solved and time taken.",
-        "The decision of the judges will be final."
+        "The decision of the judges will be final.",
       ],
-      registration: ["Register through department website", "Team registration must include both members' details"],
+      registration: [
+        "Register through department website",
+        "Team registration must include both members' details",
+      ],
       queries: {
-        "Avinash": "8080263597",
-        "Technical Support": "CSE Lab In-charge"
+        Avinash: "8080263597",
+        "Technical Support": "CSE Lab In-charge",
       },
     },
   },
@@ -363,12 +369,15 @@ export const CSE_EVENTS: Event[] = [
         "All necessary equipment must be arranged by participants.",
         "Project documentation must be submitted during registration.",
         "Judging criteria: Innovation (40%), Implementation (30%), Presentation (20%), Documentation (10%).",
-        "Final year projects are not eligible for participation."
+        "Final year projects are not eligible for participation.",
       ],
-      registration: ["Submit project abstract by 25th February", "Final registration at CSE department"],
+      registration: [
+        "Submit project abstract by 25th February",
+        "Final registration at CSE department",
+      ],
       queries: {
-        "Nikhil": "8484894757",
-        "Project Coordinator": "CSE HOD Office"
+        Nikhil: "8484894757",
+        "Project Coordinator": "CSE HOD Office",
       },
     },
   },
@@ -394,12 +403,15 @@ export const CSE_EVENTS: Event[] = [
         "All team members must stay together throughout the event.",
         "The first team to find all treasures and return to starting point wins.",
         "Any form of cheating will result in disqualification.",
-        "Participants must respect college property and rules."
+        "Participants must respect college property and rules.",
       ],
-      registration: ["Team registration at CSE department counter", "Registration closes at 9:30 AM"],
+      registration: [
+        "Team registration at CSE department counter",
+        "Registration closes at 9:30 AM",
+      ],
       queries: {
-        "Dipali": "8446343302",
-        "Event Head": "Sports & Cultural Committee"
+        Dipali: "8446343302",
+        "Event Head": "Sports & Cultural Committee",
       },
     },
   },
@@ -756,6 +768,14 @@ export const getEventFeeByName = (eventName: string, teamSize?: number) => {
   if (!eventType) return null;
 
   return calculateEventFee(eventType, teamSize);
+};
+
+export const GENERAL_ENGINEERING_TECHNICAL_FEE = 100;
+
+export const calculateGeneralEngineeringGamesFee = (gamesCount: number) => {
+  if (gamesCount === 3) return 100;
+  if (gamesCount === 5) return 150;
+  return 0;
 };
 
 export const eventImages = [

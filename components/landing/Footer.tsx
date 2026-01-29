@@ -7,6 +7,7 @@ export function Footer() {
   return (
     <footer className="border-t border-muted bg-background">
       <div className="container mx-auto px-4 py-8">
+        <ThemeToggle className="relative w-fit " />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center mb-8">
           <div className="space-y-3">
             <div className="flex justify-center md:justify-start space-x-6">
@@ -24,7 +25,6 @@ export function Footer() {
                 <Linkedin className="h-6 w-6" />
               </Link>
             </div>
-            <ThemeToggle className="relative w-fit " />
           </div>
 
           <div className="flex items-center justify-center md:justify-end space-x-4">

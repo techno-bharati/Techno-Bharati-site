@@ -14,6 +14,10 @@ export const EventType = {
   PYTHON_WARRIORS: "PYTHON_WARRIORS",
   FREEFIRE_BATTLESHIP: "FREEFIRE_BATTLESHIP",
   AI_TALES: "AI_TALES",
+  GE_TECHNO_SCIENCE_QUIZ: "GE_TECHNO_SCIENCE_QUIZ",
+  GE_POSTER_COMPETITION: "GE_POSTER_COMPETITION",
+  GE_SCITECH_MODEL_EXPO: "GE_SCITECH_MODEL_EXPO",
+  GE_GAMES_BUNDLE: "GE_GAMES_BUNDLE",
 } as const;
 
 export type EventType = (typeof EventType)[keyof typeof EventType];
@@ -44,3 +48,15 @@ export const AdminRole = {
 } as const;
 
 export type AdminRole = (typeof AdminRole)[keyof typeof AdminRole];
+
+export const Department = {
+  AIML: "AIML",
+  CSE: "CSE",
+  MECHANICAL: "MECHANICAL",
+  CIVIL: "CIVIL",
+  ENTC: "ENTC",
+  GENERAL_ENGINEERING: "GENERAL_ENGINEERING",
+  OTHER: "OTHER",
+} as const;
+
+export type Department = (typeof Department)[keyof typeof Department];

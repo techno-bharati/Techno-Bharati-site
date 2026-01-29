@@ -92,7 +92,7 @@ model Registration {
   amount            Float              @default(0)
   registrationDate  DateTime           @default(now())
   paymentMode       String             @default("ONLINE")
-  department        String             @default("UNASSIGNED")
+  department        Department         @default(AIML)
   class             String             @default("YEAR_NOT_SET")
 
   studentName   String?
@@ -160,6 +160,11 @@ enum EventType {
   PYTHON_WARRIORS
   FREEFIRE_BATTLESHIP
   AI_TALES
+  // General Engineering department
+  GE_TECHNO_SCIENCE_QUIZ
+  GE_POSTER_COMPETITION
+  GE_SCITECH_MODEL_EXPO
+  GE_GAMES_BUNDLE
 }
 
 enum RegistrationStatus {
@@ -177,7 +182,7 @@ enum PaymentStatus {
 }
 
 model Admin {
-  id        String     @id @default(cuid())
+  id        String     @id @default(uuid())
   email     String     @unique
   password  String // Hashed password
   name      String
@@ -185,7 +190,7 @@ model Admin {
   /// For EVENT_ADMIN this scopes access to a single event.
   eventType EventType?
   /// For department-level admins, this scopes access to a single department.
-  department String?
+  department Department?
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
 }
@@ -195,4 +200,14 @@ enum AdminRole {
   /// Department-level super admin, limited to a single department
   DEPARTMENT_ADMIN
   EVENT_ADMIN
+}
+
+enum Department {
+  AIML
+  CSE
+  MECHANICAL
+  CIVIL
+  ENTC
+  GENERAL_ENGINEERING
+  OTHER
 }

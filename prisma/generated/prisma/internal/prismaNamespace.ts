@@ -1454,6 +1454,22 @@ export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<
 >;
 
 /**
+ * Reference to a field of type 'Department'
+ */
+export type EnumDepartmentFieldRefInput<$PrismaModel> = FieldRefInputType<
+  $PrismaModel,
+  "Department"
+>;
+
+/**
+ * Reference to a field of type 'Department[]'
+ */
+export type ListEnumDepartmentFieldRefInput<$PrismaModel> = FieldRefInputType<
+  $PrismaModel,
+  "Department[]"
+>;
+
+/**
  * Reference to a field of type 'AdminRole'
  */
 export type EnumAdminRoleFieldRefInput<$PrismaModel> = FieldRefInputType<
