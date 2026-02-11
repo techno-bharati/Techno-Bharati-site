@@ -285,7 +285,7 @@ export default function DashboardPage() {
       </div>
 
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:space-x-4">
-        {adminRole === "SUPER_ADMIN" && (
+        {(adminRole === "SUPER_ADMIN" || adminRole === "DEPARTMENT_ADMIN") && (
           <Select
             defaultValue="all"
             onValueChange={(value) => {
