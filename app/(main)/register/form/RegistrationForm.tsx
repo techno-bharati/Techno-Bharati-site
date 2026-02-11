@@ -144,40 +144,36 @@ const RegistrationForm = ({
   };
 
   const selectedEvent = form.watch("events");
+  const teamSize = form.watch("numberOfTeamMembers");
   const formTitle = selectedEvent
     ? `${selectedEvent} Registration`
     : "Event Registration";
 
   useEffect(() => {
-    const teamSize = form.watch("numberOfTeamMembers");
-
-    if (selectedEvent) {
-      if (selectedEvent === "General Engineering Games") {
-        setTotalFee(calculateGeneralEngineeringGamesFee(selectedGames.length));
-      } else if (
-        selectedEvent === "Techno Science Quiz" ||
-        selectedEvent === "Poster Competition" ||
-        selectedEvent === "SciTech Model Expo 2K26"
-      ) {
-        setTotalFee(GENERAL_ENGINEERING_TECHNICAL_FEE);
-      } else if (
-        selectedEvent === "Model Making" ||
-        selectedEvent === "CAD Master" ||
-        selectedEvent === "Videography"
-      ) {
-        setTotalFee(CIVIL_TECHNICAL_FEE);
-      } else {
-        const fee = getEventFeeByName(selectedEvent, teamSize);
-        setTotalFee(fee || 0);
-      }
+    if (!selectedEvent) {
+      setTotalFee(0);
+      return;
     }
-  }, [
-    form.watch("events"),
-    form.watch("numberOfTeamMembers"),
-    form,
-    selectedEvent,
-    selectedGames.length,
-  ]);
+
+    if (selectedEvent === "General Engineering Games") {
+      setTotalFee(calculateGeneralEngineeringGamesFee(selectedGames.length));
+    } else if (
+      selectedEvent === "Techno Science Quiz" ||
+      selectedEvent === "Poster Competition" ||
+      selectedEvent === "SciTech Model Expo 2K26"
+    ) {
+      setTotalFee(GENERAL_ENGINEERING_TECHNICAL_FEE);
+    } else if (
+      selectedEvent === "Model Making" ||
+      selectedEvent === "CAD Master" ||
+      selectedEvent === "Videography"
+    ) {
+      setTotalFee(CIVIL_TECHNICAL_FEE);
+    } else {
+      const fee = getEventFeeByName(selectedEvent, teamSize);
+      setTotalFee(fee || 0);
+    }
+  }, [selectedEvent, teamSize, selectedGames.length]);
 
   useEffect(() => {
     if (selectedEvent === "Startup Sphere") {
@@ -188,7 +184,7 @@ const RegistrationForm = ({
   useEffect(() => {
     if (selectedEvent === "General Engineering Games") {
       form.setValue("selectedGames", selectedGames as any);
-    } else {
+    } else if (selectedGames.length > 0) {
       // Avoid leaking games selection into other event submissions
       setSelectedGames([]);
       form.setValue("selectedGames", undefined as any);
@@ -939,7 +935,7 @@ const RegistrationForm = ({
             )}
           />
 
-          <div className="mt-4 p-4 bg-primary/5 rounded-lg flex items-start gap-2 justify-between md:col-span-2">
+          <div className="mt-4 p-4 bg-primary/10 rounded-xl flex items-start gap-2 justify-between md:col-span-2">
             <div>
               <p className="text-lg font-semibold">
                 Total Registration Fee: ₹{totalFee}
@@ -966,7 +962,7 @@ const RegistrationForm = ({
 
           <Button
             type="submit"
-            className="w-full md:col-span-2"
+            className="w-full md:col-span-2 rounded-xl dark:text-white"
             disabled={isPending}
           >
             {isPending ? "Submitting..." : "Submit"}
