@@ -361,7 +361,7 @@ export const CSE_EVENTS: Event[] = [
       rules: [],
       registration: ["Entry Fee Rs. 100 per participant"],
       queries: {
-       "heshvardhan gadagade": "788178133"
+        "heshvardhan gadagade": "788178133",
       },
     },
   },
