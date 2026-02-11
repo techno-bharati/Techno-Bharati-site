@@ -38,6 +38,7 @@ export default function DashboardPage() {
   const router = useRouter();
   const [search, setSearch] = useState("");
   const [eventFilter, setEventFilter] = useState("all");
+  const [departmentFilter, setDepartmentFilter] = useState("all");
   const [selectedRegistration, setSelectedRegistration] = useState<any>(null);
   const [adminRole, setAdminRole] = useState<
     "SUPER_ADMIN" | "DEPARTMENT_ADMIN" | "EVENT_ADMIN" | null
@@ -79,7 +80,7 @@ export default function DashboardPage() {
     error: registrationsError,
     refetch,
   } = useQuery({
-    queryKey: ["registrations", selectedEvent],
+    queryKey: ["registrations", selectedEvent, departmentFilter],
     queryFn: async () => {
       const params = new URLSearchParams();
       if (selectedEvent && selectedEvent !== "all") {
@@ -88,6 +89,10 @@ export default function DashboardPage() {
 
       if (selectedEvent === "all") {
         params.append("fetchAll", "true");
+      }
+
+      if (departmentFilter && departmentFilter !== "all") {
+        params.append("department", departmentFilter);
       }
 
       const queryString = params.toString();
@@ -101,6 +106,53 @@ export default function DashboardPage() {
       return res.json();
     },
   });
+
+  const getEventOptionsForDepartment = (dept: string | null) => {
+    // Map departments to their event types
+    const map: Record<string, { value: string; label: string }[]> = {
+      all: [
+        { value: "STARTUP_SPHERE", label: "Startup Sphere" },
+        { value: "FACE_TO_FACE", label: "Face To Face" },
+        { value: "PYTHON_WARRIORS", label: "Python Warriors" },
+        { value: "FREEFIRE_BATTLESHIP", label: "FreeFire Battleship" },
+        { value: "AI_TALES", label: "AI Tales" },
+        { value: "GE_TECHNO_SCIENCE_QUIZ", label: "Techno Science Quiz" },
+        { value: "GE_POSTER_COMPETITION", label: "Poster Competition" },
+        {
+          value: "GE_SCITECH_MODEL_EXPO",
+          label: "SciTech Model Expo 2K26",
+        },
+        { value: "GE_GAMES_BUNDLE", label: "GE Games Bundle" },
+        { value: "CE_MODEL_MAKING", label: "Model Making" },
+        { value: "CE_CAD_MASTER", label: "CAD Master" },
+        { value: "CE_VIDEOGRAPHY", label: "Videography" },
+      ],
+      AIML: [
+        { value: "STARTUP_SPHERE", label: "Startup Sphere" },
+        { value: "FACE_TO_FACE", label: "Face To Face" },
+        { value: "PYTHON_WARRIORS", label: "Python Warriors" },
+        { value: "FREEFIRE_BATTLESHIP", label: "FreeFire Battleship" },
+        { value: "AI_TALES", label: "AI Tales" },
+      ],
+      GENERAL_ENGINEERING: [
+        { value: "GE_TECHNO_SCIENCE_QUIZ", label: "Techno Science Quiz" },
+        { value: "GE_POSTER_COMPETITION", label: "Poster Competition" },
+        {
+          value: "GE_SCITECH_MODEL_EXPO",
+          label: "SciTech Model Expo 2K26",
+        },
+        { value: "GE_GAMES_BUNDLE", label: "GE Games Bundle" },
+      ],
+      CIVIL: [
+        { value: "CE_MODEL_MAKING", label: "Model Making" },
+        { value: "CE_CAD_MASTER", label: "CAD Master" },
+        { value: "CE_VIDEOGRAPHY", label: "Videography" },
+      ],
+    };
+
+    if (!dept || dept === "all") return map.all;
+    return map[dept] || map.all;
+  };
 
   const filteredRegistrations = registrationsData?.registrations?.filter(
     (reg: any) => {
@@ -285,26 +337,54 @@ export default function DashboardPage() {
       </div>
 
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:space-x-4">
+        {adminRole === "SUPER_ADMIN" && (
+          <Select
+            defaultValue="all"
+            onValueChange={(value) => {
+              setDepartmentFilter(value);
+              // Reset event filter whenever department changes
+              setEventFilter("all");
+              setSelectedEvent("all");
+            }}
+          >
+            <SelectTrigger className="w-full sm:w-[200px] rounded-xl">
+              <SelectValue placeholder="Filter by department" />
+            </SelectTrigger>
+            <SelectContent className="rounded-xl">
+              <SelectItem value="all">All Departments</SelectItem>
+              <SelectItem value="AIML">AIML</SelectItem>
+              <SelectItem value="CSE">CSE</SelectItem>
+              <SelectItem value="MECHANICAL">Mechanical</SelectItem>
+              <SelectItem value="CIVIL">Civil</SelectItem>
+              <SelectItem value="ENTC">ENTC</SelectItem>
+              <SelectItem value="GENERAL_ENGINEERING">
+                General Engineering
+              </SelectItem>
+              <SelectItem value="OTHER">Other</SelectItem>
+            </SelectContent>
+          </Select>
+        )}
         {(adminRole === "SUPER_ADMIN" || adminRole === "DEPARTMENT_ADMIN") && (
           <Select
             defaultValue="all"
+            value={eventFilter}
             onValueChange={(value) => {
               setEventFilter(value);
               setSelectedEvent(value === "all" ? "all" : value);
             }}
           >
-            <SelectTrigger className="w-full sm:w-[180px] rounded-xl">
+            <SelectTrigger className="w-full sm:w-[200px] rounded-xl">
               <SelectValue placeholder="Filter by event" />
             </SelectTrigger>
             <SelectContent className="rounded-xl">
               <SelectItem value="all">All Events</SelectItem>
-              <SelectItem value="STARTUP_SPHERE">Startup Sphere</SelectItem>
-              <SelectItem value="FACE_TO_FACE">Face To Face</SelectItem>
-              <SelectItem value="PYTHON_WARRIORS">Python Warriors</SelectItem>
-              <SelectItem value="FREEFIRE_BATTLESHIP">
-                FreeFire Battleship
-              </SelectItem>
-              <SelectItem value="AI_TALES">AI Tales</SelectItem>
+              {getEventOptionsForDepartment(
+                adminRole === "SUPER_ADMIN" ? departmentFilter : adminDepartment
+              ).map((opt) => (
+                <SelectItem key={opt.value} value={opt.value}>
+                  {opt.label}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         )}

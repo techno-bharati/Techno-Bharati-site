@@ -2,7 +2,11 @@ import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { jwtVerify } from "jose";
 import { cookies } from "next/headers";
-import { AdminRole, EventType } from "@/prisma/generated/prisma/client";
+import {
+  AdminRole,
+  EventType,
+  Department,
+} from "@/prisma/generated/prisma/client";
 
 interface JWTPayload {
   sub: string;
@@ -15,6 +19,7 @@ interface JWTPayload {
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const eventType = searchParams.get("eventType") || null;
+  const department = searchParams.get("department") || null;
 
   try {
     const cookieStore = await cookies();
@@ -36,6 +41,15 @@ export async function GET(req: Request) {
     // Optional filter by eventType from query param
     if (eventType && eventType !== "all") {
       where.eventType = eventType as EventType;
+    }
+
+    // Optional department filter for SUPER_ADMIN only
+    if (
+      department &&
+      department !== "all" &&
+      payload.role === AdminRole.SUPER_ADMIN
+    ) {
+      where.department = department as Department;
     }
 
     // EVENT_ADMIN is always locked to a single event, regardless of query param
