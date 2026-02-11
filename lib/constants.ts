@@ -295,39 +295,6 @@ export const CSE_AIML_EVENTS: Event[] = [
 export const CSE_EVENTS: Event[] = [
   {
     id: 1,
-    name: "C-PRO Master",
-    slug: "c-pro-master",
-    department: "CSE",
-    date: "2026-02-28",
-    time: "10:00 AM",
-    venue: "Bharati Vidyapeeth College of Engineering, Kolhapur",
-    entryFee: "100",
-    type: "Technical Event",
-    modalData: {
-      eventName: "C-PRO Master",
-      description:
-        "C-PRO Master is a competitive programming challenge designed to test participants' expertise in C programming. Participants will solve complex algorithmic problems within a time limit, demonstrating their coding efficiency, logical thinking, and problem-solving skills.",
-      rules: [
-        "Participants must solve given programming problems using C language only.",
-        "No external libraries or pre-built code snippets are allowed.",
-        "Each participant/team will have access to a computer with a C compiler.",
-        "The competition duration is 2 hours (10:00 AM - 12:00 PM).",
-        "Solutions will be judged on correctness, efficiency, and code quality.",
-        "Any form of plagiarism will lead to immediate disqualification.",
-        "The judges' decision will be final and binding.",
-      ],
-      registration: [
-        "Online registration through college portal",
-        "On-spot registration available until 9:30 AM",
-      ],
-      queries: {
-        Anjali: "7420949831",
-        "Event Coordinator": "CSE Department Office",
-      },
-    },
-  },
-  {
-    id: 2,
     name: "CODEFUSION",
     slug: "codefusion",
     department: "CSE",
@@ -341,27 +308,23 @@ export const CSE_EVENTS: Event[] = [
       description:
         "CODEFUSION is a multi-language coding competition where participants can choose their preferred programming language (C, C++, Java, Python) to solve algorithmic challenges. The event focuses on problem-solving versatility and coding efficiency across different programming paradigms.",
       rules: [
-        "Participants can use any of the allowed languages: C, C++, Java, or Python.",
-        "Each problem has specific language constraints that must be followed.",
-        "Teams of maximum 2 members are allowed.",
-        "Duration: 3 hours (10:00 AM - 1:00 PM).",
-        "Internet access is prohibited during the competition.",
-        "Participants must bring their own laptops with required compilers/IDEs installed.",
-        "Scoring is based on number of problems solved and time taken.",
-        "The decision of the judges will be final.",
+        "Maximum 2 participants per team",
+        "Round 1: Aptitude",
+        "Round 2: Coding",
+        "Entry Fee Rs. 100 per participant",
       ],
       registration: [
         "Register through department website",
         "Team registration must include both members' details",
+        "Entery Fee Rs. 100 per participant",
       ],
       queries: {
-        Avinash: "8080263597",
-        "Technical Support": "CSE Lab In-charge",
+        "avishkar kamble": "9359984873",
       },
     },
   },
   {
-    id: 3,
+    id: 2,
     name: "Project Expo",
     slug: "project-expo",
     department: "CSE",
@@ -374,30 +337,17 @@ export const CSE_EVENTS: Event[] = [
       eventName: "Project Expo",
       description:
         "Project Expo showcases innovative software and hardware projects developed by students. This event provides a platform for students to demonstrate their technical skills, creativity, and practical implementation of computer science concepts in real-world applications.",
-      rules: [
-        "Projects can be software-based, hardware-based, or IoT applications.",
-        "Teams of 2-4 members are allowed.",
-        "Each team gets 10 minutes for presentation and 5 minutes for Q&A.",
-        "Projects must be original work of the participating students.",
-        "All necessary equipment must be arranged by participants.",
-        "Project documentation must be submitted during registration.",
-        "Judging criteria: Innovation (40%), Implementation (30%), Presentation (20%), Documentation (10%).",
-        "Final year projects are not eligible for participation.",
-      ],
-      registration: [
-        "Submit project abstract by 25th February",
-        "Final registration at CSE department",
-      ],
+      rules: ["Minmum presenstation time: 10 minutes"],
+      registration: ["Entry Fee Rs. 100 per participant"],
       queries: {
-        Nikhil: "8484894757",
-        "Project Coordinator": "CSE HOD Office",
+        "subhan modak": "7507088006",
       },
     },
   },
   {
-    id: 4,
-    name: "Treasure Hunt",
-    slug: "treasure-hunt",
+    id: 3,
+    name: "Counter Strike",
+    slug: "counter-strike",
     department: "CSE",
     date: "2026-02-28",
     time: "10:00 AM",
@@ -407,24 +357,11 @@ export const CSE_EVENTS: Event[] = [
     modalData: {
       eventName: "Treasure Hunt",
       description:
-        "Treasure Hunt is an exciting puzzle-solving game where participants follow clues, solve riddles, and complete challenges to find hidden treasures. The event combines logical thinking, teamwork, and creativity in a fun and engaging format.",
-      rules: [
-        "Teams of 3-5 members must register together.",
-        "The hunt begins at 10:00 AM sharp from the CSE department.",
-        "Clues will lead to various locations across the campus.",
-        "No mobile phones or external help is allowed during the hunt.",
-        "All team members must stay together throughout the event.",
-        "The first team to find all treasures and return to starting point wins.",
-        "Any form of cheating will result in disqualification.",
-        "Participants must respect college property and rules.",
-      ],
-      registration: [
-        "Team registration at CSE department counter",
-        "Registration closes at 9:30 AM",
-      ],
+        "Counter Strike is a team based game where two teams of 5 players each compete to win the game.",
+      rules: [],
+      registration: ["Entry Fee Rs. 100 per participant"],
       queries: {
-        Dipali: "8446343302",
-        "Event Head": "Sports & Cultural Committee",
+       "heshvardhan gadagade": "788178133"
       },
     },
   },
