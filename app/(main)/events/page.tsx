@@ -3,11 +3,31 @@
 import { useState } from "react";
 import { EVENTS_BY_DEPARTMENT } from "@/lib/constants";
 import EventCard from "@/components/register/EventCard";
+import { useSearchParams } from "next/navigation";
 
 export default function Page() {
-  const [selectedDepartment, setSelectedDepartment] = useState<
-    "CSE (AIML)" | "CSE" | "MECH" | "ECE" | "CIVIL" | "General Engineering"
-  >("CSE (AIML)");
+  const searchParams = useSearchParams();
+  type DepartmentFilter =
+    | "CSE (AIML)"
+    | "CSE"
+    | "MECH"
+    | "ECE"
+    | "CIVIL"
+    | "General Engineering";
+
+  const deptFromUrl = searchParams.get("dept");
+  const initialDepartment: DepartmentFilter =
+    deptFromUrl === "CSE (AIML)" ||
+    deptFromUrl === "CSE" ||
+    deptFromUrl === "MECH" ||
+    deptFromUrl === "ECE" ||
+    deptFromUrl === "CIVIL" ||
+    deptFromUrl === "General Engineering"
+      ? deptFromUrl
+      : "CSE (AIML)";
+
+  const [selectedDepartment, setSelectedDepartment] =
+    useState<DepartmentFilter>(initialDepartment);
 
   const filteredEvents = EVENTS_BY_DEPARTMENT[selectedDepartment] ?? [];
 
@@ -71,7 +91,11 @@ export default function Page() {
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                 {technicalEvents.map((event) => (
-                  <EventCard key={event.id} event={event} />
+                  <EventCard
+                    key={event.id}
+                    event={event}
+                    selectedDepartment={selectedDepartment}
+                  />
                 ))}
               </div>
             </section>
@@ -84,7 +108,11 @@ export default function Page() {
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                 {nonTechnicalEvents.map((event) => (
-                  <EventCard key={event.id} event={event} />
+                  <EventCard
+                    key={event.id}
+                    event={event}
+                    selectedDepartment={selectedDepartment}
+                  />
                 ))}
               </div>
             </section>
@@ -93,7 +121,11 @@ export default function Page() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {filteredEvents.map((event) => (
-            <EventCard key={event.id} event={event} />
+            <EventCard
+              key={event.id}
+              event={event}
+              selectedDepartment={selectedDepartment}
+            />
           ))}
         </div>
       )}

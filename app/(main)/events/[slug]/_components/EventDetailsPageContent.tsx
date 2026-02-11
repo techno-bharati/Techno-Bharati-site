@@ -100,6 +100,23 @@ const EventDetailsPageContent = ({ slug }: { slug: string }) => {
     );
   }
 
+  const departmentToDeptParam = (department: string) => {
+    // `EVENTS_BY_DEPARTMENT` keys are: "CSE (AIML)", "CSE", "MECH", "ECE", "CIVIL", "General Engineering"
+    if (department === "Civil") return "CIVIL";
+    if (department === "General Engineering") return "General Engineering";
+    if (department === "CSE (AIML)") return "CSE (AIML)";
+    if (department === "CSE") return "CSE";
+    if (department === "MECH") return "MECH";
+    if (department === "ECE") return "ECE";
+    // Fallback: don't force a department filter
+    return null;
+  };
+
+  const deptParam = departmentToDeptParam(event.department);
+  const backToEventsHref = deptParam
+    ? `/events?dept=${encodeURIComponent(deptParam)}`
+    : "/events";
+
   const { modalData } = event;
 
   return (
@@ -108,7 +125,7 @@ const EventDetailsPageContent = ({ slug }: { slug: string }) => {
         <Button
           variant="outline"
           className="rounded-lg group"
-          onClick={() => router.push("/events")}
+          onClick={() => router.push(backToEventsHref)}
         >
           <ArrowLeft className="-mr-1 group-hover:-translate-x-1 transition-transform" />
           Back to Events

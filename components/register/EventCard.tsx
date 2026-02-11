@@ -7,7 +7,13 @@ import { Button } from "@/components/ui/button";
 import { Calendar, MapPin, Clock, Coins, ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-const EventCard = ({ event }: { event: Event }) => {
+const EventCard = ({
+  event,
+  selectedDepartment,
+}: {
+  event: Event;
+  selectedDepartment?: string;
+}) => {
   const router = useRouter();
   return (
     <Card
@@ -38,8 +44,13 @@ const EventCard = ({ event }: { event: Event }) => {
         </div>
         <Button
           variant="default"
-          className="mt-4 w-full bg-primary text-primary-foreground hover:bg-primary/95 rounded-xl font-medium group"
-          onClick={() => router.push(`/events/${event.slug}`)}
+          className="mt-4 w-full bg-primary dark:text-white text-primary-foreground hover:bg-primary/95 rounded-xl font-medium group"
+          onClick={() => {
+            const deptParam = selectedDepartment
+              ? `?dept=${encodeURIComponent(selectedDepartment)}`
+              : "";
+            router.push(`/events/${event.slug}${deptParam}`);
+          }}
         >
           Know More
           <ArrowRight className="-ml-1 group-hover:translate-x-1 transition-transform" />
