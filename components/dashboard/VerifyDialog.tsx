@@ -38,7 +38,7 @@ export function VerifyDialog({
   const queryClient = useQueryClient();
   const [showImageDialog, setShowImageDialog] = useState(false);
   const [adminRole, setAdminRole] = useState<
-    "SUPER_ADMIN" | "EVENT_ADMIN" | null
+    "SUPER_ADMIN" | "DEPARTMENT_ADMIN" | "EVENT_ADMIN" | null
   >(null);
   const [selectedPaymentMode, setSelectedPaymentMode] = useState<string>("");
 
@@ -161,7 +161,7 @@ export function VerifyDialog({
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="max-w-3xl h-[90vh] flex flex-col overflow-hidden">
+        <DialogContent className="max-w-3xl h-[90vh] bg-card flex flex-col overflow-hidden">
           <DialogHeader className="flex-shrink-0">
             <DialogTitle>Registration Details</DialogTitle>
           </DialogHeader>
@@ -303,12 +303,19 @@ export function VerifyDialog({
           <div className="flex-shrink-0">
             <Separator />
             <DialogFooter className="p-6">
-              <Button variant="outline" onClick={() => onOpenChange(false)}>
+              <Button
+                variant="outline"
+                className="rounded-xl"
+                onClick={() => onOpenChange(false)}
+              >
                 Close
               </Button>
-              {adminRole === "SUPER_ADMIN" && (
+              {(adminRole === "SUPER_ADMIN" ||
+                adminRole === "DEPARTMENT_ADMIN" ||
+                adminRole === "EVENT_ADMIN") && (
                 <Button
                   onClick={() => verifyRegistration()}
+                  className="rounded-xl"
                   disabled={isPending || registration.status === "CONFIRMED"}
                 >
                   {isPending ? "Verifying..." : "Verify Registration"}
@@ -316,6 +323,7 @@ export function VerifyDialog({
               )}
               <Button
                 onClick={() => updatePaymentMode()}
+                className="rounded-xl"
                 disabled={isUpdating || registration.status === "CONFIRMED"}
               >
                 {isUpdating ? "Updating..." : "Update Details"}

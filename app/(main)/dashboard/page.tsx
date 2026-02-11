@@ -498,7 +498,9 @@ export default function DashboardPage() {
                   <TableHead>Amount</TableHead>
                   <TableHead>Date</TableHead>
                   <TableHead>Status</TableHead>
-                  {adminRole === "SUPER_ADMIN" && (
+                  {(adminRole === "SUPER_ADMIN" ||
+                    adminRole === "DEPARTMENT_ADMIN" ||
+                    adminRole === "EVENT_ADMIN") && (
                     <TableHead className="w-[140px]">Actions</TableHead>
                   )}
                 </TableRow>
@@ -544,7 +546,9 @@ export default function DashboardPage() {
                         {registration.status}
                       </Badge>
                     </TableCell>
-                    {adminRole === "SUPER_ADMIN" && (
+                    {(adminRole === "SUPER_ADMIN" ||
+                      adminRole === "DEPARTMENT_ADMIN" ||
+                      adminRole === "EVENT_ADMIN") && (
                       <TableCell>
                         <div className="flex items-center gap-2">
                           <Button
