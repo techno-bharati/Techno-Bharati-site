@@ -42,7 +42,7 @@ export default function Page() {
     : [];
 
   return (
-    <div className="bg-background max-w-screen-2xl mx-auto px-4 py-10">
+    <div className="bg-background max-w-screen-2xl min-h-screen mx-auto px-4 py-10 mb-20">
       <h1 className="text-4xl md:text-5xl font-bold text-center mb-8 md:mb-10 text-foreground">
         Events
       </h1>
@@ -89,12 +89,16 @@ export default function Page() {
               <h2 className="text-xl font-semibold mb-2 text-foreground">
                 Technical Events
               </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-                {technicalEvents.map((event) => (
+              <div
+                key={selectedDepartment}
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"
+              >
+                {technicalEvents.map((event, index) => (
                   <EventCard
                     key={event.id}
                     event={event}
                     selectedDepartment={selectedDepartment}
+                    index={index}
                   />
                 ))}
               </div>
@@ -106,12 +110,16 @@ export default function Page() {
               <h2 className="text-xl font-semibold mb-2 text-foreground">
                 Non-Technical Events
               </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-                {nonTechnicalEvents.map((event) => (
+              <div
+                key={selectedDepartment}
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"
+              >
+                {nonTechnicalEvents.map((event, index) => (
                   <EventCard
                     key={event.id}
                     event={event}
                     selectedDepartment={selectedDepartment}
+                    index={index}
                   />
                 ))}
               </div>
@@ -119,12 +127,16 @@ export default function Page() {
           )}
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-          {filteredEvents.map((event) => (
+        <div
+          key={selectedDepartment}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"
+        >
+          {filteredEvents.map((event, index) => (
             <EventCard
               key={event.id}
               event={event}
               selectedDepartment={selectedDepartment}
+              index={index}
             />
           ))}
         </div>

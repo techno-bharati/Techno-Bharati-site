@@ -120,7 +120,7 @@ const EventDetailsPageContent = ({ slug }: { slug: string }) => {
   const { modalData } = event;
 
   return (
-    <div className="p-4 md:p-8 bg-background">
+    <div className="p-4 md:p-8 bg-background min-h-screen mb-12">
       <div className="max-w-7xl mx-auto space-y-6">
         <Button
           variant="outline"
@@ -194,19 +194,6 @@ const EventDetailsPageContent = ({ slug }: { slug: string }) => {
                   ))}
                 </div>
               </div>
-              {/* <div className="flex-shrink-0">
-                <h3 className="text-lg md:text-xl text-foreground mb-2">
-                  Payment QR
-                </h3>
-                <div className="relative w-[150px] h-[150px] md:w-[200px] md:h-[200px] bg-muted rounded-lg p-2">
-                  <Image
-                    src="/qr.jpeg"
-                    fill
-                    className="object-contain rounded-lg"
-                    alt="Payment QR"
-                  />
-                </div>
-              </div> */}
             </div>
 
             <div className="flex flex-col gap-3 mt-6">
