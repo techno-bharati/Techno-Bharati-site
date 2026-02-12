@@ -29,6 +29,10 @@ const slugToEventName: Record<string, EventNameOption> = {
   "model-making": "Model Making",
   "cad-master": "CAD Master",
   videography: "Videography",
+  // CSE department
+  codefusion: "CODEFUSION",
+  "project-expo": "Project Expo",
+  "counter-strike": "Counter Strike",
 };
 
 export default async function EventRegisterPage({ params }: PageProps) {

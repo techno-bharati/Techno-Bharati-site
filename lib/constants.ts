@@ -45,6 +45,19 @@ export const EVENT_FEES: Record<string, EventFee> = {
     amount: 100,
     type: "per person",
   },
+  // CSE department
+  CSE_CODEFUSION: {
+    amount: 100,
+    type: "per person",
+  },
+  CSE_PROJECT_EXPO: {
+    amount: 100,
+    type: "per person",
+  },
+  CSE_COUNTER_STRIKE: {
+    amount: 100,
+    type: "per person",
+  },
 } as const;
 
 export interface Event {
@@ -715,6 +728,9 @@ export const getEventFeeByName = (eventName: string, teamSize?: number) => {
     "Model Making": "CE_MODEL_MAKING",
     "CAD Master": "CE_CAD_MASTER",
     Videography: "CE_VIDEOGRAPHY",
+    CODEFUSION: "CSE_CODEFUSION",
+    "Project Expo": "CSE_PROJECT_EXPO",
+    "Counter Strike": "CSE_COUNTER_STRIKE",
   } as const;
 
   const eventType = eventMap[eventName as keyof typeof eventMap];

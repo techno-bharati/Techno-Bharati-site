@@ -48,7 +48,10 @@ export type EventNameOption =
   | "General Engineering Games"
   | "Model Making"
   | "CAD Master"
-  | "Videography";
+  | "Videography"
+  | "CODEFUSION"
+  | "Project Expo"
+  | "Counter Strike";
 
 interface RegistrationFormProps {
   /**
@@ -356,6 +359,15 @@ const RegistrationForm = ({
                       <SelectItem value="Videography">
                         Videography (Civil)
                       </SelectItem>
+                      <SelectItem value="CODEFUSION">
+                        CODEFUSION (CSE)
+                      </SelectItem>
+                      <SelectItem value="Project Expo">
+                        Project Expo (CSE)
+                      </SelectItem>
+                      <SelectItem value="Counter Strike">
+                        Counter Strike (CSE)
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -372,7 +384,10 @@ const RegistrationForm = ({
             selectedEvent === "SciTech Model Expo 2K26" ||
             selectedEvent === "Model Making" ||
             selectedEvent === "CAD Master" ||
-            selectedEvent === "Videography") && (
+            selectedEvent === "Videography" ||
+            selectedEvent === "CODEFUSION" ||
+            selectedEvent === "Project Expo" ||
+            selectedEvent === "Counter Strike") && (
             <>
               <FormField
                 control={form.control}

@@ -126,6 +126,9 @@ export default function DashboardPage() {
         { value: "CE_MODEL_MAKING", label: "Model Making" },
         { value: "CE_CAD_MASTER", label: "CAD Master" },
         { value: "CE_VIDEOGRAPHY", label: "Videography" },
+        { value: "CSE_CODEFUSION", label: "CODEFUSION" },
+        { value: "CSE_PROJECT_EXPO", label: "Project Expo" },
+        { value: "CSE_COUNTER_STRIKE", label: "Counter Strike" },
       ],
       AIML: [
         { value: "STARTUP_SPHERE", label: "Startup Sphere" },
@@ -133,6 +136,11 @@ export default function DashboardPage() {
         { value: "PYTHON_WARRIORS", label: "Python Warriors" },
         { value: "FREEFIRE_BATTLESHIP", label: "FreeFire Battleship" },
         { value: "AI_TALES", label: "AI Tales" },
+      ],
+      CSE: [
+        { value: "CSE_CODEFUSION", label: "CODEFUSION" },
+        { value: "CSE_PROJECT_EXPO", label: "Project Expo" },
+        { value: "CSE_COUNTER_STRIKE", label: "Counter Strike" },
       ],
       GENERAL_ENGINEERING: [
         { value: "GE_TECHNO_SCIENCE_QUIZ", label: "Techno Science Quiz" },

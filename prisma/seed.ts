@@ -137,6 +137,38 @@ async function main() {
       eventType: EventType.CE_VIDEOGRAPHY,
       department: Department.CIVIL,
     },
+    // CSE department admin and event admins
+    {
+      email: "cse.admin@technobharati.com",
+      password: "cse@admin",
+      name: "CSE Department Admin",
+      role: AdminRole.DEPARTMENT_ADMIN,
+      department: Department.CSE,
+    },
+    {
+      email: "cse.codefusion@technobharati.com",
+      password: "cse@codefusion",
+      name: "CSE CODEFUSION Admin",
+      role: AdminRole.EVENT_ADMIN,
+      eventType: EventType.CSE_CODEFUSION,
+      department: Department.CSE,
+    },
+    {
+      email: "cse.projectexpo@technobharati.com",
+      password: "cse@projectexpo",
+      name: "CSE Project Expo Admin",
+      role: AdminRole.EVENT_ADMIN,
+      eventType: EventType.CSE_PROJECT_EXPO,
+      department: Department.CSE,
+    },
+    {
+      email: "cse.counterstrike@technobharati.com",
+      password: "cse@counterstrike",
+      name: "CSE Counter Strike Admin",
+      role: AdminRole.EVENT_ADMIN,
+      eventType: EventType.CSE_COUNTER_STRIKE,
+      department: Department.CSE,
+    },
   ];
 
   for (const admin of admins) {
@@ -304,6 +336,48 @@ async function main() {
         studentName: "Civil Videography Participant 1",
         contactNumber: "7777770003",
         email: "civil3@example.com",
+      },
+    ],
+  });
+
+  // Seed sample registrations for CSE department events
+  await db.registration.createMany({
+    data: [
+      {
+        collegeName: "Bharati Vidyapeeth College of Engineering, Kolhapur",
+        eventType: EventType.CSE_CODEFUSION,
+        paymentScreenshot: "https://example.com/seed/cse-codefusion.png",
+        amount: 100,
+        paymentMode: "ONLINE",
+        department: Department.CSE,
+        class: "second year",
+        studentName: "CSE CODEFUSION Participant 1",
+        contactNumber: "6666660001",
+        email: "cse1@example.com",
+      },
+      {
+        collegeName: "Bharati Vidyapeeth College of Engineering, Kolhapur",
+        eventType: EventType.CSE_PROJECT_EXPO,
+        paymentScreenshot: "https://example.com/seed/cse-project-expo.png",
+        amount: 100,
+        paymentMode: "ONLINE",
+        department: Department.CSE,
+        class: "third year",
+        studentName: "CSE Project Expo Participant 1",
+        contactNumber: "6666660002",
+        email: "cse2@example.com",
+      },
+      {
+        collegeName: "Bharati Vidyapeeth College of Engineering, Kolhapur",
+        eventType: EventType.CSE_COUNTER_STRIKE,
+        paymentScreenshot: "https://example.com/seed/cse-counter-strike.png",
+        amount: 100,
+        paymentMode: "OFFLINE",
+        department: Department.CSE,
+        class: "first year",
+        studentName: "CSE Counter Strike Participant 1",
+        contactNumber: "6666660003",
+        email: "cse3@example.com",
       },
     ],
   });

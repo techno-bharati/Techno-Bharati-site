@@ -169,6 +169,10 @@ enum EventType {
   CE_MODEL_MAKING
   CE_CAD_MASTER
   CE_VIDEOGRAPHY
+  // CSE department
+  CSE_CODEFUSION
+  CSE_PROJECT_EXPO
+  CSE_COUNTER_STRIKE
 }
 
 enum RegistrationStatus {

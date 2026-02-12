@@ -59,6 +59,7 @@ const aiTalesSchema = pythonWorriorsSchema; // Same as Python Warriors
 
 const generalEngineeringTechnicalSchema = pythonWorriorsSchema;
 const civilTechnicalSchema = pythonWorriorsSchema; // Same as individual events: name, contact, email
+const cseTechnicalSchema = pythonWorriorsSchema; // CSE events: student name, contact, email
 
 const generalEngineeringGamesBundleSchema = z.object({
   selectedGames: z
@@ -102,6 +103,10 @@ export const userRegistrationFormSchema = z
         "Model Making",
         "CAD Master",
         "Videography",
+        // CSE department
+        "CODEFUSION",
+        "Project Expo",
+        "Counter Strike",
       ],
       {
         required_error: "Please select an event",
@@ -163,5 +168,10 @@ export const userRegistrationFormSchema = z
       z
         .object({ events: z.literal("Videography") })
         .merge(civilTechnicalSchema),
+      z.object({ events: z.literal("CODEFUSION") }).merge(cseTechnicalSchema),
+      z.object({ events: z.literal("Project Expo") }).merge(cseTechnicalSchema),
+      z
+        .object({ events: z.literal("Counter Strike") })
+        .merge(cseTechnicalSchema),
     ])
   );

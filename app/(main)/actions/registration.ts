@@ -34,6 +34,9 @@ export async function createRegistration(
       "Model Making": EventType.CE_MODEL_MAKING,
       "CAD Master": EventType.CE_CAD_MASTER,
       Videography: EventType.CE_VIDEOGRAPHY,
+      CODEFUSION: EventType.CSE_CODEFUSION,
+      "Project Expo": EventType.CSE_PROJECT_EXPO,
+      "Counter Strike": EventType.CSE_COUNTER_STRIKE,
     } as const;
 
     const calculateTotalFee = (data: typeof formData) => {
@@ -93,8 +96,6 @@ export async function createRegistration(
       department: departmentMap[formData.department] as Department,
       class: formData.class,
     };
-
-    console.log("Base data:", baseData);
 
     try {
       if (formData.events === "FreeFire Battleship") {
