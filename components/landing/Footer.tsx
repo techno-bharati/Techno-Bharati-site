@@ -1,16 +1,25 @@
 import { Instagram, Linkedin } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import ThemeToggle from "./ThemeToggle";
+import { zenDots } from "@/lib/fonts";
 
 export function Footer() {
   return (
-    <footer className="border-t border-muted bg-background">
+    <footer className="relative border-t border-muted bg-background overflow-hidden">
+      <div className="absolute inset-0 pointer-events-none select-none">
+        <div
+          className={`absolute left-1/2 -bottom-8 -translate-x-1/2 opacity-[0.03] dark:opacity-[0.05] w-full text-center ${zenDots.className}`}
+        >
+          <span className="text-[4rem] sm:text-[6rem] md:text-[8rem] lg:text-[10rem] font-black text-foreground whitespace-nowrap tracking-tighter inline-block leading-[0.8]">
+            INFUSION AI
+          </span>
+        </div>
+      </div>
+
       <div className="container mx-auto px-4 py-8">
-        <ThemeToggle className="relative w-fit " />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center mb-8">
           <div className="space-y-3">
-            <div className="flex justify-center md:justify-start space-x-6">
+            <div className="flex justify-start space-x-6">
               <Link
                 href="https://www.instagram.com/bvcoek_aiml/"
                 target="_blank"
@@ -23,6 +32,26 @@ export function Footer() {
                 className="text-muted-foreground hover:text-primary"
               >
                 <Linkedin className="h-6 w-6" />
+              </Link>
+            </div>
+            <div className="flex flex-col justify-start items-start md:items-start text-sm text-muted-foreground">
+              <Link
+                href="/contactus"
+                className="hover:text-primary font-semibold"
+              >
+                CONTACT US
+              </Link>
+              <Link
+                href="/sponsors"
+                className="hover:text-primary font-semibold"
+              >
+                SPONSORS
+              </Link>
+              <Link
+                href="/aboutus"
+                className="hover:text-primary font-semibold"
+              >
+                ABOUT US
               </Link>
             </div>
           </div>
@@ -44,25 +73,19 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="flex justify-center space-x-8 text-sm text-muted-foreground">
-          <Link href="/contactus" className="hover:text-primary font-semibold">
-            CONTACT US
-          </Link>
-          <Link href="/sponsors" className="hover:text-primary font-semibold">
-            SPONSORS
-          </Link>
-          <Link href="/aboutus" className="hover:text-primary font-semibold">
-            ABOUT US
-          </Link>
-        </div>
-
-        <div className="mt-2 flex justify-center space-x-8 text-sm text-muted-foreground">
-          <span className="text-sm md:text-base tracking-tight">
+        <div className="w-full mt-2 text-xs sm:text-sm flex justify-between text-muted-foreground/80 capitalize">
+          <p className="text-muted-foreground/80 select-none pointer-events-none">
+            &copy; copyright Techno Bharati 2k26
+          </p>
+          <p className="tracking-tight">
             Developed & Managed by{" "}
-            <Link href={"/"} className="hover:underline hover:text-primary">
+            <Link
+              href={"/"}
+              className="hover:underline underline-offset-4 hover:text-primary"
+            >
               Team InfusionAI
             </Link>
-          </span>
+          </p>
         </div>
       </div>
     </footer>
