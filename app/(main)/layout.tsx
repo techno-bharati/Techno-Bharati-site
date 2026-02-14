@@ -13,7 +13,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="w-full h-screen flex flex-col">
+    <div className="w-full h-full mt-20">
       <Navigation2 />
       <div className="flex-1">{children}</div>
       <Footer />
