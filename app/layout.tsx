@@ -37,13 +37,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <AppProvider>
-          <header>
-            <Navigation2 />
-          </header>
-
           <SmoothScroll>{children}</SmoothScroll>
-
-          <Footer />
         </AppProvider>
       </body>
     </html>
