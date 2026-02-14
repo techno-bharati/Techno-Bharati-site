@@ -1,21 +1,17 @@
-import { EventCards } from "@/components/landing/EventCards";
-import { Features } from "@/components/landing/Features";
-import { Footer } from "@/components/landing/Footer";
 import { Hero2 } from "@/components/landing/Hero2";
+import EventHightlights from "@/components/landing/EventHightlights";
+import { FeaturedEvents } from "@/components/landing/FeaturedEvents";
 import { Sponsors } from "@/components/landing/Sponsors";
-import ImageCarousel from "@/components/landing/ImageCarousel";
-import { Navigation2 } from "@/components/landing/Navigation2";
+import ReadyToJoin from "@/components/landing/ReadyToJoin";
 
 export default function Home() {
   return (
     <>
-      <Navigation2 />
       <Hero2 />
-      <ImageCarousel />
-      <EventCards />
+      <EventHightlights />
+      <FeaturedEvents />
       <Sponsors />
-      <Features />
-      <Footer />
+      <ReadyToJoin />
     </>
   );
 }
