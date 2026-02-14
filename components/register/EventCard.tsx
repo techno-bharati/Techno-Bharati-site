@@ -35,6 +35,7 @@ const EventCard = ({
       initial="initial"
       animate="animate"
       custom={index}
+      className="z-30"
     >
       <Card className="min-h-full flex flex-col justify-between h-full shadow-sm border bg-card rounded-xl transition-colors">
         <CardHeader>
