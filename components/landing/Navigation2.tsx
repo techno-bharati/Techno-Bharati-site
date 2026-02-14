@@ -3,7 +3,9 @@
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
+import { zenDots } from "@/lib/fonts";
+import ThemeToogle from "./ThemeToggle";
 
 export function Navigation2() {
   const [isOpen, setIsOpen] = useState(false);
@@ -45,20 +47,22 @@ export function Navigation2() {
 
   return (
     <motion.nav
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      className="sticky top-0 w-full z-50 bg-background/80 backdrop-blur-sm border-b border-muted"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-md border-b border-muted px-4"
     >
-      <div className="container mx-auto px-4">
+      <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <motion.button
-            whileHover={{ scale: 1.05 }}
+            whileHover={{ scale: 1.01 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => handleNavigation("/")}
             className="flex items-center space-x-2"
           >
-            <span className="font-mono text-xl">INFUSION AI</span>
+            <span className={`font-mono text-xl ${zenDots.className}`}>
+              INFUSION AI
+            </span>
           </motion.button>
 
           {/* Desktop Navigation */}
@@ -74,6 +78,7 @@ export function Navigation2() {
                 {link.label}
               </motion.button>
             ))}
+            <ThemeToogle />
           </div>
 
           {/* Mobile Menu Button */}
@@ -111,6 +116,7 @@ export function Navigation2() {
                 </motion.button>
               ))}
             </div>
+            <ThemeToogle className="w-fit" />
           </motion.div>
         )}
       </AnimatePresence>
