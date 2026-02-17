@@ -265,9 +265,7 @@ export function VerifyDialog({
                                   : `Player ${index + 1}`}
                                 : {player.playerName}
                               </p>
-                              <p className="ml-4">
-                                FreeFire ID: {player.freeFireId}
-                              </p>
+                              <p className="ml-4">BGMI ID: {player.bgmiId}</p>
                               <p className="ml-4">
                                 Contact: {player.contactNumber}
                               </p>

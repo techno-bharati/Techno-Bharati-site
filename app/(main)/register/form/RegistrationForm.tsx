@@ -40,7 +40,7 @@ export type EventNameOption =
   | "Startup Sphere"
   | "Face To Face"
   | "Python Worriors"
-  | "FreeFire Battleship"
+  | "BGMI"
   | "AI Tales"
   | "Techno Science Quiz"
   | "Poster Competition"
@@ -334,9 +334,7 @@ const RegistrationForm = ({
                       <SelectItem value="Python Worriors">
                         Python Warriors
                       </SelectItem>
-                      {/* <SelectItem value="FreeFire Battleship">
-                        FreeFire Battleship
-                      </SelectItem> */}
+                      <SelectItem value="BGMI">BGMI</SelectItem>
                       <SelectItem value="AI Tales">AI Tales</SelectItem>
                       <SelectItem value="Techno Science Quiz">
                         Techno Science Quiz (GE)
@@ -566,7 +564,7 @@ const RegistrationForm = ({
             </>
           )}
 
-          {selectedEvent === "FreeFire Battleship" && (
+          {selectedEvent === "BGMI" && (
             <>
               <FormField
                 control={form.control}
@@ -612,13 +610,13 @@ const RegistrationForm = ({
                     />
                     <FormField
                       control={form.control}
-                      name={`players.${index}.freeFireId`}
+                      name={`players.${index}.bgmiId`}
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Free Fire ID</FormLabel>
+                          <FormLabel>BGMI ID</FormLabel>
                           <FormControl>
                             <Input
-                              placeholder="Enter Free Fire ID"
+                              placeholder="Enter BGMI ID"
                               {...field}
                               disabled={isPending}
                             />

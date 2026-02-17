@@ -140,11 +140,11 @@ model TeamMember {
   @@index([registrationId])
 }
 
-// create these records only for FireFire Battleship
+// create these records only for BGMI squad registrations
 model Player {
   id            String   @id @default(cuid())
   playerName    String
-  freeFireId    String
+  bgmiId        String
   contactNumber String
   createdAt     DateTime @default(now())
 
@@ -158,7 +158,7 @@ enum EventType {
   STARTUP_SPHERE
   FACE_TO_FACE
   PYTHON_WARRIORS
-  FREEFIRE_BATTLESHIP
+  BGMI
   AI_TALES
   // General Engineering department
   GE_TECHNO_SCIENCE_QUIZ

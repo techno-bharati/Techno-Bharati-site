@@ -114,7 +114,7 @@ export default function DashboardPage() {
         { value: "STARTUP_SPHERE", label: "Startup Sphere" },
         { value: "FACE_TO_FACE", label: "Face To Face" },
         { value: "PYTHON_WARRIORS", label: "Python Warriors" },
-        { value: "FREEFIRE_BATTLESHIP", label: "FreeFire Battleship" },
+        { value: "BGMI", label: "BGMI" },
         { value: "AI_TALES", label: "AI Tales" },
         { value: "GE_TECHNO_SCIENCE_QUIZ", label: "Techno Science Quiz" },
         { value: "GE_POSTER_COMPETITION", label: "Poster Competition" },
@@ -134,7 +134,7 @@ export default function DashboardPage() {
         { value: "STARTUP_SPHERE", label: "Startup Sphere" },
         { value: "FACE_TO_FACE", label: "Face To Face" },
         { value: "PYTHON_WARRIORS", label: "Python Warriors" },
-        { value: "FREEFIRE_BATTLESHIP", label: "FreeFire Battleship" },
+        { value: "BGMI", label: "BGMI" },
         { value: "AI_TALES", label: "AI Tales" },
       ],
       CSE: [

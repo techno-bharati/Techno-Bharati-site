@@ -13,7 +13,7 @@ const slugToEventName: Record<string, EventNameOption> = {
   "startup-sphere": "Startup Sphere",
   "face-to-face": "Face To Face",
   "python-warriors": "Python Worriors",
-  freefire: "FreeFire Battleship",
+  bgmi: "BGMI",
   "ai-tales": "AI Tales",
   // ge (technical)
   "techno-science-quiz": "Techno Science Quiz",

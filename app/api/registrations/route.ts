@@ -140,7 +140,7 @@ export async function GET(req: Request) {
         (stats[4]._sum.numberOfTeamMembers || 0) + stats[5] + stats[6];
     } else if (eventType === "STARTUP_SPHERE") {
       totalParticipants = stats[4]._sum.numberOfTeamMembers || 0;
-    } else if (eventType === "FREEFIRE_BATTLESHIP") {
+    } else if (eventType === "BGMI") {
       totalParticipants = stats[0] * 4;
     } else {
       totalParticipants = stats[0];

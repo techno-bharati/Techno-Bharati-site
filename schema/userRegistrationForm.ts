@@ -33,7 +33,7 @@ const fireFireBattleshipSchema = z.object({
     .array(
       z.object({
         playerName: z.string().min(1, "Player name is required"),
-        freeFireId: z.string().min(1, "Free Fire ID is required"),
+        bgmiId: z.string().min(1, "BGMI ID is required"),
         contactNumber: z
           .string()
           .min(10, "Contact number must be at least 10 digits"),
@@ -91,7 +91,7 @@ export const userRegistrationFormSchema = z
         "Startup Sphere",
         "Face To Face",
         "Python Worriors",
-        "FreeFire Battleship",
+        "BGMI",
         "AI Tales",
         // General Engineering (Technical)
         "Techno Science Quiz",
@@ -145,9 +145,7 @@ export const userRegistrationFormSchema = z
       z
         .object({ events: z.literal("Python Worriors") })
         .merge(pythonWorriorsSchema),
-      z
-        .object({ events: z.literal("FreeFire Battleship") })
-        .merge(fireFireBattleshipSchema),
+      z.object({ events: z.literal("BGMI") }).merge(fireFireBattleshipSchema),
       z.object({ events: z.literal("AI Tales") }).merge(aiTalesSchema),
       z
         .object({ events: z.literal("Techno Science Quiz") })

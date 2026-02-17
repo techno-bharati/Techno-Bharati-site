@@ -1290,7 +1290,7 @@ export type TeamMemberScalarFieldEnum =
 export const PlayerScalarFieldEnum = {
   id: "id",
   playerName: "playerName",
-  freeFireId: "freeFireId",
+  bgmiId: "bgmiId",
   contactNumber: "contactNumber",
   createdAt: "createdAt",
   registrationId: "registrationId",

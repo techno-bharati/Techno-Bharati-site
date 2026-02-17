@@ -25,7 +25,7 @@ export async function createRegistration(
       "Startup Sphere": EventType.STARTUP_SPHERE,
       "Face To Face": EventType.FACE_TO_FACE,
       "Python Worriors": EventType.PYTHON_WARRIORS,
-      "FreeFire Battleship": EventType.FREEFIRE_BATTLESHIP,
+      BGMI: EventType.BGMI,
       "AI Tales": EventType.AI_TALES,
       "Techno Science Quiz": EventType.GE_TECHNO_SCIENCE_QUIZ,
       "Poster Competition": EventType.GE_POSTER_COMPETITION,
@@ -64,9 +64,8 @@ export async function createRegistration(
           : 1;
       const fee = getEventFeeByName(eventName, teamSize);
 
-      if (eventName === "Startup Sphere") {
-        return fee ?? 0;
-      } else if (eventName === "FreeFire Battleship") {
+      // Startup Sphere and BGMI both use calculated fees
+      if (eventName === "Startup Sphere" || eventName === "BGMI") {
         return fee ?? 0;
       }
 
@@ -98,8 +97,8 @@ export async function createRegistration(
     };
 
     try {
-      if (formData.events === "FreeFire Battleship") {
-        console.log("Creating FreeFire registration with data:", {
+      if (formData.events === "BGMI") {
+        console.log("Creating BGMI registration with data:", {
           squadName: formData.squadName,
           leaderEmail: formData.players[0].email,
           playerCount: formData.players.length,
@@ -132,7 +131,7 @@ export async function createRegistration(
                   },
                 }),
               }
-            : formData.events === "FreeFire Battleship"
+            : formData.events === "BGMI"
               ? {
                   ...baseData,
                   squadName: formData.squadName,
@@ -141,7 +140,7 @@ export async function createRegistration(
                   players: {
                     create: formData.players.map((player) => ({
                       playerName: player.playerName,
-                      freeFireId: player.freeFireId,
+                      bgmiId: player.bgmiId,
                       contactNumber: player.contactNumber,
                     })),
                   },
