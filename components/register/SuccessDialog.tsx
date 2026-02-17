@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import { CheckCircle2 } from "lucide-react";
+import { ArrowLeft, CheckCircle2 } from "lucide-react";
 
 interface SuccessDialogProps {
   open: boolean;
@@ -21,7 +21,7 @@ export function SuccessDialog({ open, onOpenChange }: SuccessDialogProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md sm:rounded-xl">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <CheckCircle2 className="h-6 w-6 text-green-500" />
@@ -32,8 +32,12 @@ export function SuccessDialog({ open, onOpenChange }: SuccessDialogProps) {
             within 24 hours.
           </DialogDescription>
         </DialogHeader>
-        <div className="flex justify-center">
-          <Button onClick={() => router.push("/")} className="w-full sm:w-auto">
+        <div className="flex justify-center w-full">
+          <Button
+            onClick={() => router.push("/")}
+            className="w-full text-white group rounded-xl leading-3"
+          >
+            <ArrowLeft className="group-hover:-translate-x-1 transition-transform" />
             Return to Home
           </Button>
         </div>

@@ -69,11 +69,7 @@ export const ThemeSwitcher = ({ className }: ThemeSwitcherProps) => {
             type="button"
           >
             {isActive && (
-              <motion.div
-                className="absolute inset-0 rounded-full bg-secondary"
-                layoutId="activeTheme"
-                transition={{ type: "spring", duration: 0.5 }}
-              />
+              <div className="absolute inset-0 rounded-full bg-secondary" />
             )}
             <Icon
               className={cn(
