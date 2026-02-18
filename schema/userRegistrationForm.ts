@@ -106,7 +106,7 @@ export const userRegistrationFormSchema = z
         // CSE department
         "CODEFUSION",
         "Project Expo",
-        "Counter Strike",
+        "Treasure Hunt",
       ],
       {
         required_error: "Please select an event",
@@ -169,7 +169,7 @@ export const userRegistrationFormSchema = z
       z.object({ events: z.literal("CODEFUSION") }).merge(cseTechnicalSchema),
       z.object({ events: z.literal("Project Expo") }).merge(cseTechnicalSchema),
       z
-        .object({ events: z.literal("Counter Strike") })
+        .object({ events: z.literal("Treasure Hunt") })
         .merge(cseTechnicalSchema),
     ])
   );

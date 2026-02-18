@@ -58,6 +58,10 @@ export const EVENT_FEES: Record<string, EventFee> = {
     amount: 100,
     type: "per person",
   },
+  CSE_TREASURE_HUNT: {
+    amount: 100,
+    type: "per person",
+  },
 } as const;
 
 export interface Event {
@@ -359,8 +363,8 @@ export const CSE_EVENTS: Event[] = [
   },
   {
     id: 3,
-    name: "Counter Strike",
-    slug: "counter-strike",
+    name: "Treasure Hunt",
+    slug: "treasure-hunt",
     department: "CSE",
     date: "2026-02-28",
     time: "10:00 AM",
@@ -370,7 +374,7 @@ export const CSE_EVENTS: Event[] = [
     modalData: {
       eventName: "Treasure Hunt",
       description:
-        "Counter Strike is a team based game where two teams of 5 players each compete to win the game.",
+        "Treasure Hunt is a team based game where two teams of 5 players each compete to win the game.",
       rules: [],
       registration: ["Entry Fee Rs. 100 per participant"],
       queries: {
@@ -1096,7 +1100,7 @@ export const getEventFeeByName = (eventName: string, teamSize?: number) => {
     Videography: "CE_VIDEOGRAPHY",
     CODEFUSION: "CSE_CODEFUSION",
     "Project Expo": "CSE_PROJECT_EXPO",
-    "Counter Strike": "CSE_COUNTER_STRIKE",
+    "Treasure Hunt": "CSE_TREASURE_HUNT",
   } as const;
 
   const eventType = eventMap[eventName as keyof typeof eventMap];

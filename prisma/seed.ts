@@ -162,11 +162,11 @@ async function main() {
       department: Department.CSE,
     },
     {
-      email: "cse.counterstrike@technobharati.com",
-      password: "cse@counterstrike",
-      name: "CSE Counter Strike Admin",
+      email: "cse.treasurehunt@technobharati.com",
+      password: "cse@treasurehunt",
+      name: "CSE Treasure Hunt Admin",
       role: AdminRole.EVENT_ADMIN,
-      eventType: EventType.CSE_COUNTER_STRIKE,
+      eventType: EventType.CSE_TREASURE_HUNT,
       department: Department.CSE,
     },
   ];
@@ -184,7 +184,8 @@ async function main() {
       {
         collegeName: "Bharati Vidyapeeth College of Engineering, Kolhapur",
         eventType: EventType.STARTUP_SPHERE,
-        paymentScreenshot: "https://example.com/seed/startup-sphere.png",
+        paymentScreenshot:
+          "https://res.cloudinary.com/dtxqfmc0h/image/upload/v1771329696/wgjs52apcz6xliwknobx.png",
         amount: 500,
         paymentMode: "ONLINE",
         department: Department.AIML,
@@ -366,18 +367,6 @@ async function main() {
         studentName: "CSE Project Expo Participant 1",
         contactNumber: "6666660002",
         email: "cse2@example.com",
-      },
-      {
-        collegeName: "Bharati Vidyapeeth College of Engineering, Kolhapur",
-        eventType: EventType.CSE_COUNTER_STRIKE,
-        paymentScreenshot: "https://example.com/seed/cse-counter-strike.png",
-        amount: 100,
-        paymentMode: "OFFLINE",
-        department: Department.CSE,
-        class: "first year",
-        studentName: "CSE Counter Strike Participant 1",
-        contactNumber: "6666660003",
-        email: "cse3@example.com",
       },
     ],
   });

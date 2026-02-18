@@ -23,7 +23,7 @@ export const EventType = {
   CE_VIDEOGRAPHY: "CE_VIDEOGRAPHY",
   CSE_CODEFUSION: "CSE_CODEFUSION",
   CSE_PROJECT_EXPO: "CSE_PROJECT_EXPO",
-  CSE_COUNTER_STRIKE: "CSE_COUNTER_STRIKE",
+  CSE_TREASURE_HUNT: "CSE_TREASURE_HUNT",
 } as const;
 
 export type EventType = (typeof EventType)[keyof typeof EventType];

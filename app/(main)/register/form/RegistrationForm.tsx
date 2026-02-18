@@ -51,7 +51,7 @@ export type EventNameOption =
   | "Videography"
   | "CODEFUSION"
   | "Project Expo"
-  | "Counter Strike";
+  | "Treasure Hunt";
 
 interface RegistrationFormProps {
   /**
@@ -385,7 +385,7 @@ const RegistrationForm = ({
             selectedEvent === "Videography" ||
             selectedEvent === "CODEFUSION" ||
             selectedEvent === "Project Expo" ||
-            selectedEvent === "Counter Strike") && (
+            selectedEvent === "Treasure Hunt") && (
             <>
               <FormField
                 control={form.control}

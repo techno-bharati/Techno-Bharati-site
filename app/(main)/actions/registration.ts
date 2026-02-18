@@ -36,7 +36,7 @@ export async function createRegistration(
       Videography: EventType.CE_VIDEOGRAPHY,
       CODEFUSION: EventType.CSE_CODEFUSION,
       "Project Expo": EventType.CSE_PROJECT_EXPO,
-      "Counter Strike": EventType.CSE_COUNTER_STRIKE,
+      "Treasure Hunt": EventType.CSE_TREASURE_HUNT,
     } as const;
 
     const calculateTotalFee = (data: typeof formData) => {

@@ -172,7 +172,7 @@ enum EventType {
   // CSE department
   CSE_CODEFUSION
   CSE_PROJECT_EXPO
-  CSE_COUNTER_STRIKE
+  CSE_TREASURE_HUNT
 }
 
 enum RegistrationStatus {
