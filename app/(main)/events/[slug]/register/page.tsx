@@ -37,6 +37,10 @@ const slugToEventName: Record<string, EventNameOption> = {
   codefusion: "CODEFUSION",
   "project-expo": "Project Expo",
   "treasure-hunt": "Treasure Hunt",
+  // Mechanical department
+  "mech-project-expo": "Mech Project Expo",
+  "mech-junk-yard": "Mech Junk Yard",
+  "mech-ipl-auction": "Mech IPL Auction",
 };
 
 export default async function EventRegisterPage({ params }: PageProps) {

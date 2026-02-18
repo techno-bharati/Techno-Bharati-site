@@ -61,6 +61,9 @@ const generalEngineeringTechnicalSchema = pythonWorriorsSchema;
 const civilTechnicalSchema = pythonWorriorsSchema; // Same as individual events: name, contact, email
 const cseTechnicalSchema = pythonWorriorsSchema; // CSE events: student name, contact, email
 
+// Mechanical events use the same individual participant schema
+const mechTechnicalSchema = pythonWorriorsSchema;
+
 const generalEngineeringGamesBundleSchema = z.object({
   selectedGames: z
     .array(z.string().min(1))
@@ -111,6 +114,9 @@ export const userRegistrationFormSchema = z
         "CODEFUSION",
         "Project Expo",
         "Treasure Hunt",
+        "Mech Project Expo",
+        "Mech Junk Yard",
+        "Mech IPL Auction",
       ],
       {
         required_error: "Please select an event",
@@ -184,5 +190,14 @@ export const userRegistrationFormSchema = z
       z
         .object({ events: z.literal("Treasure Hunt") })
         .merge(cseTechnicalSchema),
+      z
+        .object({ events: z.literal("Mech Project Expo") })
+        .merge(mechTechnicalSchema),
+      z
+        .object({ events: z.literal("Mech Junk Yard") })
+        .merge(mechTechnicalSchema),
+      z
+        .object({ events: z.literal("Mech IPL Auction") })
+        .merge(mechTechnicalSchema),
     ])
   );

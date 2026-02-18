@@ -54,7 +54,10 @@ export type EventNameOption =
   | "Videography"
   | "CODEFUSION"
   | "Project Expo"
-  | "Treasure Hunt";
+  | "Treasure Hunt"
+  | "Mech Project Expo"
+  | "Mech Junk Yard"
+  | "Mech IPL Auction";
 
 interface RegistrationFormProps {
   /**
@@ -378,6 +381,15 @@ const RegistrationForm = ({
                       <SelectItem value="Treasure Hunt">
                         Treasure Hunt (CSE)
                       </SelectItem>
+                      <SelectItem value="Mech Project Expo">
+                        Mech Project Expo (Mechanical)
+                      </SelectItem>
+                      <SelectItem value="Mech Junk Yard">
+                        Mech Junk Yard (Mechanical)
+                      </SelectItem>
+                      <SelectItem value="Mech IPL Auction">
+                        Mech IPL Auction (Mechanical)
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -400,7 +412,10 @@ const RegistrationForm = ({
             selectedEvent === "Videography" ||
             selectedEvent === "CODEFUSION" ||
             selectedEvent === "Project Expo" ||
-            selectedEvent === "Treasure Hunt") && (
+            selectedEvent === "Treasure Hunt" ||
+            selectedEvent === "Mech Project Expo" ||
+            selectedEvent === "Mech Junk Yard" ||
+            selectedEvent === "Mech IPL Auction") && (
             <>
               <FormField
                 control={form.control}

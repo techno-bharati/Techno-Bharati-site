@@ -27,6 +27,9 @@ export const EventType = {
   CSE_CODEFUSION: "CSE_CODEFUSION",
   CSE_PROJECT_EXPO: "CSE_PROJECT_EXPO",
   CSE_TREASURE_HUNT: "CSE_TREASURE_HUNT",
+  MECH_PROJECT_EXPO: "MECH_PROJECT_EXPO",
+  MECH_JUNK_YARD: "MECH_JUNK_YARD",
+  MECH_IPL_AUCTION: "MECH_IPL_AUCTION",
 } as const;
 
 export type EventType = (typeof EventType)[keyof typeof EventType];

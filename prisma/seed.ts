@@ -222,6 +222,16 @@ async function main() {
       eventType: "ENTC_SNAP_AND_SHINE" as unknown as EventType,
       department: Department.ENTC,
     },
+    // Mechanical department events
+    {
+      eventType: EventType.MECH_PROJECT_EXPO,
+      department: Department.MECHANICAL,
+    },
+    { eventType: EventType.MECH_JUNK_YARD, department: Department.MECHANICAL },
+    {
+      eventType: EventType.MECH_IPL_AUCTION,
+      department: Department.MECHANICAL,
+    },
   ];
   for (const ev of events) {
     await db.event.upsert({

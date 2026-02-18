@@ -132,6 +132,9 @@ export default function DashboardPage() {
         { value: "CSE_CODEFUSION", label: "CODEFUSION" },
         { value: "CSE_PROJECT_EXPO", label: "Project Expo" },
         { value: "CSE_TREASURE_HUNT", label: "Treasure Hunt" },
+        { value: "MECH_PROJECT_EXPO", label: "Mech Project Expo" },
+        { value: "MECH_JUNK_YARD", label: "Mech Junk Yard" },
+        { value: "MECH_IPL_AUCTION", label: "Mech IPL Auction" },
       ],
       AIML: [
         { value: "STARTUP_SPHERE", label: "Startup Sphere" },
@@ -160,9 +163,14 @@ export default function DashboardPage() {
         { value: "CE_VIDEOGRAPHY", label: "Videography" },
       ],
       ENTC: [
-        { value: "ENTC_PROJECT_EXPO", label: "ENTC Project Expo" },
+        { value: "ENTC_PROJECT_EXPO", label: "Project Expo" },
         { value: "ENTC_DIGITAL_DANGAL", label: "Digital Dangal" },
         { value: "ENTC_SNAP_AND_SHINE", label: "Snap & Shine" },
+      ],
+      MECHANICAL: [
+        { value: "MECH_PROJECT_EXPO", label: "Project Expo" },
+        { value: "MECH_JUNK_YARD", label: "Junk Yard" },
+        { value: "MECH_IPL_AUCTION", label: "IPL Auction" },
       ],
     };
 

@@ -40,6 +40,10 @@ export async function createRegistration(
       CODEFUSION: EventType.CSE_CODEFUSION,
       "Project Expo": EventType.CSE_PROJECT_EXPO,
       "Treasure Hunt": EventType.CSE_TREASURE_HUNT,
+      // Mechanical events
+      "Mech Project Expo": EventType.MECH_PROJECT_EXPO,
+      "Mech Junk Yard": EventType.MECH_JUNK_YARD,
+      "Mech IPL Auction": EventType.MECH_IPL_AUCTION,
     } as const;
 
     const calculateTotalFee = (data: typeof formData) => {

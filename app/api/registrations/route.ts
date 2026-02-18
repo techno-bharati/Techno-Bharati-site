@@ -38,6 +38,11 @@ const DEPARTMENT_EVENT_TYPES: Partial<Record<Department, EventType[]>> = {
     EventType.ENTC_DIGITAL_DANGAL,
     EventType.ENTC_SNAP_AND_SHINE,
   ],
+  MECHANICAL: [
+    EventType.MECH_PROJECT_EXPO,
+    EventType.MECH_JUNK_YARD,
+    EventType.MECH_IPL_AUCTION,
+  ],
 };
 
 interface JWTPayload {

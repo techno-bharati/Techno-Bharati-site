@@ -1,11 +1,10 @@
-
 generator client {
   provider = "prisma-client"
   output   = "./generated/prisma"
 }
 
 datasource db {
-  provider  = "postgresql"
+  provider = "postgresql"
 }
 
 model User {
@@ -187,6 +186,10 @@ enum EventType {
   CSE_CODEFUSION
   CSE_PROJECT_EXPO
   CSE_TREASURE_HUNT
+  // Mechanical department
+  MECH_PROJECT_EXPO
+  MECH_JUNK_YARD
+  MECH_IPL_AUCTION
 }
 
 enum RegistrationStatus {
@@ -204,17 +207,17 @@ enum PaymentStatus {
 }
 
 model Admin {
-  id        String     @id @default(uuid())
-  email     String     @unique
-  password  String // Hashed password
-  name      String
-  role      AdminRole  @default(EVENT_ADMIN)
+  id         String      @id @default(uuid())
+  email      String      @unique
+  password   String // Hashed password
+  name       String
+  role       AdminRole   @default(EVENT_ADMIN)
   /// For EVENT_ADMIN this scopes access to a single event.
-  eventType EventType?
+  eventType  EventType?
   /// For department-level admins, this scopes access to a single department.
   department Department?
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
 }
 
 enum AdminRole {
