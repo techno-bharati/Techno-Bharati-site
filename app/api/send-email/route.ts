@@ -23,7 +23,7 @@ export async function POST(req: Request) {
 
     let participantDetails = "";
     if (
-      ["FACE_TO_FACE", "PYTHON_WARRIORS", "AI_TALES"].includes(
+      ["FACE_TO_FACE", "PYTHON_FRONTIERS", "AI_TALES"].includes(
         registration.eventType
       )
     ) {

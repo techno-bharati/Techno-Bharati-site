@@ -39,7 +39,7 @@ import { Separator } from "@/components/ui/separator";
 export type EventNameOption =
   | "Startup Sphere"
   | "Face To Face"
-  | "Python Worriors"
+  | "Python Frontiers"
   | "BGMI"
   | "AI Tales"
   | "Techno Science Quiz"
@@ -331,8 +331,8 @@ const RegistrationForm = ({
                         Startup Sphere
                       </SelectItem>
                       <SelectItem value="Face To Face">Face To Face</SelectItem>
-                      <SelectItem value="Python Worriors">
-                        Python Warriors
+                      <SelectItem value="Python Frontiers">
+                        Python Frontiers
                       </SelectItem>
                       <SelectItem value="BGMI">BGMI</SelectItem>
                       <SelectItem value="AI Tales">AI Tales</SelectItem>
@@ -363,8 +363,8 @@ const RegistrationForm = ({
                       <SelectItem value="Project Expo">
                         Project Expo (CSE)
                       </SelectItem>
-                      <SelectItem value="Counter Strike">
-                        Counter Strike (CSE)
+                      <SelectItem value="Treasure Hunt">
+                        Treasure Hunt (CSE)
                       </SelectItem>
                     </SelectContent>
                   </Select>
@@ -375,7 +375,7 @@ const RegistrationForm = ({
           )}
 
           {(selectedEvent === "Face To Face" ||
-            selectedEvent === "Python Worriors" ||
+            selectedEvent === "Python Frontiers" ||
             selectedEvent === "AI Tales" ||
             selectedEvent === "Techno Science Quiz" ||
             selectedEvent === "Poster Competition" ||

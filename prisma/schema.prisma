@@ -154,10 +154,20 @@ model Player {
   @@index([registrationId])
 }
 
+model Event {
+  id         String     @id @default(cuid())
+  eventType  EventType  @unique
+  department Department
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  @@index([department])
+}
+
 enum EventType {
   STARTUP_SPHERE
   FACE_TO_FACE
-  PYTHON_WARRIORS
+  PYTHON_FRONTIERS
   BGMI
   AI_TALES
   // General Engineering department

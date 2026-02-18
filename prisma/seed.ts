@@ -52,9 +52,9 @@ async function main() {
     {
       email: "pythonwarriors.admin@technobharati.com",
       password: "python@admin",
-      name: "Python Warriors Admin",
+      name: "Python Frontiers Admin",
       role: AdminRole.EVENT_ADMIN,
-      eventType: EventType.PYTHON_WARRIORS,
+      eventType: EventType.PYTHON_FRONTIERS,
       department: Department.AIML,
     },
     {
@@ -179,6 +179,46 @@ async function main() {
     });
   }
 
+  // Seed Event table: links each event type to its organizing department.
+  // Used for filtering registrations by "event department" (e.g. AIML events),
+  // not by the student's department field on Registration.
+  const events: { eventType: EventType; department: Department }[] = [
+    { eventType: EventType.STARTUP_SPHERE, department: Department.AIML },
+    { eventType: EventType.FACE_TO_FACE, department: Department.AIML },
+    { eventType: EventType.PYTHON_FRONTIERS, department: Department.AIML },
+    { eventType: EventType.BGMI, department: Department.AIML },
+    { eventType: EventType.AI_TALES, department: Department.AIML },
+    {
+      eventType: EventType.GE_TECHNO_SCIENCE_QUIZ,
+      department: Department.GENERAL_ENGINEERING,
+    },
+    {
+      eventType: EventType.GE_POSTER_COMPETITION,
+      department: Department.GENERAL_ENGINEERING,
+    },
+    {
+      eventType: EventType.GE_SCITECH_MODEL_EXPO,
+      department: Department.GENERAL_ENGINEERING,
+    },
+    {
+      eventType: EventType.GE_GAMES_BUNDLE,
+      department: Department.GENERAL_ENGINEERING,
+    },
+    { eventType: EventType.CE_MODEL_MAKING, department: Department.CIVIL },
+    { eventType: EventType.CE_CAD_MASTER, department: Department.CIVIL },
+    { eventType: EventType.CE_VIDEOGRAPHY, department: Department.CIVIL },
+    { eventType: EventType.CSE_CODEFUSION, department: Department.CSE },
+    { eventType: EventType.CSE_PROJECT_EXPO, department: Department.CSE },
+    { eventType: EventType.CSE_TREASURE_HUNT, department: Department.CSE },
+  ];
+  for (const ev of events) {
+    await db.event.upsert({
+      where: { eventType: ev.eventType },
+      update: { department: ev.department },
+      create: ev,
+    });
+  }
+
   await db.registration.createMany({
     data: [
       {
@@ -208,7 +248,7 @@ async function main() {
       },
       {
         collegeName: "Bharati Vidyapeeth College of Engineering, Kolhapur",
-        eventType: EventType.PYTHON_WARRIORS,
+        eventType: EventType.PYTHON_FRONTIERS,
         paymentScreenshot: "https://example.com/seed/python-warriors.png",
         amount: 100,
         paymentMode: "OFFLINE",

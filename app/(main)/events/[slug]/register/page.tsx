@@ -12,7 +12,7 @@ interface PageProps {
 const slugToEventName: Record<string, EventNameOption> = {
   "startup-sphere": "Startup Sphere",
   "face-to-face": "Face To Face",
-  "python-warriors": "Python Worriors",
+  "python-frontiers": "Python Frontiers",
   bgmi: "BGMI",
   "ai-tales": "AI Tales",
   // ge (technical)

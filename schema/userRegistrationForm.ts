@@ -55,7 +55,7 @@ const pythonWorriorsSchema = z.object({
   email: z.string().email("Invalid email address"),
 });
 
-const aiTalesSchema = pythonWorriorsSchema; // Same as Python Warriors
+const aiTalesSchema = pythonWorriorsSchema; // Same as Python Frontiers
 
 const generalEngineeringTechnicalSchema = pythonWorriorsSchema;
 const civilTechnicalSchema = pythonWorriorsSchema; // Same as individual events: name, contact, email
@@ -90,7 +90,7 @@ export const userRegistrationFormSchema = z
       [
         "Startup Sphere",
         "Face To Face",
-        "Python Worriors",
+        "Python Frontiers",
         "BGMI",
         "AI Tales",
         // General Engineering (Technical)
@@ -143,7 +143,7 @@ export const userRegistrationFormSchema = z
         .merge(startupSphereSchema),
       z.object({ events: z.literal("Face To Face") }).merge(faceToFaceSchema),
       z
-        .object({ events: z.literal("Python Worriors") })
+        .object({ events: z.literal("Python Frontiers") })
         .merge(pythonWorriorsSchema),
       z.object({ events: z.literal("BGMI") }).merge(fireFireBattleshipSchema),
       z.object({ events: z.literal("AI Tales") }).merge(aiTalesSchema),

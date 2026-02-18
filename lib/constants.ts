@@ -20,7 +20,7 @@ export const EVENT_FEES: Record<string, EventFee> = {
     amount: 100,
     type: "per person",
   },
-  PYTHON_WARRIORS: {
+  PYTHON_FRONTIERS: {
     amount: 100,
     type: "per person",
   },
@@ -208,10 +208,10 @@ export const CSE_AIML_EVENTS: Event[] = [
     date: "28th Feb 2025",
     time: "2:00 PM - 5:00 PM",
     venue: "Bharati Vidyapeeth College of Engineering, Kolahpur",
-    entryFee: `${EVENT_FEES.PYTHON_WARRIORS.amount} (per person)`,
+    entryFee: `${EVENT_FEES.PYTHON_FRONTIERS.amount} (per person)`,
     type: "Technical Event",
     modalData: {
-      eventName: "Python Warriors",
+      eventName: "Python Frontiers",
       description:
         "A high-intensity inter-college coding battle designed to push your Python skills to the limit. Solve real-world challenges, optimize your code, and prove your supremacy in the coding arena!",
       rules: [
@@ -1091,8 +1091,7 @@ export const getEventFeeByName = (eventName: string, teamSize?: number) => {
   const eventMap = {
     "Startup Sphere": "STARTUP_SPHERE",
     "Face To Face": "FACE_TO_FACE",
-    "Python Worriors": "PYTHON_WARRIORS",
-    // BGMI uses its own fee key
+    "Python Frontiers": "PYTHON_FRONTIERS",
     BGMI: "BGMI",
     "AI Tales": "AI_TALES",
     "Model Making": "CE_MODEL_MAKING",

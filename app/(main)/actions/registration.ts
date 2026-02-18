@@ -24,7 +24,7 @@ export async function createRegistration(
     const eventTypeMap = {
       "Startup Sphere": EventType.STARTUP_SPHERE,
       "Face To Face": EventType.FACE_TO_FACE,
-      "Python Worriors": EventType.PYTHON_WARRIORS,
+      "Python Frontiers": EventType.PYTHON_FRONTIERS,
       BGMI: EventType.BGMI,
       "AI Tales": EventType.AI_TALES,
       "Techno Science Quiz": EventType.GE_TECHNO_SCIENCE_QUIZ,

@@ -154,7 +154,7 @@ export function VerifyDialog({
 
   if (!registration || !open) return null;
 
-  const isSoloEvent = ["FACE_TO_FACE", "PYTHON_WARRIORS", "AI_TALES"].includes(
+  const isSoloEvent = ["FACE_TO_FACE", "PYTHON_FRONTIERS", "AI_TALES"].includes(
     registration.eventType
   );
 

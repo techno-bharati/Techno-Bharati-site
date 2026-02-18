@@ -8,6 +8,33 @@ import {
   Department,
 } from "@/prisma/generated/prisma/client";
 
+/** Fallback: event types per department when Event table is empty or not seeded. */
+const DEPARTMENT_EVENT_TYPES: Partial<Record<Department, EventType[]>> = {
+  AIML: [
+    EventType.STARTUP_SPHERE,
+    EventType.FACE_TO_FACE,
+    EventType.PYTHON_FRONTIERS,
+    EventType.BGMI,
+    EventType.AI_TALES,
+  ],
+  GENERAL_ENGINEERING: [
+    EventType.GE_TECHNO_SCIENCE_QUIZ,
+    EventType.GE_POSTER_COMPETITION,
+    EventType.GE_SCITECH_MODEL_EXPO,
+    EventType.GE_GAMES_BUNDLE,
+  ],
+  CIVIL: [
+    EventType.CE_MODEL_MAKING,
+    EventType.CE_CAD_MASTER,
+    EventType.CE_VIDEOGRAPHY,
+  ],
+  CSE: [
+    EventType.CSE_CODEFUSION,
+    EventType.CSE_PROJECT_EXPO,
+    EventType.CSE_TREASURE_HUNT,
+  ],
+};
+
 interface JWTPayload {
   sub: string;
   email: string;
@@ -43,23 +70,43 @@ export async function GET(req: Request) {
       where.eventType = eventType as EventType;
     }
 
-    // Optional department filter for SUPER_ADMIN only
-    if (
+    // Helper: filter by event's department (from Event table), not student's department
+    const departmentForFilter =
       department &&
       department !== "all" &&
       payload.role === AdminRole.SUPER_ADMIN
-    ) {
-      where.department = department as Department;
+        ? (department as Department)
+        : payload.role === AdminRole.DEPARTMENT_ADMIN && payload.department
+          ? (payload.department as Department)
+          : null;
+
+    if (departmentForFilter) {
+      let eventTypesForDept: EventType[];
+      try {
+        const eventsForDept = await prisma.event.findMany({
+          where: { department: departmentForFilter },
+          select: { eventType: true },
+        });
+        eventTypesForDept = eventsForDept.map((e) => e.eventType);
+      } catch {
+        eventTypesForDept = [];
+      }
+      if (
+        eventTypesForDept.length === 0 &&
+        DEPARTMENT_EVENT_TYPES[departmentForFilter]
+      ) {
+        eventTypesForDept = DEPARTMENT_EVENT_TYPES[departmentForFilter]!;
+      }
+      if (eventTypesForDept.length > 0) {
+        where.eventType = { in: eventTypesForDept };
+      }
     }
+    // SUPER_ADMIN with no department filter: no extra where (sees all)
+    // DEPARTMENT_ADMIN: already applied above via departmentForFilter
 
     // EVENT_ADMIN is always locked to a single event, regardless of query param
     if (payload.role === AdminRole.EVENT_ADMIN && payload.eventType) {
       where.eventType = payload.eventType;
-    }
-
-    // Department-level admins can see all registrations for their department
-    if (payload.role === AdminRole.DEPARTMENT_ADMIN && payload.department) {
-      where.department = payload.department;
     }
 
     const [registrations, stats] = await Promise.all([
@@ -116,7 +163,7 @@ export async function GET(req: Request) {
             ...where,
             OR: [
               { eventType: "FACE_TO_FACE" },
-              { eventType: "PYTHON_WARRIORS" },
+              { eventType: "PYTHON_FRONTIERS" },
               { eventType: "AI_TALES" },
             ],
           },

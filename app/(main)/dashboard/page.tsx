@@ -113,7 +113,7 @@ export default function DashboardPage() {
       all: [
         { value: "STARTUP_SPHERE", label: "Startup Sphere" },
         { value: "FACE_TO_FACE", label: "Face To Face" },
-        { value: "PYTHON_WARRIORS", label: "Python Warriors" },
+        { value: "PYTHON_FRONTIERS", label: "Python Frontiers" },
         { value: "BGMI", label: "BGMI" },
         { value: "AI_TALES", label: "AI Tales" },
         { value: "GE_TECHNO_SCIENCE_QUIZ", label: "Techno Science Quiz" },
@@ -128,19 +128,19 @@ export default function DashboardPage() {
         { value: "CE_VIDEOGRAPHY", label: "Videography" },
         { value: "CSE_CODEFUSION", label: "CODEFUSION" },
         { value: "CSE_PROJECT_EXPO", label: "Project Expo" },
-        { value: "CSE_COUNTER_STRIKE", label: "Counter Strike" },
+        { value: "CSE_TREASURE_HUNT", label: "Treasure Hunt" },
       ],
       AIML: [
         { value: "STARTUP_SPHERE", label: "Startup Sphere" },
         { value: "FACE_TO_FACE", label: "Face To Face" },
-        { value: "PYTHON_WARRIORS", label: "Python Warriors" },
+        { value: "PYTHON_FRONTIERS", label: "Python Frontiers" },
         { value: "BGMI", label: "BGMI" },
         { value: "AI_TALES", label: "AI Tales" },
       ],
       CSE: [
         { value: "CSE_CODEFUSION", label: "CODEFUSION" },
         { value: "CSE_PROJECT_EXPO", label: "Project Expo" },
-        { value: "CSE_COUNTER_STRIKE", label: "Counter Strike" },
+        { value: "CSE_TREASURE_HUNT", label: "Treasure Hunt" },
       ],
       GENERAL_ENGINEERING: [
         { value: "GE_TECHNO_SCIENCE_QUIZ", label: "Techno Science Quiz" },
@@ -347,7 +347,7 @@ export default function DashboardPage() {
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:space-x-4">
         {adminRole === "SUPER_ADMIN" && (
           <Select
-            defaultValue="all"
+            value={departmentFilter}
             onValueChange={(value) => {
               setDepartmentFilter(value);
               // Reset event filter whenever department changes
