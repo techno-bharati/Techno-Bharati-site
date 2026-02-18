@@ -420,6 +420,7 @@ export const ModelName = {
   Registration: "Registration",
   TeamMember: "TeamMember",
   Player: "Player",
+  Event: "Event",
   Admin: "Admin",
 } as const;
 
@@ -451,6 +452,7 @@ export type TypeMap<
       | "registration"
       | "teamMember"
       | "player"
+      | "event"
       | "admin";
     txIsolationLevel: TransactionIsolationLevel;
   };
@@ -1063,6 +1065,82 @@ export type TypeMap<
         };
       };
     };
+    Event: {
+      payload: Prisma.$EventPayload<ExtArgs>;
+      fields: Prisma.EventFieldRefs;
+      operations: {
+        findUnique: {
+          args: Prisma.EventFindUniqueArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPayload> | null;
+        };
+        findUniqueOrThrow: {
+          args: Prisma.EventFindUniqueOrThrowArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPayload>;
+        };
+        findFirst: {
+          args: Prisma.EventFindFirstArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPayload> | null;
+        };
+        findFirstOrThrow: {
+          args: Prisma.EventFindFirstOrThrowArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPayload>;
+        };
+        findMany: {
+          args: Prisma.EventFindManyArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPayload>[];
+        };
+        create: {
+          args: Prisma.EventCreateArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPayload>;
+        };
+        createMany: {
+          args: Prisma.EventCreateManyArgs<ExtArgs>;
+          result: BatchPayload;
+        };
+        createManyAndReturn: {
+          args: Prisma.EventCreateManyAndReturnArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPayload>[];
+        };
+        delete: {
+          args: Prisma.EventDeleteArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPayload>;
+        };
+        update: {
+          args: Prisma.EventUpdateArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPayload>;
+        };
+        deleteMany: {
+          args: Prisma.EventDeleteManyArgs<ExtArgs>;
+          result: BatchPayload;
+        };
+        updateMany: {
+          args: Prisma.EventUpdateManyArgs<ExtArgs>;
+          result: BatchPayload;
+        };
+        updateManyAndReturn: {
+          args: Prisma.EventUpdateManyAndReturnArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPayload>[];
+        };
+        upsert: {
+          args: Prisma.EventUpsertArgs<ExtArgs>;
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPayload>;
+        };
+        aggregate: {
+          args: Prisma.EventAggregateArgs<ExtArgs>;
+          result: runtime.Types.Utils.Optional<Prisma.AggregateEvent>;
+        };
+        groupBy: {
+          args: Prisma.EventGroupByArgs<ExtArgs>;
+          result: runtime.Types.Utils.Optional<Prisma.EventGroupByOutputType>[];
+        };
+        count: {
+          args: Prisma.EventCountArgs<ExtArgs>;
+          result:
+            | runtime.Types.Utils.Optional<Prisma.EventCountAggregateOutputType>
+            | number;
+        };
+      };
+    };
     Admin: {
       payload: Prisma.$AdminPayload<ExtArgs>;
       fields: Prisma.AdminFieldRefs;
@@ -1298,6 +1376,17 @@ export const PlayerScalarFieldEnum = {
 
 export type PlayerScalarFieldEnum =
   (typeof PlayerScalarFieldEnum)[keyof typeof PlayerScalarFieldEnum];
+
+export const EventScalarFieldEnum = {
+  id: "id",
+  eventType: "eventType",
+  department: "department",
+  createdAt: "createdAt",
+  updatedAt: "updatedAt",
+} as const;
+
+export type EventScalarFieldEnum =
+  (typeof EventScalarFieldEnum)[keyof typeof EventScalarFieldEnum];
 
 export const AdminScalarFieldEnum = {
   id: "id",
@@ -1596,6 +1685,7 @@ export type GlobalOmitConfig = {
   registration?: Prisma.RegistrationOmit;
   teamMember?: Prisma.TeamMemberOmit;
   player?: Prisma.PlayerOmit;
+  event?: Prisma.EventOmit;
   admin?: Prisma.AdminOmit;
 };
 

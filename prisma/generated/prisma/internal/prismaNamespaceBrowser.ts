@@ -62,6 +62,7 @@ export const ModelName = {
   Registration: "Registration",
   TeamMember: "TeamMember",
   Player: "Player",
+  Event: "Event",
   Admin: "Admin",
 } as const;
 
@@ -201,6 +202,17 @@ export const PlayerScalarFieldEnum = {
 
 export type PlayerScalarFieldEnum =
   (typeof PlayerScalarFieldEnum)[keyof typeof PlayerScalarFieldEnum];
+
+export const EventScalarFieldEnum = {
+  id: "id",
+  eventType: "eventType",
+  department: "department",
+  createdAt: "createdAt",
+  updatedAt: "updatedAt",
+} as const;
+
+export type EventScalarFieldEnum =
+  (typeof EventScalarFieldEnum)[keyof typeof EventScalarFieldEnum];
 
 export const AdminScalarFieldEnum = {
   id: "id",

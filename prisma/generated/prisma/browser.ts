@@ -57,6 +57,13 @@ export type TeamMember = Prisma.TeamMemberModel;
  */
 export type Player = Prisma.PlayerModel;
 /**
+ * Model Event
+ * Links an event type to its organizing department. Used for filtering
+ * registrations by "event department" (e.g. AIML events) rather than
+ * the student's department field on Registration.
+ */
+export type Event = Prisma.EventModel;
+/**
  * Model Admin
  *
  */

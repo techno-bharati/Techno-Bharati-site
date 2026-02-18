@@ -15,5 +15,6 @@ export type * from "./models/Authenticator";
 export type * from "./models/Registration";
 export type * from "./models/TeamMember";
 export type * from "./models/Player";
+export type * from "./models/Event";
 export type * from "./models/Admin";
 export type * from "./commonInputTypes";
