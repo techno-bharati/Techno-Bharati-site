@@ -15,6 +15,10 @@ const slugToEventName: Record<string, EventNameOption> = {
   "python-frontiers": "Python Frontiers",
   bgmi: "BGMI",
   "ai-tales": "AI Tales",
+  // entc
+  "entc-project-expo": "ENTC Project Expo",
+  "digital-dangal": "Digital Dangal",
+  "snap-and-shine": "Snap & Shine",
   // ge (technical)
   "techno-science-quiz": "Techno Science Quiz",
   "poster-competition": "Poster Competition",

@@ -33,6 +33,11 @@ const DEPARTMENT_EVENT_TYPES: Partial<Record<Department, EventType[]>> = {
     EventType.CSE_PROJECT_EXPO,
     EventType.CSE_TREASURE_HUNT,
   ],
+  ENTC: [
+    EventType.ENTC_PROJECT_EXPO,
+    EventType.ENTC_DIGITAL_DANGAL,
+    EventType.ENTC_SNAP_AND_SHINE,
+  ],
 };
 
 interface JWTPayload {
@@ -220,6 +225,31 @@ export async function GET(req: Request) {
     });
   } catch (error) {
     console.error("Registration fetch error:", error);
+    const message = error instanceof Error ? error.message : String(error);
+
+    // If the DB hasn't been migrated to include some EventType values yet
+    // (common when filtering by a department that has no registrations),
+    // Postgres can throw: invalid input value for enum "EventType": "..."
+    // In that case, return a safe empty payload so the dashboard doesn't break.
+    if (
+      message.toLowerCase().includes("invalid input value for enum") &&
+      message.includes("EventType")
+    ) {
+      return NextResponse.json({
+        registrations: [],
+        stats: {
+          totalRegistrations: 0,
+          totalRevenue: 0,
+          totalRevenueForEvent: 0,
+          offlineRevenue: 0,
+          activeEvents: 0,
+          todayRegistrations: 0,
+          eventBreakdown: {} as Record<string, number>,
+          totalParticipants: 0,
+        },
+      });
+    }
+
     return NextResponse.json(
       { error: "Failed to fetch registrations" },
       { status: 500 }

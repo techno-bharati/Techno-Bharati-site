@@ -11,7 +11,7 @@ const EventsCard = () => {
     | "CSE (AIML)"
     | "CSE"
     | "MECH"
-    | "ECE"
+    | "ENTC"
     | "CIVIL"
     | "General Engineering";
 
@@ -20,7 +20,7 @@ const EventsCard = () => {
     deptFromUrl === "CSE (AIML)" ||
     deptFromUrl === "CSE" ||
     deptFromUrl === "MECH" ||
-    deptFromUrl === "ECE" ||
+    deptFromUrl === "ENTC" ||
     deptFromUrl === "CIVIL" ||
     deptFromUrl === "General Engineering"
       ? deptFromUrl
@@ -49,7 +49,7 @@ const EventsCard = () => {
           "CSE (AIML)",
           "CSE",
           "MECH",
-          "ECE",
+          "ENTC",
           "CIVIL",
           "General Engineering",
         ].map((dept) => (
@@ -62,7 +62,7 @@ const EventsCard = () => {
                   | "CSE (AIML)"
                   | "CSE"
                   | "MECH"
-                  | "ECE"
+                  | "ENTC"
                   | "CIVIL"
                   | "General Engineering"
               )

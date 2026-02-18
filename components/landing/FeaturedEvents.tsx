@@ -78,7 +78,7 @@ export function FeaturedEvents() {
     | "CSE (AIML)"
     | "CSE"
     | "MECH"
-    | "ECE"
+    | "ENTC"
     | "CIVIL"
     | "General Engineering";
 
@@ -127,7 +127,7 @@ export function FeaturedEvents() {
               "CSE (AIML)",
               "CSE",
               "MECH",
-              "ECE",
+              "ENTC",
               "CIVIL",
               "General Engineering",
             ].map((dept, index) => (
@@ -144,7 +144,7 @@ export function FeaturedEvents() {
                       | "CSE (AIML)"
                       | "CSE"
                       | "MECH"
-                      | "ECE"
+                      | "ENTC"
                       | "CIVIL"
                       | "General Engineering"
                   )

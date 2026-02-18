@@ -13,7 +13,7 @@ export default function EventsPageContent() {
     | "CSE (AIML)"
     | "CSE"
     | "MECH"
-    | "ECE"
+    | "ENTC"
     | "CIVIL"
     | "General Engineering";
 
@@ -22,7 +22,7 @@ export default function EventsPageContent() {
     deptFromUrl === "CSE (AIML)" ||
     deptFromUrl === "CSE" ||
     deptFromUrl === "MECH" ||
-    deptFromUrl === "ECE" ||
+    deptFromUrl === "ENTC" ||
     deptFromUrl === "CIVIL" ||
     deptFromUrl === "General Engineering"
       ? deptFromUrl
@@ -91,7 +91,7 @@ export default function EventsPageContent() {
           "CSE (AIML)",
           "CSE",
           "MECH",
-          "ECE",
+          "ENTC",
           "CIVIL",
           "General Engineering",
         ].map((dept, index) => (
@@ -108,7 +108,7 @@ export default function EventsPageContent() {
                   | "CSE (AIML)"
                   | "CSE"
                   | "MECH"
-                  | "ECE"
+                  | "ENTC"
                   | "CIVIL"
                   | "General Engineering"
               )

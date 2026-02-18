@@ -32,6 +32,19 @@ export const EVENT_FEES: Record<string, EventFee> = {
     amount: 100,
     type: "per person",
   },
+  // ENTC department
+  ENTC_PROJECT_EXPO: {
+    amount: 100,
+    type: "per person",
+  },
+  ENTC_DIGITAL_DANGAL: {
+    amount: 100,
+    type: "per person",
+  },
+  ENTC_SNAP_AND_SHINE: {
+    amount: 100,
+    type: "per person",
+  },
   // Civil Engineering department
   CE_MODEL_MAKING: {
     amount: 100,
@@ -683,19 +696,19 @@ export const MECH_EVENTS: Event[] = [
     },
   },
 ];
-export const ECE_EVENTS: Event[] = [
+export const ENTC_EVENTS: Event[] = [
   {
     id: 1,
     name: "Project Expo",
-    slug: "project-expo",
+    slug: "entc-project-expo",
     department: "Electronic and Telecommunication Engineering",
     date: "2026-02-28",
     time: "10:00 AM",
     venue: "Bharati Vidyapeeth's College of Engineering Kolhapur",
-    entryFee: "100",
+    entryFee: `${EVENT_FEES.ENTC_PROJECT_EXPO.amount} (per person)`,
     type: "Technical Event",
     modalData: {
-      eventName: "Project Expo",
+      eventName: "ENTC Project Expo",
       description: "Showcase your innovative engineering projects...",
       rules: ["Rule 1", "Rule 2"],
       registration: [""],
@@ -713,7 +726,7 @@ export const ECE_EVENTS: Event[] = [
     date: "2026-02-28",
     time: "10:00 AM",
     venue: "Bharati Vidyapeeth's College of Engineering Kolhapur",
-    entryFee: "100",
+    entryFee: `${EVENT_FEES.ENTC_DIGITAL_DANGAL.amount} (per person)`,
     type: "Technical Event",
     modalData: {
       eventName: "Digital Dangal",
@@ -734,7 +747,7 @@ export const ECE_EVENTS: Event[] = [
     date: "2026-02-28",
     time: "10:00 AM",
     venue: "Bharati Vidyapeeth's College of Engineering Kolhapur",
-    entryFee: "100",
+    entryFee: `${EVENT_FEES.ENTC_SNAP_AND_SHINE.amount} (per person)`,
     type: "Non-Technical Event",
     modalData: {
       eventName: "Snap & Shine",
@@ -1047,7 +1060,7 @@ export const EVENTS_BY_DEPARTMENT: Record<string, Event[]> = {
   "CSE (AIML)": CSE_AIML_EVENTS,
   CSE: CSE_EVENTS,
   MECH: MECH_EVENTS,
-  ECE: ECE_EVENTS,
+  ENTC: ENTC_EVENTS,
   CIVIL: CIVIL_EVENTS,
   "General Engineering": GENERAL_ENGINEERING_EVENTS,
 };
@@ -1063,7 +1076,7 @@ export const events = [
   ...CSE_AIML_EVENTS,
   ...CSE_EVENTS,
   ...CIVIL_EVENTS,
-  ...ECE_EVENTS,
+  ...ENTC_EVENTS,
   ...MECH_EVENTS,
   ...GENERAL_ENGINEERING_EVENTS,
 ];
@@ -1094,6 +1107,10 @@ export const getEventFeeByName = (eventName: string, teamSize?: number) => {
     "Python Frontiers": "PYTHON_FRONTIERS",
     BGMI: "BGMI",
     "AI Tales": "AI_TALES",
+    // ENTC events
+    "ENTC Project Expo": "ENTC_PROJECT_EXPO",
+    "Digital Dangal": "ENTC_DIGITAL_DANGAL",
+    "Snap & Shine": "ENTC_SNAP_AND_SHINE",
     "Model Making": "CE_MODEL_MAKING",
     "CAD Master": "CE_CAD_MASTER",
     Videography: "CE_VIDEOGRAPHY",

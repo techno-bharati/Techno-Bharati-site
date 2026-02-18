@@ -107,7 +107,7 @@ const EventDetailsPageContent = ({ slug }: { slug: string }) => {
     if (department === "CSE (AIML)") return "CSE (AIML)";
     if (department === "CSE") return "CSE";
     if (department === "MECH") return "MECH";
-    if (department === "ECE") return "ECE";
+    if (department === "ENTC") return "ENTC";
     // Fallback: don't force a department filter
     return null;
   };

@@ -93,6 +93,10 @@ export const userRegistrationFormSchema = z
         "Python Frontiers",
         "BGMI",
         "AI Tales",
+        // ENTC department
+        "ENTC Project Expo",
+        "Digital Dangal",
+        "Snap & Shine",
         // General Engineering (Technical)
         "Techno Science Quiz",
         "Poster Competition",
@@ -147,6 +151,15 @@ export const userRegistrationFormSchema = z
         .merge(pythonWorriorsSchema),
       z.object({ events: z.literal("BGMI") }).merge(fireFireBattleshipSchema),
       z.object({ events: z.literal("AI Tales") }).merge(aiTalesSchema),
+      z
+        .object({ events: z.literal("ENTC Project Expo") })
+        .merge(pythonWorriorsSchema),
+      z
+        .object({ events: z.literal("Digital Dangal") })
+        .merge(pythonWorriorsSchema),
+      z
+        .object({ events: z.literal("Snap & Shine") })
+        .merge(pythonWorriorsSchema),
       z
         .object({ events: z.literal("Techno Science Quiz") })
         .merge(generalEngineeringTechnicalSchema),

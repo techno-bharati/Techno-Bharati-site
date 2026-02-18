@@ -116,6 +116,9 @@ export default function DashboardPage() {
         { value: "PYTHON_FRONTIERS", label: "Python Frontiers" },
         { value: "BGMI", label: "BGMI" },
         { value: "AI_TALES", label: "AI Tales" },
+        { value: "ENTC_PROJECT_EXPO", label: "ENTC Project Expo" },
+        { value: "ENTC_DIGITAL_DANGAL", label: "Digital Dangal" },
+        { value: "ENTC_SNAP_AND_SHINE", label: "Snap & Shine" },
         { value: "GE_TECHNO_SCIENCE_QUIZ", label: "Techno Science Quiz" },
         { value: "GE_POSTER_COMPETITION", label: "Poster Competition" },
         {
@@ -156,33 +159,49 @@ export default function DashboardPage() {
         { value: "CE_CAD_MASTER", label: "CAD Master" },
         { value: "CE_VIDEOGRAPHY", label: "Videography" },
       ],
+      ENTC: [
+        { value: "ENTC_PROJECT_EXPO", label: "ENTC Project Expo" },
+        { value: "ENTC_DIGITAL_DANGAL", label: "Digital Dangal" },
+        { value: "ENTC_SNAP_AND_SHINE", label: "Snap & Shine" },
+      ],
     };
 
     if (!dept || dept === "all") return map.all;
     return map[dept] || map.all;
   };
 
-  const filteredRegistrations = registrationsData?.registrations?.filter(
-    (reg: any) => {
-      const matchesSearch =
-        reg.collegeName.toLowerCase().includes(search.toLowerCase()) ||
-        reg.studentName?.toLowerCase().includes(search.toLowerCase()) ||
-        reg.teamName?.toLowerCase().includes(search.toLowerCase()) ||
-        reg.squadName?.toLowerCase().includes(search.toLowerCase());
-      const matchesEvent =
-        adminRole === "EVENT_ADMIN"
-          ? reg.eventType === adminEventType
-          : eventFilter === "all" || reg.eventType === eventFilter;
+  const safeStats = registrationsData?.stats ?? {
+    totalRegistrations: 0,
+    totalRevenue: 0,
+    totalRevenueForEvent: 0,
+    offlineRevenue: 0,
+    activeEvents: 0,
+    todayRegistrations: 0,
+    eventBreakdown: {} as Record<string, number>,
+    totalParticipants: 0,
+  };
 
-      // Add payment mode filter
-      const matchesPaymentMode =
-        paymentModeFilter === "all" ||
-        (paymentModeFilter === "ONLINE" && reg.paymentMode === "ONLINE") ||
-        (paymentModeFilter === "OFFLINE" && reg.paymentMode === "OFFLINE");
+  const safeRegistrations = registrationsData?.registrations ?? [];
 
-      return matchesSearch && matchesEvent && matchesPaymentMode;
-    }
-  );
+  const filteredRegistrations = safeRegistrations.filter((reg: any) => {
+    const matchesSearch =
+      reg.collegeName.toLowerCase().includes(search.toLowerCase()) ||
+      reg.studentName?.toLowerCase().includes(search.toLowerCase()) ||
+      reg.teamName?.toLowerCase().includes(search.toLowerCase()) ||
+      reg.squadName?.toLowerCase().includes(search.toLowerCase());
+    const matchesEvent =
+      adminRole === "EVENT_ADMIN"
+        ? reg.eventType === adminEventType
+        : eventFilter === "all" || reg.eventType === eventFilter;
+
+    // Add payment mode filter
+    const matchesPaymentMode =
+      paymentModeFilter === "all" ||
+      (paymentModeFilter === "ONLINE" && reg.paymentMode === "ONLINE") ||
+      (paymentModeFilter === "OFFLINE" && reg.paymentMode === "OFFLINE");
+
+    return matchesSearch && matchesEvent && matchesPaymentMode;
+  });
 
   const handleLogout = async () => {
     try {
@@ -282,17 +301,6 @@ export default function DashboardPage() {
     setSelectedRegistration(registration);
   };
 
-  if (registrationsError) {
-    console.error("Dashboard error:", registrationsError);
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <p className="text-red-500">
-          Error loading registrations: {registrationsError.message}
-        </p>
-      </div>
-    );
-  }
-
   return (
     <div className="container mx-auto px-4 py-6 space-y-5">
       <div className="flex flex-col gap-6 mb-6 sm:flex-row sm:items-center sm:justify-between">
@@ -343,6 +351,26 @@ export default function DashboardPage() {
           </>
         )}
       </div>
+
+      {registrationsError && (
+        <Card className="rounded-xl border-destructive/30">
+          <CardHeader className="py-4">
+            <CardTitle className="text-sm text-destructive">
+              Couldn&apos;t load registrations
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="pt-0">
+            <div className="text-sm text-muted-foreground">
+              {registrationsError.message}
+            </div>
+            <div className="mt-3">
+              <Button variant="outline" size="sm" onClick={() => refetch()}>
+                Retry
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:space-x-4">
         {adminRole === "SUPER_ADMIN" && (
@@ -470,16 +498,16 @@ export default function DashboardPage() {
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold">
-                      {registrationsData?.stats.totalRegistrations}
+                      {safeStats.totalRegistrations}
                     </div>
                     <div className="text-xs text-muted-foreground mt-1">
-                      {Object.entries(
-                        registrationsData?.stats.eventBreakdown || {}
-                      ).map(([event, count]) => (
-                        <div key={event}>
-                          {event.replace(/_/g, " ")}: {count as number}
-                        </div>
-                      ))}
+                      {Object.entries(safeStats.eventBreakdown || {}).map(
+                        ([event, count]) => (
+                          <div key={event}>
+                            {event.replace(/_/g, " ")}: {count as number}
+                          </div>
+                        )
+                      )}
                     </div>
                   </CardContent>
                 </Card>
@@ -494,7 +522,7 @@ export default function DashboardPage() {
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold text-black dark:text-white">
-                      ₹{registrationsData?.stats.totalRevenue}
+                      ₹{safeStats.totalRevenue}
                     </div>
                     <div className="mt-3 pt-3 border-t">
                       <div className="flex justify-between mt-2">
@@ -503,8 +531,8 @@ export default function DashboardPage() {
                         </div>
                         <div className="text-xl font-semibold text-black dark:text-white">
                           ₹
-                          {(registrationsData?.stats.totalRevenue || 0) -
-                            (registrationsData?.stats.offlineRevenue || 0)}
+                          {(safeStats.totalRevenue || 0) -
+                            (safeStats.offlineRevenue || 0)}
                         </div>
                       </div>
                       <div className="flex justify-between">
@@ -512,7 +540,7 @@ export default function DashboardPage() {
                           Offline Payments
                         </div>
                         <div className="text-xl font-semibold text-black dark:text-white">
-                          ₹{registrationsData?.stats.offlineRevenue || 0}
+                          ₹{safeStats.offlineRevenue || 0}
                         </div>
                       </div>
                     </div>
@@ -529,7 +557,7 @@ export default function DashboardPage() {
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold">
-                      {registrationsData?.stats.activeEvents}
+                      {safeStats.activeEvents}
                     </div>
                   </CardContent>
                 </Card>
@@ -545,7 +573,7 @@ export default function DashboardPage() {
                         Today's Registrations
                       </div>
                       <div className="text-2xl font-bold">
-                        {registrationsData?.stats.todayRegistrations}
+                        {safeStats.todayRegistrations}
                       </div>
                     </div>
                     <div>
@@ -553,7 +581,7 @@ export default function DashboardPage() {
                         Total Participants
                       </div>
                       <div className="text-2xl font-bold">
-                        {registrationsData?.stats.totalParticipants}
+                        {safeStats.totalParticipants}
                       </div>
                       <p className="text-xs text-muted-foreground mt-1">
                         Across all events

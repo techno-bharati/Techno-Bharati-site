@@ -42,6 +42,9 @@ export type EventNameOption =
   | "Python Frontiers"
   | "BGMI"
   | "AI Tales"
+  | "ENTC Project Expo"
+  | "Digital Dangal"
+  | "Snap & Shine"
   | "Techno Science Quiz"
   | "Poster Competition"
   | "SciTech Model Expo 2K26"
@@ -336,6 +339,15 @@ const RegistrationForm = ({
                       </SelectItem>
                       <SelectItem value="BGMI">BGMI</SelectItem>
                       <SelectItem value="AI Tales">AI Tales</SelectItem>
+                      <SelectItem value="ENTC Project Expo">
+                        ENTC Project Expo (ENTC)
+                      </SelectItem>
+                      <SelectItem value="Digital Dangal">
+                        Digital Dangal (ENTC)
+                      </SelectItem>
+                      <SelectItem value="Snap & Shine">
+                        Snap &amp; Shine (ENTC)
+                      </SelectItem>
                       <SelectItem value="Techno Science Quiz">
                         Techno Science Quiz (GE)
                       </SelectItem>
@@ -377,6 +389,9 @@ const RegistrationForm = ({
           {(selectedEvent === "Face To Face" ||
             selectedEvent === "Python Frontiers" ||
             selectedEvent === "AI Tales" ||
+            selectedEvent === "ENTC Project Expo" ||
+            selectedEvent === "Digital Dangal" ||
+            selectedEvent === "Snap & Shine" ||
             selectedEvent === "Techno Science Quiz" ||
             selectedEvent === "Poster Competition" ||
             selectedEvent === "SciTech Model Expo 2K26" ||

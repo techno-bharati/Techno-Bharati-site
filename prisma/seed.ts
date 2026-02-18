@@ -210,6 +210,18 @@ async function main() {
     { eventType: EventType.CSE_CODEFUSION, department: Department.CSE },
     { eventType: EventType.CSE_PROJECT_EXPO, department: Department.CSE },
     { eventType: EventType.CSE_TREASURE_HUNT, department: Department.CSE },
+    {
+      eventType: "ENTC_PROJECT_EXPO" as unknown as EventType,
+      department: Department.ENTC,
+    },
+    {
+      eventType: "ENTC_DIGITAL_DANGAL" as unknown as EventType,
+      department: Department.ENTC,
+    },
+    {
+      eventType: "ENTC_SNAP_AND_SHINE" as unknown as EventType,
+      department: Department.ENTC,
+    },
   ];
   for (const ev of events) {
     await db.event.upsert({
