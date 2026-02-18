@@ -13,9 +13,7 @@ import type * as Prisma from "../internal/prismaNamespace";
 
 /**
  * Model Event
- * Links an event type to its organizing department. Used for filtering
- * registrations by "event department" (e.g. AIML events) rather than
- * the student's department field on Registration.
+ *
  */
 export type EventModel =
   runtime.Types.Result.DefaultSelection<Prisma.$EventPayload>;
