@@ -32,7 +32,6 @@ import DashboardLoading, {
   StatsCardSkeleton,
   RegistrationsTableSkeleton,
 } from "./loading";
-import { Suspense } from "react";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -126,6 +125,7 @@ export default function DashboardPage() {
           label: "SciTech Model Expo 2K26",
         },
         { value: "GE_GAMES_BUNDLE", label: "GE Games Bundle" },
+        { value: "FREEFIRE", label: "FreeFire" },
         { value: "CE_MODEL_MAKING", label: "Model Making" },
         { value: "CE_CAD_MASTER", label: "CAD Master" },
         { value: "CE_VIDEOGRAPHY", label: "Videography" },
@@ -155,7 +155,7 @@ export default function DashboardPage() {
           value: "GE_SCITECH_MODEL_EXPO",
           label: "SciTech Model Expo 2K26",
         },
-        { value: "GE_GAMES_BUNDLE", label: "GE Games Bundle" },
+        { value: "FREEFIRE", label: "FreeFire" },
       ],
       CIVIL: [
         { value: "CE_MODEL_MAKING", label: "Model Making" },
@@ -404,7 +404,6 @@ export default function DashboardPage() {
               <SelectItem value="GENERAL_ENGINEERING">
                 General Engineering
               </SelectItem>
-              <SelectItem value="OTHER">Other</SelectItem>
             </SelectContent>
           </Select>
         )}

@@ -33,16 +33,6 @@ export default function EventsPageContent() {
 
   const filteredEvents = EVENTS_BY_DEPARTMENT[selectedDepartment] ?? [];
 
-  const isGeneralEngineering = selectedDepartment === "General Engineering";
-
-  const technicalEvents = isGeneralEngineering
-    ? filteredEvents.filter((event) => event.type === "Technical Event")
-    : filteredEvents;
-
-  const nonTechnicalEvents = isGeneralEngineering
-    ? filteredEvents.filter((event) => event.type === "Non-Technical Event")
-    : [];
-
   const departmentSelectionAnimationVariants = {
     initial: {
       y: 12,
@@ -123,66 +113,19 @@ export default function EventsPageContent() {
           </motion.button>
         ))}
       </div>
-
-      {isGeneralEngineering ? (
-        <div className="space-y-6 z-10">
-          {technicalEvents.length > 0 && (
-            <section>
-              <h2 className="text-xl font-semibold mb-2 text-foreground">
-                Technical Events
-              </h2>
-              <div
-                key={selectedDepartment}
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"
-              >
-                {technicalEvents.map((event, index) => (
-                  <EventCard
-                    key={event.id}
-                    event={event}
-                    selectedDepartment={selectedDepartment}
-                    index={index}
-                  />
-                ))}
-              </div>
-            </section>
-          )}
-
-          {nonTechnicalEvents.length > 0 && (
-            <section>
-              <h2 className="text-xl font-semibold mb-2 text-foreground">
-                Non-Technical Events
-              </h2>
-              <div
-                key={selectedDepartment}
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"
-              >
-                {nonTechnicalEvents.map((event, index) => (
-                  <EventCard
-                    key={event.id}
-                    event={event}
-                    selectedDepartment={selectedDepartment}
-                    index={index}
-                  />
-                ))}
-              </div>
-            </section>
-          )}
-        </div>
-      ) : (
-        <div
-          key={selectedDepartment}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"
-        >
-          {filteredEvents.map((event, index) => (
-            <EventCard
-              key={event.id}
-              event={event}
-              selectedDepartment={selectedDepartment}
-              index={index}
-            />
-          ))}
-        </div>
-      )}
+      <div
+        key={selectedDepartment}
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"
+      >
+        {filteredEvents.map((event, index) => (
+          <EventCard
+            key={event.id}
+            event={event}
+            selectedDepartment={selectedDepartment}
+            index={index}
+          />
+        ))}
+      </div>
     </div>
   );
 }

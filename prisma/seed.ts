@@ -204,6 +204,10 @@ async function main() {
       eventType: EventType.GE_GAMES_BUNDLE,
       department: Department.GENERAL_ENGINEERING,
     },
+    {
+      eventType: EventType.FREEFIRE,
+      department: Department.GENERAL_ENGINEERING,
+    },
     { eventType: EventType.CE_MODEL_MAKING, department: Department.CIVIL },
     { eventType: EventType.CE_CAD_MASTER, department: Department.CIVIL },
     { eventType: EventType.CE_VIDEOGRAPHY, department: Department.CIVIL },

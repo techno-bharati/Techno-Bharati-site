@@ -41,6 +41,7 @@ export type EventNameOption =
   | "Face To Face"
   | "Python Frontiers"
   | "BGMI"
+  | "FreeFire"
   | "AI Tales"
   | "ENTC Project Expo"
   | "Digital Dangal"
@@ -341,6 +342,7 @@ const RegistrationForm = ({
                         Python Frontiers
                       </SelectItem>
                       <SelectItem value="BGMI">BGMI</SelectItem>
+                      <SelectItem value="FreeFire">FreeFire</SelectItem>
                       <SelectItem value="AI Tales">AI Tales</SelectItem>
                       <SelectItem value="ENTC Project Expo">
                         ENTC Project Expo (ENTC)
@@ -617,7 +619,112 @@ const RegistrationForm = ({
                 <h3 className="font-semibold">Squad Players</h3>
                 <FormDescription>All 4 players are required</FormDescription>
                 {Array.from({ length: 4 }).map((_, index) => (
-                  <div key={index} className="space-y-4 p-4 border rounded-lg">
+                  <div key={index} className="space-y-4 p-4 border rounded-xl">
+                    <h4 className="font-medium">
+                      {index === 0 ? "Squad Leader" : `Player ${index + 1}`}
+                    </h4>
+                    <FormField
+                      control={form.control}
+                      name={`players.${index}.playerName`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Name</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="Enter player name"
+                              {...field}
+                              disabled={isPending}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name={`players.${index}.bgmiId`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>BGMI ID</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="Enter BGMI ID"
+                              {...field}
+                              disabled={isPending}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name={`players.${index}.contactNumber`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Contact Number</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="Enter contact number"
+                              type="tel"
+                              {...field}
+                              disabled={isPending}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    {index === 0 && (
+                      <FormField
+                        control={form.control}
+                        name={`players.${index}.email`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Email (Squad Leader Only)</FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="Enter squad leader's email"
+                                type="email"
+                                {...field}
+                                disabled={isPending}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    )}
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+
+          {selectedEvent === "FreeFire" && (
+            <>
+              <FormField
+                control={form.control}
+                name="squadName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Squad Name</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter squad name"
+                        {...field}
+                        disabled={isPending}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <div className="space-y-6 md:col-span-2">
+                <h3 className="font-semibold">Squad Players</h3>
+                <FormDescription>All 4 players are required</FormDescription>
+                {Array.from({ length: 4 }).map((_, index) => (
+                  <div key={index} className="space-y-4 p-4 border rounded-xl">
                     <h4 className="font-medium">
                       {index === 0 ? "Squad Leader" : `Player ${index + 1}`}
                     </h4>

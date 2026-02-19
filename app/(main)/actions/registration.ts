@@ -26,6 +26,7 @@ export async function createRegistration(
       "Face To Face": EventType.FACE_TO_FACE,
       "Python Frontiers": EventType.PYTHON_FRONTIERS,
       BGMI: EventType.BGMI,
+      FreeFire: EventType.FREEFIRE,
       "AI Tales": EventType.AI_TALES,
       "ENTC Project Expo": EventType.ENTC_PROJECT_EXPO,
       "Digital Dangal": EventType.ENTC_DIGITAL_DANGAL,
@@ -71,8 +72,12 @@ export async function createRegistration(
           : 1;
       const fee = getEventFeeByName(eventName, teamSize);
 
-      // Startup Sphere and BGMI both use calculated fees
-      if (eventName === "Startup Sphere" || eventName === "BGMI") {
+      // Startup Sphere, BGMI, and FreeFire all use calculated fees
+      if (
+        eventName === "Startup Sphere" ||
+        eventName === "BGMI" ||
+        eventName === "FreeFire"
+      ) {
         return fee ?? 0;
       }
 
@@ -104,8 +109,8 @@ export async function createRegistration(
     };
 
     try {
-      if (formData.events === "BGMI") {
-        console.log("Creating BGMI registration with data:", {
+      if (formData.events === "BGMI" || formData.events === "FreeFire") {
+        console.log(`Creating ${formData.events} registration with data:`, {
           squadName: formData.squadName,
           leaderEmail: formData.players[0].email,
           playerCount: formData.players.length,
@@ -138,7 +143,7 @@ export async function createRegistration(
                   },
                 }),
               }
-            : formData.events === "BGMI"
+            : formData.events === "BGMI" || formData.events === "FreeFire"
               ? {
                   ...baseData,
                   squadName: formData.squadName,

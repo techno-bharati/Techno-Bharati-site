@@ -14,6 +14,7 @@ const slugToEventName: Record<string, EventNameOption> = {
   "face-to-face": "Face To Face",
   "python-frontiers": "Python Frontiers",
   bgmi: "BGMI",
+  freefire: "FreeFire",
   "ai-tales": "AI Tales",
   // entc
   "entc-project-expo": "ENTC Project Expo",
@@ -24,7 +25,6 @@ const slugToEventName: Record<string, EventNameOption> = {
   "poster-competition": "Poster Competition",
   "scitech-model-expo": "SciTech Model Expo 2K26",
   // General engineering (games) -> send to bundle form
-  "free-fire-challenge": "General Engineering Games",
   "coin-drop-challenge": "General Engineering Games",
   "funny-walk-race": "General Engineering Games",
   "pass-the-balloon": "General Engineering Games",

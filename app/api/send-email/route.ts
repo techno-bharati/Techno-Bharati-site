@@ -64,7 +64,10 @@ export async function POST(req: Request) {
             : ""
         }
       `;
-    } else if (registration.eventType === "BGMI") {
+    } else if (
+      registration.eventType === "BGMI" ||
+      registration.eventType === "FREEFIRE"
+    ) {
       participantDetails = `
         <h3>Squad Information:</h3>
         <p>Squad Name: ${registration.squadName}</p>

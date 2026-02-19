@@ -22,6 +22,7 @@ const DEPARTMENT_EVENT_TYPES: Partial<Record<Department, EventType[]>> = {
     EventType.GE_POSTER_COMPETITION,
     EventType.GE_SCITECH_MODEL_EXPO,
     EventType.GE_GAMES_BUNDLE,
+    EventType.FREEFIRE,
   ],
   CIVIL: [
     EventType.CE_MODEL_MAKING,
@@ -197,7 +198,7 @@ export async function GET(req: Request) {
         (stats[4]._sum.numberOfTeamMembers || 0) + stats[5] + stats[6];
     } else if (eventType === "STARTUP_SPHERE") {
       totalParticipants = stats[4]._sum.numberOfTeamMembers || 0;
-    } else if (eventType === "BGMI") {
+    } else if (eventType === "BGMI" || eventType === "FREEFIRE") {
       totalParticipants = stats[0] * 4;
     } else {
       totalParticipants = stats[0];

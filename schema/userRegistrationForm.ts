@@ -95,6 +95,7 @@ export const userRegistrationFormSchema = z
         "Face To Face",
         "Python Frontiers",
         "BGMI",
+        "FreeFire",
         "AI Tales",
         // ENTC department
         "ENTC Project Expo",
@@ -156,6 +157,9 @@ export const userRegistrationFormSchema = z
         .object({ events: z.literal("Python Frontiers") })
         .merge(pythonWorriorsSchema),
       z.object({ events: z.literal("BGMI") }).merge(fireFireBattleshipSchema),
+      z
+        .object({ events: z.literal("FreeFire") })
+        .merge(fireFireBattleshipSchema),
       z.object({ events: z.literal("AI Tales") }).merge(aiTalesSchema),
       z
         .object({ events: z.literal("ENTC Project Expo") })

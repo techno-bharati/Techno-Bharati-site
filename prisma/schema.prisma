@@ -139,7 +139,7 @@ model TeamMember {
   @@index([registrationId])
 }
 
-// create these records only for BGMI squad registrations
+// create these records only for BGMI and FreeFire squad registrations
 model Player {
   id            String   @id @default(cuid())
   playerName    String
@@ -178,6 +178,7 @@ enum EventType {
   GE_POSTER_COMPETITION
   GE_SCITECH_MODEL_EXPO
   GE_GAMES_BUNDLE
+  FREEFIRE
   // Civil Engineering department
   CE_MODEL_MAKING
   CE_CAD_MASTER

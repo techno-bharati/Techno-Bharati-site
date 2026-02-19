@@ -78,7 +78,47 @@ export async function GET() {
 
     // Process BGMI registrations
     if (groupedRegistrations.BGMI?.length) {
-      const freeFireData = groupedRegistrations.BGMI.map((reg) => ({
+      const bgmiData = groupedRegistrations.BGMI.map((reg) => ({
+        "Registration ID": reg.id,
+        "College Name": reg.collegeName,
+        "Registration Date": new Date(reg.registrationDate).toLocaleString(),
+        Status: reg.status,
+        "Payment Status": reg.paymentStatus,
+        Amount: `₹${reg.amount}`,
+        "Squad Name": reg.squadName,
+        // Squad Leader (Player 1)
+        "Leader Name": reg.players?.[0]?.playerName || "",
+        "Leader BGMI ID": reg.players?.[0]?.bgmiId || "",
+        "Leader Contact": reg.players?.[0]?.contactNumber || "",
+        // Player 2
+        "Player 2 Name": reg.players?.[1]?.playerName || "",
+        "Player 2 BGMI ID": reg.players?.[1]?.bgmiId || "",
+        "Player 2 Contact": reg.players?.[1]?.contactNumber || "",
+        // Player 3
+        "Player 3 Name": reg.players?.[2]?.playerName || "",
+        "Player 3 BGMI ID": reg.players?.[2]?.bgmiId || "",
+        "Player 3 Contact": reg.players?.[2]?.contactNumber || "",
+        // Player 4
+        "Player 4 Name": reg.players?.[3]?.playerName || "",
+        "Player 4 BGMI ID": reg.players?.[3]?.bgmiId || "",
+        "Player 4 Contact": reg.players?.[3]?.contactNumber || "",
+        "Verified By": reg.verifiedBy?.name || "Not Verified",
+        "Verification Date": reg.verifiedAt
+          ? new Date(reg.verifiedAt).toLocaleString()
+          : "Not Verified",
+        Notes: reg.notes || "",
+      }));
+
+      const wsBGMI = XLSX.utils.json_to_sheet(bgmiData);
+      wsBGMI["!cols"] = Object.keys(bgmiData[0] || {}).map(() => ({
+        wch: 20,
+      }));
+      XLSX.utils.book_append_sheet(wb, wsBGMI, "BGMI");
+    }
+
+    // Process FreeFire registrations
+    if (groupedRegistrations.FREEFIRE?.length) {
+      const freeFireData = groupedRegistrations.FREEFIRE.map((reg) => ({
         "Registration ID": reg.id,
         "College Name": reg.collegeName,
         "Registration Date": new Date(reg.registrationDate).toLocaleString(),
@@ -113,12 +153,12 @@ export async function GET() {
       wsFreeFire["!cols"] = Object.keys(freeFireData[0] || {}).map(() => ({
         wch: 20,
       }));
-      XLSX.utils.book_append_sheet(wb, wsFreeFire, "BGMI");
+      XLSX.utils.book_append_sheet(wb, wsFreeFire, "FreeFire");
     }
 
     // Process other events
     const otherEvents = registrations.filter(
-      (reg) => !["STARTUP_SPHERE", "BGMI"].includes(reg.eventType)
+      (reg) => !["STARTUP_SPHERE", "BGMI", "FREEFIRE"].includes(reg.eventType)
     );
 
     if (otherEvents.length) {
