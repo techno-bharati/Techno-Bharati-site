@@ -32,6 +32,8 @@ import {
   GENERAL_ENGINEERING_TECHNICAL_FEE,
   CIVIL_TECHNICAL_FEE,
   getEventFeeByName,
+  EVENT_TO_ORGANIZING_DEPARTMENT,
+  PAYMENT_QR_BY_DEPARTMENT,
 } from "@/lib/constants";
 import Image from "next/image";
 import { Separator } from "@/components/ui/separator";
@@ -90,7 +92,7 @@ const RegistrationForm = ({
   const [selectedGames, setSelectedGames] = useState<string[]>(
     initialSelectedGames ?? []
   );
-  const router = useRouter(); 
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof userRegistrationFormSchema>>({
     resolver: zodResolver(userRegistrationFormSchema),
@@ -216,14 +218,14 @@ const RegistrationForm = ({
 
   return (
     <div className="w-full max-w-4xl mx-auto">
-       <Button
-          variant="outline"
-          className="rounded-xl group"
-          onClick={() => router.push('/events')}
-        >
-          <ArrowLeft className="-mr-1 group-hover:-translate-x-1 transition-transform" />
-          Back to Events
-        </Button>
+      <Button
+        variant="outline"
+        className="rounded-xl group"
+        onClick={() => router.push("/events")}
+      >
+        <ArrowLeft className="-mr-1 group-hover:-translate-x-1 transition-transform" />
+        Back to Events
+      </Button>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit, onError)}
@@ -1110,13 +1112,33 @@ const RegistrationForm = ({
               </p>
             </div>
             <Separator orientation="vertical" />
-            <div>
-              <h3 className="text-md text-white flex-1">Payment QR</h3>
+            <div className="flex flex-col items-center gap-1">
+              <h3 className="text-md text-white flex-1">
+                Payment QR
+                {selectedEvent &&
+                  (() => {
+                    const dept =
+                      EVENT_TO_ORGANIZING_DEPARTMENT[selectedEvent];
+                    return dept ? ` (${dept})` : "";
+                  })()}
+              </h3>
               <Image
-                alt="payment qr"
-                src={"/qr.jpeg"}
+                alt={
+                  selectedEvent &&
+                  EVENT_TO_ORGANIZING_DEPARTMENT[selectedEvent]
+                    ? `Payment QR - ${EVENT_TO_ORGANIZING_DEPARTMENT[selectedEvent]}`
+                    : "Payment QR"
+                }
+                src={
+                  selectedEvent
+                    ? PAYMENT_QR_BY_DEPARTMENT[
+                        EVENT_TO_ORGANIZING_DEPARTMENT[selectedEvent] as keyof typeof PAYMENT_QR_BY_DEPARTMENT
+                      ] ?? "/qr.jpeg"
+                    : "/qr.jpeg"
+                }
                 width={100}
                 height={100}
+                unoptimized
               />
             </div>
           </div>

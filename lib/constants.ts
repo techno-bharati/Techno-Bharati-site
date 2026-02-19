@@ -799,6 +799,48 @@ export const getEventFeeByName = (eventName: string, teamSize?: number) => {
   return calculateEventFee(eventType, teamSize);
 };
 
+/** Organizing department key for each event (used for department-specific payment QR). */
+export const EVENT_TO_ORGANIZING_DEPARTMENT: Record<
+  string,
+  keyof typeof EVENTS_BY_DEPARTMENT
+> = {
+  "Startup Sphere": "CSE (AIML)",
+  "Face To Face": "CSE (AIML)",
+  "Python Frontiers": "CSE (AIML)",
+  BGMI: "CSE (AIML)",
+  "AI Tales": "CSE (AIML)",
+  "ENTC Project Expo": "ENTC",
+  "Digital Dangal": "ENTC",
+  "Snap & Shine": "ENTC",
+  "Techno Science Quiz": "General Engineering",
+  "Poster Competition": "General Engineering",
+  "SciTech Model Expo 2K26": "General Engineering",
+  "General Engineering Games": "General Engineering",
+  FreeFire: "General Engineering",
+  "Model Making": "CIVIL",
+  "CAD Master": "CIVIL",
+  Videography: "CIVIL",
+  CODEFUSION: "CSE",
+  "Project Expo": "CSE",
+  "Treasure Hunt": "CSE",
+  "Mech Project Expo": "MECH",
+  "Mech Junk Yard": "MECH",
+  "Mech IPL Auction": "MECH",
+};
+
+/** Payment QR code image path per organizing department. Add images under public/qr/ for each key. */
+export const PAYMENT_QR_BY_DEPARTMENT: Record<
+  keyof typeof EVENTS_BY_DEPARTMENT,
+  string
+> = {
+  "CSE (AIML)": "/qr/aiml.jpeg",
+  CSE: "/qr/cse.jpeg",
+  MECH: "/qr/mech.jpeg",
+  ENTC: "/qr/entc.jpeg",
+  CIVIL: "/qr/civil.jpeg",
+  "General Engineering": "/qr/general-engineering.jpeg",
+};
+
 export const GENERAL_ENGINEERING_TECHNICAL_FEE = 100;
 export const CIVIL_TECHNICAL_FEE = 100;
 
