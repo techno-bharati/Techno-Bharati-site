@@ -35,6 +35,8 @@ import {
 } from "@/lib/constants";
 import Image from "next/image";
 import { Separator } from "@/components/ui/separator";
+import { ArrowLeft } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export type EventNameOption =
   | "Startup Sphere"
@@ -88,6 +90,7 @@ const RegistrationForm = ({
   const [selectedGames, setSelectedGames] = useState<string[]>(
     initialSelectedGames ?? []
   );
+  const router = useRouter(); 
 
   const form = useForm<z.infer<typeof userRegistrationFormSchema>>({
     resolver: zodResolver(userRegistrationFormSchema),
@@ -212,7 +215,15 @@ const RegistrationForm = ({
   };
 
   return (
-    <>
+    <div className="w-full max-w-4xl mx-auto">
+       <Button
+          variant="outline"
+          className="rounded-xl group"
+          onClick={() => router.push('/events')}
+        >
+          <ArrowLeft className="-mr-1 group-hover:-translate-x-1 transition-transform" />
+          Back to Events
+        </Button>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit, onError)}
@@ -1123,7 +1134,7 @@ const RegistrationForm = ({
         open={showSuccessDialog}
         onOpenChange={setShowSuccessDialog}
       />
-    </>
+    </div>
   );
 };
 

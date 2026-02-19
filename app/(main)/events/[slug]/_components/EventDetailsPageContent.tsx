@@ -91,7 +91,7 @@ const EventDetailsPageContent = ({ slug }: { slug: string }) => {
         </h1>
         <Button
           variant="outline"
-          className="rounded-lg"
+          className="rounded-xl"
           onClick={() => router.push("/events")}
         >
           Back to Events
@@ -124,7 +124,7 @@ const EventDetailsPageContent = ({ slug }: { slug: string }) => {
       <div className="max-w-7xl mx-auto space-y-6">
         <Button
           variant="outline"
-          className="rounded-lg group"
+          className="rounded-xl group"
           onClick={() => router.push(backToEventsHref)}
         >
           <ArrowLeft className="-mr-1 group-hover:-translate-x-1 transition-transform" />
@@ -199,7 +199,7 @@ const EventDetailsPageContent = ({ slug }: { slug: string }) => {
             <div className="flex flex-col gap-3 mt-6">
               <Button
                 variant="default"
-                className="w-full bg-primary text-primary-foreground hover:bg-primary/95 rounded-xl group"
+                className="w-full bg-primary text-primary-foreground hover:bg-primary/95 rounded-xl group text-white"
                 onClick={() => router.push(`/events/${slug}/register`)}
               >
                 Register
