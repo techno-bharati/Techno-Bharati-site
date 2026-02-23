@@ -1117,23 +1117,23 @@ const RegistrationForm = ({
                 Payment QR
                 {selectedEvent &&
                   (() => {
-                    const dept =
-                      EVENT_TO_ORGANIZING_DEPARTMENT[selectedEvent];
+                    const dept = EVENT_TO_ORGANIZING_DEPARTMENT[selectedEvent];
                     return dept ? ` (${dept})` : "";
                   })()}
               </h3>
               <Image
                 alt={
-                  selectedEvent &&
-                  EVENT_TO_ORGANIZING_DEPARTMENT[selectedEvent]
+                  selectedEvent && EVENT_TO_ORGANIZING_DEPARTMENT[selectedEvent]
                     ? `Payment QR - ${EVENT_TO_ORGANIZING_DEPARTMENT[selectedEvent]}`
                     : "Payment QR"
                 }
                 src={
                   selectedEvent
-                    ? PAYMENT_QR_BY_DEPARTMENT[
-                        EVENT_TO_ORGANIZING_DEPARTMENT[selectedEvent] as keyof typeof PAYMENT_QR_BY_DEPARTMENT
-                      ] ?? "/qr.jpeg"
+                    ? (PAYMENT_QR_BY_DEPARTMENT[
+                        EVENT_TO_ORGANIZING_DEPARTMENT[
+                          selectedEvent
+                        ] as keyof typeof PAYMENT_QR_BY_DEPARTMENT
+                      ] ?? "/qr.jpeg")
                     : "/qr.jpeg"
                 }
                 width={100}
