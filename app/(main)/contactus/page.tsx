@@ -1,8 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
-import { Braces, Mail, MapPin, Phone, School } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
+import { Braces, Mail, MapPin, Phone, School, User } from "lucide-react";
 import Link from "next/link";
 import { zenDots } from "@/lib/fonts";
 import ContactDetailsCards from "./_components/ContactDetailsCards";
@@ -44,8 +43,6 @@ export default function ContactUsPage() {
 
             <ContactDetailsCards cardTitle="Address" cardIcon={MapPin}>
               <p className="text-muted-foreground">
-                Second Floor AIML Department
-                <br />
                 Bharati Vidyapeeth&apos;s College of Engineering
                 <br />
                 Kolhapur, Maharashtra
@@ -54,24 +51,20 @@ export default function ContactUsPage() {
               </p>
             </ContactDetailsCards>
 
-            <ContactDetailsCards
-              cardTitle="Event coordinator"
-              cardIcon={School}
-            >
+            <ContactDetailsCards cardTitle="Event Convenor" cardIcon={School}>
               <div className="space-y-2 text-muted-foreground text-2xl">
-                <p>Dr. S.M. Mulla : +91 98601 51986</p>
+                <p>Dr. S. M. Mulla : +91 98601 51986</p>
               </div>
             </ContactDetailsCards>
 
-            {/* <ContactDetailsCards
-              cardTitle="Platform queries"
-              cardIcon={Braces}
-              children={
-                <div className="space-y-2 text-muted-foreground text-2xl">
-                  <p>Harshal : +91 95292 04516</p>
-                </div>
-              }
-            /> */}
+            <ContactDetailsCards
+              cardTitle="Event co-coordinator "
+              cardIcon={User}
+            >
+              <div className="space-y-3 text-muted-foreground text-2xl">
+                <p>Mr. Sajid Momin: +90 95616 65030</p>
+              </div>
+            </ContactDetailsCards>
           </div>
         </div>
       </section>
