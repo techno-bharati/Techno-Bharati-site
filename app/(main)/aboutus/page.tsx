@@ -60,12 +60,10 @@ export default function AboutUsPage() {
                 premier institution dedicated to excellence in technical
                 education. With state-of-the-art facilities and experienced
                 faculty, we strive to nurture the next generation of engineers
-                and innovators.
-              </p>
-              <p className="text-muted-foreground">
-                Our AI&ML department is at the forefront of technological
-                advancement, preparing students for the challenges of tomorrow
-                through cutting-edge curriculum and practical exposure.
+                and innovators.{" "}
+                <span className="font-semibold">
+                  Accredited by NAAC with A+ grade with CGPA of 3.38.
+                </span>
               </p>
             </motion.div>
           </div>
