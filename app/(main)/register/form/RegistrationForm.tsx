@@ -1113,7 +1113,7 @@ const RegistrationForm = ({
             </div>
             <Separator orientation="vertical" />
             <div className="flex flex-col items-center gap-1">
-              <h3 className="text-md text-white flex-1">
+              <h3 className="text-md  flex-1">
                 Payment QR
                 {selectedEvent &&
                   (() => {
@@ -1136,9 +1136,10 @@ const RegistrationForm = ({
                       ] ?? "/qr.jpeg")
                     : "/qr.jpeg"
                 }
-                width={100}
-                height={100}
+                width={180}
+                height={180}
                 unoptimized
+                className="rounded-xl"
               />
             </div>
           </div>
