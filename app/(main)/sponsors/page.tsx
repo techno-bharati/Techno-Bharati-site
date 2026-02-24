@@ -17,10 +17,17 @@ const SponsorsPage = () => {
             opacity: 1,
             filter: "blur(0px)",
           }}
-          className={`text-2xl uppercase md:text-3xl lg:text-6xl ${zenDots.className} text-center mt-11`}
+          className={`text-4xl uppercase md:text-6xl lg:text-6xl ${zenDots.className} text-center mt-28`}
         >
-          Sponsors
+          our Sponsors
         </motion.h1>
+      </div>
+      <div className="mt-10">
+        <img
+          src={"/sponsers/gfg.png"}
+          alt="gfg"
+          className="rounded-xl border"
+        />
       </div>
     </section>
   );
