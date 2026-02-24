@@ -112,7 +112,7 @@ export default function Countdown() {
   const [hasEnded, setHasEnded] = useState(false);
 
   useEffect(() => {
-    const targetDate = new Date("2026-03-13T00:00:00");
+    const targetDate = new Date("2026-03-25T00:00:00");
 
     const calculateTimeLeft = () => {
       const difference = +targetDate - +new Date();
