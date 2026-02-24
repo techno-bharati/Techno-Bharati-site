@@ -166,19 +166,20 @@ const EventDetailsPageContent = ({ slug }: { slug: string }) => {
               {renderRules(modalData.rules, modalData.eventName)}
             </div>
 
-            <div>
-              <h3 className="text-lg md:text-xl text-foreground mb-2">
-                Registration Steps
-              </h3>
-              <ul className="list-disc pl-6 text-muted-foreground text-sm md:text-base">
-                {modalData.registration.map((step, index) => (
-                  <li key={index} className="mt-1">
-                    {step}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
+            {modalData.registration.length > 0 && (
+              <div>
+                <h3 className="text-lg md:text-xl text-foreground mb-2">
+                  Registration Steps
+                </h3>
+                <ul className="list-disc pl-6 text-muted-foreground text-sm md:text-base">
+                  {modalData.registration.map((step, index) => (
+                    <li key={index} className="mt-1">
+                      {step}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
             <div className="w-full flex flex-col justify-between md:flex-row md:gap-8 lg:gap-16 mt-4">
               <div className="mb-6 md:mb-0">
                 <h3 className="text-lg md:text-xl text-foreground">Queries</h3>
