@@ -43,8 +43,46 @@ export function Hero2() {
   return (
     <section
       ref={scope}
-      className="relative min-h-screen flex items-center justify-center overflow-hidden z-10"
+      className="relative min-h-screen max-w-7xl mx-auto flex flex-col items-center justify-center overflow-hidden z-10"
     >
+      <motion.div
+        initial={{
+          opacity: 0,
+        }}
+        animate={{
+          opacity: 1,
+        }}
+        className="flex flex-col md:flex-row items-center justify-center gap-4 text-center  space-x-4 w-full h-fit"
+      >
+        <Image
+          src="/bvcoek.png"
+          alt="BVCOE Logo"
+          width={160}
+          height={160}
+          className="h-20 sm:h-full w-auto"
+        />
+        <div className="text-muted-foreground">
+          <p className="font-bold text-sm md:text-xl lg:text-2xl uppercase">
+            Bharati Vidyapeeth&apos;s College of Engineering, Kolhapur
+          </p>
+        </div>
+        <div className="flex gap-2 items-center">
+          <Image
+            src={"/naac.png"}
+            alt="naaclogo"
+            width={100}
+            height={100}
+            className="h-16 sm:h-full w-auto"
+          />
+          <Image
+            src={"/iste.webp"}
+            alt="istelogo"
+            width={70}
+            height={70}
+            className="size-14 sm:size-20"
+          />
+        </div>
+      </motion.div>
       <motion.div
         id="hero"
         initial={"initial"}
@@ -85,7 +123,9 @@ export function Hero2() {
             variants={animation}
             className="text-[1rem] md:text-[1.5rem] text-muted-foreground font-light"
           >
-            <TextShimmer spread={4}>13th March, 2026</TextShimmer>
+            <TextShimmer spread={4} className="text-xl md:text-3xl">
+              25th March, 2026
+            </TextShimmer>
           </motion.p>
         </motion.div>
 
