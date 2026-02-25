@@ -75,7 +75,7 @@ export function Hero2() {
             className="h-16 sm:h-full w-auto"
           />
           <Image
-            src={"/iste.jpg"}
+            src={"/Iste.png"}
             alt="istelogo"
             width={100}
             height={100}
