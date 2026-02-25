@@ -61,7 +61,7 @@ export function Navigation2() {
             className="flex items-center space-x-2"
           >
             <span className={`font-mono text-xl ${zenDots.className}`}>
-              INFUSION AI
+              BVCOEK
             </span>
           </motion.button>
 

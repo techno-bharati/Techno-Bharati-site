@@ -11,7 +11,7 @@ export function Footer() {
           className={`absolute left-1/2 -bottom-8 -translate-x-1/2 opacity-[0.03] dark:opacity-[0.05] w-full text-center ${zenDots.className}`}
         >
           <span className="text-[4rem] sm:text-[6rem] md:text-[8rem] lg:text-[10rem] font-black text-foreground whitespace-nowrap tracking-tighter inline-block leading-[0.8]">
-            INFUSION AI
+            TECHNO BHARATI
           </span>
         </div>
       </div>
