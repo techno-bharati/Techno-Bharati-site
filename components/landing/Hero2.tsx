@@ -75,11 +75,11 @@ export function Hero2() {
             className="h-16 sm:h-full w-auto"
           />
           <Image
-            src={"/iste.webp"}
+            src={"/iste.jpg"}
             alt="istelogo"
             width={70}
             height={70}
-            className="size-14 sm:size-20"
+            className="size-14 sm:size-20 rounded-full"
           />
         </div>
       </motion.div>
