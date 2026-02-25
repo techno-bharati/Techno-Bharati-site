@@ -77,8 +77,8 @@ export function Hero2() {
           <Image
             src={"/iste.jpg"}
             alt="istelogo"
-            width={70}
-            height={70}
+            width={100}
+            height={100}
             className="size-14 sm:size-20 rounded-full"
           />
         </div>

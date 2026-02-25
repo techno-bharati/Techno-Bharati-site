@@ -102,6 +102,14 @@ export function Sponsors() {
             className="rounded-lg grayscale hover:grayscale-0 transition-all"
             priority
           />
+          <Image
+            src="/sponsers/gfg.png"
+            alt="sponsor 2 Logo"
+            width={150}
+            height={120}
+            className="rounded-lg grayscale hover:grayscale-0 transition-all bg-white"
+            priority
+          />
         </div>
       </div>
     </section>
