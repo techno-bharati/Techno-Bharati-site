@@ -17,6 +17,14 @@ export default function EventsPageContent() {
     | "CIVIL"
     | "General Engineering";
 
+  const departmentEventNames = {
+    "CSE (AIML)": "infusion ai",
+    CSE: "coderace",
+    CIVIL: "nirman",
+    ENTC: "techno spark",
+    MECH: "creanturous",
+    "General Engineering": "techno science expo",
+  };
   const deptFromUrl = searchParams.get("dept");
   const initialDepartment: DepartmentFilter =
     deptFromUrl === "CSE (AIML)" ||
@@ -76,7 +84,7 @@ export default function EventsPageContent() {
       </motion.h1>
 
       {/* department events filter */}
-      <div className="p-2 flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2">
         {[
           "CSE (AIML)",
           "CSE",
@@ -113,6 +121,15 @@ export default function EventsPageContent() {
           </motion.button>
         ))}
       </div>
+      {selectedDepartment && (
+        <motion.h1
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className={`my-6 text-xl md:text-2xl font-semibold uppercase ${zenDots.className}`}
+        >
+          {departmentEventNames[selectedDepartment]}
+        </motion.h1>
+      )}
       <div
         key={selectedDepartment}
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"
