@@ -22,11 +22,15 @@ const SponsorsPage = () => {
           our Sponsors
         </motion.h1>
       </div>
+      <p className="text-center text-2xl my-7 font-semibold opacity-60 tracking-tight">
+        We extend our heartfelt thanks to our sponsors for <br /> making Techno
+        Bharati 2026 a grand success!
+      </p>
       <div className="mt-10">
         <img
           src={"/sponsers/gfg.png"}
           alt="gfg"
-          className="rounded-xl border"
+          className="rounded-xl border dark:bg-white"
         />
       </div>
     </section>
