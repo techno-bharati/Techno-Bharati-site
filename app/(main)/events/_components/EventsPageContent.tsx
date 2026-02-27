@@ -26,6 +26,7 @@ export default function EventsPageContent() {
     "General Engineering": "techno science expo",
   };
   const deptFromUrl = searchParams.get("dept");
+
   const initialDepartment: DepartmentFilter =
     deptFromUrl === "CSE (AIML)" ||
     deptFromUrl === "CSE" ||
@@ -58,90 +59,93 @@ export default function EventsPageContent() {
   };
 
   return (
-    <div className="bg-background max-w-7xl min-h-screen mx-auto px-4 py-10 mb-20">
+    <div className="relative overflow-hidden">
       <motion.h1
-        initial={{
-          opacity: 0,
-        }}
-        animate={{
-          opacity: 1,
-        }}
-        className={`text-4xl md:text-5xl font-bold mb-8 md:mb-10 text-left text-foreground uppercase ${zenDots.className}`}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 0.15 }}
+        transition={{ duration: 0.8 }}
+        className=" hidden md:block absolute right-0 top-40 text-[7rem] md:text-[12rem] font-extrabold uppercase text-foreground pointer-events-none select-none z-0 whitespace-nowrap"
       >
-        Events
+        EVENTS
       </motion.h1>
 
-      <motion.h1
-        initial={{
-          opacity: 0,
-        }}
-        animate={{
-          opacity: 1,
-        }}
-        className="z-0 hidden md:block fixed -right-0 top-32 md:top-36 text-[6rem] md:text-[10rem] uppercase font-bold  text-muted pointer-events-none select-none"
-      >
-        events
-      </motion.h1>
-
-      {/* department events filter */}
-      <div className="flex flex-wrap gap-2">
-        {[
-          "CSE (AIML)",
-          "CSE",
-          "MECH",
-          "ENTC",
-          "CIVIL",
-          "General Engineering",
-        ].map((dept, index) => (
-          <motion.button
-            key={dept}
-            variants={departmentSelectionAnimationVariants}
-            initial={"initial"}
-            animate={"animate"}
-            custom={index}
-            type="button"
-            onClick={() =>
-              setSelectedDepartment(
-                dept as
-                  | "CSE (AIML)"
-                  | "CSE"
-                  | "MECH"
-                  | "ENTC"
-                  | "CIVIL"
-                  | "General Engineering"
-              )
-            }
-            className={`border border-border px-3 py-2 rounded-full text-sm md:text-base transition-colors ${
-              selectedDepartment === dept
-                ? "bg-green-600 text-white"
-                : "bg-background hover:bg-accent"
-            }`}
-          >
-            {dept}
-          </motion.button>
-        ))}
-      </div>
-      {selectedDepartment && (
+      <div className="relative z-10 max-w-7xl min-h-screen mx-auto px-4 md:px-6 py-10 md:py-14 mb-20 ">
         <motion.h1
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className={`my-6 text-xl md:text-2xl font-semibold uppercase ${zenDots.className}`}
+          className={`text-4xl md:text-5xl lg:text-6xl font-bold mb-8 md:mb-10 text-left text-foreground uppercase ${zenDots.className}`}
         >
-          {departmentEventNames[selectedDepartment]}
+          Events
         </motion.h1>
-      )}
-      <div
-        key={selectedDepartment}
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"
-      >
-        {filteredEvents.map((event, index) => (
-          <EventCard
-            key={event.id}
-            event={event}
-            selectedDepartment={selectedDepartment}
-            index={index}
-          />
-        ))}
+
+        <div className="flex flex-wrap gap-3">
+          {[
+            "CSE (AIML)",
+            "CSE",
+            "MECH",
+            "ENTC",
+            "CIVIL",
+            "General Engineering",
+          ].map((dept, index) => (
+            <motion.button
+              key={dept}
+              variants={departmentSelectionAnimationVariants}
+              initial="initial"
+              animate="animate"
+              custom={index}
+              type="button"
+              onClick={() =>
+                setSelectedDepartment(
+                  dept as
+                    | "CSE (AIML)"
+                    | "CSE"
+                    | "MECH"
+                    | "ENTC"
+                    | "CIVIL"
+                    | "General Engineering"
+                )
+              }
+              className={`
+            px-4 py-2 md:px-5 md:py-3
+            rounded-full 
+            text-sm md:text-base font-medium
+            border border-border 
+            transition-all duration-200
+            ${
+              selectedDepartment === dept
+                ? "bg-green-600 text-white shadow-md scale-105"
+                : "bg-background hover:bg-accent"
+            }
+          `}
+            >
+              {dept}
+            </motion.button>
+          ))}
+        </div>
+
+        {selectedDepartment && (
+          <motion.h2
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className={`z-10 my-8 text-xl md:text-2xl lg:text-3xl font-semibold uppercase ${zenDots.className}`}
+          >
+            {departmentEventNames[selectedDepartment]}
+          </motion.h2>
+        )}
+
+        <div
+          key={selectedDepartment}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
+        >
+          {filteredEvents.map((event, index) => (
+            <EventCard
+              key={event.id}
+              event={event}
+              selectedDepartment={selectedDepartment}
+              index={index}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

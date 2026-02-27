@@ -39,7 +39,7 @@ const EventCard = ({
     >
       <Card className="min-h-full flex flex-col justify-between h-full shadow-sm border bg-card rounded-xl transition-colors">
         <CardHeader>
-          <CardTitle className="text-xl font-semibold text-foreground">
+          <CardTitle className="text-xl md:text-2xl lg:text-3xl font-semibold text-foreground">
             {event.name}
           </CardTitle>
         </CardHeader>
