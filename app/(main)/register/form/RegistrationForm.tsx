@@ -87,6 +87,7 @@ const RegistrationForm = ({
   const [totalFee, setTotalFee] = useState<number>(0);
   const [codefusionHasSecondParticipant, setCodefusionHasSecondParticipant] =
     useState(false);
+  const [treasureHuntShowExtra, setTreasureHuntShowExtra] = useState(true);
   const [paymentMode, setPaymentMode] = useState<"ONLINE" | "OFFLINE">(
     "ONLINE"
   );
@@ -171,6 +172,10 @@ const RegistrationForm = ({
   const selectedEvent = form.watch("events");
   const teamSize = form.watch("numberOfTeamMembers");
   const codefusionParticipant2Name = form.watch("participant2.studentName");
+  const treasureP2Name = form.watch("participant2.studentName");
+  const treasureP3Name = form.watch("participant3.studentName");
+  const treasureP4Name = form.watch("participant4.studentName");
+  const treasureP5Name = form.watch("participant5.studentName");
   const formTitle = selectedEvent
     ? `${selectedEvent} Registration`
     : "Event Registration";
@@ -201,7 +206,9 @@ const RegistrationForm = ({
           ? codefusionHasSecondParticipant || !!codefusionParticipant2Name
             ? 2
             : 1
-          : teamSize;
+          : selectedEvent === "Treasure Hunt"
+            ? teamSize
+            : teamSize;
       const fee = getEventFeeByName(selectedEvent, membersForFee);
       setTotalFee(fee || 0);
     }
@@ -211,13 +218,69 @@ const RegistrationForm = ({
     selectedGames.length,
     codefusionHasSecondParticipant,
     codefusionParticipant2Name,
+    treasureP2Name,
+    treasureP3Name,
+    treasureP4Name,
+    treasureP5Name,
   ]);
 
   useEffect(() => {
-    if (selectedEvent === "Startup Sphere") {
+    if (selectedEvent === "Treasure Hunt") {
       form.setValue("numberOfTeamMembers", 1);
     }
   }, [selectedEvent, form]);
+
+  // Ensure only visible Treasure Hunt team members affect validation
+  useEffect(() => {
+    if (selectedEvent !== "Treasure Hunt") return;
+
+    const maxMembers = teamSize ?? 1;
+    const participantKeys = [
+      "participant2",
+      "participant3",
+      "participant4",
+      "participant5",
+    ] as const;
+
+    participantKeys.forEach((key, index) => {
+      const memberNumber = index + 2; // participant2 → 2, etc.
+      if (memberNumber > maxMembers) {
+        const current = form.getValues(key as any);
+        if (current) {
+          form.setValue(key as any, undefined as any, {
+            shouldValidate: true,
+            shouldDirty: true,
+          });
+        }
+      }
+    });
+  }, [selectedEvent, teamSize, form]);
+
+  // Ensure only visible Treasure Hunt team members affect validation
+  useEffect(() => {
+    if (selectedEvent !== "Treasure Hunt") return;
+
+    const maxMembers = teamSize ?? 1;
+    const participantKeys = [
+      "participant2",
+      "participant3",
+      "participant4",
+      "participant5",
+    ] as const;
+
+    participantKeys.forEach((key, index) => {
+      const memberNumber = index + 2; // participant2 → 2, etc.
+      if (memberNumber > maxMembers) {
+        const current = form.getValues(key as any);
+        if (current) {
+          form.setValue(key as any, undefined as any, {
+            shouldValidate: true,
+            shouldDirty: true,
+          });
+        }
+      }
+    });
+  }, [selectedEvent, teamSize, form]);
 
   useEffect(() => {
     if (selectedEvent !== "CODEFUSION") {
@@ -466,7 +529,6 @@ const RegistrationForm = ({
             selectedEvent === "CAD Master" ||
             selectedEvent === "Videography" ||
             selectedEvent === "Project Expo" ||
-            selectedEvent === "Treasure Hunt" ||
             selectedEvent === "Mech Project Expo" ||
             selectedEvent === "Mech Junk Yard" ||
             selectedEvent === "Mech IPL Auction") && (
@@ -531,6 +593,194 @@ const RegistrationForm = ({
             </>
           )}
 
+          {selectedEvent === "Treasure Hunt" && (
+            <>
+              <FormField
+                control={form.control}
+                name="teamName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      Team Name <RequiredAsterisk />
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter team name"
+                        {...field}
+                        disabled={isPending}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="numberOfTeamMembers"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      Number of Team Members <RequiredAsterisk />
+                    </FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={(value) => field.onChange(Number(value))}
+                        value={field.value ? String(field.value) : "1"}
+                        disabled={isPending}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select number of team members" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {Array.from({ length: 5 }, (_, index) => (
+                            <SelectItem key={index + 1} value={`${index + 1}`}>
+                              {index + 1}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormDescription>
+                      Minimum 1 and maximum of 5 team members allowed. Each
+                      participant is ₹100.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Team Leader */}
+              <div className="space-y-4 md:col-span-2">
+                <h3 className="font-semibold">Team Leader Details</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border rounded-xl">
+                  <FormField
+                    control={form.control}
+                    name="studentName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          Team Leader Name <RequiredAsterisk />
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Enter team leader name"
+                            {...field}
+                            disabled={isPending}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="contactNumber"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          Team Leader Contact Number <RequiredAsterisk />
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Enter contact number"
+                            {...field}
+                            disabled={isPending}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          Team Leader Email <RequiredAsterisk />
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Enter email"
+                            type="email"
+                            {...field}
+                            disabled={isPending}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
+
+              {/* Dynamic Team Members */}
+              {(form.watch("numberOfTeamMembers") ?? 1) > 1 && (
+                <div className="space-y-4 md:col-span-2">
+                  <h3 className="font-semibold">Team Members</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {Array.from({
+                      length: (form.watch("numberOfTeamMembers") ?? 1) - 1,
+                    }).map((_, index) => {
+                      // Map index 0→participant2, 1→participant3, etc.
+                      const participantKey = `participant${index + 2}` as
+                        | "participant2"
+                        | "participant3"
+                        | "participant4"
+                        | "participant5";
+                      return (
+                        <div
+                          key={index}
+                          className="p-4 border rounded-xl space-y-3"
+                        >
+                          <h4 className="font-medium">
+                            Team Member {index + 1}
+                          </h4>
+                          <FormField
+                            control={form.control}
+                            name={`${participantKey}.studentName` as any}
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>
+                                  Name <RequiredAsterisk />
+                                </FormLabel>
+                                <FormControl>
+                                  <Input
+                                    placeholder="Enter name"
+                                    {...field}
+                                    disabled={isPending}
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={form.control}
+                            name={`${participantKey}.contactNumber` as any}
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Contact Number</FormLabel>
+                                <FormControl>
+                                  <Input
+                                    placeholder="Enter contact number"
+                                    {...field}
+                                    disabled={isPending}
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            </>
+          )}
           {selectedEvent === "CODEFUSION" && (
             <div className="space-y-4 md:col-span-2">
               <div className="grid grid-cols-2 gap-6">

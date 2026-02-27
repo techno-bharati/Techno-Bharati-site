@@ -777,7 +777,7 @@ export const calculateEventFee = (
   const eventFee = EVENT_FEES[eventType];
 
   if (
-    eventType === "STARTUP_SPHERE" &&
+    eventType === "CSE_TREASURE_HUNT" &&
     numberOfMembers &&
     "baseAmount" in eventFee
   ) {

@@ -163,7 +163,7 @@ export type TeamMemberGroupByOutputType = {
   id: string;
   studentName: string;
   contactNumber: string;
-  email: string;
+  email: string | null;
   createdAt: Date;
   registrationId: string | null;
   _count: TeamMemberCountAggregateOutputType | null;
@@ -191,7 +191,7 @@ export type TeamMemberWhereInput = {
   id?: Prisma.StringFilter<"TeamMember"> | string;
   studentName?: Prisma.StringFilter<"TeamMember"> | string;
   contactNumber?: Prisma.StringFilter<"TeamMember"> | string;
-  email?: Prisma.StringFilter<"TeamMember"> | string;
+  email?: Prisma.StringNullableFilter<"TeamMember"> | string | null;
   createdAt?: Prisma.DateTimeFilter<"TeamMember"> | Date | string;
   registrationId?: Prisma.StringNullableFilter<"TeamMember"> | string | null;
   registrationAsLeader?: Prisma.XOR<
@@ -208,7 +208,7 @@ export type TeamMemberOrderByWithRelationInput = {
   id?: Prisma.SortOrder;
   studentName?: Prisma.SortOrder;
   contactNumber?: Prisma.SortOrder;
-  email?: Prisma.SortOrder;
+  email?: Prisma.SortOrderInput | Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
   registrationId?: Prisma.SortOrderInput | Prisma.SortOrder;
   registrationAsLeader?: Prisma.RegistrationOrderByWithRelationInput;
@@ -223,7 +223,7 @@ export type TeamMemberWhereUniqueInput = Prisma.AtLeast<
     NOT?: Prisma.TeamMemberWhereInput | Prisma.TeamMemberWhereInput[];
     studentName?: Prisma.StringFilter<"TeamMember"> | string;
     contactNumber?: Prisma.StringFilter<"TeamMember"> | string;
-    email?: Prisma.StringFilter<"TeamMember"> | string;
+    email?: Prisma.StringNullableFilter<"TeamMember"> | string | null;
     createdAt?: Prisma.DateTimeFilter<"TeamMember"> | Date | string;
     registrationId?: Prisma.StringNullableFilter<"TeamMember"> | string | null;
     registrationAsLeader?: Prisma.XOR<
@@ -242,7 +242,7 @@ export type TeamMemberOrderByWithAggregationInput = {
   id?: Prisma.SortOrder;
   studentName?: Prisma.SortOrder;
   contactNumber?: Prisma.SortOrder;
-  email?: Prisma.SortOrder;
+  email?: Prisma.SortOrderInput | Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
   registrationId?: Prisma.SortOrderInput | Prisma.SortOrder;
   _count?: Prisma.TeamMemberCountOrderByAggregateInput;
@@ -261,7 +261,10 @@ export type TeamMemberScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"TeamMember"> | string;
   studentName?: Prisma.StringWithAggregatesFilter<"TeamMember"> | string;
   contactNumber?: Prisma.StringWithAggregatesFilter<"TeamMember"> | string;
-  email?: Prisma.StringWithAggregatesFilter<"TeamMember"> | string;
+  email?:
+    | Prisma.StringNullableWithAggregatesFilter<"TeamMember">
+    | string
+    | null;
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"TeamMember"> | Date | string;
   registrationId?:
     | Prisma.StringNullableWithAggregatesFilter<"TeamMember">
@@ -273,7 +276,7 @@ export type TeamMemberCreateInput = {
   id?: string;
   studentName: string;
   contactNumber: string;
-  email: string;
+  email?: string | null;
   createdAt?: Date | string;
   registrationAsLeader?: Prisma.RegistrationCreateNestedOneWithoutTeamLeaderInput;
   registrationAsMember?: Prisma.RegistrationCreateNestedOneWithoutTeamMembersInput;
@@ -283,7 +286,7 @@ export type TeamMemberUncheckedCreateInput = {
   id?: string;
   studentName: string;
   contactNumber: string;
-  email: string;
+  email?: string | null;
   createdAt?: Date | string;
   registrationId?: string | null;
   registrationAsLeader?: Prisma.RegistrationUncheckedCreateNestedOneWithoutTeamLeaderInput;
@@ -293,7 +296,7 @@ export type TeamMemberUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   studentName?: Prisma.StringFieldUpdateOperationsInput | string;
   contactNumber?: Prisma.StringFieldUpdateOperationsInput | string;
-  email?: Prisma.StringFieldUpdateOperationsInput | string;
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   registrationAsLeader?: Prisma.RegistrationUpdateOneWithoutTeamLeaderNestedInput;
   registrationAsMember?: Prisma.RegistrationUpdateOneWithoutTeamMembersNestedInput;
@@ -303,7 +306,7 @@ export type TeamMemberUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   studentName?: Prisma.StringFieldUpdateOperationsInput | string;
   contactNumber?: Prisma.StringFieldUpdateOperationsInput | string;
-  email?: Prisma.StringFieldUpdateOperationsInput | string;
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   registrationId?:
     | Prisma.NullableStringFieldUpdateOperationsInput
@@ -316,7 +319,7 @@ export type TeamMemberCreateManyInput = {
   id?: string;
   studentName: string;
   contactNumber: string;
-  email: string;
+  email?: string | null;
   createdAt?: Date | string;
   registrationId?: string | null;
 };
@@ -325,7 +328,7 @@ export type TeamMemberUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   studentName?: Prisma.StringFieldUpdateOperationsInput | string;
   contactNumber?: Prisma.StringFieldUpdateOperationsInput | string;
-  email?: Prisma.StringFieldUpdateOperationsInput | string;
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 
@@ -333,7 +336,7 @@ export type TeamMemberUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   studentName?: Prisma.StringFieldUpdateOperationsInput | string;
   contactNumber?: Prisma.StringFieldUpdateOperationsInput | string;
-  email?: Prisma.StringFieldUpdateOperationsInput | string;
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   registrationId?:
     | Prisma.NullableStringFieldUpdateOperationsInput
@@ -525,7 +528,7 @@ export type TeamMemberCreateWithoutRegistrationAsLeaderInput = {
   id?: string;
   studentName: string;
   contactNumber: string;
-  email: string;
+  email?: string | null;
   createdAt?: Date | string;
   registrationAsMember?: Prisma.RegistrationCreateNestedOneWithoutTeamMembersInput;
 };
@@ -534,7 +537,7 @@ export type TeamMemberUncheckedCreateWithoutRegistrationAsLeaderInput = {
   id?: string;
   studentName: string;
   contactNumber: string;
-  email: string;
+  email?: string | null;
   createdAt?: Date | string;
   registrationId?: string | null;
 };
@@ -551,7 +554,7 @@ export type TeamMemberCreateWithoutRegistrationAsMemberInput = {
   id?: string;
   studentName: string;
   contactNumber: string;
-  email: string;
+  email?: string | null;
   createdAt?: Date | string;
   registrationAsLeader?: Prisma.RegistrationCreateNestedOneWithoutTeamLeaderInput;
 };
@@ -560,7 +563,7 @@ export type TeamMemberUncheckedCreateWithoutRegistrationAsMemberInput = {
   id?: string;
   studentName: string;
   contactNumber: string;
-  email: string;
+  email?: string | null;
   createdAt?: Date | string;
   registrationAsLeader?: Prisma.RegistrationUncheckedCreateNestedOneWithoutTeamLeaderInput;
 };
@@ -604,7 +607,7 @@ export type TeamMemberUpdateWithoutRegistrationAsLeaderInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   studentName?: Prisma.StringFieldUpdateOperationsInput | string;
   contactNumber?: Prisma.StringFieldUpdateOperationsInput | string;
-  email?: Prisma.StringFieldUpdateOperationsInput | string;
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   registrationAsMember?: Prisma.RegistrationUpdateOneWithoutTeamMembersNestedInput;
 };
@@ -613,7 +616,7 @@ export type TeamMemberUncheckedUpdateWithoutRegistrationAsLeaderInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   studentName?: Prisma.StringFieldUpdateOperationsInput | string;
   contactNumber?: Prisma.StringFieldUpdateOperationsInput | string;
-  email?: Prisma.StringFieldUpdateOperationsInput | string;
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   registrationId?:
     | Prisma.NullableStringFieldUpdateOperationsInput
@@ -656,7 +659,7 @@ export type TeamMemberScalarWhereInput = {
   id?: Prisma.StringFilter<"TeamMember"> | string;
   studentName?: Prisma.StringFilter<"TeamMember"> | string;
   contactNumber?: Prisma.StringFilter<"TeamMember"> | string;
-  email?: Prisma.StringFilter<"TeamMember"> | string;
+  email?: Prisma.StringNullableFilter<"TeamMember"> | string | null;
   createdAt?: Prisma.DateTimeFilter<"TeamMember"> | Date | string;
   registrationId?: Prisma.StringNullableFilter<"TeamMember"> | string | null;
 };
@@ -665,7 +668,7 @@ export type TeamMemberCreateManyRegistrationAsMemberInput = {
   id?: string;
   studentName: string;
   contactNumber: string;
-  email: string;
+  email?: string | null;
   createdAt?: Date | string;
 };
 
@@ -673,7 +676,7 @@ export type TeamMemberUpdateWithoutRegistrationAsMemberInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   studentName?: Prisma.StringFieldUpdateOperationsInput | string;
   contactNumber?: Prisma.StringFieldUpdateOperationsInput | string;
-  email?: Prisma.StringFieldUpdateOperationsInput | string;
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   registrationAsLeader?: Prisma.RegistrationUpdateOneWithoutTeamLeaderNestedInput;
 };
@@ -682,7 +685,7 @@ export type TeamMemberUncheckedUpdateWithoutRegistrationAsMemberInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   studentName?: Prisma.StringFieldUpdateOperationsInput | string;
   contactNumber?: Prisma.StringFieldUpdateOperationsInput | string;
-  email?: Prisma.StringFieldUpdateOperationsInput | string;
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   registrationAsLeader?: Prisma.RegistrationUncheckedUpdateOneWithoutTeamLeaderNestedInput;
 };
@@ -691,7 +694,7 @@ export type TeamMemberUncheckedUpdateManyWithoutRegistrationAsMemberInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   studentName?: Prisma.StringFieldUpdateOperationsInput | string;
   contactNumber?: Prisma.StringFieldUpdateOperationsInput | string;
-  email?: Prisma.StringFieldUpdateOperationsInput | string;
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 
@@ -815,7 +818,7 @@ export type $TeamMemberPayload<
       id: string;
       studentName: string;
       contactNumber: string;
-      email: string;
+      email: string | null;
       createdAt: Date;
       registrationId: string | null;
     },

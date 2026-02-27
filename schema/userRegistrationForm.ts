@@ -82,11 +82,28 @@ const pythonWorriorsSchema = z.object({
   email: z.string().email("Invalid email address"),
 });
 
+const treasureHuntParticipantSchema = z.object({
+  studentName: z.string().min(1, "Name is required"),
+  contactNumber: z
+    .string()
+    .regex(indianPhoneRegex, "Enter valid contact number")
+    .or(z.literal(""))
+    .optional(),
+});
+
 const aiTalesSchema = pythonWorriorsSchema;
 const generalEngineeringTechnicalSchema = pythonWorriorsSchema;
 const civilTechnicalSchema = pythonWorriorsSchema;
 const cseTechnicalSchema = pythonWorriorsSchema;
 const mechTechnicalSchema = pythonWorriorsSchema;
+
+const treasureHuntSchema = pythonWorriorsSchema.extend({
+  teamName: z.string().min(1, "Team name is required"),
+  participant2: treasureHuntParticipantSchema.optional(),
+  participant3: treasureHuntParticipantSchema.optional(),
+  participant4: treasureHuntParticipantSchema.optional(),
+  participant5: treasureHuntParticipantSchema.optional(),
+});
 
 const codefusionSchema = pythonWorriorsSchema.extend({
   participant2: z
@@ -229,7 +246,7 @@ export const userRegistrationFormSchema = z
       z.object({ events: z.literal("Project Expo") }).merge(cseTechnicalSchema),
       z
         .object({ events: z.literal("Treasure Hunt") })
-        .merge(cseTechnicalSchema),
+        .merge(treasureHuntSchema),
       z
         .object({ events: z.literal("Mech Project Expo") })
         .merge(mechTechnicalSchema),

@@ -129,7 +129,7 @@ model TeamMember {
   id            String   @id @default(cuid())
   studentName   String
   contactNumber String
-  email         String
+  email         String?
   createdAt     DateTime @default(now())
 
   registrationAsLeader Registration? @relation("TeamLeader")

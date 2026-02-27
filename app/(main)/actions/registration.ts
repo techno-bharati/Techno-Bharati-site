@@ -72,7 +72,15 @@ export async function createRegistration(
             ? data.participant2
               ? 2
               : 1
-            : 1;
+            : eventName === "Treasure Hunt"
+              ? 1 +
+                [
+                  data.participant2,
+                  data.participant3,
+                  data.participant4,
+                  data.participant5,
+                ].filter((p) => p && p.studentName).length
+              : 1;
       const fee = getEventFeeByName(eventName, teamSize);
 
       // Startup Sphere, BGMI, and FreeFire all use calculated fees
@@ -146,66 +154,95 @@ export async function createRegistration(
                   },
                 }),
               }
-            : formData.events === "BGMI" || formData.events === "FreeFire"
-              ? {
-                  ...baseData,
-                  squadName: formData.squadName,
-                  email: formData.players[0].email,
-                  contactNumber: formData.players[0].contactNumber,
-                  players: {
-                    create: formData.players.map((player) => ({
-                      playerName: player.playerName,
-                      bgmiId: player.bgmiId,
-                      contactNumber: player.contactNumber,
-                    })),
-                  },
-                }
-              : formData.events === "General Engineering Games"
-                ? {
+            : formData.events === "Treasure Hunt"
+              ? (() => {
+                  const additionalParticipants = [
+                    formData.participant2,
+                    formData.participant3,
+                    formData.participant4,
+                    formData.participant5,
+                  ].filter(
+                    (p): p is NonNullable<typeof formData.participant2> =>
+                      !!p && !!p.studentName
+                  );
+
+                  return {
                     ...baseData,
+                    teamName: formData.teamName,
                     studentName: formData.studentName,
                     contactNumber: formData.contactNumber,
                     email: formData.email,
-                    notes: `GE Games: ${formData.selectedGames.join(", ")}${
-                      formData.groupName
-                        ? ` | Group: ${formData.groupName}`
-                        : ""
-                    }`,
+                    numberOfTeamMembers: 1 + additionalParticipants.length,
+                    ...(additionalParticipants.length > 0 && {
+                      teamMembers: {
+                        create: additionalParticipants.map((p) => ({
+                          studentName: p.studentName,
+                          contactNumber: p.contactNumber || "",
+                        })),
+                      },
+                    }),
+                  };
+                })()
+              : formData.events === "BGMI" || formData.events === "FreeFire"
+                ? {
+                    ...baseData,
+                    squadName: formData.squadName,
+                    email: formData.players[0].email,
+                    contactNumber: formData.players[0].contactNumber,
+                    players: {
+                      create: formData.players.map((player) => ({
+                        playerName: player.playerName,
+                        bgmiId: player.bgmiId,
+                        contactNumber: player.contactNumber,
+                      })),
+                    },
                   }
-                : formData.events === "CODEFUSION"
+                : formData.events === "General Engineering Games"
                   ? {
                       ...baseData,
                       studentName: formData.studentName,
                       contactNumber: formData.contactNumber,
                       email: formData.email,
-                      ...(formData.participant2 && {
-                        teamMembers: {
-                          create: [
-                            {
-                              studentName: formData.participant2.studentName,
-                              contactNumber:
-                                formData.participant2.contactNumber,
-                              email: formData.participant2.email,
-                            },
-                          ],
-                        },
-                      }),
+                      notes: `GE Games: ${formData.selectedGames.join(", ")}${
+                        formData.groupName
+                          ? ` | Group: ${formData.groupName}`
+                          : ""
+                      }`,
                     }
-                  : formData.events === "Model Making" ||
-                      formData.events === "CAD Master" ||
-                      formData.events === "Videography"
+                  : formData.events === "CODEFUSION"
                     ? {
                         ...baseData,
                         studentName: formData.studentName,
                         contactNumber: formData.contactNumber,
                         email: formData.email,
+                        ...(formData.participant2 && {
+                          teamMembers: {
+                            create: [
+                              {
+                                studentName: formData.participant2.studentName,
+                                contactNumber:
+                                  formData.participant2.contactNumber,
+                                email: formData.participant2.email,
+                              },
+                            ],
+                          },
+                        }),
                       }
-                    : {
-                        ...baseData,
-                        studentName: formData.studentName,
-                        contactNumber: formData.contactNumber,
-                        email: formData.email,
-                      },
+                    : formData.events === "Model Making" ||
+                        formData.events === "CAD Master" ||
+                        formData.events === "Videography"
+                      ? {
+                          ...baseData,
+                          studentName: formData.studentName,
+                          contactNumber: formData.contactNumber,
+                          email: formData.email,
+                        }
+                      : {
+                          ...baseData,
+                          studentName: formData.studentName,
+                          contactNumber: formData.contactNumber,
+                          email: formData.email,
+                        },
         include: {
           players: true,
           teamLeader: true,
