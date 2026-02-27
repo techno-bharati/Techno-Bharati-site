@@ -163,7 +163,7 @@ export type PlayerGroupByOutputType = {
   id: string;
   playerName: string;
   bgmiId: string;
-  contactNumber: string;
+  contactNumber: string | null;
   createdAt: Date;
   registrationId: string;
   _count: PlayerCountAggregateOutputType | null;
@@ -191,7 +191,7 @@ export type PlayerWhereInput = {
   id?: Prisma.StringFilter<"Player"> | string;
   playerName?: Prisma.StringFilter<"Player"> | string;
   bgmiId?: Prisma.StringFilter<"Player"> | string;
-  contactNumber?: Prisma.StringFilter<"Player"> | string;
+  contactNumber?: Prisma.StringNullableFilter<"Player"> | string | null;
   createdAt?: Prisma.DateTimeFilter<"Player"> | Date | string;
   registrationId?: Prisma.StringFilter<"Player"> | string;
   registration?: Prisma.XOR<
@@ -204,7 +204,7 @@ export type PlayerOrderByWithRelationInput = {
   id?: Prisma.SortOrder;
   playerName?: Prisma.SortOrder;
   bgmiId?: Prisma.SortOrder;
-  contactNumber?: Prisma.SortOrder;
+  contactNumber?: Prisma.SortOrderInput | Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
   registrationId?: Prisma.SortOrder;
   registration?: Prisma.RegistrationOrderByWithRelationInput;
@@ -218,7 +218,7 @@ export type PlayerWhereUniqueInput = Prisma.AtLeast<
     NOT?: Prisma.PlayerWhereInput | Prisma.PlayerWhereInput[];
     playerName?: Prisma.StringFilter<"Player"> | string;
     bgmiId?: Prisma.StringFilter<"Player"> | string;
-    contactNumber?: Prisma.StringFilter<"Player"> | string;
+    contactNumber?: Prisma.StringNullableFilter<"Player"> | string | null;
     createdAt?: Prisma.DateTimeFilter<"Player"> | Date | string;
     registrationId?: Prisma.StringFilter<"Player"> | string;
     registration?: Prisma.XOR<
@@ -233,7 +233,7 @@ export type PlayerOrderByWithAggregationInput = {
   id?: Prisma.SortOrder;
   playerName?: Prisma.SortOrder;
   bgmiId?: Prisma.SortOrder;
-  contactNumber?: Prisma.SortOrder;
+  contactNumber?: Prisma.SortOrderInput | Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
   registrationId?: Prisma.SortOrder;
   _count?: Prisma.PlayerCountOrderByAggregateInput;
@@ -252,7 +252,10 @@ export type PlayerScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Player"> | string;
   playerName?: Prisma.StringWithAggregatesFilter<"Player"> | string;
   bgmiId?: Prisma.StringWithAggregatesFilter<"Player"> | string;
-  contactNumber?: Prisma.StringWithAggregatesFilter<"Player"> | string;
+  contactNumber?:
+    | Prisma.StringNullableWithAggregatesFilter<"Player">
+    | string
+    | null;
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Player"> | Date | string;
   registrationId?: Prisma.StringWithAggregatesFilter<"Player"> | string;
 };
@@ -261,7 +264,7 @@ export type PlayerCreateInput = {
   id?: string;
   playerName: string;
   bgmiId: string;
-  contactNumber: string;
+  contactNumber?: string | null;
   createdAt?: Date | string;
   registration: Prisma.RegistrationCreateNestedOneWithoutPlayersInput;
 };
@@ -270,7 +273,7 @@ export type PlayerUncheckedCreateInput = {
   id?: string;
   playerName: string;
   bgmiId: string;
-  contactNumber: string;
+  contactNumber?: string | null;
   createdAt?: Date | string;
   registrationId: string;
 };
@@ -279,7 +282,10 @@ export type PlayerUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   playerName?: Prisma.StringFieldUpdateOperationsInput | string;
   bgmiId?: Prisma.StringFieldUpdateOperationsInput | string;
-  contactNumber?: Prisma.StringFieldUpdateOperationsInput | string;
+  contactNumber?:
+    | Prisma.NullableStringFieldUpdateOperationsInput
+    | string
+    | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   registration?: Prisma.RegistrationUpdateOneRequiredWithoutPlayersNestedInput;
 };
@@ -288,7 +294,10 @@ export type PlayerUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   playerName?: Prisma.StringFieldUpdateOperationsInput | string;
   bgmiId?: Prisma.StringFieldUpdateOperationsInput | string;
-  contactNumber?: Prisma.StringFieldUpdateOperationsInput | string;
+  contactNumber?:
+    | Prisma.NullableStringFieldUpdateOperationsInput
+    | string
+    | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   registrationId?: Prisma.StringFieldUpdateOperationsInput | string;
 };
@@ -297,7 +306,7 @@ export type PlayerCreateManyInput = {
   id?: string;
   playerName: string;
   bgmiId: string;
-  contactNumber: string;
+  contactNumber?: string | null;
   createdAt?: Date | string;
   registrationId: string;
 };
@@ -306,7 +315,10 @@ export type PlayerUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   playerName?: Prisma.StringFieldUpdateOperationsInput | string;
   bgmiId?: Prisma.StringFieldUpdateOperationsInput | string;
-  contactNumber?: Prisma.StringFieldUpdateOperationsInput | string;
+  contactNumber?:
+    | Prisma.NullableStringFieldUpdateOperationsInput
+    | string
+    | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 
@@ -314,7 +326,10 @@ export type PlayerUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   playerName?: Prisma.StringFieldUpdateOperationsInput | string;
   bgmiId?: Prisma.StringFieldUpdateOperationsInput | string;
-  contactNumber?: Prisma.StringFieldUpdateOperationsInput | string;
+  contactNumber?:
+    | Prisma.NullableStringFieldUpdateOperationsInput
+    | string
+    | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   registrationId?: Prisma.StringFieldUpdateOperationsInput | string;
 };
@@ -446,7 +461,7 @@ export type PlayerCreateWithoutRegistrationInput = {
   id?: string;
   playerName: string;
   bgmiId: string;
-  contactNumber: string;
+  contactNumber?: string | null;
   createdAt?: Date | string;
 };
 
@@ -454,7 +469,7 @@ export type PlayerUncheckedCreateWithoutRegistrationInput = {
   id?: string;
   playerName: string;
   bgmiId: string;
-  contactNumber: string;
+  contactNumber?: string | null;
   createdAt?: Date | string;
 };
 
@@ -508,7 +523,7 @@ export type PlayerScalarWhereInput = {
   id?: Prisma.StringFilter<"Player"> | string;
   playerName?: Prisma.StringFilter<"Player"> | string;
   bgmiId?: Prisma.StringFilter<"Player"> | string;
-  contactNumber?: Prisma.StringFilter<"Player"> | string;
+  contactNumber?: Prisma.StringNullableFilter<"Player"> | string | null;
   createdAt?: Prisma.DateTimeFilter<"Player"> | Date | string;
   registrationId?: Prisma.StringFilter<"Player"> | string;
 };
@@ -517,7 +532,7 @@ export type PlayerCreateManyRegistrationInput = {
   id?: string;
   playerName: string;
   bgmiId: string;
-  contactNumber: string;
+  contactNumber?: string | null;
   createdAt?: Date | string;
 };
 
@@ -525,7 +540,10 @@ export type PlayerUpdateWithoutRegistrationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   playerName?: Prisma.StringFieldUpdateOperationsInput | string;
   bgmiId?: Prisma.StringFieldUpdateOperationsInput | string;
-  contactNumber?: Prisma.StringFieldUpdateOperationsInput | string;
+  contactNumber?:
+    | Prisma.NullableStringFieldUpdateOperationsInput
+    | string
+    | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 
@@ -533,7 +551,10 @@ export type PlayerUncheckedUpdateWithoutRegistrationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   playerName?: Prisma.StringFieldUpdateOperationsInput | string;
   bgmiId?: Prisma.StringFieldUpdateOperationsInput | string;
-  contactNumber?: Prisma.StringFieldUpdateOperationsInput | string;
+  contactNumber?:
+    | Prisma.NullableStringFieldUpdateOperationsInput
+    | string
+    | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 
@@ -541,7 +562,10 @@ export type PlayerUncheckedUpdateManyWithoutRegistrationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string;
   playerName?: Prisma.StringFieldUpdateOperationsInput | string;
   bgmiId?: Prisma.StringFieldUpdateOperationsInput | string;
-  contactNumber?: Prisma.StringFieldUpdateOperationsInput | string;
+  contactNumber?:
+    | Prisma.NullableStringFieldUpdateOperationsInput
+    | string
+    | null;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 
@@ -646,7 +670,7 @@ export type $PlayerPayload<
       id: string;
       playerName: string;
       bgmiId: string;
-      contactNumber: string;
+      contactNumber: string | null;
       createdAt: Date;
       registrationId: string;
     },
