@@ -43,7 +43,7 @@ export function Hero2() {
   return (
     <section
       ref={scope}
-      className="relative min-h-screen max-w-7xl mx-auto flex flex-col items-center justify-center overflow-hidden z-10"
+      className="relative pt-20 md:pt-24 pb-16 md:pb-20 max-w-7xl mx-auto flex flex-col items-center gap-8 lg:min-h-screen lg:justify-center overflow-hidden z-10"
     >
       <motion.div
         initial={{
@@ -52,7 +52,7 @@ export function Hero2() {
         animate={{
           opacity: 1,
         }}
-        className="flex flex-col md:flex-row items-center justify-center gap-4 text-center  space-x-4 w-full h-fit"
+        className="flex flex-col md:flex-row items-center justify-center gap-4 text-center w-full h-fit"
       >
         <Image
           src="/bvcoek.png"
@@ -61,28 +61,30 @@ export function Hero2() {
           height={160}
           className="h-20 sm:h-full w-auto"
         />
-        <div className="text-muted-foreground">
+        <div className="text-yellow-800">
           <p className="font-bold text-sm md:text-xl lg:text-2xl uppercase">
-            Bharati Vidyapeeth&apos;s College of Engineering, Kolhapur
+            Bharati Vidyapeeth&apos;s College of Engineering,
+            <br /> Kolhapur
           </p>
         </div>
-        <div className="flex gap-2 items-center">
+        <div className="flex gap-3 items-center justify-center flex-wrap">
           <Image
-            src={"/naac.png"}
+            src="/naac.png"
             alt="naaclogo"
             width={100}
             height={100}
-            className="h-16 sm:h-full w-auto"
+            className="h-14 md:h-16 lg:h-20 w-auto object-contain"
           />
           <Image
-            src={"/Iste.png"}
+            src="/Iste.png"
             alt="istelogo"
             width={100}
             height={100}
-            className="size-14 sm:size-20 rounded-full"
+            className="h-14 md:h-16 lg:h-20 w-auto object-contain rounded-full"
           />
         </div>
       </motion.div>
+
       <motion.div
         id="hero"
         initial={"initial"}
@@ -96,7 +98,7 @@ export function Hero2() {
           className=""
         >
           <div
-            className={`text-[4rem] md:text-[6rem] lg:text-[9rem] font-bold tracking-tight flex flex-col space-y-[-2.5rem] md:space-y-[-4rem] lg:space-y-[-6rem] ${zenDots.className}`}
+            className={`text-[4rem] md:text-[6rem] lg:text-[9rem] font-bold tracking-tight flex flex-col leading-[0.8] ${zenDots.className}`}
           >
             <motion.h1
               id="hero"
@@ -106,7 +108,7 @@ export function Hero2() {
             >
               Techno
             </motion.h1>
-
+            {/* <br /> */}
             <motion.h1
               id="hero"
               initial={"initial"}
@@ -116,18 +118,18 @@ export function Hero2() {
               Bharati
             </motion.h1>
           </div>
-
-          <motion.p
-            id="hero"
-            initial={"initial"}
-            variants={animation}
-            className="text-[1rem] md:text-[1.5rem] text-muted-foreground font-light"
-          >
-            <TextShimmer spread={4} className="text-xl md:text-3xl">
-              25th March, 2026
-            </TextShimmer>
-          </motion.p>
         </motion.div>
+
+        <motion.p
+          id="hero"
+          initial={"initial"}
+          variants={animation}
+          className="text-[1rem] md:text-[1.5rem] text-muted-foreground font-light"
+        >
+          <TextShimmer spread={4} className="text-xl md:text-3xl">
+            25th March, 2026
+          </TextShimmer>
+        </motion.p>
 
         <motion.div id="hero" initial={"initial"} variants={animation}>
           <Countdown />
