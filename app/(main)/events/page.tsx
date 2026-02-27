@@ -4,7 +4,7 @@ import EventsPageContent from "./_components/EventsPageContent";
 const EventsPage = () => {
   return (
     <Suspense fallback={null}>
-      <EventsPageContent />;
+      <EventsPageContent />
     </Suspense>
   );
 };
