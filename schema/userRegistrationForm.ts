@@ -1,49 +1,76 @@
 import { z } from "zod";
 
+const indianPhoneRegex = /^(?:\+91|91)?[6-9]\d{9}$/;
+
 // Define event-specific schemas
 const startupSphereSchema = z.object({
   startupCategory: z.string(),
   numberOfTeamMembers: z.number().min(1).max(5),
   teamLeader: z.object({
     studentName: z.string(),
-    contactNumber: z.string(),
-    email: z.string().email(),
+    contactNumber: z
+      .string()
+      .regex(indianPhoneRegex, "Enter valid contact number"),
+    email: z.string().email("Enter valid email address"),
   }),
   teamName: z.string(),
   teamMembers: z
     .array(
       z.object({
         studentName: z.string().optional(),
-        contactNumber: z.string().optional(),
-        email: z.string().email().optional(),
+        contactNumber: z
+          .string()
+          .regex(indianPhoneRegex, "Enter valid contact number")
+          .optional(),
+        email: z.string().email("Enter valid email address").optional(),
       })
     )
     .optional(),
 });
 
 const faceToFaceSchema = z.object({
-  studentName: z.string(),
-  contactNumber: z.string(),
-  email: z.string().email(),
+  studentName: z.string({ required_error: "Student name is required" }),
+  contactNumber: z
+    .string({ required_error: "Contact Number is required" })
+    .regex(indianPhoneRegex, "Enter valid contact number"),
+  email: z
+    .string({ required_error: "Email is required" })
+    .email("Enter valid email address"),
 });
 
 const fireFireBattleshipSchema = z.object({
-  squadName: z.string().min(1, "Squad name is required"),
+  squadName: z
+    .string({ required_error: "Squad name is required" })
+    .min(1, "Squad name is required"),
   players: z
     .array(
       z.object({
-        playerName: z.string().min(1, "Player name is required"),
-        bgmiId: z.string().min(1, "BGMI ID is required"),
+        playerName: z
+          .string({ required_error: "Name is required" })
+          .min(1, "Player name is required"),
+        bgmiId: z
+          .string({ required_error: "BGMI ID is required" })
+          .min(1, "BGMI ID is required"),
+        email: z
+          .string({ required_error: "Squad Leader email address is required" })
+          .email("Invalid email address")
+          .optional(),
         contactNumber: z
-          .string()
-          .min(10, "Contact number must be at least 10 digits"),
-        email: z.string().email("Invalid email address").optional(),
+          .string({
+            required_error: "Squad Leader contact number is required",
+          })
+          .regex(indianPhoneRegex, "Enter valid contact number")
+          .optional(),
       })
     )
     .length(4, "Exactly 4 players are required")
-    .refine((players) => players[0].email !== undefined, {
+    .refine((players) => !!players[0]?.email, {
       message: "Squad leader's email is required",
-      path: ["players", 0, "email"],
+      path: [0, "email"],
+    })
+    .refine((players) => !!players[0]?.contactNumber, {
+      message: "Squad leader's contact number is required",
+      path: [0, "contactNumber"],
     }),
 });
 
@@ -55,14 +82,23 @@ const pythonWorriorsSchema = z.object({
   email: z.string().email("Invalid email address"),
 });
 
-const aiTalesSchema = pythonWorriorsSchema; // Same as Python Frontiers
-
+const aiTalesSchema = pythonWorriorsSchema;
 const generalEngineeringTechnicalSchema = pythonWorriorsSchema;
-const civilTechnicalSchema = pythonWorriorsSchema; // Same as individual events: name, contact, email
-const cseTechnicalSchema = pythonWorriorsSchema; // CSE events: student name, contact, email
-
-// Mechanical events use the same individual participant schema
+const civilTechnicalSchema = pythonWorriorsSchema;
+const cseTechnicalSchema = pythonWorriorsSchema;
 const mechTechnicalSchema = pythonWorriorsSchema;
+
+const codefusionSchema = pythonWorriorsSchema.extend({
+  participant2: z
+    .object({
+      studentName: z.string().min(1, "Name is required"),
+      contactNumber: z
+        .string()
+        .min(10, "Contact number must be at least 10 digits"),
+      email: z.string().email("Invalid email address"),
+    })
+    .optional(),
+});
 
 const generalEngineeringGamesBundleSchema = z.object({
   selectedGames: z
@@ -189,7 +225,7 @@ export const userRegistrationFormSchema = z
       z
         .object({ events: z.literal("Videography") })
         .merge(civilTechnicalSchema),
-      z.object({ events: z.literal("CODEFUSION") }).merge(cseTechnicalSchema),
+      z.object({ events: z.literal("CODEFUSION") }).merge(codefusionSchema),
       z.object({ events: z.literal("Project Expo") }).merge(cseTechnicalSchema),
       z
         .object({ events: z.literal("Treasure Hunt") })
