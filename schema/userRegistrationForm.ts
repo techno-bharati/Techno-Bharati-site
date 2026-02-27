@@ -149,8 +149,6 @@ const mechProjectExpoSchema = standardRegistrationSchema.extend({
   participant5: participantSchema.optional(),
 });
 
-const entcProjectExpoSchema = mechIplAuctionSchema;
-
 const codefusionSchema = standardRegistrationSchema.extend({
   participant2: z
     .object({
@@ -176,6 +174,9 @@ const generalEngineeringGamesBundleSchema = z.object({
     .min(10, "Contact number must be at least 10 digits"),
   email: z.string().email("Invalid email address"),
 });
+
+const entcProjectExpoSchema = mechIplAuctionSchema;
+const entcDigitalDangalSchema = codefusionSchema;
 
 // Add this before the main schema
 const paymentModeSchema = z.object({
@@ -265,7 +266,7 @@ const baseUserRegistrationFormSchema = z
         .merge(entcProjectExpoSchema),
       z
         .object({ events: z.literal("Digital Dangal") })
-        .merge(standardRegistrationSchema),
+        .merge(entcDigitalDangalSchema),
       z
         .object({ events: z.literal("Snap & Shine") })
         .merge(standardRegistrationSchema),

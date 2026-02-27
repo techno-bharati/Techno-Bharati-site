@@ -68,7 +68,7 @@ export async function createRegistration(
       const teamSize =
         eventName === "Startup Sphere"
           ? (data.teamMembers?.length || 0) + 1
-          : eventName === "CODEFUSION"
+          : eventName === "CODEFUSION" || eventName === "Digital Dangal"
             ? data.participant2
               ? 2
               : 1
@@ -256,7 +256,8 @@ export async function createRegistration(
                           },
                         };
                       })()
-                    : formData.events === "CODEFUSION"
+                    : formData.events === "CODEFUSION" ||
+                        formData.events === "Digital Dangal"
                       ? {
                           ...baseData,
                           studentName: formData.studentName,

@@ -87,6 +87,10 @@ const RegistrationForm = ({
   const [totalFee, setTotalFee] = useState<number>(0);
   const [codefusionHasSecondParticipant, setCodefusionHasSecondParticipant] =
     useState(false);
+  const [
+    entcDigitalDangalSecondParticipant,
+    setEntcDigitalDangalSecondParticipant,
+  ] = useState(false);
   const [mechIplHasFourthMember, setMechIplHasFourthMember] = useState(false);
   const [mechJunkYardHasThirdMember, setMechJunkYardHasThirdMember] =
     useState(false);
@@ -177,6 +181,7 @@ const RegistrationForm = ({
   const selectedEvent = form.watch("events");
   const teamSize = form.watch("numberOfTeamMembers");
   const codefusionParticipant2Name = form.watch("participant2.studentName");
+  const entcDigitalDangal2Name = form.watch("participant2.studentName");
   const treasureP2Name = form.watch("participant2.studentName");
   const treasureP3Name = form.watch("participant3.studentName");
   const treasureP4Name = form.watch("participant4.studentName");
@@ -184,6 +189,26 @@ const RegistrationForm = ({
   const formTitle = selectedEvent
     ? `${selectedEvent} Registration`
     : "Event Registration";
+
+  const getMembersCount = () => {
+    if (selectedEvent === "CODEFUSION") {
+      return codefusionHasSecondParticipant || !!codefusionParticipant2Name
+        ? 2
+        : 1;
+    }
+
+    if (selectedEvent === "Treasure Hunt") {
+      return teamSize;
+    }
+
+    if (selectedEvent === "Digital Dangal") {
+      return entcDigitalDangalSecondParticipant || !!entcDigitalDangal2Name
+        ? 2
+        : 1;
+    }
+
+    return teamSize;
+  };
 
   useEffect(() => {
     if (!selectedEvent) {
@@ -209,14 +234,7 @@ const RegistrationForm = ({
     ) {
       setTotalFee(CIVIL_TECHNICAL_FEE);
     } else {
-      const membersForFee =
-        selectedEvent === "CODEFUSION"
-          ? codefusionHasSecondParticipant || !!codefusionParticipant2Name
-            ? 2
-            : 1
-          : selectedEvent === "Treasure Hunt"
-            ? teamSize
-            : teamSize;
+      const membersForFee = getMembersCount();
       const fee = getEventFeeByName(selectedEvent, membersForFee);
       setTotalFee(fee || 0);
     }
@@ -226,6 +244,8 @@ const RegistrationForm = ({
     selectedGames.length,
     codefusionHasSecondParticipant,
     codefusionParticipant2Name,
+    entcDigitalDangalSecondParticipant,
+    entcDigitalDangal2Name,
     treasureP2Name,
     treasureP3Name,
     treasureP4Name,
@@ -369,15 +389,35 @@ const RegistrationForm = ({
   }, [selectedEvent, teamSize, form]);
 
   useEffect(() => {
-    if (selectedEvent !== "CODEFUSION") {
-      setCodefusionHasSecondParticipant(false);
+    const isCodefusion = selectedEvent === "CODEFUSION";
+    const isDigitalDangal = selectedEvent === "Digital Dangal";
+
+    // Reset toggle states when leaving their events
+    if (!isCodefusion) setCodefusionHasSecondParticipant(false);
+    if (!isDigitalDangal) setEntcDigitalDangalSecondParticipant(false);
+
+    // Clear participant2 when it shouldn't be present for current event
+    if (!isCodefusion && !isDigitalDangal) {
       form.setValue("participant2", undefined as any);
       return;
     }
-    if (!codefusionHasSecondParticipant) {
-      form.setValue("participant2", undefined as any);
+
+    const shouldShowParticipant2 =
+      (isCodefusion && codefusionHasSecondParticipant) ||
+      (isDigitalDangal && entcDigitalDangalSecondParticipant);
+
+    if (!shouldShowParticipant2) {
+      form.setValue("participant2", undefined as any, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
     }
-  }, [selectedEvent, codefusionHasSecondParticipant, form]);
+  }, [
+    selectedEvent,
+    codefusionHasSecondParticipant,
+    entcDigitalDangalSecondParticipant,
+    form,
+  ]);
 
   useEffect(() => {
     if (selectedEvent !== "Mech IPL Auction") {
@@ -1734,7 +1774,8 @@ const RegistrationForm = ({
               </div>
             </div>
           )}
-          {selectedEvent === "CODEFUSION" && (
+          {(selectedEvent === "CODEFUSION" ||
+            selectedEvent === "Digital Dangal") && (
             <div className="space-y-4 md:col-span-2">
               <div className="grid grid-cols-2 gap-6">
                 <FormField
@@ -1798,16 +1839,51 @@ const RegistrationForm = ({
               <label className="flex items-center gap-2 text-sm select-none">
                 <input
                   type="checkbox"
-                  checked={codefusionHasSecondParticipant}
-                  onChange={(e) =>
-                    setCodefusionHasSecondParticipant(e.target.checked)
+                  checked={
+                    selectedEvent === "CODEFUSION"
+                      ? codefusionHasSecondParticipant
+                      : entcDigitalDangalSecondParticipant
                   }
+                  onChange={(e) => {
+                    const checked = e.target.checked;
+
+                    if (selectedEvent === "CODEFUSION") {
+                      setCodefusionHasSecondParticipant(checked);
+                    } else {
+                      setEntcDigitalDangalSecondParticipant(checked);
+                    }
+
+                    // Ensure validation fails immediately if user enables participant 2
+                    // but hasn't filled the required fields yet.
+                    if (checked) {
+                      const current = form.getValues("participant2" as any);
+                      if (!current) {
+                        form.setValue(
+                          "participant2" as any,
+                          {
+                            studentName: "",
+                            contactNumber: "",
+                            email: "",
+                          } as any,
+                          { shouldValidate: true, shouldDirty: true }
+                        );
+                      } else {
+                        form.trigger("participant2" as any);
+                      }
+                    } else {
+                      form.setValue("participant2" as any, undefined as any, {
+                        shouldValidate: true,
+                        shouldDirty: true,
+                      });
+                    }
+                  }}
                   disabled={isPending}
                 />
                 Add Participant 2 (optional, max 2 participants)
               </label>
 
-              {codefusionHasSecondParticipant && (
+              {(codefusionHasSecondParticipant ||
+                entcDigitalDangalSecondParticipant) && (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border rounded-xl">
                   <FormField
                     control={form.control}
