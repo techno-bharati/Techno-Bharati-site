@@ -62,7 +62,7 @@ export default function ContactUsPage() {
               cardIcon={User}
             >
               <div className="space-y-3 text-muted-foreground text-2xl">
-                <p>Mr. Sajid Momin: +90 95616 65030</p>
+                <p>Mr. Sajid Momin: +91 95616 65030</p>
               </div>
             </ContactDetailsCards>
           </div>
