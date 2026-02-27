@@ -89,7 +89,9 @@ export async function GET() {
         // Squad Leader (Player 1)
         "Leader Name": reg.players?.[0]?.playerName || "",
         "Leader BGMI ID": reg.players?.[0]?.bgmiId || "",
-        "Leader Contact": reg.players?.[0]?.contactNumber || "",
+        "Leader Email": reg.email || "",
+        "Leader Contact":
+          reg.players?.[0]?.contactNumber || reg.contactNumber || "",
         // Player 2
         "Player 2 Name": reg.players?.[1]?.playerName || "",
         "Player 2 BGMI ID": reg.players?.[1]?.bgmiId || "",
@@ -129,7 +131,9 @@ export async function GET() {
         // Squad Leader (Player 1)
         "Leader Name": reg.players?.[0]?.playerName || "",
         "Leader BGMI ID": reg.players?.[0]?.bgmiId || "",
-        "Leader Contact": reg.players?.[0]?.contactNumber || "",
+        "Leader Email": reg.email || "",
+        "Leader Contact":
+          reg.players?.[0]?.contactNumber || reg.contactNumber || "",
         // Player 2
         "Player 2 Name": reg.players?.[1]?.playerName || "",
         "Player 2 BGMI ID": reg.players?.[1]?.bgmiId || "",
