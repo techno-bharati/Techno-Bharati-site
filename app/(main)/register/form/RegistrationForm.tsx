@@ -240,6 +240,24 @@ const RegistrationForm = ({
         shouldDirty: true,
       });
     }
+    if (selectedEvent === "Mech Project Expo") {
+      const current = form.getValues("numberOfTeamMembers");
+      if (!current || current < 2 || current > 5) {
+        form.setValue("numberOfTeamMembers", 2 as any, {
+          shouldValidate: true,
+          shouldDirty: true,
+        });
+      }
+    }
+    if (selectedEvent === "Treasure Hunt") {
+      const current = form.getValues("numberOfTeamMembers");
+      if (!current || current < 2 || current > 5) {
+        form.setValue("numberOfTeamMembers", 2, {
+          shouldValidate: true,
+          shouldDirty: true,
+        });
+      }
+    }
     if (selectedEvent === "Mech Junk Yard") {
       const current = form.getValues("numberOfTeamMembers");
       if (!current || current < 2 || current > 3) {
@@ -414,7 +432,7 @@ const RegistrationForm = ({
       <Button
         variant="outline"
         className="rounded-xl group"
-        onClick={() => router.push("/events")}
+        onClick={() => router.back()}
       >
         <ArrowLeft className="-mr-1 group-hover:-translate-x-1 transition-transform" />
         Back to Events
@@ -623,8 +641,7 @@ const RegistrationForm = ({
             selectedEvent === "SciTech Model Expo 2K26" ||
             selectedEvent === "Model Making" ||
             selectedEvent === "CAD Master" ||
-            selectedEvent === "Videography" ||
-            selectedEvent === "Mech Project Expo") && (
+            selectedEvent === "Videography") && (
             <>
               <FormField
                 control={form.control}
@@ -967,7 +984,6 @@ const RegistrationForm = ({
                   </FormItem>
                 )}
               />
-
               <FormField
                 control={form.control}
                 name="numberOfTeamMembers"
@@ -979,23 +995,23 @@ const RegistrationForm = ({
                     <FormControl>
                       <Select
                         onValueChange={(value) => field.onChange(Number(value))}
-                        value={field.value ? String(field.value) : "1"}
+                        value={field.value ? String(field.value) : "2"}
                         disabled={isPending}
                       >
                         <SelectTrigger>
                           <SelectValue placeholder="Select number of team members" />
                         </SelectTrigger>
                         <SelectContent>
-                          {Array.from({ length: 5 }, (_, index) => (
-                            <SelectItem key={index + 1} value={`${index + 1}`}>
-                              {index + 1}
+                          {Array.from({ length: 4 }, (_, index) => (
+                            <SelectItem key={index + 2} value={`${index + 2}`}>
+                              {index + 2}
                             </SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
                     </FormControl>
                     <FormDescription>
-                      Minimum 1 and maximum of 5 team members allowed. Each
+                      Minimum 2 and maximum of 5 team members allowed. Each
                       participant is ₹100.
                     </FormDescription>
                     <FormMessage />
@@ -1003,7 +1019,6 @@ const RegistrationForm = ({
                 )}
               />
 
-              {/* Team Leader */}
               <div className="space-y-4 md:col-span-2">
                 <h3 className="font-semibold">Team Leader Details</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border rounded-xl">
@@ -1068,15 +1083,198 @@ const RegistrationForm = ({
                 </div>
               </div>
 
-              {/* Dynamic Team Members */}
-              {(form.watch("numberOfTeamMembers") ?? 1) > 1 && (
+              {(form.watch("numberOfTeamMembers") ?? 2) >= 2 && (
                 <div className="space-y-4 md:col-span-2">
                   <h3 className="font-semibold">Team Members</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {Array.from({
                       length: (form.watch("numberOfTeamMembers") ?? 1) - 1,
                     }).map((_, index) => {
-                      // Map index 0→participant2, 1→participant3, etc.
+                      const participantKey = `participant${index + 2}` as
+                        | "participant2"
+                        | "participant3"
+                        | "participant4"
+                        | "participant5";
+                      return (
+                        <div
+                          key={index}
+                          className="p-4 border rounded-xl space-y-3"
+                        >
+                          <h4 className="font-medium">
+                            Team Member {index + 1}
+                          </h4>
+                          <FormField
+                            control={form.control}
+                            name={`${participantKey}.studentName` as any}
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>
+                                  Name <RequiredAsterisk />
+                                </FormLabel>
+                                <FormControl>
+                                  <Input
+                                    placeholder="Enter name"
+                                    {...field}
+                                    disabled={isPending}
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={form.control}
+                            name={`${participantKey}.contactNumber` as any}
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Contact Number</FormLabel>
+                                <FormControl>
+                                  <Input
+                                    placeholder="Enter contact number"
+                                    {...field}
+                                    disabled={isPending}
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            </>
+          )}
+
+          {selectedEvent === "Mech Project Expo" && (
+            <>
+              <FormField
+                control={form.control}
+                name="teamName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      Team Name <RequiredAsterisk />
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter team name"
+                        {...field}
+                        disabled={isPending}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="numberOfTeamMembers"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      Number of Team Members <RequiredAsterisk />
+                    </FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={(value) => field.onChange(Number(value))}
+                        value={field.value ? String(field.value) : "2"}
+                        disabled={isPending}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select number of team members" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {Array.from({ length: 4 }, (_, index) => (
+                            <SelectItem key={index + 2} value={`${index + 2}`}>
+                              {index + 2}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormDescription>
+                      Minimum 2 and maximum of 5 team members allowed. Each
+                      participant is ₹100.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <div className="space-y-4 md:col-span-2">
+                <h3 className="font-semibold">Team Leader Details</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border rounded-xl">
+                  <FormField
+                    control={form.control}
+                    name="studentName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          Team Leader Name <RequiredAsterisk />
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Enter team leader name"
+                            {...field}
+                            disabled={isPending}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="contactNumber"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          Team Leader Contact Number <RequiredAsterisk />
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Enter contact number"
+                            {...field}
+                            disabled={isPending}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          Team Leader Email <RequiredAsterisk />
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Enter email"
+                            type="email"
+                            {...field}
+                            disabled={isPending}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
+
+              {(form.watch("numberOfTeamMembers") ?? 2) >= 2 && (
+                <div className="space-y-4 md:col-span-2">
+                  <h3 className="font-semibold">Team Members</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {Array.from({
+                      length: (form.watch("numberOfTeamMembers") ?? 2) - 1,
+                    }).map((_, index) => {
                       const participantKey = `participant${index + 2}` as
                         | "participant2"
                         | "participant3"

@@ -138,6 +138,20 @@ const mechIplAuctionSchema = standardRegistrationSchema.extend({
   participant4: participantSchema.optional(),
 });
 
+const mechProjectExpoSchema = standardRegistrationSchema.extend({
+  teamName: z
+    .string({ required_error: "Team name is required" })
+    .min(1, "Team name is required"),
+  numberOfTeamMembers: z
+    .number()
+    .min(2, "Minimum 2 team members are required")
+    .max(5, "Maximum 5 team members are allowed"),
+  participant2: participantSchema,
+  participant3: participantSchema.optional(),
+  participant4: participantSchema.optional(),
+  participant5: participantSchema.optional(),
+});
+
 const codefusionSchema = standardRegistrationSchema.extend({
   participant2: z
     .object({
@@ -282,7 +296,7 @@ const baseUserRegistrationFormSchema = z
         .merge(treasureHuntSchema),
       z
         .object({ events: z.literal("Mech Project Expo") })
-        .merge(mechTechnicalSchema),
+        .merge(mechProjectExpoSchema),
       z
         .object({ events: z.literal("Mech Junk Yard") })
         .merge(mechJunkYardSchema),
@@ -314,6 +328,41 @@ export const userRegistrationFormSchema =
             code: z.ZodIssueCode.custom,
             path: ["participant4", "studentName"],
             message: "Member 4 name is required when team has 4 members",
+          });
+        }
+      }
+    }
+
+    if (data.events === "Mech Project Expo") {
+      const total = data.numberOfTeamMembers;
+
+      if (total >= 3) {
+        if (!data.participant3 || !data.participant3.studentName?.trim()) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ["participant3", "studentName"],
+            message:
+              "Member 3 name is required when team has 3 or more members",
+          });
+        }
+      }
+
+      if (total >= 4) {
+        if (!data.participant4 || !data.participant4.studentName?.trim()) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ["participant4", "studentName"],
+            message: "Member 4 name is required when team has 4 members",
+          });
+        }
+      }
+
+      if (total >= 5) {
+        if (!data.participant5 || !data.participant5.studentName?.trim()) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ["participant5", "studentName"],
+            message: "Member 5 name is required when team has 4 members",
           });
         }
       }
