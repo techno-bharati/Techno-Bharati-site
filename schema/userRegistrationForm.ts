@@ -102,6 +102,17 @@ const projectExpoParticipantSchema = z.object({
     .optional(),
 });
 
+const mechIplAuctionParticipantSchema = z.object({
+  studentName: z
+    .string({ required_error: "Student name is required" })
+    .min(1, "Name is required"),
+  contactNumber: z
+    .string()
+    .regex(indianPhoneRegex, "Enter valid contact number")
+    .or(z.literal(""))
+    .optional(),
+});
+
 const aiTalesSchema = pythonWorriorsSchema;
 const generalEngineeringTechnicalSchema = pythonWorriorsSchema;
 const civilTechnicalSchema = pythonWorriorsSchema;
@@ -127,6 +138,19 @@ const projectExpoSchema = pythonWorriorsSchema.extend({
   participant2: projectExpoParticipantSchema,
   participant3: projectExpoParticipantSchema.optional(),
   participant4: projectExpoParticipantSchema.optional(),
+});
+
+const mechIplAuctionSchema = pythonWorriorsSchema.extend({
+  teamName: z
+    .string({ required_error: "Team name is required" })
+    .min(1, "Team name is required"),
+  numberOfTeamMembers: z
+    .number()
+    .min(3, "Minimum 3 team members are required")
+    .max(4, "Maximum 4 team members are allowed"),
+  participant2: mechIplAuctionParticipantSchema,
+  participant3: mechIplAuctionParticipantSchema,
+  participant4: mechIplAuctionParticipantSchema.optional(),
 });
 
 const codefusionSchema = pythonWorriorsSchema.extend({
@@ -279,7 +303,7 @@ const baseUserRegistrationFormSchema = z
         .merge(mechTechnicalSchema),
       z
         .object({ events: z.literal("Mech IPL Auction") })
-        .merge(mechTechnicalSchema),
+        .merge(mechIplAuctionSchema),
     ])
   );
 
@@ -299,6 +323,19 @@ export const userRegistrationFormSchema =
         }
       }
 
+      if (total >= 4) {
+        if (!data.participant4 || !data.participant4.studentName?.trim()) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ["participant4", "studentName"],
+            message: "Member 4 name is required when team has 4 members",
+          });
+        }
+      }
+    }
+
+    if (data.events === "Mech IPL Auction") {
+      const total = data.numberOfTeamMembers;
       if (total >= 4) {
         if (!data.participant4 || !data.participant4.studentName?.trim()) {
           ctx.addIssue({
