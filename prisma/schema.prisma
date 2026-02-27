@@ -144,7 +144,7 @@ model Player {
   id            String   @id @default(cuid())
   playerName    String
   bgmiId        String
-  contactNumber String
+  contactNumber String?
   createdAt     DateTime @default(now())
 
   registration   Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
