@@ -20,7 +20,6 @@ export async function createRegistration(
     if (!uploadResult.success) {
       return { success: false, error: "Failed to upload payment screenshot" };
     }
-
     const eventTypeMap = {
       "Startup Sphere": EventType.STARTUP_SPHERE,
       "Face To Face": EventType.FACE_TO_FACE,
@@ -69,7 +68,11 @@ export async function createRegistration(
       const teamSize =
         eventName === "Startup Sphere"
           ? (data.teamMembers?.length || 0) + 1
-          : 1;
+          : eventName === "CODEFUSION"
+            ? data.participant2
+              ? 2
+              : 1
+            : 1;
       const fee = getEventFeeByName(eventName, teamSize);
 
       // Startup Sphere, BGMI, and FreeFire all use calculated fees
@@ -169,21 +172,40 @@ export async function createRegistration(
                         : ""
                     }`,
                   }
-                : formData.events === "Model Making" ||
-                    formData.events === "CAD Master" ||
-                    formData.events === "Videography"
+                : formData.events === "CODEFUSION"
                   ? {
                       ...baseData,
                       studentName: formData.studentName,
                       contactNumber: formData.contactNumber,
                       email: formData.email,
+                      ...(formData.participant2 && {
+                        teamMembers: {
+                          create: [
+                            {
+                              studentName: formData.participant2.studentName,
+                              contactNumber:
+                                formData.participant2.contactNumber,
+                              email: formData.participant2.email,
+                            },
+                          ],
+                        },
+                      }),
                     }
-                  : {
-                      ...baseData,
-                      studentName: formData.studentName,
-                      contactNumber: formData.contactNumber,
-                      email: formData.email,
-                    },
+                  : formData.events === "Model Making" ||
+                      formData.events === "CAD Master" ||
+                      formData.events === "Videography"
+                    ? {
+                        ...baseData,
+                        studentName: formData.studentName,
+                        contactNumber: formData.contactNumber,
+                        email: formData.email,
+                      }
+                    : {
+                        ...baseData,
+                        studentName: formData.studentName,
+                        contactNumber: formData.contactNumber,
+                        email: formData.email,
+                      },
         include: {
           players: true,
           teamLeader: true,

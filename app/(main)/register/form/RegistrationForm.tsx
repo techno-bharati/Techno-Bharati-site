@@ -39,6 +39,7 @@ import Image from "next/image";
 import { Separator } from "@/components/ui/separator";
 import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
+import RequiredAsterisk from "@/components/RequiredAstrick";
 
 export type EventNameOption =
   | "Startup Sphere"
@@ -84,6 +85,8 @@ const RegistrationForm = ({
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const [totalFee, setTotalFee] = useState<number>(0);
+  const [codefusionHasSecondParticipant, setCodefusionHasSecondParticipant] =
+    useState(false);
   const [paymentMode, setPaymentMode] = useState<"ONLINE" | "OFFLINE">(
     "ONLINE"
   );
@@ -106,7 +109,10 @@ const RegistrationForm = ({
       department: undefined,
       class: undefined,
     },
+    mode: "onChange",
   });
+
+  const { isValid } = form.formState;
 
   const { mutate, isPending } = useMutation({
     mutationFn: createRegistration,
@@ -125,7 +131,9 @@ const RegistrationForm = ({
         setTotalFee(0);
         setShowSuccessDialog(true);
       } else {
-        toast.error(data.error || "Something went wrong");
+        toast.error("Something went wrong, please try again later.", {
+          id: "form-submit",
+        });
       }
     },
     onError: (error) => {
@@ -138,7 +146,9 @@ const RegistrationForm = ({
     async (data: z.infer<typeof userRegistrationFormSchema>) => {
       try {
         if (!data.payss) {
-          toast.error("Please upload a payment screenshot");
+          toast.error("Please upload a payment screenshot", {
+            id: "form-submit",
+          });
           return;
         }
         toast.loading("Submitting..", { id: "form-submit" });
@@ -160,6 +170,7 @@ const RegistrationForm = ({
 
   const selectedEvent = form.watch("events");
   const teamSize = form.watch("numberOfTeamMembers");
+  const codefusionParticipant2Name = form.watch("participant2.studentName");
   const formTitle = selectedEvent
     ? `${selectedEvent} Registration`
     : "Event Registration";
@@ -185,16 +196,39 @@ const RegistrationForm = ({
     ) {
       setTotalFee(CIVIL_TECHNICAL_FEE);
     } else {
-      const fee = getEventFeeByName(selectedEvent, teamSize);
+      const membersForFee =
+        selectedEvent === "CODEFUSION"
+          ? codefusionHasSecondParticipant || !!codefusionParticipant2Name
+            ? 2
+            : 1
+          : teamSize;
+      const fee = getEventFeeByName(selectedEvent, membersForFee);
       setTotalFee(fee || 0);
     }
-  }, [selectedEvent, teamSize, selectedGames.length]);
+  }, [
+    selectedEvent,
+    teamSize,
+    selectedGames.length,
+    codefusionHasSecondParticipant,
+    codefusionParticipant2Name,
+  ]);
 
   useEffect(() => {
     if (selectedEvent === "Startup Sphere") {
       form.setValue("numberOfTeamMembers", 1);
     }
   }, [selectedEvent, form]);
+
+  useEffect(() => {
+    if (selectedEvent !== "CODEFUSION") {
+      setCodefusionHasSecondParticipant(false);
+      form.setValue("participant2", undefined as any);
+      return;
+    }
+    if (!codefusionHasSecondParticipant) {
+      form.setValue("participant2", undefined as any);
+    }
+  }, [selectedEvent, codefusionHasSecondParticipant, form]);
 
   useEffect(() => {
     if (selectedEvent === "General Engineering Games") {
@@ -217,7 +251,7 @@ const RegistrationForm = ({
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto">
+    <div className="w-full max-w-6xl mx-auto text-lg md:text-xl">
       <Button
         variant="outline"
         className="rounded-xl group"
@@ -229,13 +263,13 @@ const RegistrationForm = ({
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit, onError)}
-          className="w-full max-w-4xl mx-auto p-6 rounded-lg grid grid-cols-1 md:grid-cols-2 gap-6"
+          className="w-full max-w-6xl mx-auto py-3 rounded-lg grid grid-cols-1 md:grid-cols-2 gap-6"
         >
           <div className="space-y-1 md:col-span-2">
             <h2 className="text-xl md:text-2xl font-semibold text-foreground">
               {formTitle}
             </h2>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground">
               Fill the details below to complete your registration.
             </p>
           </div>
@@ -245,7 +279,9 @@ const RegistrationForm = ({
             name="collegeName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>College Name</FormLabel>
+                <FormLabel>
+                  College Name <RequiredAsterisk />
+                </FormLabel>
                 <FormControl>
                   <Input
                     placeholder="Enter your college name"
@@ -263,7 +299,9 @@ const RegistrationForm = ({
             name="department"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Enter Department</FormLabel>
+                <FormLabel>
+                  Enter Department <RequiredAsterisk />
+                </FormLabel>
                 <Select
                   onValueChange={(value) => {
                     field.onChange(value);
@@ -306,7 +344,9 @@ const RegistrationForm = ({
             name="class"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Enter Class</FormLabel>
+                <FormLabel>
+                  Enter Class <RequiredAsterisk />
+                </FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   value={field.value}
@@ -329,7 +369,7 @@ const RegistrationForm = ({
             )}
           />
 
-          {!initialEvent && (
+          {/* {!initialEvent && (
             <FormField
               control={form.control}
               name="events"
@@ -411,7 +451,7 @@ const RegistrationForm = ({
                 </FormItem>
               )}
             />
-          )}
+          )} */}
 
           {(selectedEvent === "Face To Face" ||
             selectedEvent === "Python Frontiers" ||
@@ -425,7 +465,6 @@ const RegistrationForm = ({
             selectedEvent === "Model Making" ||
             selectedEvent === "CAD Master" ||
             selectedEvent === "Videography" ||
-            selectedEvent === "CODEFUSION" ||
             selectedEvent === "Project Expo" ||
             selectedEvent === "Treasure Hunt" ||
             selectedEvent === "Mech Project Expo" ||
@@ -437,7 +476,9 @@ const RegistrationForm = ({
                 name="studentName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Student Name</FormLabel>
+                    <FormLabel>
+                      Student Name <RequiredAsterisk />
+                    </FormLabel>
                     <FormControl>
                       <Input
                         placeholder="Enter your name"
@@ -454,7 +495,9 @@ const RegistrationForm = ({
                 name="contactNumber"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Contact Number</FormLabel>
+                    <FormLabel>
+                      Contact Number <RequiredAsterisk />
+                    </FormLabel>
                     <FormControl>
                       <Input
                         placeholder="Enter your contact number"
@@ -471,7 +514,9 @@ const RegistrationForm = ({
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel>
+                      Email <RequiredAsterisk />
+                    </FormLabel>
                     <FormControl>
                       <Input
                         placeholder="Enter your email"
@@ -486,7 +531,147 @@ const RegistrationForm = ({
             </>
           )}
 
-          {selectedEvent === "General Engineering Games" && (
+          {selectedEvent === "CODEFUSION" && (
+            <div className="space-y-4 md:col-span-2">
+              <div className="grid grid-cols-2 gap-6">
+                <FormField
+                  control={form.control}
+                  name="studentName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>
+                        Participant 1 Name <RequiredAsterisk />
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Enter your name"
+                          {...field}
+                          disabled={isPending}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="contactNumber"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>
+                        Participant 1 Contact Number <RequiredAsterisk />
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Enter your contact number"
+                          {...field}
+                          disabled={isPending}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>
+                        Participant 1 Email <RequiredAsterisk />
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Enter your email"
+                          {...field}
+                          disabled={isPending}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <label className="flex items-center gap-2 text-sm select-none">
+                <input
+                  type="checkbox"
+                  checked={codefusionHasSecondParticipant}
+                  onChange={(e) =>
+                    setCodefusionHasSecondParticipant(e.target.checked)
+                  }
+                  disabled={isPending}
+                />
+                Add Participant 2 (optional, max 2 participants)
+              </label>
+
+              {codefusionHasSecondParticipant && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border rounded-xl">
+                  <FormField
+                    control={form.control}
+                    name="participant2.studentName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          Participant 2 Name <RequiredAsterisk />
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Enter participant 2 name"
+                            {...field}
+                            disabled={isPending}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="participant2.contactNumber"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          Participant 2 Contact Number <RequiredAsterisk />
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Enter participant 2 contact number"
+                            {...field}
+                            disabled={isPending}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="participant2.email"
+                    render={({ field }) => (
+                      <FormItem className="md:col-span-1">
+                        <FormLabel>
+                          Participant 2 Email <RequiredAsterisk />
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Enter participant 2 email"
+                            type="email"
+                            {...field}
+                            disabled={isPending}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* {selectedEvent === "General Engineering Games" && (
             <>
               <div className="space-y-2 md:col-span-2">
                 <FormLabel>Select Games (choose exactly 3 or 5)</FormLabel>
@@ -525,7 +710,6 @@ const RegistrationForm = ({
                     );
                   })}
                 </div>
-                {/* show schema error for selectedGames */}
                 <FormField
                   control={form.control}
                   name="selectedGames"
@@ -607,7 +791,7 @@ const RegistrationForm = ({
                 )}
               />
             </>
-          )}
+          )} */}
 
           {selectedEvent === "BGMI" && (
             <>
@@ -616,7 +800,9 @@ const RegistrationForm = ({
                 name="squadName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Squad Name</FormLabel>
+                    <FormLabel>
+                      Squad Name <RequiredAsterisk />
+                    </FormLabel>
                     <FormControl>
                       <Input
                         placeholder="Enter squad name"
@@ -628,77 +814,29 @@ const RegistrationForm = ({
                   </FormItem>
                 )}
               />
-              <div className="space-y-6 md:col-span-2">
+              <div className="space-y-3 md:col-span-2 w-full">
                 <h3 className="font-semibold">Squad Players</h3>
                 <FormDescription>All 4 players are required</FormDescription>
-                {Array.from({ length: 4 }).map((_, index) => (
-                  <div key={index} className="space-y-4 p-4 border rounded-xl">
-                    <h4 className="font-medium">
-                      {index === 0 ? "Squad Leader" : `Player ${index + 1}`}
-                    </h4>
-                    <FormField
-                      control={form.control}
-                      name={`players.${index}.playerName`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Name</FormLabel>
-                          <FormControl>
-                            <Input
-                              placeholder="Enter player name"
-                              {...field}
-                              disabled={isPending}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name={`players.${index}.bgmiId`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>BGMI ID</FormLabel>
-                          <FormControl>
-                            <Input
-                              placeholder="Enter BGMI ID"
-                              {...field}
-                              disabled={isPending}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name={`players.${index}.contactNumber`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Contact Number</FormLabel>
-                          <FormControl>
-                            <Input
-                              placeholder="Enter contact number"
-                              type="tel"
-                              {...field}
-                              disabled={isPending}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    {index === 0 && (
+                <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {Array.from({ length: 4 }).map((_, index) => (
+                    <div
+                      key={index}
+                      className="space-y-4 p-4 border rounded-xl"
+                    >
+                      <h4 className="font-medium">
+                        {index === 0 ? "Squad Leader" : `Player ${index + 1}`}
+                      </h4>
                       <FormField
                         control={form.control}
-                        name={`players.${index}.email`}
+                        name={`players.${index}.playerName`}
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Email (Squad Leader Only)</FormLabel>
+                            <FormLabel>
+                              Name <RequiredAsterisk />
+                            </FormLabel>
                             <FormControl>
                               <Input
-                                placeholder="Enter squad leader's email"
-                                type="email"
+                                placeholder="Enter player name"
                                 {...field}
                                 disabled={isPending}
                               />
@@ -707,9 +845,71 @@ const RegistrationForm = ({
                           </FormItem>
                         )}
                       />
-                    )}
-                  </div>
-                ))}
+                      <FormField
+                        control={form.control}
+                        name={`players.${index}.bgmiId`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>
+                              BGMI ID <RequiredAsterisk />
+                            </FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="Enter BGMI ID"
+                                {...field}
+                                disabled={isPending}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      {index === 0 && (
+                        <>
+                          <FormField
+                            control={form.control}
+                            name={`players.${index}.email`}
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>
+                                  Email <RequiredAsterisk />
+                                </FormLabel>
+                                <FormControl>
+                                  <Input
+                                    placeholder="Enter squad leader's email"
+                                    type="email"
+                                    {...field}
+                                    disabled={isPending}
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={form.control}
+                            name={`players.${index}.contactNumber`}
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>
+                                  Contact Number <RequiredAsterisk />
+                                </FormLabel>
+                                <FormControl>
+                                  <Input
+                                    placeholder="Enter your contact number"
+                                    {...field}
+                                    disabled={isPending}
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </>
+                      )}
+                    </div>
+                  ))}
+                </div>
               </div>
             </>
           )}
@@ -733,253 +933,29 @@ const RegistrationForm = ({
                   </FormItem>
                 )}
               />
-              <div className="space-y-6 md:col-span-2">
+              <div className="space-y-3 md:col-span-2">
                 <h3 className="font-semibold">Squad Players</h3>
                 <FormDescription>All 4 players are required</FormDescription>
-                {Array.from({ length: 4 }).map((_, index) => (
-                  <div key={index} className="space-y-4 p-4 border rounded-xl">
-                    <h4 className="font-medium">
-                      {index === 0 ? "Squad Leader" : `Player ${index + 1}`}
-                    </h4>
-                    <FormField
-                      control={form.control}
-                      name={`players.${index}.playerName`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Name</FormLabel>
-                          <FormControl>
-                            <Input
-                              placeholder="Enter player name"
-                              {...field}
-                              disabled={isPending}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name={`players.${index}.bgmiId`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>BGMI ID</FormLabel>
-                          <FormControl>
-                            <Input
-                              placeholder="Enter BGMI ID"
-                              {...field}
-                              disabled={isPending}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name={`players.${index}.contactNumber`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Contact Number</FormLabel>
-                          <FormControl>
-                            <Input
-                              placeholder="Enter contact number"
-                              type="tel"
-                              {...field}
-                              disabled={isPending}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    {index === 0 && (
-                      <FormField
-                        control={form.control}
-                        name={`players.${index}.email`}
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Email (Squad Leader Only)</FormLabel>
-                            <FormControl>
-                              <Input
-                                placeholder="Enter squad leader's email"
-                                type="email"
-                                {...field}
-                                disabled={isPending}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    )}
-                  </div>
-                ))}
-              </div>
-            </>
-          )}
-
-          {selectedEvent === "Startup Sphere" && (
-            <>
-              <FormField
-                control={form.control}
-                name="startupCategory"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Select Category</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      value={field.value}
-                      disabled={isPending}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Category" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="Idea Presentation">
-                          Idea Presentation
-                        </SelectItem>
-                        <SelectItem value="Project Exibition">
-                          Project Exhibition
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="numberOfTeamMembers"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Number of Team Members</FormLabel>
-                    <FormControl>
-                      <Select
-                        onValueChange={(value) => field.onChange(Number(value))}
-                        value={field.value ? String(field.value) : "1"}
-                        disabled={isPending}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select number of team members" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {Array.from({ length: 5 }, (_, index) => (
-                            <SelectItem key={index + 1} value={`${index + 1}`}>
-                              {index + 1}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormDescription>
-                      Minimum 1 (Team Leader) and maximum of 5 team members
-                      allowed
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="teamName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Team Name</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Enter team name"
-                        {...field}
-                        disabled={isPending}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <div className="space-y-4">
-                <h3 className="font-semibold">Team Leader Details</h3>
-                <FormField
-                  control={form.control}
-                  name="teamLeader.studentName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Team Leader Name</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Enter team leader name"
-                          {...field}
-                          disabled={isPending}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="teamLeader.contactNumber"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Team Leader Contact Number</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Enter contact number"
-                          {...field}
-                          disabled={isPending}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="teamLeader.email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Team Leader Email</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="email"
-                          placeholder="Enter email"
-                          {...field}
-                          disabled={isPending}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-
-              {form.watch("numberOfTeamMembers") > 1 && (
-                <div className="space-y-6">
-                  <h3 className="font-semibold">Team Members</h3>
-                  {Array.from({
-                    length: form.watch("numberOfTeamMembers") - 1,
-                  }).map((_, index) => (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {Array.from({ length: 4 }).map((_, index) => (
                     <div
                       key={index}
-                      className="space-y-4 p-4 border rounded-lg"
+                      className="space-y-4 p-4 border rounded-xl"
                     >
-                      <h4>Team Member {index + 1}</h4>
+                      <h4 className="font-medium">
+                        {index === 0 ? "Squad Leader" : `Player ${index + 1}`}
+                      </h4>
                       <FormField
                         control={form.control}
-                        name={`teamMembers.${index}.studentName`}
+                        name={`players.${index}.playerName`}
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Name</FormLabel>
+                            <FormLabel>
+                              Name <RequiredAsterisk />
+                            </FormLabel>
                             <FormControl>
                               <Input
-                                placeholder="Enter name"
+                                placeholder="Enter player name"
                                 {...field}
                                 disabled={isPending}
                               />
@@ -988,16 +964,17 @@ const RegistrationForm = ({
                           </FormItem>
                         )}
                       />
-
                       <FormField
                         control={form.control}
-                        name={`teamMembers.${index}.contactNumber`}
+                        name={`players.${index}.bgmiId`}
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Contact Number</FormLabel>
+                            <FormLabel>
+                              BGMI ID <RequiredAsterisk />
+                            </FormLabel>
                             <FormControl>
                               <Input
-                                placeholder="Enter contact number"
+                                placeholder="Enter BGMI ID"
                                 {...field}
                                 disabled={isPending}
                               />
@@ -1006,29 +983,53 @@ const RegistrationForm = ({
                           </FormItem>
                         )}
                       />
-
-                      <FormField
-                        control={form.control}
-                        name={`teamMembers.${index}.email`}
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Email</FormLabel>
-                            <FormControl>
-                              <Input
-                                type="email"
-                                placeholder="Enter email"
-                                {...field}
-                                disabled={isPending}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                      {index === 0 && (
+                        <>
+                          <FormField
+                            control={form.control}
+                            name={`players.${index}.email`}
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>
+                                  Email <RequiredAsterisk />
+                                </FormLabel>
+                                <FormControl>
+                                  <Input
+                                    placeholder="Enter squad leader's email"
+                                    type="email"
+                                    {...field}
+                                    disabled={isPending}
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={form.control}
+                            name={`players.${index}.contactNumber`}
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>
+                                  Contact Number <RequiredAsterisk />
+                                </FormLabel>
+                                <FormControl>
+                                  <Input
+                                    placeholder="Enter your contact number"
+                                    {...field}
+                                    disabled={isPending}
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </>
+                      )}
                     </div>
                   ))}
                 </div>
-              )}
+              </div>
             </>
           )}
 
@@ -1037,7 +1038,9 @@ const RegistrationForm = ({
             name="paymentMode"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Payment Mode</FormLabel>
+                <FormLabel>
+                  Payment Mode <RequiredAsterisk />
+                </FormLabel>
                 <Select
                   onValueChange={(value) => {
                     field.onChange(value);
@@ -1070,6 +1073,7 @@ const RegistrationForm = ({
                   {form.watch("paymentMode") === "ONLINE"
                     ? "Upload Payment Screenshot"
                     : "Upload Receipt Photo"}
+                  <RequiredAsterisk />
                 </FormLabel>
                 <FormControl>
                   <Input
@@ -1143,11 +1147,15 @@ const RegistrationForm = ({
               />
             </div>
           </div>
-
+          {!isValid && (
+            <p className="text-base capitalize text-red-500">
+              * fill all the input fields to submit the form
+            </p>
+          )}
           <Button
             type="submit"
             className="w-full md:col-span-2 rounded-xl dark:text-white"
-            disabled={isPending}
+            disabled={isPending || !isValid}
           >
             {isPending ? "Submitting..." : "Submit"}
           </Button>
