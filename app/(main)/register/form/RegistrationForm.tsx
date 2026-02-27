@@ -228,6 +228,12 @@ const RegistrationForm = ({
     if (selectedEvent === "Treasure Hunt") {
       form.setValue("numberOfTeamMembers", 1);
     }
+    if (selectedEvent === "Project Expo") {
+      form.setValue("numberOfTeamMembers", 2 as any, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+    }
   }, [selectedEvent, form]);
 
   // Ensure only visible Treasure Hunt team members affect validation
@@ -280,6 +286,24 @@ const RegistrationForm = ({
         }
       }
     });
+  }, [selectedEvent, teamSize, form]);
+
+  // Clear hidden Project Expo members when team size decreases
+  useEffect(() => {
+    if (selectedEvent !== "Project Expo") return;
+    const total = teamSize ?? 2;
+    if (total < 4) {
+      form.setValue("participant4", undefined as any, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+    }
+    if (total < 3) {
+      form.setValue("participant3", undefined as any, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+    }
   }, [selectedEvent, teamSize, form]);
 
   useEffect(() => {
@@ -528,7 +552,6 @@ const RegistrationForm = ({
             selectedEvent === "Model Making" ||
             selectedEvent === "CAD Master" ||
             selectedEvent === "Videography" ||
-            selectedEvent === "Project Expo" ||
             selectedEvent === "Mech Project Expo" ||
             selectedEvent === "Mech Junk Yard" ||
             selectedEvent === "Mech IPL Auction") && (
@@ -590,6 +613,262 @@ const RegistrationForm = ({
                   </FormItem>
                 )}
               />
+            </>
+          )}
+
+          {selectedEvent === "Project Expo" && (
+            <>
+              <FormField
+                control={form.control}
+                name="numberOfTeamMembers"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      Number of Team Members <RequiredAsterisk />
+                    </FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={(value) => {
+                          form.setValue("numberOfTeamMembers", Number(value) as any, {
+                            shouldValidate: true,
+                            shouldDirty: true,
+                          });
+                        }}
+                        value={field.value ? String(field.value) : "2"}
+                        disabled={isPending}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select additional members" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="2">2</SelectItem>
+                          <SelectItem value="3">3</SelectItem>
+                          <SelectItem value="4">4</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormDescription>
+                      Project Expo requires minimum 2 members and maximum 4
+                      members per team.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="teamName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      Team Name <RequiredAsterisk />
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter team name"
+                        {...field}
+                        disabled={isPending}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <div className="space-y-4 md:col-span-2">
+                <h3 className="font-semibold">Team Leader Details</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border rounded-xl">
+                  <FormField
+                    control={form.control}
+                    name="studentName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          Team Leader Name <RequiredAsterisk />
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Enter team leader name"
+                            {...field}
+                            disabled={isPending}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="contactNumber"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          Team Leader Contact Number <RequiredAsterisk />
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Enter contact number"
+                            {...field}
+                            disabled={isPending}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          Team Leader Email <RequiredAsterisk />
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Enter email"
+                            type="email"
+                            {...field}
+                            disabled={isPending}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-4 md:col-span-2">
+                <h3 className="font-semibold">Team Members</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Member 2 (required) */}
+                  <div className="p-4 border rounded-xl space-y-3">
+                    <h4 className="font-medium">Team Member 1</h4>
+                    <FormField
+                      control={form.control}
+                      name="participant2.studentName"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>
+                            Name <RequiredAsterisk />
+                          </FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="Enter name"
+                              {...field}
+                              disabled={isPending}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="participant2.contactNumber"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Contact Number</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="Enter contact number"
+                              {...field}
+                              disabled={isPending}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  {(teamSize ?? 2) >= 3 && (
+                    <div className="p-4 border rounded-xl space-y-3">
+                      <h4 className="font-medium">Team Member 2</h4>
+                      <FormField
+                        control={form.control}
+                        name="participant3.studentName"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>
+                              Name <RequiredAsterisk />
+                            </FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="Enter name"
+                                {...field}
+                                disabled={isPending}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="participant3.contactNumber"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Contact Number</FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="Enter contact number"
+                                {...field}
+                                disabled={isPending}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  )}
+
+                  {(teamSize ?? 2) >= 4 && (
+                    <div className="p-4 border rounded-xl space-y-3">
+                      <h4 className="font-medium">Team Member 3</h4>
+                      <FormField
+                        control={form.control}
+                        name="participant4.studentName"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>
+                              Name <RequiredAsterisk />
+                            </FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="Enter name"
+                                {...field}
+                                disabled={isPending}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="participant4.contactNumber"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Contact Number</FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="Enter contact number"
+                                {...field}
+                                disabled={isPending}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
             </>
           )}
 

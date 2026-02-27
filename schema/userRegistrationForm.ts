@@ -91,6 +91,17 @@ const treasureHuntParticipantSchema = z.object({
     .optional(),
 });
 
+const projectExpoParticipantSchema = z.object({
+  studentName: z
+    .string({ required_error: "Student name is required" })
+    .min(1, "Name is required"),
+  contactNumber: z
+    .string()
+    .regex(indianPhoneRegex, "Enter valid contact number")
+    .or(z.literal(""))
+    .optional(),
+});
+
 const aiTalesSchema = pythonWorriorsSchema;
 const generalEngineeringTechnicalSchema = pythonWorriorsSchema;
 const civilTechnicalSchema = pythonWorriorsSchema;
@@ -103,6 +114,19 @@ const treasureHuntSchema = pythonWorriorsSchema.extend({
   participant3: treasureHuntParticipantSchema.optional(),
   participant4: treasureHuntParticipantSchema.optional(),
   participant5: treasureHuntParticipantSchema.optional(),
+});
+
+const projectExpoSchema = pythonWorriorsSchema.extend({
+  teamName: z
+    .string({ required_error: "Team name is required" })
+    .min(1, "Team name is required"),
+  numberOfTeamMembers: z
+    .number()
+    .min(2, "Minimum 2 team members are required")
+    .max(4, "Maximum 4 team members are allowed"),
+  participant2: projectExpoParticipantSchema,
+  participant3: projectExpoParticipantSchema.optional(),
+  participant4: projectExpoParticipantSchema.optional(),
 });
 
 const codefusionSchema = pythonWorriorsSchema.extend({
@@ -139,7 +163,7 @@ const paymentModeSchema = z.object({
 });
 
 // Main schema with event selection
-export const userRegistrationFormSchema = z
+const baseUserRegistrationFormSchema = z
   .object({
     collegeName: z.string().min(1, "College name is required"),
     events: z.enum(
@@ -243,7 +267,9 @@ export const userRegistrationFormSchema = z
         .object({ events: z.literal("Videography") })
         .merge(civilTechnicalSchema),
       z.object({ events: z.literal("CODEFUSION") }).merge(codefusionSchema),
-      z.object({ events: z.literal("Project Expo") }).merge(cseTechnicalSchema),
+      z
+        .object({ events: z.literal("Project Expo") })
+        .merge(projectExpoSchema),
       z
         .object({ events: z.literal("Treasure Hunt") })
         .merge(treasureHuntSchema),
@@ -258,3 +284,32 @@ export const userRegistrationFormSchema = z
         .merge(mechTechnicalSchema),
     ])
   );
+
+export const userRegistrationFormSchema = baseUserRegistrationFormSchema.superRefine(
+  (data, ctx) => {
+    if (data.events === "Project Expo") {
+      const total = data.numberOfTeamMembers;
+
+      if (total >= 3) {
+        if (!data.participant3 || !data.participant3.studentName?.trim()) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ["participant3", "studentName"],
+            message:
+              "Member 3 name is required when team has 3 or more members",
+          });
+        }
+      }
+
+      if (total >= 4) {
+        if (!data.participant4 || !data.participant4.studentName?.trim()) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ["participant4", "studentName"],
+            message: "Member 4 name is required when team has 4 members",
+          });
+        }
+      }
+    }
+  }
+);
