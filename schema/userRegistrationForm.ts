@@ -267,9 +267,7 @@ const baseUserRegistrationFormSchema = z
         .object({ events: z.literal("Videography") })
         .merge(civilTechnicalSchema),
       z.object({ events: z.literal("CODEFUSION") }).merge(codefusionSchema),
-      z
-        .object({ events: z.literal("Project Expo") })
-        .merge(projectExpoSchema),
+      z.object({ events: z.literal("Project Expo") }).merge(projectExpoSchema),
       z
         .object({ events: z.literal("Treasure Hunt") })
         .merge(treasureHuntSchema),
@@ -285,8 +283,8 @@ const baseUserRegistrationFormSchema = z
     ])
   );
 
-export const userRegistrationFormSchema = baseUserRegistrationFormSchema.superRefine(
-  (data, ctx) => {
+export const userRegistrationFormSchema =
+  baseUserRegistrationFormSchema.superRefine((data, ctx) => {
     if (data.events === "Project Expo") {
       const total = data.numberOfTeamMembers;
 
@@ -311,5 +309,4 @@ export const userRegistrationFormSchema = baseUserRegistrationFormSchema.superRe
         }
       }
     }
-  }
-);
+  });

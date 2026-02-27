@@ -73,16 +73,16 @@ export async function createRegistration(
               ? 2
               : 1
             : eventName === "Project Expo"
-              ? data.numberOfTeamMembers ?? 2
-            : eventName === "Treasure Hunt"
-              ? 1 +
-                [
-                  data.participant2,
-                  data.participant3,
-                  data.participant4,
-                  data.participant5,
-                ].filter((p) => p && p.studentName).length
-              : 1;
+              ? (data.numberOfTeamMembers ?? 2)
+              : eventName === "Treasure Hunt"
+                ? 1 +
+                  [
+                    data.participant2,
+                    data.participant3,
+                    data.participant4,
+                    data.participant5,
+                  ].filter((p) => p && p.studentName).length
+                : 1;
       const fee = getEventFeeByName(eventName, teamSize);
 
       // Startup Sphere, BGMI, and FreeFire all use calculated fees
@@ -211,79 +211,86 @@ export async function createRegistration(
                           : ""
                       }`,
                     }
-                : formData.events === "Project Expo"
-                  ? (() => {
-                      const total = formData.numberOfTeamMembers ?? 2;
-                      const participants = [
-                        formData.participant2,
-                        formData.participant3,
-                        formData.participant4,
-                      ].slice(0, Math.max(0, total - 1));
+                  : formData.events === "Project Expo"
+                    ? (() => {
+                        const total = formData.numberOfTeamMembers ?? 2;
+                        const participants = [
+                          formData.participant2,
+                          formData.participant3,
+                          formData.participant4,
+                        ].slice(0, Math.max(0, total - 1));
 
-                      // Basic server-side safety: required members must exist
-                      if (total < 2 || total > 4) {
-                        throw new Error(
-                          "Project Expo team size must be between 2 and 4"
-                        );
-                      }
-                      if (!participants[0]?.studentName) {
-                        throw new Error("Project Expo requires at least 2 members");
-                      }
-                      if (total >= 3 && !participants[1]?.studentName) {
-                        throw new Error("Project Expo requires member 3 details");
-                      }
-                      if (total >= 4 && !participants[2]?.studentName) {
-                        throw new Error("Project Expo requires member 4 details");
-                      }
+                        // Basic server-side safety: required members must exist
+                        if (total < 2 || total > 4) {
+                          throw new Error(
+                            "Project Expo team size must be between 2 and 4"
+                          );
+                        }
+                        if (!participants[0]?.studentName) {
+                          throw new Error(
+                            "Project Expo requires at least 2 members"
+                          );
+                        }
+                        if (total >= 3 && !participants[1]?.studentName) {
+                          throw new Error(
+                            "Project Expo requires member 3 details"
+                          );
+                        }
+                        if (total >= 4 && !participants[2]?.studentName) {
+                          throw new Error(
+                            "Project Expo requires member 4 details"
+                          );
+                        }
 
-                      return {
-                        ...baseData,
-                        studentName: formData.studentName,
-                        contactNumber: formData.contactNumber,
-                        email: formData.email,
-                        numberOfTeamMembers: total,
-                        teamMembers: {
-                          create: participants.map((p) => ({
-                            studentName: p!.studentName,
-                            contactNumber: (p as any).contactNumber ?? "",
-                          })),
-                        },
-                      };
-                    })()
-                  : formData.events === "CODEFUSION"
-                    ? {
-                        ...baseData,
-                        studentName: formData.studentName,
-                        contactNumber: formData.contactNumber,
-                        email: formData.email,
-                        ...(formData.participant2 && {
+                        return {
+                          ...baseData,
+                          studentName: formData.studentName,
+                          contactNumber: formData.contactNumber,
+                          email: formData.email,
+                          numberOfTeamMembers: total,
                           teamMembers: {
-                            create: [
-                              {
-                                studentName: formData.participant2.studentName,
-                                contactNumber:
-                                  formData.participant2.contactNumber,
-                                email: formData.participant2.email,
-                              },
-                            ],
+                            create: participants.map((p) => ({
+                              studentName: p!.studentName,
+                              contactNumber: (p as any).contactNumber ?? "",
+                            })),
                           },
-                        }),
-                      }
-                    : formData.events === "Model Making" ||
-                        formData.events === "CAD Master" ||
-                        formData.events === "Videography"
+                        };
+                      })()
+                    : formData.events === "CODEFUSION"
                       ? {
                           ...baseData,
                           studentName: formData.studentName,
                           contactNumber: formData.contactNumber,
                           email: formData.email,
+                          ...(formData.participant2 && {
+                            teamMembers: {
+                              create: [
+                                {
+                                  studentName:
+                                    formData.participant2.studentName,
+                                  contactNumber:
+                                    formData.participant2.contactNumber,
+                                  email: formData.participant2.email,
+                                },
+                              ],
+                            },
+                          }),
                         }
-                      : {
-                          ...baseData,
-                          studentName: formData.studentName,
-                          contactNumber: formData.contactNumber,
-                          email: formData.email,
-                        },
+                      : formData.events === "Model Making" ||
+                          formData.events === "CAD Master" ||
+                          formData.events === "Videography"
+                        ? {
+                            ...baseData,
+                            studentName: formData.studentName,
+                            contactNumber: formData.contactNumber,
+                            email: formData.email,
+                          }
+                        : {
+                            ...baseData,
+                            studentName: formData.studentName,
+                            contactNumber: formData.contactNumber,
+                            email: formData.email,
+                          },
         include: {
           players: true,
           teamLeader: true,

@@ -629,10 +629,14 @@ const RegistrationForm = ({
                     <FormControl>
                       <Select
                         onValueChange={(value) => {
-                          form.setValue("numberOfTeamMembers", Number(value) as any, {
-                            shouldValidate: true,
-                            shouldDirty: true,
-                          });
+                          form.setValue(
+                            "numberOfTeamMembers",
+                            Number(value) as any,
+                            {
+                              shouldValidate: true,
+                              shouldDirty: true,
+                            }
+                          );
                         }}
                         value={field.value ? String(field.value) : "2"}
                         disabled={isPending}
