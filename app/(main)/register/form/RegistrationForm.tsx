@@ -90,6 +90,8 @@ const RegistrationForm = ({
   const [mechIplHasFourthMember, setMechIplHasFourthMember] = useState(false);
   const [mechJunkYardHasThirdMember, setMechJunkYardHasThirdMember] =
     useState(false);
+  const [entcProjectExpoFourthMember, setEntcProjectExpoFourthMember] =
+    useState(false);
   const [treasureHuntShowExtra, setTreasureHuntShowExtra] = useState(true);
   const [paymentMode, setPaymentMode] = useState<"ONLINE" | "OFFLINE">(
     "ONLINE"
@@ -282,6 +284,18 @@ const RegistrationForm = ({
         (form.getValues("numberOfTeamMembers") ?? 3) === 4
       );
     }
+    if (selectedEvent === "ENTC Project Expo") {
+      const current = form.getValues("numberOfTeamMembers");
+      if (!current || current < 3 || current > 4) {
+        form.setValue("numberOfTeamMembers", 3 as any, {
+          shouldValidate: true,
+          shouldDirty: true,
+        });
+      }
+      setEntcProjectExpoFourthMember(
+        (form.getValues("numberOfTeamMembers") ?? 3) === 4
+      );
+    }
   }, [selectedEvent, form]);
 
   // Ensure only visible Treasure Hunt team members affect validation
@@ -371,6 +385,7 @@ const RegistrationForm = ({
       form.setValue("participant4", undefined as any);
       return;
     }
+
     if (!mechIplHasFourthMember) {
       form.setValue("participant4", undefined as any, {
         shouldValidate: true,
@@ -378,6 +393,21 @@ const RegistrationForm = ({
       });
     }
   }, [selectedEvent, mechIplHasFourthMember, form]);
+
+  useEffect(() => {
+    if (selectedEvent !== "ENTC Project Expo") {
+      setEntcProjectExpoFourthMember(false);
+      form.setValue("participant4", undefined as any);
+      return;
+    }
+
+    if (!entcProjectExpoFourthMember) {
+      form.setValue("participant4", undefined as any, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+    }
+  }, [selectedEvent, entcProjectExpoFourthMember, form]);
 
   useEffect(() => {
     if (selectedEvent !== "Mech Junk Yard") {
@@ -546,94 +576,9 @@ const RegistrationForm = ({
             )}
           />
 
-          {/* {!initialEvent && (
-            <FormField
-              control={form.control}
-              name="events"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Select Event</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    value={field.value}
-                    disabled={isPending}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Choose an event" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="Startup Sphere">
-                        Startup Sphere
-                      </SelectItem>
-                      <SelectItem value="Face To Face">Face To Face</SelectItem>
-                      <SelectItem value="Python Frontiers">
-                        Python Frontiers
-                      </SelectItem>
-                      <SelectItem value="BGMI">BGMI</SelectItem>
-                      <SelectItem value="FreeFire">FreeFire</SelectItem>
-                      <SelectItem value="AI Tales">AI Tales</SelectItem>
-                      <SelectItem value="ENTC Project Expo">
-                        ENTC Project Expo (ENTC)
-                      </SelectItem>
-                      <SelectItem value="Digital Dangal">
-                        Digital Dangal (ENTC)
-                      </SelectItem>
-                      <SelectItem value="Snap & Shine">
-                        Snap &amp; Shine (ENTC)
-                      </SelectItem>
-                      <SelectItem value="Techno Science Quiz">
-                        Techno Science Quiz (GE)
-                      </SelectItem>
-                      <SelectItem value="Poster Competition">
-                        Poster Competition (GE)
-                      </SelectItem>
-                      <SelectItem value="SciTech Model Expo 2K26">
-                        SciTech Model Expo 2K26 (GE)
-                      </SelectItem>
-                      <SelectItem value="General Engineering Games">
-                        General Engineering Games (3 or 5)
-                      </SelectItem>
-                      <SelectItem value="Model Making">
-                        Model Making (Civil)
-                      </SelectItem>
-                      <SelectItem value="CAD Master">
-                        CAD Master (Civil)
-                      </SelectItem>
-                      <SelectItem value="Videography">
-                        Videography (Civil)
-                      </SelectItem>
-                      <SelectItem value="CODEFUSION">
-                        CODEFUSION (CSE)
-                      </SelectItem>
-                      <SelectItem value="Project Expo">
-                        Project Expo (CSE)
-                      </SelectItem>
-                      <SelectItem value="Treasure Hunt">
-                        Treasure Hunt (CSE)
-                      </SelectItem>
-                      <SelectItem value="Mech Project Expo">
-                        Mech Project Expo (Mechanical)
-                      </SelectItem>
-                      <SelectItem value="Mech Junk Yard">
-                        Mech Junk Yard (Mechanical)
-                      </SelectItem>
-                      <SelectItem value="Mech IPL Auction">
-                        Mech IPL Auction (Mechanical)
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          )} */}
-
           {(selectedEvent === "Face To Face" ||
             selectedEvent === "Python Frontiers" ||
             selectedEvent === "AI Tales" ||
-            selectedEvent === "ENTC Project Expo" ||
             selectedEvent === "Digital Dangal" ||
             selectedEvent === "Snap & Shine" ||
             selectedEvent === "Techno Science Quiz" ||
@@ -1333,7 +1278,8 @@ const RegistrationForm = ({
             </>
           )}
 
-          {selectedEvent === "Mech IPL Auction" && (
+          {(selectedEvent === "Mech IPL Auction" ||
+            selectedEvent === "ENTC Project Expo") && (
             <div className="space-y-4 md:col-span-2">
               <FormField
                 control={form.control}
@@ -1425,10 +1371,18 @@ const RegistrationForm = ({
                   <label className="flex items-center gap-3 text-sm select-none">
                     <input
                       type="checkbox"
-                      checked={mechIplHasFourthMember}
+                      checked={
+                        selectedEvent === "Mech IPL Auction"
+                          ? mechIplHasFourthMember
+                          : entcProjectExpoFourthMember
+                      }
                       onChange={(e) => {
                         const checked = e.target.checked;
-                        setMechIplHasFourthMember(checked);
+                        if (selectedEvent === "Mech IPL Auction") {
+                          setMechIplHasFourthMember(checked);
+                        } else {
+                          setEntcProjectExpoFourthMember(checked);
+                        }
                         form.setValue(
                           "numberOfTeamMembers",
                           (checked ? 4 : 3) as any,
@@ -1531,7 +1485,7 @@ const RegistrationForm = ({
                     />
                   </div>
 
-                  {mechIplHasFourthMember && (
+                  {(mechIplHasFourthMember || entcProjectExpoFourthMember) && (
                     <div className="p-4 border rounded-xl space-y-3">
                       <h4 className="font-medium">Team Member 4</h4>
                       <FormField

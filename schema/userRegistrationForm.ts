@@ -2,7 +2,6 @@ import { z } from "zod";
 
 const indianPhoneRegex = /^(?:\+91|91)?[6-9]\d{9}$/;
 
-// Define event-specific schemas
 const startupSphereSchema = z.object({
   startupCategory: z.string(),
   numberOfTeamMembers: z.number().min(1).max(5),
@@ -89,8 +88,6 @@ const faceToFaceSchema = standardRegistrationSchema;
 const aiTalesSchema = standardRegistrationSchema;
 const generalEngineeringTechnicalSchema = standardRegistrationSchema;
 const civilTechnicalSchema = standardRegistrationSchema;
-const cseTechnicalSchema = standardRegistrationSchema;
-const mechTechnicalSchema = standardRegistrationSchema;
 
 const treasureHuntSchema = standardRegistrationSchema.extend({
   teamName: z.string().min(1, "Team name is required"),
@@ -151,6 +148,8 @@ const mechProjectExpoSchema = standardRegistrationSchema.extend({
   participant4: participantSchema.optional(),
   participant5: participantSchema.optional(),
 });
+
+const entcProjectExpoSchema = mechIplAuctionSchema;
 
 const codefusionSchema = standardRegistrationSchema.extend({
   participant2: z
@@ -263,7 +262,7 @@ const baseUserRegistrationFormSchema = z
       z.object({ events: z.literal("AI Tales") }).merge(aiTalesSchema),
       z
         .object({ events: z.literal("ENTC Project Expo") })
-        .merge(standardRegistrationSchema),
+        .merge(entcProjectExpoSchema),
       z
         .object({ events: z.literal("Digital Dangal") })
         .merge(standardRegistrationSchema),
@@ -381,7 +380,10 @@ export const userRegistrationFormSchema =
       }
     }
 
-    if (data.events === "Mech IPL Auction") {
+    if (
+      data.events === "Mech IPL Auction" ||
+      data.events === "ENTC Project Expo"
+    ) {
       const total = data.numberOfTeamMembers;
       if (total >= 4) {
         if (!data.participant4 || !data.participant4.studentName?.trim()) {
