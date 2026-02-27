@@ -6,11 +6,16 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { zenDots } from "@/lib/fonts";
 import ThemeToogle from "./ThemeToggle";
+import { useRouter } from "next/navigation";
 
 export function Navigation2() {
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+
   const menuRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
+  const router = useRouter();
 
   useEffect(() => {
     setMounted(true);
@@ -19,20 +24,25 @@ export function Navigation2() {
   const navLinks = [
     { href: "/aboutus", label: "ABOUT US" },
     { href: "/events", label: "EVENTS" },
-    // Route all registration traffic through the events list,
-    // where users can pick a specific event and register.
     { href: "/sponsors", label: "SPONSORS" },
     { href: "/contactus", label: "CONTACT US" },
   ];
 
   const handleNavigation = (path: string) => {
     setIsOpen(false);
-    window.location.href = path;
+    router.push(path);
   };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+      const target = event.target as Node;
+
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(target) &&
+        buttonRef.current &&
+        !buttonRef.current.contains(target)
+      ) {
         setIsOpen(false);
       }
     };
@@ -49,11 +59,11 @@ export function Navigation2() {
     <motion.nav
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
+      viewport={{ once: true }}
       className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-md border-b border-muted px-4"
     >
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between h-16">
-          {/* Logo */}
           <motion.button
             whileHover={{ scale: 1.01 }}
             whileTap={{ scale: 0.95 }}
@@ -65,7 +75,6 @@ export function Navigation2() {
             </span>
           </motion.button>
 
-          {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             {navLinks.map((link) => (
               <motion.button
@@ -81,19 +90,18 @@ export function Navigation2() {
             <ThemeToogle />
           </div>
 
-          {/* Mobile Menu Button */}
           <Button
+            ref={buttonRef}
             variant="ghost"
             size="icon"
             className="md:hidden"
-            onClick={() => setIsOpen(!isOpen)}
+            onClick={() => setIsOpen((prev) => !prev)}
           >
             {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </Button>
         </div>
       </div>
 
-      {/* Mobile Navigation */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
