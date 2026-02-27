@@ -28,16 +28,6 @@ const startupSphereSchema = z.object({
     .optional(),
 });
 
-const faceToFaceSchema = z.object({
-  studentName: z.string({ required_error: "Student name is required" }),
-  contactNumber: z
-    .string({ required_error: "Contact Number is required" })
-    .regex(indianPhoneRegex, "Enter valid contact number"),
-  email: z
-    .string({ required_error: "Email is required" })
-    .email("Enter valid email address"),
-});
-
 const fireFireBattleshipSchema = z.object({
   squadName: z
     .string({ required_error: "Squad name is required" })
@@ -74,24 +64,17 @@ const fireFireBattleshipSchema = z.object({
     }),
 });
 
-const pythonWorriorsSchema = z.object({
-  studentName: z.string().min(1, "Name is required"),
+const standardRegistrationSchema = z.object({
+  studentName: z.string({ required_error: "Student name is required" }),
   contactNumber: z
-    .string()
-    .min(10, "Contact number must be at least 10 digits"),
-  email: z.string().email("Invalid email address"),
+    .string({ required_error: "Contact Number is required" })
+    .regex(indianPhoneRegex, "Enter valid contact number"),
+  email: z
+    .string({ required_error: "Email is required" })
+    .email("Enter valid email address"),
 });
 
-const treasureHuntParticipantSchema = z.object({
-  studentName: z.string().min(1, "Name is required"),
-  contactNumber: z
-    .string()
-    .regex(indianPhoneRegex, "Enter valid contact number")
-    .or(z.literal(""))
-    .optional(),
-});
-
-const projectExpoParticipantSchema = z.object({
+const participantSchema = z.object({
   studentName: z
     .string({ required_error: "Student name is required" })
     .min(1, "Name is required"),
@@ -102,32 +85,22 @@ const projectExpoParticipantSchema = z.object({
     .optional(),
 });
 
-const mechIplAuctionParticipantSchema = z.object({
-  studentName: z
-    .string({ required_error: "Student name is required" })
-    .min(1, "Name is required"),
-  contactNumber: z
-    .string()
-    .regex(indianPhoneRegex, "Enter valid contact number")
-    .or(z.literal(""))
-    .optional(),
-});
+const faceToFaceSchema = standardRegistrationSchema;
+const aiTalesSchema = standardRegistrationSchema;
+const generalEngineeringTechnicalSchema = standardRegistrationSchema;
+const civilTechnicalSchema = standardRegistrationSchema;
+const cseTechnicalSchema = standardRegistrationSchema;
+const mechTechnicalSchema = standardRegistrationSchema;
 
-const aiTalesSchema = pythonWorriorsSchema;
-const generalEngineeringTechnicalSchema = pythonWorriorsSchema;
-const civilTechnicalSchema = pythonWorriorsSchema;
-const cseTechnicalSchema = pythonWorriorsSchema;
-const mechTechnicalSchema = pythonWorriorsSchema;
-
-const treasureHuntSchema = pythonWorriorsSchema.extend({
+const treasureHuntSchema = standardRegistrationSchema.extend({
   teamName: z.string().min(1, "Team name is required"),
-  participant2: treasureHuntParticipantSchema.optional(),
-  participant3: treasureHuntParticipantSchema.optional(),
-  participant4: treasureHuntParticipantSchema.optional(),
-  participant5: treasureHuntParticipantSchema.optional(),
+  participant2: participantSchema.optional(),
+  participant3: participantSchema.optional(),
+  participant4: participantSchema.optional(),
+  participant5: participantSchema.optional(),
 });
 
-const projectExpoSchema = pythonWorriorsSchema.extend({
+const projectExpoSchema = standardRegistrationSchema.extend({
   teamName: z
     .string({ required_error: "Team name is required" })
     .min(1, "Team name is required"),
@@ -135,12 +108,24 @@ const projectExpoSchema = pythonWorriorsSchema.extend({
     .number()
     .min(2, "Minimum 2 team members are required")
     .max(4, "Maximum 4 team members are allowed"),
-  participant2: projectExpoParticipantSchema,
-  participant3: projectExpoParticipantSchema.optional(),
-  participant4: projectExpoParticipantSchema.optional(),
+  participant2: participantSchema,
+  participant3: participantSchema.optional(),
+  participant4: participantSchema.optional(),
 });
 
-const mechIplAuctionSchema = pythonWorriorsSchema.extend({
+const mechJunkYardSchema = standardRegistrationSchema.extend({
+  teamName: z
+    .string({ required_error: "Team name is required" })
+    .min(3, "Team name should be atleast 3 characters long"),
+  numberOfTeamMembers: z
+    .number()
+    .min(2, "Minimum 2 team members are required")
+    .max(3, "Maximum 3 team members are allowed"),
+  participant2: participantSchema,
+  participant3: participantSchema.optional(),
+});
+
+const mechIplAuctionSchema = standardRegistrationSchema.extend({
   teamName: z
     .string({ required_error: "Team name is required" })
     .min(1, "Team name is required"),
@@ -148,12 +133,12 @@ const mechIplAuctionSchema = pythonWorriorsSchema.extend({
     .number()
     .min(3, "Minimum 3 team members are required")
     .max(4, "Maximum 4 team members are allowed"),
-  participant2: mechIplAuctionParticipantSchema,
-  participant3: mechIplAuctionParticipantSchema,
-  participant4: mechIplAuctionParticipantSchema.optional(),
+  participant2: participantSchema,
+  participant3: participantSchema,
+  participant4: participantSchema.optional(),
 });
 
-const codefusionSchema = pythonWorriorsSchema.extend({
+const codefusionSchema = standardRegistrationSchema.extend({
   participant2: z
     .object({
       studentName: z.string().min(1, "Name is required"),
@@ -256,7 +241,7 @@ const baseUserRegistrationFormSchema = z
       z.object({ events: z.literal("Face To Face") }).merge(faceToFaceSchema),
       z
         .object({ events: z.literal("Python Frontiers") })
-        .merge(pythonWorriorsSchema),
+        .merge(standardRegistrationSchema),
       z.object({ events: z.literal("BGMI") }).merge(fireFireBattleshipSchema),
       z
         .object({ events: z.literal("FreeFire") })
@@ -264,13 +249,13 @@ const baseUserRegistrationFormSchema = z
       z.object({ events: z.literal("AI Tales") }).merge(aiTalesSchema),
       z
         .object({ events: z.literal("ENTC Project Expo") })
-        .merge(pythonWorriorsSchema),
+        .merge(standardRegistrationSchema),
       z
         .object({ events: z.literal("Digital Dangal") })
-        .merge(pythonWorriorsSchema),
+        .merge(standardRegistrationSchema),
       z
         .object({ events: z.literal("Snap & Shine") })
-        .merge(pythonWorriorsSchema),
+        .merge(standardRegistrationSchema),
       z
         .object({ events: z.literal("Techno Science Quiz") })
         .merge(generalEngineeringTechnicalSchema),
@@ -300,7 +285,7 @@ const baseUserRegistrationFormSchema = z
         .merge(mechTechnicalSchema),
       z
         .object({ events: z.literal("Mech Junk Yard") })
-        .merge(mechTechnicalSchema),
+        .merge(mechJunkYardSchema),
       z
         .object({ events: z.literal("Mech IPL Auction") })
         .merge(mechIplAuctionSchema),
@@ -329,6 +314,19 @@ export const userRegistrationFormSchema =
             code: z.ZodIssueCode.custom,
             path: ["participant4", "studentName"],
             message: "Member 4 name is required when team has 4 members",
+          });
+        }
+      }
+    }
+
+    if (data.events === "Mech Junk Yard") {
+      const total = data.numberOfTeamMembers;
+      if (total >= 3) {
+        if (!data.participant3 || !data.participant3.studentName?.trim()) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ["participant3", "studentName"],
+            message: "Member 3 name is required when team has 3 members",
           });
         }
       }

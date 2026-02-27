@@ -817,7 +817,7 @@ export const getEventFeeByName = (eventName: string, teamSize?: number) => {
     "Treasure Hunt": "CSE_TREASURE_HUNT",
     // Mechanical events
     "Mech Project Expo": "MECH_PROJECT_EXPO",
-    // "Mech Junk Yard": "MECH_JUNK_YARD",
+    "Mech Junk Yard": "MECH_JUNK_YARD",
     "Mech IPL Auction": "MECH_IPL_AUCTION",
   } as const;
 

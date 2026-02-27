@@ -88,6 +88,8 @@ const RegistrationForm = ({
   const [codefusionHasSecondParticipant, setCodefusionHasSecondParticipant] =
     useState(false);
   const [mechIplHasFourthMember, setMechIplHasFourthMember] = useState(false);
+  const [mechJunkYardHasThirdMember, setMechJunkYardHasThirdMember] =
+    useState(false);
   const [treasureHuntShowExtra, setTreasureHuntShowExtra] = useState(true);
   const [paymentMode, setPaymentMode] = useState<"ONLINE" | "OFFLINE">(
     "ONLINE"
@@ -238,6 +240,18 @@ const RegistrationForm = ({
         shouldDirty: true,
       });
     }
+    if (selectedEvent === "Mech Junk Yard") {
+      const current = form.getValues("numberOfTeamMembers");
+      if (!current || current < 2 || current > 3) {
+        form.setValue("numberOfTeamMembers", 2 as any, {
+          shouldValidate: true,
+          shouldDirty: true,
+        });
+      }
+      setMechJunkYardHasThirdMember(
+        (form.getValues("numberOfTeamMembers") ?? 2) === 3
+      );
+    }
     if (selectedEvent === "Mech IPL Auction") {
       const current = form.getValues("numberOfTeamMembers");
       if (!current || current < 3 || current > 4) {
@@ -346,6 +360,34 @@ const RegistrationForm = ({
       });
     }
   }, [selectedEvent, mechIplHasFourthMember, form]);
+
+  useEffect(() => {
+    if (selectedEvent !== "Mech Junk Yard") {
+      setMechJunkYardHasThirdMember(false);
+      form.setValue("participant3", undefined as any);
+      return;
+    }
+    if (!mechJunkYardHasThirdMember) {
+      form.setValue("participant3", undefined as any, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+    }
+  }, [selectedEvent, mechJunkYardHasThirdMember, form]);
+
+  useEffect(() => {
+    if (selectedEvent !== "Mech Junk Yard") {
+      setMechJunkYardHasThirdMember(false);
+      form.setValue("participant3", undefined as any);
+      return;
+    }
+    if (!mechJunkYardHasThirdMember) {
+      form.setValue("participant3", undefined as any, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+    }
+  }, [selectedEvent, mechJunkYardHasThirdMember, form]);
 
   useEffect(() => {
     if (selectedEvent === "General Engineering Games") {
@@ -582,8 +624,7 @@ const RegistrationForm = ({
             selectedEvent === "Model Making" ||
             selectedEvent === "CAD Master" ||
             selectedEvent === "Videography" ||
-            selectedEvent === "Mech Project Expo" ||
-            selectedEvent === "Mech Junk Yard") && (
+            selectedEvent === "Mech Project Expo") && (
             <>
               <FormField
                 control={form.control}
@@ -1093,6 +1134,7 @@ const RegistrationForm = ({
               )}
             </>
           )}
+
           {selectedEvent === "Mech IPL Auction" && (
             <div className="space-y-4 md:col-span-2">
               <FormField
@@ -1316,6 +1358,210 @@ const RegistrationForm = ({
                       <FormField
                         control={form.control}
                         name="participant4.contactNumber"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Contact Number</FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="Enter contact number"
+                                {...field}
+                                disabled={isPending}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {selectedEvent === "Mech Junk Yard" && (
+            <div className="space-y-4 md:col-span-2">
+              <FormField
+                control={form.control}
+                name="teamName"
+                render={({ field }) => (
+                  <FormItem className="col-span-1">
+                    <FormLabel>
+                      Team Name <RequiredAsterisk />
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter team name"
+                        {...field}
+                        disabled={isPending}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <div className="space-y-3">
+                <h3 className="font-semibold">Team Leader Details</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border rounded-xl">
+                  <FormField
+                    control={form.control}
+                    name="studentName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          Team Leader Name <RequiredAsterisk />
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Enter team leader name"
+                            {...field}
+                            disabled={isPending}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="contactNumber"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          Team Leader Contact Number <RequiredAsterisk />
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Enter contact number"
+                            {...field}
+                            disabled={isPending}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem className="md:col-span-1">
+                        <FormLabel>
+                          Team Leader Email <RequiredAsterisk />
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Enter email"
+                            type="email"
+                            {...field}
+                            disabled={isPending}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-semibold">Team Members</h3>
+                  <label className="flex items-center gap-3 text-sm select-none">
+                    <input
+                      type="checkbox"
+                      checked={mechJunkYardHasThirdMember}
+                      onChange={(e) => {
+                        const checked = e.target.checked;
+                        setMechJunkYardHasThirdMember(checked);
+                        form.setValue(
+                          "numberOfTeamMembers",
+                          (checked ? 3 : 2) as any,
+                          {
+                            shouldValidate: true,
+                            shouldDirty: true,
+                          }
+                        );
+                        if (!checked) {
+                          form.setValue("participant3", undefined as any, {
+                            shouldValidate: true,
+                            shouldDirty: true,
+                          });
+                        }
+                      }}
+                      disabled={isPending}
+                    />
+                    Add Team Member 3 (optional, max 3 members)
+                  </label>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="p-4 border rounded-xl space-y-3">
+                    <h4 className="font-medium">Team Member 2</h4>
+                    <FormField
+                      control={form.control}
+                      name="participant2.studentName"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>
+                            Name <RequiredAsterisk />
+                          </FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="Enter name"
+                              {...field}
+                              disabled={isPending}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="participant2.contactNumber"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Contact Number</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="Enter contact number"
+                              {...field}
+                              disabled={isPending}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  {mechJunkYardHasThirdMember && (
+                    <div className="p-4 border rounded-xl space-y-3">
+                      <h4 className="font-medium">Team Member 3</h4>
+                      <FormField
+                        control={form.control}
+                        name="participant3.studentName"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>
+                              Name <RequiredAsterisk />
+                            </FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="Enter name"
+                                {...field}
+                                disabled={isPending}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="participant3.contactNumber"
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>Contact Number</FormLabel>
