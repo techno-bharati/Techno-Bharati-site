@@ -69,7 +69,7 @@ export default function EventsPageContent() {
         EVENTS
       </motion.h1>
 
-      <div className="relative z-10 max-w-7xl min-h-screen mx-auto px-4 md:px-6 py-10 md:py-14 mb-20 ">
+      <div className="relative z-10 max-w-7xl min-h-screen mx-auto px-4 md:px-4 xl:px-0 py-10 md:py-14 mb-20">
         <motion.h1
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

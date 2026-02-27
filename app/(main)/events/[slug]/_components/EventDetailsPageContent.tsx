@@ -13,7 +13,6 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { events, type Event } from "@/lib/constants";
 
 const renderRules = (rules: string[], eventName: string) => {
@@ -101,14 +100,19 @@ const EventDetailsPageContent = ({ slug }: { slug: string }) => {
   }
 
   const departmentToDeptParam = (department: string) => {
-    // `EVENTS_BY_DEPARTMENT` keys are: "CSE (AIML)", "CSE", "MECH", "ECE", "CIVIL", "General Engineering"
-    if (department === "Civil") return "CIVIL";
+    if (department === "Civil" || department === "CIVIL") return "CIVIL";
     if (department === "General Engineering") return "General Engineering";
     if (department === "CSE (AIML)") return "CSE (AIML)";
     if (department === "CSE") return "CSE";
-    if (department === "MECH") return "MECH";
-    if (department === "ENTC") return "ENTC";
-    // Fallback: don't force a department filter
+    if (department === "MECH" || department === "Mechanical Engineering") {
+      return "MECH";
+    }
+    if (
+      department === "ENTC" ||
+      department === "Electronic and Telecommunication Engineering"
+    ) {
+      return "ENTC";
+    }
     return null;
   };
 
@@ -209,7 +213,12 @@ const EventDetailsPageContent = ({ slug }: { slug: string }) => {
                 <span className="capitalize font-medium text-foreground">
                   {key}
                 </span>
-                <span className="text-muted-foreground/70">({value})</span>
+                <a
+                  href={`tel:${value}`}
+                  className="text-muted-foreground/70 hover:underline underline-offset-4 hover:text-primary"
+                >
+                  {value}
+                </a>
               </p>
             ))}
           </div>
