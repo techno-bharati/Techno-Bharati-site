@@ -135,40 +135,58 @@ const EventDetailsPageContent = ({ slug }: { slug: string }) => {
           Back to Events
         </Button>
 
-        <div className="w-full flex justify-between">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground leading-tight">
-            {event.name}
-          </h1>
+        <div className="flex flex-col md:flex-row gap-6 mb-8 items-start">
+          {event.icon && (
+            <div className="relative w-full md:w-72 lg:w-80 shrink-0 aspect-video rounded-2xl overflow-hidden bg-muted shadow-md">
+              <Image
+                src={event.icon}
+                alt={event.name}
+                fill
+                className="object-cover"
+                priority
+              />
+            </div>
+          )}
 
-          <Button
-            size="lg"
-            className="hidden md:flex w-full md:w-auto px-10 py-6 text-lg md:text-xl font-semibold rounded-2xl bg-primary hover:bg-primary/90 text-white shadow-lg group"
-            onClick={() => router.push(`/events/${slug}/register`)}
-          >
-            Register Now
-            <ArrowRight className="group-hover:translate-x-1 transition-transform" />
-          </Button>
-        </div>
+          <div className="flex flex-col justify-between gap-4 flex-1 h-full">
+            <div>
+              <span className="inline-block text-xs font-semibold uppercase tracking-widest text-primary bg-primary/10 border border-primary/20 rounded-full px-3 py-1 mb-3">
+                {event.department}
+              </span>
 
-        <div className="mt-6 flex flex-wrap gap-6 text-base sm:text-lg md:text-xl text-muted-foreground">
-          <div className="flex items-center gap-2">
-            <Coins className="h-5 w-5" />
-            <span>Entry: ₹ {event.entryFee}</span>
-          </div>
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground leading-tight">
+                {event.name}
+              </h1>
+            </div>
 
-          <div className="flex items-center gap-2">
-            <Calendar className="h-5 w-5" />
-            <span>{event.date}</span>
-          </div>
+            {/* Meta */}
+            <div className="flex flex-wrap gap-4 text-base sm:text-lg text-muted-foreground">
+              <div className="flex items-center gap-2">
+                <Coins className="h-5 w-5" />
+                <span>Entry: ₹ {event.entryFee}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Calendar className="h-5 w-5" />
+                <span>{event.date}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Clock className="h-5 w-5" />
+                <span>{event.time}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <MapPin className="h-5 w-5" />
+                <span>{event.venue}</span>
+              </div>
+            </div>
 
-          <div className="flex items-center gap-2">
-            <Clock className="h-5 w-5" />
-            <span>{event.time}</span>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <MapPin className="h-5 w-5" />
-            <span>{event.venue}</span>
+            <Button
+              size="lg"
+              className="hidden md:flex w-fit px-10 py-6 text-lg font-semibold rounded-2xl bg-primary hover:bg-primary/90 text-white shadow-lg group"
+              onClick={() => router.push(`/events/${slug}/register`)}
+            >
+              Register Now
+              <ArrowRight className="group-hover:translate-x-1 transition-transform" />
+            </Button>
           </div>
         </div>
 
