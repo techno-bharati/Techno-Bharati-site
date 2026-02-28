@@ -104,6 +104,7 @@ export interface Event {
   venue: string;
   entryFee: string;
   type: string;
+  icon?: string;
   modalData: {
     eventName: string;
     description: string;
@@ -125,6 +126,7 @@ export const CSE_AIML_EVENTS: Event[] = [
     venue: "Bharati Vidyapeeth College of Engineering, Kolahpur",
     entryFee: `${EVENT_FEES.PYTHON_FRONTIERS.amount} (per person)`,
     type: "Technical Event",
+    icon: "/event-card/aiml/python-frontiers.jpeg",
     modalData: {
       eventName: "Python Frontiers",
       description:
@@ -159,6 +161,7 @@ export const CSE_AIML_EVENTS: Event[] = [
     venue: "Bharati Vidyapeeth College of Engineering, Kolahpur",
     entryFee: `${EVENT_FEES.FACE_TO_FACE.amount} (per person)`,
     type: "Technical Event",
+    icon: "/event-card/aiml/face-to-face.jpeg",
     modalData: {
       eventName: "Face To Face",
       description:
@@ -195,6 +198,7 @@ export const CSE_AIML_EVENTS: Event[] = [
     venue: "Bharati Vidyapeeth College of Engineering, Kolahpur",
     entryFee: `${EVENT_FEES.BGMI.amount} (per team)`,
     type: "Non-Technical Event",
+    icon: "/event-card/aiml/bgmi.jpeg",
     modalData: {
       eventName: "BGMI",
       description:
@@ -236,6 +240,7 @@ export const CSE_EVENTS: Event[] = [
     venue: "Bharati Vidyapeeth College of Engineering, Kolhapur",
     entryFee: `${EVENT_FEES.CSE_CODEFUSION.amount} (per person)`,
     type: "Technical Event",
+    icon: "/event-card/cse/codefusion.png",
     modalData: {
       eventName: "CODEFUSION",
       description:
@@ -267,6 +272,7 @@ export const CSE_EVENTS: Event[] = [
     venue: "Bharati Vidyapeeth College of Engineering, Kolhapur",
     entryFee: "100",
     type: "Technical Event",
+    icon: "/event-card/cse/project-expo.png",
     modalData: {
       eventName: "Project Expo",
       description:
@@ -289,6 +295,7 @@ export const CSE_EVENTS: Event[] = [
     venue: "Bharati Vidyapeeth College of Engineering, Kolhapur",
     entryFee: "100",
     type: "Non-Technical Event",
+    icon: "/event-card/cse/treasure-hunt.png",
     modalData: {
       eventName: "Treasure Hunt",
       description:
@@ -313,6 +320,7 @@ export const MECH_EVENTS: Event[] = [
     venue: "Bharati Vidyapeeth College of Engineering, Kolahpur",
     entryFee: "100",
     type: "Technical Event",
+    icon: "/event-card/mech/ipl-auction.png",
     modalData: {
       eventName: "Mech IPL Auction",
       description: "Showcase your innovative engineering projects...",
@@ -337,7 +345,8 @@ export const MECH_EVENTS: Event[] = [
     time: "9:15 AM - 4:15 PM",
     venue: "Bharati Vidyapeeth College of Engineering, Kolahpur",
     entryFee: "100",
-    type: "Technical Event",
+    type: "Non-Technical Event",
+    icon: "/event-card/mech/junk-yard.png",
     modalData: {
       eventName: "Mech Junk Yard",
       description: "Showcase your innovative engineering projects...",
@@ -364,6 +373,7 @@ export const MECH_EVENTS: Event[] = [
     venue: "Bharati Vidyapeeth College of Engineering, Kolahpur",
     entryFee: "100",
     type: "Technical Event",
+    icon: "/event-card/mech/project-expo.png",
     modalData: {
       eventName: "Mech Project Expo",
       description: "Showcase your innovative engineering projects...",
@@ -395,6 +405,7 @@ export const ENTC_EVENTS: Event[] = [
     venue: "Bharati Vidyapeeth's College of Engineering Kolhapur",
     entryFee: `${EVENT_FEES.ENTC_PROJECT_EXPO.amount} (per person)`,
     type: "Technical Event",
+    icon: "/event-card/entc/project-expo.png",
     modalData: {
       eventName: "ENTC Project Expo",
       description: "Showcase your innovative engineering projects...",
@@ -426,6 +437,7 @@ export const ENTC_EVENTS: Event[] = [
     venue: "Bharati Vidyapeeth's College of Engineering Kolhapur",
     entryFee: `${EVENT_FEES.ENTC_DIGITAL_DANGAL.amount} (per person)`,
     type: "Technical Event",
+    icon: "/event-card/entc/digital-dangal.png",
     modalData: {
       eventName: "Digital Dangal",
       description: "A competitive digital challenge...",
@@ -461,6 +473,7 @@ export const ENTC_EVENTS: Event[] = [
     venue: "Bharati Vidyapeeth's College of Engineering Kolhapur",
     entryFee: `${EVENT_FEES.ENTC_SNAP_AND_SHINE.amount} (per person)`,
     type: "Non-Technical Event",
+    icon: "/event-card/entc/snap-shine.png",
     modalData: {
       eventName: "Snap & Shine",
       description: "Capture the best moments...",

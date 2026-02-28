@@ -107,7 +107,7 @@ export default function EventsPageContent() {
               }
               className={`
             px-4 py-2 md:px-5 md:py-3
-            rounded-full 
+            rounded-2xl
             text-sm md:text-base font-medium
             border border-border 
             transition-all duration-200
