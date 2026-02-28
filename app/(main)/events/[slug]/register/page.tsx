@@ -31,6 +31,7 @@ const slugToEventName: Record<string, EventNameOption> = {
   "emoji-expression-game": "General Engineering Games",
   //civil engineering
   "model-making": "Model Making",
+  "battle-of-brains": "Battle of Brains",
   "cad-master": "CAD Master",
   videography: "Videography",
   // CSE department
