@@ -42,7 +42,7 @@ export default function ContactUsPage() {
             </ContactDetailsCards>
 
             <ContactDetailsCards cardTitle="Address" cardIcon={MapPin}>
-              <p className="text-muted-foreground">
+              <p className="text-muted-foreground md:text-xl">
                 Bharati Vidyapeeth&apos;s College of Engineering
                 <br />
                 Kolhapur, Maharashtra
