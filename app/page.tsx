@@ -17,7 +17,7 @@ export default function Home() {
       <Hero2 />
       <div className="max-w-5xl mx-auto my-5 px-4">
         <Image
-          src={"/banner.jpeg"}
+          src={"/banner.png"}
           alt="banner"
           className="h-full w-full shadow-md rounded-2xl"
           height={800}
