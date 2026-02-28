@@ -178,6 +178,23 @@ const generalEngineeringGamesBundleSchema = z.object({
 const entcProjectExpoSchema = mechIplAuctionSchema;
 const entcDigitalDangalSchema = codefusionSchema;
 
+const battleOfBrainsSchema = standardRegistrationSchema.extend({
+  teamName: z
+    .string({ required_error: "Team name is required" })
+    .min(1, "Team name is required"),
+  participant2: z.object({
+    studentName: z
+      .string({ required_error: "Participant 2 name is required" })
+      .min(1, "Name is required"),
+    contactNumber: z
+      .string({ required_error: "Participant 2 contact number is required" })
+      .regex(indianPhoneRegex, "Enter valid contact number"),
+    email: z
+      .string({ required_error: "Participant 2 email is required" })
+      .email("Invalid email address"),
+  }),
+});
+
 // Add this before the main schema
 const paymentModeSchema = z.object({
   paymentMode: z.enum(["ONLINE", "OFFLINE"], {
@@ -209,6 +226,7 @@ const baseUserRegistrationFormSchema = z
         "General Engineering Games",
         // Civil Engineering
         "Model Making",
+        "Battle of Brains",
         "CAD Master",
         "Videography",
         // CSE department
@@ -285,10 +303,13 @@ const baseUserRegistrationFormSchema = z
       z
         .object({ events: z.literal("Model Making") })
         .merge(civilTechnicalSchema),
+      z
+        .object({ events: z.literal("Battle of Brains") })
+        .merge(battleOfBrainsSchema),
       z.object({ events: z.literal("CAD Master") }).merge(civilTechnicalSchema),
       z
         .object({ events: z.literal("Videography") })
-        .merge(civilTechnicalSchema),
+        .merge(battleOfBrainsSchema),
       z.object({ events: z.literal("CODEFUSION") }).merge(codefusionSchema),
       z.object({ events: z.literal("Project Expo") }).merge(projectExpoSchema),
       z
