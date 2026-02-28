@@ -35,6 +35,7 @@ export async function createRegistration(
       "SciTech Model Expo 2K26": EventType.GE_SCITECH_MODEL_EXPO,
       "General Engineering Games": EventType.GE_GAMES_BUNDLE,
       "Model Making": EventType.CE_MODEL_MAKING,
+      "Battle of Brains": EventType.CE_BATTLE_OF_BRAINS,
       "CAD Master": EventType.CE_CAD_MASTER,
       Videography: EventType.CE_VIDEOGRAPHY,
       CODEFUSION: EventType.CSE_CODEFUSION,
@@ -58,12 +59,11 @@ export async function createRegistration(
       ) {
         return GENERAL_ENGINEERING_TECHNICAL_FEE;
       }
-      if (
-        eventName === "Model Making" ||
-        eventName === "CAD Master" ||
-        eventName === "Videography"
-      ) {
+      if (eventName === "Model Making" || eventName === "CAD Master") {
         return CIVIL_TECHNICAL_FEE;
+      }
+      if (eventName === "Battle of Brains" || eventName === "Videography") {
+        return getEventFeeByName(eventName, 2) ?? 0;
       }
       const teamSize =
         eventName === "Startup Sphere"
@@ -277,21 +277,58 @@ export async function createRegistration(
                             },
                           }),
                         }
-                      : formData.events === "Model Making" ||
-                          formData.events === "CAD Master" ||
-                          formData.events === "Videography"
+                      : formData.events === "Battle of Brains"
                         ? {
                             ...baseData,
                             studentName: formData.studentName,
                             contactNumber: formData.contactNumber,
                             email: formData.email,
+                            teamName: formData.teamName,
+                            teamMembers: {
+                              create: [
+                                {
+                                  studentName:
+                                    formData.participant2.studentName,
+                                  contactNumber:
+                                    formData.participant2.contactNumber,
+                                  email: formData.participant2.email,
+                                },
+                              ],
+                            },
                           }
-                        : {
-                            ...baseData,
-                            studentName: formData.studentName,
-                            contactNumber: formData.contactNumber,
-                            email: formData.email,
-                          },
+                        : formData.events === "Videography"
+                          ? {
+                              ...baseData,
+                              studentName: formData.studentName,
+                              contactNumber: formData.contactNumber,
+                              email: formData.email,
+                              teamName: formData.teamName,
+                              teamMembers: {
+                                create: [
+                                  {
+                                    studentName:
+                                      formData.participant2.studentName,
+                                    contactNumber:
+                                      formData.participant2.contactNumber,
+                                    email: formData.participant2.email,
+                                  },
+                                ],
+                              },
+                            }
+                          : formData.events === "Model Making" ||
+                              formData.events === "CAD Master"
+                            ? {
+                                ...baseData,
+                                studentName: formData.studentName,
+                                contactNumber: formData.contactNumber,
+                                email: formData.email,
+                              }
+                            : {
+                                ...baseData,
+                                studentName: formData.studentName,
+                                contactNumber: formData.contactNumber,
+                                email: formData.email,
+                              },
         include: {
           players: true,
           teamLeader: true,

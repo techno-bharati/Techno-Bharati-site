@@ -54,6 +54,10 @@ export const EVENT_FEES: Record<string, EventFee> = {
     amount: 100,
     type: "per person",
   },
+  CE_BATTLE_OF_BRAINS: {
+    amount: 100,
+    type: "per person",
+  },
   CE_CAD_MASTER: {
     amount: 100,
     type: "per person",
@@ -160,7 +164,7 @@ export const CSE_AIML_EVENTS: Event[] = [
     time: "9:15 AM - 4:15 PM",
     venue: "Bharati Vidyapeeth College of Engineering, Kolahpur",
     entryFee: `${EVENT_FEES.FACE_TO_FACE.amount} (per person)`,
-    type: "Technical Event",
+    type: "Non-Technical Event",
     icon: "/event-card/aiml/face-to-face.jpeg",
     modalData: {
       eventName: "Face To Face",
@@ -632,6 +636,7 @@ export const CIVIL_EVENTS: Event[] = [
     venue: "Bharati Vidyapeeth College of Engineering, Kolahpur",
     entryFee: "100",
     type: "Technical Event",
+    icon: "/event-card/civil/model-making.png",
     modalData: {
       eventName: "Model Making",
       description: "ask for the event description",
@@ -664,8 +669,9 @@ export const CIVIL_EVENTS: Event[] = [
     date: "25th March 2026",
     time: "9:15 AM - 4:15 PM",
     venue: "Bharati Vidyapeeth College of Engineering, Kolahpur",
-    entryFee: "100",
+    entryFee: `${EVENT_FEES.CE_BATTLE_OF_BRAINS.amount} (per person)`,
     type: "Non-Technical Event",
+    icon: "/event-card/civil/battle-of-brains.png",
     modalData: {
       eventName: "Battle of Brains",
       description: "ask for",
@@ -701,6 +707,7 @@ export const CIVIL_EVENTS: Event[] = [
     venue: "Bharati Vidyapeeth College of Engineering, Kolahpur",
     entryFee: "100",
     type: "Technical Event",
+    icon: "/event-card/civil/cad-master.png",
     modalData: {
       eventName: "CAD Master",
       description: "ask for the event description",
@@ -734,8 +741,9 @@ export const CIVIL_EVENTS: Event[] = [
     date: "25th March 2026",
     time: "9:15 AM - 4:15 PM",
     venue: "Bharati Vidyapeeth College of Engineering, Kolahpur",
-    entryFee: "100",
+    entryFee: `${EVENT_FEES.CE_VIDEOGRAPHY.amount} (per person)`,
     type: "Non-Technical Event",
+    icon: "/event-card/civil/videography.png",
     modalData: {
       eventName: "Videography",
       description: "ask for the event description",
@@ -823,6 +831,7 @@ export const getEventFeeByName = (eventName: string, teamSize?: number) => {
     "Digital Dangal": "ENTC_DIGITAL_DANGAL",
     "Snap & Shine": "ENTC_SNAP_AND_SHINE",
     "Model Making": "CE_MODEL_MAKING",
+    "Battle of Brains": "CE_BATTLE_OF_BRAINS",
     "CAD Master": "CE_CAD_MASTER",
     Videography: "CE_VIDEOGRAPHY",
     CODEFUSION: "CSE_CODEFUSION",
@@ -859,6 +868,7 @@ export const EVENT_TO_ORGANIZING_DEPARTMENT: Record<
   "General Engineering Games": "General Engineering",
   FreeFire: "General Engineering",
   "Model Making": "CIVIL",
+  "Battle of Brains": "CIVIL",
   "CAD Master": "CIVIL",
   Videography: "CIVIL",
   CODEFUSION: "CSE",

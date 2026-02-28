@@ -56,6 +56,7 @@ export type EventNameOption =
   | "SciTech Model Expo 2K26"
   | "General Engineering Games"
   | "Model Making"
+  | "Battle of Brains"
   | "CAD Master"
   | "Videography"
   | "CODEFUSION"
@@ -207,6 +208,13 @@ const RegistrationForm = ({
         : 1;
     }
 
+    if (
+      selectedEvent === "Battle of Brains" ||
+      selectedEvent === "Videography"
+    ) {
+      return 2;
+    }
+
     return teamSize;
   };
 
@@ -229,10 +237,14 @@ const RegistrationForm = ({
       setTotalFee(GENERAL_ENGINEERING_TECHNICAL_FEE);
     } else if (
       selectedEvent === "Model Making" ||
-      selectedEvent === "CAD Master" ||
-      selectedEvent === "Videography"
+      selectedEvent === "CAD Master"
     ) {
       setTotalFee(CIVIL_TECHNICAL_FEE);
+    } else if (
+      selectedEvent === "Battle of Brains" ||
+      selectedEvent === "Videography"
+    ) {
+      setTotalFee(getEventFeeByName(selectedEvent, 2) ?? 200);
     } else {
       const membersForFee = getMembersCount();
       const fee = getEventFeeByName(selectedEvent, membersForFee);
@@ -391,10 +403,29 @@ const RegistrationForm = ({
   useEffect(() => {
     const isCodefusion = selectedEvent === "CODEFUSION";
     const isDigitalDangal = selectedEvent === "Digital Dangal";
+    const isBattleOfBrains = selectedEvent === "Battle of Brains";
+    const isVideography = selectedEvent === "Videography";
 
     // Reset toggle states when leaving their events
     if (!isCodefusion) setCodefusionHasSecondParticipant(false);
     if (!isDigitalDangal) setEntcDigitalDangalSecondParticipant(false);
+
+    // Battle of Brains & Videography: always require participant2 - initialize when selected
+    if (isBattleOfBrains || isVideography) {
+      const current = form.getValues("participant2" as any);
+      if (!current) {
+        form.setValue(
+          "participant2" as any,
+          {
+            studentName: "",
+            contactNumber: "",
+            email: "",
+          } as any,
+          { shouldValidate: true, shouldDirty: true }
+        );
+      }
+      return;
+    }
 
     // Clear participant2 when it shouldn't be present for current event
     if (!isCodefusion && !isDigitalDangal) {
@@ -625,8 +656,7 @@ const RegistrationForm = ({
             selectedEvent === "Poster Competition" ||
             selectedEvent === "SciTech Model Expo 2K26" ||
             selectedEvent === "Model Making" ||
-            selectedEvent === "CAD Master" ||
-            selectedEvent === "Videography") && (
+            selectedEvent === "CAD Master") && (
             <>
               <FormField
                 control={form.control}
@@ -1775,8 +1805,32 @@ const RegistrationForm = ({
             </div>
           )}
           {(selectedEvent === "CODEFUSION" ||
-            selectedEvent === "Digital Dangal") && (
+            selectedEvent === "Digital Dangal" ||
+            selectedEvent === "Battle of Brains" ||
+            selectedEvent === "Videography") && (
             <div className="space-y-4 md:col-span-2">
+              {(selectedEvent === "Battle of Brains" ||
+                selectedEvent === "Videography") && (
+                <FormField
+                  control={form.control}
+                  name="teamName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>
+                        Team Name <RequiredAsterisk />
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Enter team name"
+                          {...field}
+                          disabled={isPending}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
               <div className="grid grid-cols-2 gap-6">
                 <FormField
                   control={form.control}
@@ -1836,53 +1890,62 @@ const RegistrationForm = ({
                   )}
                 />
               </div>
-              <label className="flex items-center gap-2 text-sm select-none">
-                <input
-                  type="checkbox"
-                  checked={
-                    selectedEvent === "CODEFUSION"
-                      ? codefusionHasSecondParticipant
-                      : entcDigitalDangalSecondParticipant
-                  }
-                  onChange={(e) => {
-                    const checked = e.target.checked;
-
-                    if (selectedEvent === "CODEFUSION") {
-                      setCodefusionHasSecondParticipant(checked);
-                    } else {
-                      setEntcDigitalDangalSecondParticipant(checked);
-                    }
-
-                    // Ensure validation fails immediately if user enables participant 2
-                    // but hasn't filled the required fields yet.
-                    if (checked) {
-                      const current = form.getValues("participant2" as any);
-                      if (!current) {
-                        form.setValue(
-                          "participant2" as any,
-                          {
-                            studentName: "",
-                            contactNumber: "",
-                            email: "",
-                          } as any,
-                          { shouldValidate: true, shouldDirty: true }
-                        );
-                      } else {
-                        form.trigger("participant2" as any);
+              {selectedEvent !== "Battle of Brains" &&
+                selectedEvent !== "Videography" && (
+                  <label className="flex items-center gap-2 text-sm select-none">
+                    <input
+                      type="checkbox"
+                      checked={
+                        selectedEvent === "CODEFUSION"
+                          ? codefusionHasSecondParticipant
+                          : entcDigitalDangalSecondParticipant
                       }
-                    } else {
-                      form.setValue("participant2" as any, undefined as any, {
-                        shouldValidate: true,
-                        shouldDirty: true,
-                      });
-                    }
-                  }}
-                  disabled={isPending}
-                />
-                Add Participant 2 (optional, max 2 participants)
-              </label>
+                      onChange={(e) => {
+                        const checked = e.target.checked;
 
-              {(codefusionHasSecondParticipant ||
+                        if (selectedEvent === "CODEFUSION") {
+                          setCodefusionHasSecondParticipant(checked);
+                        } else {
+                          setEntcDigitalDangalSecondParticipant(checked);
+                        }
+
+                        // Ensure validation fails immediately if user enables participant 2
+                        // but hasn't filled the required fields yet.
+                        if (checked) {
+                          const current = form.getValues("participant2" as any);
+                          if (!current) {
+                            form.setValue(
+                              "participant2" as any,
+                              {
+                                studentName: "",
+                                contactNumber: "",
+                                email: "",
+                              } as any,
+                              { shouldValidate: true, shouldDirty: true }
+                            );
+                          } else {
+                            form.trigger("participant2" as any);
+                          }
+                        } else {
+                          form.setValue(
+                            "participant2" as any,
+                            undefined as any,
+                            {
+                              shouldValidate: true,
+                              shouldDirty: true,
+                            }
+                          );
+                        }
+                      }}
+                      disabled={isPending}
+                    />
+                    Add Participant 2 (optional, max 2 participants)
+                  </label>
+                )}
+
+              {(selectedEvent === "Battle of Brains" ||
+                selectedEvent === "Videography" ||
+                codefusionHasSecondParticipant ||
                 entcDigitalDangalSecondParticipant) && (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border rounded-xl">
                   <FormField
@@ -1949,128 +2012,6 @@ const RegistrationForm = ({
               )}
             </div>
           )}
-
-          {/* {selectedEvent === "General Engineering Games" && (
-            <>
-              <div className="space-y-2 md:col-span-2">
-                <FormLabel>Select Games (choose exactly 3 or 5)</FormLabel>
-                <p className="text-sm text-muted-foreground">
-                  3 games → ₹100, 5 games → ₹150 (per participant/groups)
-                </p>
-                <div className="space-y-2">
-                  {[
-                    "Free Fire Challenge",
-                    "Coin Drop Challenge",
-                    "Funny Walk Race",
-                    "Pass the Balloon",
-                    "Emoji Expression Game",
-                  ].map((game) => {
-                    const checked = selectedGames.includes(game);
-                    return (
-                      <label
-                        key={game}
-                        className="flex items-center gap-3 rounded-md border p-3 cursor-pointer select-none"
-                      >
-                        <input
-                          type="checkbox"
-                          className="h-4 w-4"
-                          checked={checked}
-                          onChange={() => {
-                            setSelectedGames((prev) =>
-                              prev.includes(game)
-                                ? prev.filter((g) => g !== game)
-                                : [...prev, game]
-                            );
-                          }}
-                          disabled={isPending}
-                        />
-                        <span className="text-sm">{game}</span>
-                      </label>
-                    );
-                  })}
-                </div>
-                <FormField
-                  control={form.control}
-                  name="selectedGames"
-                  render={() => (
-                    <FormItem>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-
-              <FormField
-                control={form.control}
-                name="groupName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Group Name (optional)</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Enter group name (if any)"
-                        {...field}
-                        disabled={isPending}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="studentName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Student Name</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Enter your name"
-                        {...field}
-                        disabled={isPending}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="contactNumber"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Contact Number</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Enter your contact number"
-                        {...field}
-                        disabled={isPending}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Enter your email"
-                        {...field}
-                        disabled={isPending}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </>
-          )} */}
 
           {selectedEvent === "BGMI" && (
             <>
