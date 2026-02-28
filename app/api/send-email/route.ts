@@ -87,18 +87,52 @@ export async function POST(req: Request) {
           .join("")}
       `;
     } else {
-      participantDetails = `
-        <h3>Squad Information:</h3>
-        <p>Squad Name: ${registration.squadName}</p>
-        ${registration.players
-          ?.map(
-            (player: any, index: number) => `
-          <p>Player ${index + 1}: ${player.playerName}</p>
-          <p>BGMI ID: ${player.bgmiId}</p>
-          <p>Contact: ${player.contactNumber}</p>
+      const primaryName =
+        registration.studentName || registration.teamLeader?.studentName || "";
+      const primaryEmail =
+        registration.email || registration.teamLeader?.email || "";
+      const primaryContact =
+        registration.contactNumber ||
+        registration.teamLeader?.contactNumber ||
+        "";
+
+      const teamMembersHtml =
+        registration.teamMembers && registration.teamMembers.length > 0
+          ? `
+          <h3>Team Members:</h3>
+          ${(registration.teamMembers ?? [])
+            .map(
+              (member: any, index: number) => `
+            <div style="margin-left: 20px; margin-bottom: 10px;">
+              <p>Member ${index + 1}: ${member.studentName}</p>
+              ${member.email ? `<p>Email: ${member.email}</p>` : ""}
+              ${
+                member.contactNumber
+                  ? `<p>Contact: ${member.contactNumber}</p>`
+                  : ""
+              }
+            </div>
+          `
+            )
+            .join("")}
         `
-          )
-          .join("")}
+          : "";
+
+      participantDetails = `
+        <h3>Participant / Team Details:</h3>
+        ${
+          registration.teamName
+            ? `<p><strong>Team Name:</strong> ${registration.teamName}</p>`
+            : ""
+        }
+        <p><strong>Name:</strong> ${primaryName}</p>
+        ${primaryEmail ? `<p><strong>Email:</strong> ${primaryEmail}</p>` : ""}
+        ${
+          primaryContact
+            ? `<p><strong>Contact:</strong> ${primaryContact}</p>`
+            : ""
+        }
+        ${teamMembersHtml}
       `;
     }
 
