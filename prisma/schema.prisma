@@ -181,6 +181,7 @@ enum EventType {
   FREEFIRE
   // Civil Engineering department
   CE_MODEL_MAKING
+  CE_BATTLE_OF_BRAINS
   CE_CAD_MASTER
   CE_VIDEOGRAPHY
   // CSE department
