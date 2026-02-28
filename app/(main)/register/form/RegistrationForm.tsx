@@ -529,10 +529,10 @@ const RegistrationForm = ({
   };
 
   return (
-    <div className="w-full max-w-6xl mx-auto text-lg md:text-xl">
+    <div className="w-full max-w-7xl mx-auto text-lg md:text-xl">
       <Button
         variant="outline"
-        className="rounded-xl group"
+        className="rounded-xl group mb-8"
         onClick={() => router.back()}
       >
         <ArrowLeft className="-mr-1 group-hover:-translate-x-1 transition-transform" />
@@ -541,7 +541,7 @@ const RegistrationForm = ({
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit, onError)}
-          className="w-full max-w-6xl mx-auto py-3 rounded-lg grid grid-cols-1 md:grid-cols-2 gap-6"
+          className="w-full max-w-7xl mx-auto rounded-lg grid grid-cols-1 md:grid-cols-2 gap-6"
         >
           <div className="space-y-1 md:col-span-2">
             <h2 className="text-xl md:text-2xl font-semibold text-foreground">

@@ -3,6 +3,14 @@
 import { useInView, motion } from "motion/react";
 import Image from "next/image";
 import { useRef } from "react";
+import { Sponsors as SponsorsArray } from "@/lib/constants";
+
+const track = [
+  ...SponsorsArray,
+  ...SponsorsArray,
+  ...SponsorsArray,
+  ...SponsorsArray,
+];
 
 export function Sponsors() {
   const sponsorsSectionRef = useRef(null);
@@ -12,47 +20,23 @@ export function Sponsors() {
   });
 
   const animationVariants = {
-    initial: {
-      y: 40,
-      opacity: 0,
-      filter: "blur(5px)",
-    },
+    initial: { y: 40, opacity: 0, filter: "blur(5px)" },
     animate: {
       y: 0,
       opacity: 1,
       filter: "blur(0px)",
-      transition: {
-        duration: 0.8,
-      },
+      transition: { duration: 0.8 },
     },
   };
 
   const BGTextAnimationVariants = {
-    initial: {
-      y: 100,
-      opacity: 0,
-    },
-    animate: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        bounce: 0,
-      },
-    },
+    initial: { y: 100, opacity: 0 },
+    animate: { y: 0, opacity: 1, transition: { bounce: 0 } },
   };
 
   const growVariants = {
-    initial: {
-      width: "0rem",
-      opacity: 0.6,
-    },
-    animate: {
-      width: "2.5rem",
-      opacity: 1,
-      transition: {
-        duration: 0.6,
-      },
-    },
+    initial: { width: "0rem", opacity: 0.6 },
+    animate: { width: "2.5rem", opacity: 1, transition: { duration: 0.6 } },
   };
 
   return (
@@ -70,46 +54,48 @@ export function Sponsors() {
 
           <motion.div
             variants={growVariants}
-            initial={"initial"}
+            initial="initial"
             animate={sponsorsSectionInView ? "animate" : "initial"}
             className="h-5 w-10 bg-primary z-10"
           />
 
           <motion.h1
             variants={BGTextAnimationVariants}
-            initial={"initial"}
+            initial="initial"
             animate={sponsorsSectionInView ? "animate" : "initial"}
-            className="z-0 hidden md:block absolute -right-3 top-2 text-[6rem] md:text-[8rem] uppercase font-bold  text-muted pointer-events-none select-none"
+            className="z-0 hidden md:block absolute -right-3 top-2 text-[6rem] md:text-[8rem] uppercase font-bold text-muted pointer-events-none select-none"
           >
             sponsors
           </motion.h1>
         </div>
 
-        <div className="flex flex-wrap justify-center items-center gap-8 max-w-3xl mx-auto z-10 transition-all duration-700">
-          <Image
-            src="/sponsers/sponser.jpeg"
-            alt="sponsor 1 Logo"
-            width={150}
-            height={120}
-            className="rounded-lg grayscale hover:grayscale-0 transition-all"
-            priority
-          />
-          <Image
-            src="/sponsers/sponser2.jpeg"
-            alt="sponsor 2 Logo"
-            width={150}
-            height={120}
-            className="rounded-lg grayscale hover:grayscale-0 transition-all"
-            priority
-          />
-          <Image
-            src="/sponsers/gfg.png"
-            alt="sponsor 2 Logo"
-            width={150}
-            height={120}
-            className="rounded-lg grayscale hover:grayscale-0 transition-all bg-white"
-            priority
-          />
+        <div className="relative overflow-hidden">
+          <motion.div
+            className="flex gap-12 w-max"
+            animate={{ x: ["0%", "-50%"] }}
+            transition={{
+              duration: 18,
+              ease: "linear",
+              repeat: Infinity,
+            }}
+          >
+            {track.map((sponsor, i) => (
+              <div
+                key={i}
+                className="flex items-center justify-center shrink-0"
+              >
+                <Image
+                  src={sponsor.src}
+                  alt={sponsor.alt}
+                  width={150}
+                  height={120}
+                  className={`rounded-lg transition-all duration-300 object-contain ${
+                    sponsor.bg ? "bg-white p-1" : ""
+                  }`}
+                />
+              </div>
+            ))}
+          </motion.div>
         </div>
       </div>
     </section>

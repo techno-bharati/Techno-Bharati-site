@@ -124,14 +124,14 @@ const EventDetailsPageContent = ({ slug }: { slug: string }) => {
   const { modalData } = event;
 
   return (
-    <div className="px-5 md:px-10 lg:px-20 py-8 md:py-12 bg-background min-h-screen mb-16">
-      <div className="max-w-5xl mx-auto">
+    <div className="p-6 bg-background min-h-screen mb-16">
+      <div className="max-w-7xl mx-auto">
         <Button
           variant="outline"
-          className="mb-8 text-base md:text-lg group rounded-xl"
+          className="mb-8  group rounded-xl"
           onClick={() => router.push(backToEventsHref)}
         >
-          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" />
+          <ArrowLeft className="-mr-1 group-hover:-translate-x-1 transition-transform" />
           Back to Events
         </Button>
 

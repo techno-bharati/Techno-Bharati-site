@@ -10,11 +10,16 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 import { animate, motion, useInView } from "motion/react";
+import { Button } from "../ui/button";
+import { ArrowRight } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function EventHightlights() {
   const [api, setApi] = useState<any>();
   const [current, setCurrent] = useState(0);
   const [count, setCount] = useState(0);
+
+  const router = useRouter();
 
   const eventHightlightSectionRef = useRef(null);
   const eventHightlightSectionInView = useInView(eventHightlightSectionRef, {
@@ -22,7 +27,6 @@ export default function EventHightlights() {
     margin: "-100px",
   });
 
-  // Create a duplicated array for seamless looping
   const duplicatedImages = [...eventImages, ...eventImages];
 
   useEffect(() => {
@@ -30,8 +34,8 @@ export default function EventHightlights() {
       return;
     }
 
-    setCount(eventImages.length); // Use original length for dots
-    setCurrent(api.selectedScrollSnap() % eventImages.length); // Modulo for correct dot highlighting
+    setCount(eventImages.length);
+    setCurrent(api.selectedScrollSnap() % eventImages.length);
 
     api.on("select", () => {
       setCurrent(api.selectedScrollSnap() % eventImages.length);
@@ -171,6 +175,17 @@ export default function EventHightlights() {
               onClick={() => api?.scrollTo(index)}
             />
           ))}
+        </div>
+
+        <div className="flex justify-center mt-4">
+          <Button
+            variant="outline"
+            className="group rounded-xl px-6 py-5 text-sm md:text-base font-semibold border-primary/30 hover:border-primary hover:bg-primary/5 transition-all duration-200"
+            onClick={() => router.push("/gallery")}
+          >
+            View Full Gallery
+            <ArrowRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform duration-200" />
+          </Button>
         </div>
       </motion.div>
     </section>

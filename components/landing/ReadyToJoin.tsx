@@ -1,11 +1,38 @@
+"use client";
+
 import { pixelifySans, zenDots } from "@/lib/fonts";
 import { ArrowRight } from "lucide-react";
+import { useInView } from "motion/react";
 import Link from "next/link";
-import React from "react";
+import React, { useRef } from "react";
+import { motion } from "motion/react";
 
 const ReadyToJoin = () => {
+  const readyToJoin = useRef(null);
+  const isReadyToJoinInView = useInView(readyToJoin, {
+    once: true,
+  });
+
+  const animationVariants = {
+    initial: {
+      opacity: 0,
+    },
+    animate: {
+      opacity: 1,
+      transition: {
+        duration: 0.8,
+      },
+    },
+  };
+
   return (
-    <section className="max-w-7xl px-4 mx-auto my-16">
+    <motion.section
+      ref={readyToJoin}
+      variants={animationVariants}
+      initial={"initial"}
+      animate={isReadyToJoinInView ? "animate" : "initial"}
+      className="max-w-7xl px-4 mx-auto my-16"
+    >
       <div className="w-full p-4 min-h-[13rem] bg-primary/70 rounded-xl flex flex-col gap-6 items-center justify-center">
         <h3
           className={`uppercase font-bold text-2xl font-pixel text-white ${zenDots.className}`}
@@ -28,7 +55,7 @@ const ReadyToJoin = () => {
           <ArrowRight className="group-hover:-rotate-45 transition-transform size-4" />
         </Link>
       </div>
-    </section>
+    </motion.section>
   );
 };
 

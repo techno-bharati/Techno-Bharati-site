@@ -1,11 +1,38 @@
+"use client";
+
 import { Instagram, Linkedin } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { zenDots } from "@/lib/fonts";
+import { motion, useInView } from "motion/react";
+import { useRef } from "react";
 
 export function Footer() {
+  const footerRef = useRef(null);
+  const isFooterInView = useInView(footerRef, {
+    once: true,
+  });
+
+  const animationVariants = {
+    initial: {
+      opacity: 0,
+    },
+    animate: {
+      opacity: 1,
+      transition: {
+        duration: 0.8,
+      },
+    },
+  };
+
   return (
-    <footer className="relative border-t border-muted bg-background overflow-hidden">
+    <motion.footer
+      ref={footerRef}
+      variants={animationVariants}
+      initial={"initial"}
+      animate={isFooterInView ? "animate" : "initial"}
+      className="relative border-t border-muted bg-background overflow-hidden"
+    >
       <div className="absolute inset-0 pointer-events-none select-none">
         <div
           className={`absolute left-1/2 -bottom-8 -translate-x-1/2 opacity-[0.03] dark:opacity-[0.05] w-full text-center ${zenDots.className}`}
@@ -88,6 +115,6 @@ export function Footer() {
           </p>
         </div>
       </div>
-    </footer>
+    </motion.footer>
   );
 }

@@ -8,7 +8,7 @@ import { zenDots } from "@/lib/fonts";
 export default function AboutUsPage() {
   return (
     <div className="min-h-screen bg-background">
-      <section className="relative py-20 overflow-hidden">
+      <section className="relative py-14 overflow-hidden">
         <div className="container mx-auto px-4 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

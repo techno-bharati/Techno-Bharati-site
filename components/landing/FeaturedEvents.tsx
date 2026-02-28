@@ -161,10 +161,11 @@ export function FeaturedEvents() {
           </div>
         </div>
         <div
-          key={duplicatedEvents.length}
+          key={selectedDepartment}
           className="relative w-full overflow-hidden cursor-default"
         >
           <motion.div
+            key={selectedDepartment}
             className="flex gap-6 w-max"
             animate={{ x: ["0%", "-50%"] }}
             transition={{
@@ -174,39 +175,42 @@ export function FeaturedEvents() {
             }}
           >
             {duplicatedEvents.map((event, index) => (
-              <motion.div
-                initial={{
-                  y: 12,
-                  opacity: 0,
-                  filter: "blur(7px)",
-                }}
-                animate={{
-                  y: 0,
-                  opacity: 1,
-                  filter: "blur(0px)",
-                  transition: {
-                    delay: index * 0.2,
-                  },
-                }}
-                key={index}
-                className="h-[13rem] w-[26rem] shrink-0 bg-primary/10 backdrop-blur-sm p-6 rounded-xl border border-primary/10 hover:border-primary/20 flex flex-col justify-between transition-colors"
+              <Link
+                href={`/events/${event.slug}`}
+                key={`${selectedDepartment}-${index}`}
+                className="group"
               >
-                <p className="text-sm text-muted-foreground">{event.type}</p>
-
-                <h2 className="text-xl font-semibold">{event.name}</h2>
-
-                <p className="text-sm text-muted-foreground line-clamp-3">
-                  {event.modalData.description}
-                </p>
-
-                <Link
-                  href="/events"
-                  className="text-primary text-xs font-bold hover:underline uppercase group flex gap-1 items-center underline-offset-2"
+                <motion.div
+                  initial={{
+                    y: 12,
+                    opacity: 0,
+                    filter: "blur(7px)",
+                  }}
+                  animate={{
+                    y: 0,
+                    opacity: 1,
+                    filter: "blur(0px)",
+                    transition: {
+                      delay: index * 0.2,
+                    },
+                  }}
+                  key={`${selectedDepartment}-${index}`}
+                  className="h-[13rem] w-[26rem] shrink-0 bg-primary/10 backdrop-blur-sm p-6 rounded-xl border border-primary/10 hover:border-primary/20 flex flex-col justify-between transition-colors"
                 >
-                  View Details
-                  <ArrowRight className="group-hover:-rotate-45 transition-transform size-4" />
-                </Link>
-              </motion.div>
+                  <p className="text-sm text-muted-foreground">{event.type}</p>
+
+                  <h2 className="text-xl font-semibold">{event.name}</h2>
+
+                  <p className="text-sm text-muted-foreground line-clamp-3">
+                    {event.modalData.description}
+                  </p>
+
+                  <p className="text-primary text-xs font-bold group-hover:underline uppercase group flex gap-1 items-center underline-offset-2">
+                    View Details
+                    <ArrowRight className="group-hover:-rotate-45 transition-transform size-4" />
+                  </p>
+                </motion.div>
+              </Link>
             ))}
           </motion.div>
         </div>

@@ -24,6 +24,7 @@ export function Navigation2() {
   const navLinks = [
     { href: "/aboutus", label: "ABOUT US" },
     { href: "/events", label: "EVENTS" },
+    { href: "gallery", label: "GALLERY" },
     { href: "/sponsors", label: "SPONSORS" },
     { href: "/contactus", label: "CONTACT US" },
   ];
@@ -60,7 +61,7 @@ export function Navigation2() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       viewport={{ once: true }}
-      className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-md border-b border-muted px-4"
+      className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-md border-b border-muted sm:px-4"
     >
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between h-16">
@@ -70,7 +71,9 @@ export function Navigation2() {
             onClick={() => handleNavigation("/")}
             className="flex items-center space-x-2"
           >
-            <span className={`font-mono text-xl ${zenDots.className}`}>
+            <span
+              className={`font-mono text-xl mx-4 sm:mx-0 ${zenDots.className}`}
+            >
               BVCOEK
             </span>
           </motion.button>
@@ -94,7 +97,7 @@ export function Navigation2() {
             ref={buttonRef}
             variant="ghost"
             size="icon"
-            className="md:hidden"
+            className="md:hidden mx-4 sm:mx-0"
             onClick={() => setIsOpen((prev) => !prev)}
           >
             {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -123,8 +126,8 @@ export function Navigation2() {
                   {link.label}
                 </motion.button>
               ))}
+              <ThemeToogle className="w-fit" />
             </div>
-            <ThemeToogle className="w-fit" />
           </motion.div>
         )}
       </AnimatePresence>

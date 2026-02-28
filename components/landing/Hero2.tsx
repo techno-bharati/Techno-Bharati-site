@@ -89,7 +89,7 @@ export function Hero2() {
         id="hero"
         initial={"initial"}
         variants={animation}
-        className="relative z-20 text-center space-y-10 px-4 max-w-4xl mx-auto flex flex-col items-center"
+        className="relative z-20 text-center space-y-10 max-w-4xl mx-auto flex flex-col items-center"
       >
         <motion.div
           id="hero"

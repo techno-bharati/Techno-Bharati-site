@@ -70,15 +70,24 @@ export default function EventsPageContent() {
       </motion.h1>
 
       <div className="relative z-10 max-w-7xl min-h-screen mx-auto px-4 md:px-4 xl:px-0 py-10 md:py-14 mb-20">
-        <motion.h1
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className={`text-4xl md:text-5xl lg:text-6xl font-bold mb-8 md:mb-10 text-left text-foreground uppercase ${zenDots.className}`}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-center"
         >
-          Events
-        </motion.h1>
+          <h1
+            className={`text-4xl md:text-6xl font-bold mb-6 uppercase ${zenDots.className}`}
+          >
+            Events
+          </h1>
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            Explore our curated lineup of exciting technical and non-technical
+            events.
+          </p>
+        </motion.div>
 
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-wrap gap-3 mt-8">
           {[
             "CSE (AIML)",
             "CSE",
