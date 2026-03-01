@@ -511,6 +511,7 @@ export const GENERAL_ENGINEERING_EVENTS: Event[] = [
     venue: "Bharati Vidyapeeth College of Engineering, Kolahpur",
     entryFee: "100",
     type: "Technical Event",
+    icon: "/event-card/gs/techno-quiz.jpg",
     modalData: {
       eventName: "Techno Science Quiz",
       description:
@@ -539,6 +540,7 @@ export const GENERAL_ENGINEERING_EVENTS: Event[] = [
     venue: "Bharati Vidyapeeth College of Engineering, Kolahpur",
     entryFee: "100",
     type: "Technical Event",
+    icon: "/event-card/gs/poster.jpg",
     modalData: {
       eventName: "Poster Competition",
       description:
@@ -569,6 +571,7 @@ export const GENERAL_ENGINEERING_EVENTS: Event[] = [
     venue: "Bharati Vidyapeeth College of Engineering, Kolahpur",
     entryFee: "100",
     type: "Technical Event",
+    icon: "/event-card/gs/scitech-expo.jpg",
     modalData: {
       eventName: "SciTech Model Expo 2K26",
       description: "ask for the event description",
@@ -596,6 +599,7 @@ export const GENERAL_ENGINEERING_EVENTS: Event[] = [
     venue: "Bharati Vidyapeeth College of Engineering, Kolahpur",
     entryFee: `${EVENT_FEES.FREEFIRE.amount} (per team)`,
     type: "Non-Technical Event",
+    icon: "/event-card/gs/freefire.jpg",
     modalData: {
       eventName: "FreeFire",
       description:
