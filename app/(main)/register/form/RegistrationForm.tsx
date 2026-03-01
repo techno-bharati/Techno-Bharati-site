@@ -22,9 +22,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { useCallback, useState, useEffect } from "react";
+import { useCallback, useState, useEffect, useRef } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { createRegistration } from "@/app/(main)/actions/registration";
+import { uploadImageClient } from "@/lib/uploadImageClient";
 import { toast } from "sonner";
 import {
   calculateGeneralEngineeringGamesFee,
@@ -36,7 +37,7 @@ import {
 } from "@/lib/constants";
 import Image from "next/image";
 import { Separator } from "@/components/ui/separator";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, CheckCircle2, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import RequiredAsterisk from "@/components/RequiredAstrick";
 
@@ -78,13 +79,18 @@ interface RegistrationFormProps {
   initialSelectedGames?: string[];
 }
 
+const UPLOAD_DEBOUNCE_MS = 600;
+
 const RegistrationForm = ({
   initialEvent,
   initialSelectedGames,
 }: RegistrationFormProps) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [redirectToSuccessPage, setRedirectToSuccessPage] = useState(false);
-  const [successEventName, setSuccessEventName] = useState<string | null>(null);
+  const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const uploadDebounceRef = useRef<NodeJS.Timeout | null>(null);
+  const uploadFileRef = useRef<File | null>(null);
   const [totalFee, setTotalFee] = useState<number>(0);
   const [codefusionHasSecondParticipant, setCodefusionHasSecondParticipant] =
     useState(false);
@@ -110,6 +116,7 @@ const RegistrationForm = ({
 
   const form = useForm<z.infer<typeof userRegistrationFormSchema>>({
     resolver: zodResolver(userRegistrationFormSchema),
+    mode: "onTouched",
     defaultValues: {
       collegeName: "",
       events: initialEvent,
@@ -120,7 +127,6 @@ const RegistrationForm = ({
       department: undefined,
       class: undefined,
     },
-    mode: "onChange",
   });
 
   const { isValid } = form.formState;
@@ -130,16 +136,16 @@ const RegistrationForm = ({
     mutationFn: createRegistration,
     onSuccess: (data) => {
       if (data.success) {
-        // Capture the selected event for success redirect BEFORE resetting the form
-        const eventForRedirect = selectedEvent || null;
-        setSuccessEventName(eventForRedirect);
-
-        toast.success("Registration successful!", { id: "form-submit" });
-        // Set before any re-render so success page can read it
+        const eventForRedirect = selectedEvent || "";
         if (typeof window !== "undefined") {
           window.sessionStorage.setItem("registrationSuccess", "true");
         }
-        setRedirectToSuccessPage(true);
+        toast.success("Registration successful!", { id: "form-submit" });
+        router.push(
+          `/events/success?event=${encodeURIComponent(
+            eventForRedirect
+          )}&from=registration`
+        );
         form.reset({
           collegeName: "",
           events: undefined,
@@ -150,6 +156,8 @@ const RegistrationForm = ({
         });
         setSelectedFile(null);
         setTotalFee(0);
+        setUploadedImageUrl(null);
+        setUploadError(null);
       } else {
         toast.error("Something went wrong, please try again later.", {
           id: "form-submit",
@@ -171,17 +179,35 @@ const RegistrationForm = ({
           });
           return;
         }
-        toast.loading("Submitting..", { id: "form-submit" });
+        if (!uploadedImageUrl) {
+          if (isUploading) {
+            toast.error("Please wait for the image to finish uploading", {
+              id: "form-submit",
+            });
+          } else if (uploadError) {
+            toast.error("Please select the image again to retry upload", {
+              id: "form-submit",
+            });
+          } else {
+            toast.error("Please wait for the image to finish uploading", {
+              id: "form-submit",
+            });
+          }
+          return;
+        }
+        toast.loading("Submitting registration..", { id: "form-submit" });
+        const { payss: _payss, ...rest } = data;
         mutate({
-          ...data,
+          ...rest,
           paymentMode: data.paymentMode,
+          paymentScreenshotUrl: uploadedImageUrl,
         });
       } catch (error) {
         console.error("Submission error:", error);
         toast.error("Failed to submit form", { id: "form-submit" });
       }
     },
-    [mutate]
+    [mutate, uploadedImageUrl, isUploading, uploadError]
   );
 
   const onError = (errors: any) => {
@@ -272,6 +298,59 @@ const RegistrationForm = ({
     treasureP4Name,
     treasureP5Name,
   ]);
+
+  // Debounced upload when payss changes - uploads before submit for faster submission
+  const payssValue = form.watch("payss");
+  useEffect(() => {
+    const file = payssValue ?? null;
+    setUploadError(null);
+    setUploadedImageUrl(null);
+
+    if (!file) {
+      setIsUploading(false);
+      uploadFileRef.current = null;
+      if (uploadDebounceRef.current) {
+        clearTimeout(uploadDebounceRef.current);
+        uploadDebounceRef.current = null;
+      }
+      return;
+    }
+
+    uploadFileRef.current = file;
+    if (uploadDebounceRef.current) {
+      clearTimeout(uploadDebounceRef.current);
+    }
+
+    uploadDebounceRef.current = setTimeout(async () => {
+      uploadDebounceRef.current = null;
+      const fileToUpload = uploadFileRef.current;
+      if (!fileToUpload || fileToUpload !== file) return;
+
+      setIsUploading(true);
+      const result = await uploadImageClient(fileToUpload);
+
+      if (uploadFileRef.current !== fileToUpload) return;
+
+      if (result.success && result.url) {
+        setUploadedImageUrl(result.url);
+        setUploadError(null);
+      } else {
+        setUploadedImageUrl(null);
+        setUploadError(result.error ?? "Upload failed");
+        toast.error(
+          result.error ?? "Failed to upload image. Please try again."
+        );
+      }
+      setIsUploading(false);
+    }, UPLOAD_DEBOUNCE_MS);
+
+    return () => {
+      if (uploadDebounceRef.current) {
+        clearTimeout(uploadDebounceRef.current);
+        uploadDebounceRef.current = null;
+      }
+    };
+  }, [payssValue]);
 
   useEffect(() => {
     if (selectedEvent === "Treasure Hunt") {
@@ -535,16 +614,6 @@ const RegistrationForm = ({
       onChange(value);
     }
   };
-
-  useEffect(() => {
-    if (!redirectToSuccessPage || !successEventName) return;
-    sessionStorage.setItem("registrationSuccess", "true");
-    router.push(
-      `/events/success?event=${encodeURIComponent(
-        successEventName
-      )}&from=registration`
-    );
-  }, [redirectToSuccessPage, successEventName, router]);
 
   return (
     <div className="w-full max-w-7xl mx-auto text-lg md:text-xl">
@@ -2375,7 +2444,28 @@ const RegistrationForm = ({
                 </FormDescription>
                 <FormMessage />
                 {selectedFile && (
-                  <p className="text-sm text-gray-500">{selectedFile.name}</p>
+                  <div className="flex items-center gap-2 text-sm">
+                    <span className="text-muted-foreground">
+                      {selectedFile.name}
+                    </span>
+                    {isUploading && (
+                      <Loader2
+                        className="h-4 w-4 animate-spin text-muted-foreground"
+                        aria-hidden
+                      />
+                    )}
+                    {uploadedImageUrl && !isUploading && (
+                      <CheckCircle2
+                        className="h-4 w-4 text-green-600"
+                        aria-label="Upload complete"
+                      />
+                    )}
+                    {uploadError && !isUploading && (
+                      <span className="text-destructive text-xs">
+                        {uploadError}
+                      </span>
+                    )}
+                  </div>
                 )}
               </FormItem>
             )}
@@ -2427,14 +2517,18 @@ const RegistrationForm = ({
             </div>
           </div>
           {!isValid && (
-            <p className="text-base capitalize text-red-500">
-              * fill all the input fields to submit the form
+            <p className="text-base text-red-500">
+              * Fill all the input fields to submit the form
             </p>
           )}
           <Button
             type="submit"
             className="w-full md:col-span-2 rounded-xl dark:text-white"
-            disabled={isPending || !isValid}
+            disabled={
+              isPending ||
+              !isValid ||
+              (!!selectedFile && (!uploadedImageUrl || isUploading))
+            }
           >
             {isPending ? "Submitting..." : "Submit"}
           </Button>
