@@ -83,8 +83,8 @@ const RegistrationForm = ({
   initialSelectedGames,
 }: RegistrationFormProps) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  // const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const [redirectToSuccessPage, setRedirectToSuccessPage] = useState(false);
+  const [successEventName, setSuccessEventName] = useState<string | null>(null);
   const [totalFee, setTotalFee] = useState<number>(0);
   const [codefusionHasSecondParticipant, setCodefusionHasSecondParticipant] =
     useState(false);
@@ -130,7 +130,16 @@ const RegistrationForm = ({
     mutationFn: createRegistration,
     onSuccess: (data) => {
       if (data.success) {
+        // Capture the selected event for success redirect BEFORE resetting the form
+        const eventForRedirect = selectedEvent || null;
+        setSuccessEventName(eventForRedirect);
+
         toast.success("Registration successful!", { id: "form-submit" });
+        // Set before any re-render so success page can read it
+        if (typeof window !== "undefined") {
+          window.sessionStorage.setItem("registrationSuccess", "true");
+        }
+        setRedirectToSuccessPage(true);
         form.reset({
           collegeName: "",
           events: undefined,
@@ -141,11 +150,6 @@ const RegistrationForm = ({
         });
         setSelectedFile(null);
         setTotalFee(0);
-        // Set before any re-render so success page can read it
-        if (typeof window !== "undefined") {
-          window.sessionStorage.setItem("registrationSuccess", "true");
-        }
-        setRedirectToSuccessPage(true);
       } else {
         toast.error("Something went wrong, please try again later.", {
           id: "form-submit",
@@ -517,7 +521,6 @@ const RegistrationForm = ({
     if (selectedEvent === "General Engineering Games") {
       form.setValue("selectedGames", selectedGames as any);
     } else if (selectedGames.length > 0) {
-      // Avoid leaking games selection into other event submissions
       setSelectedGames([]);
       form.setValue("selectedGames", undefined as any);
     }
@@ -534,12 +537,14 @@ const RegistrationForm = ({
   };
 
   useEffect(() => {
-    if (!redirectToSuccessPage) return;
+    if (!redirectToSuccessPage || !successEventName) return;
     sessionStorage.setItem("registrationSuccess", "true");
     router.push(
-      `/events/success?event=${encodeURIComponent(selectedEvent)}&from=registration`
+      `/events/success?event=${encodeURIComponent(
+        successEventName
+      )}&from=registration`
     );
-  }, [redirectToSuccessPage]);
+  }, [redirectToSuccessPage, successEventName, router]);
 
   return (
     <div className="w-full max-w-7xl mx-auto text-lg md:text-xl">
