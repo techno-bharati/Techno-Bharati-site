@@ -65,10 +65,7 @@ export default function ContactUsPage() {
               </div>
             </ContactDetailsCards>
 
-            <ContactDetailsCards
-              cardTitle="Event co-coordinator "
-              cardIcon={User}
-            >
+            <ContactDetailsCards cardTitle="Event Coordinator" cardIcon={User}>
               <div className="space-y-3 text-muted-foreground text-2xl">
                 <p>
                   Mr. Sajid Momin:{" "}
