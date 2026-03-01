@@ -26,7 +26,6 @@ import { useCallback, useState, useEffect } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { createRegistration } from "@/app/(main)/actions/registration";
 import { toast } from "sonner";
-import { SuccessDialog } from "@/components/register/SuccessDialog";
 import {
   calculateGeneralEngineeringGamesFee,
   GENERAL_ENGINEERING_TECHNICAL_FEE,
@@ -84,7 +83,8 @@ const RegistrationForm = ({
   initialSelectedGames,
 }: RegistrationFormProps) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [showSuccessDialog, setShowSuccessDialog] = useState(false);
+  // const [showSuccessDialog, setShowSuccessDialog] = useState(false);
+  const [redirectToSuccessPage, setRedirectToSuccessPage] = useState(false);
   const [totalFee, setTotalFee] = useState<number>(0);
   const [codefusionHasSecondParticipant, setCodefusionHasSecondParticipant] =
     useState(false);
@@ -141,7 +141,11 @@ const RegistrationForm = ({
         });
         setSelectedFile(null);
         setTotalFee(0);
-        setShowSuccessDialog(true);
+        // Set before any re-render so success page can read it
+        if (typeof window !== "undefined") {
+          window.sessionStorage.setItem("registrationSuccess", "true");
+        }
+        setRedirectToSuccessPage(true);
       } else {
         toast.error("Something went wrong, please try again later.", {
           id: "form-submit",
@@ -528,6 +532,14 @@ const RegistrationForm = ({
       onChange(value);
     }
   };
+
+  useEffect(() => {
+    if (!redirectToSuccessPage) return;
+    sessionStorage.setItem("registrationSuccess", "true");
+    router.push(
+      `/events/success?event=${encodeURIComponent(selectedEvent)}&from=registration`
+    );
+  }, [redirectToSuccessPage]);
 
   return (
     <div className="w-full max-w-7xl mx-auto text-lg md:text-xl">
@@ -2423,10 +2435,10 @@ const RegistrationForm = ({
           </Button>
         </form>
       </Form>
-      <SuccessDialog
-        open={showSuccessDialog}
+      {/* <SuccessDialog
+        open={true}
         onOpenChange={setShowSuccessDialog}
-      />
+      /> */}
     </div>
   );
 };
