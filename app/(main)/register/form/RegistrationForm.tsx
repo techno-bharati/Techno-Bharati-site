@@ -124,6 +124,7 @@ const RegistrationForm = ({
   });
 
   const { isValid } = form.formState;
+  const paymentModeFormWatch = form.watch("paymentMode");
 
   const { mutate, isPending } = useMutation({
     mutationFn: createRegistration,
@@ -1831,7 +1832,7 @@ const RegistrationForm = ({
                   )}
                 />
               )}
-              <div className="grid grid-cols-2 gap-6">
+              <div className="grid grid-cols-2 gap-4 border p-4 rounded-xl">
                 <FormField
                   control={form.control}
                   name="studentName"
@@ -2265,6 +2266,11 @@ const RegistrationForm = ({
                   onValueChange={(value) => {
                     field.onChange(value);
                     setPaymentMode(value as "ONLINE" | "OFFLINE");
+                    if (value === "OFFLINE") {
+                      form.setValue("transactionId", undefined as any, {
+                        shouldValidate: true,
+                      });
+                    }
                   }}
                   value={field.value}
                   disabled={isPending}
@@ -2283,6 +2289,42 @@ const RegistrationForm = ({
               </FormItem>
             )}
           />
+
+          {paymentModeFormWatch === "ONLINE" && (
+            <FormField
+              control={form.control}
+              name="transactionId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    Transaction ID <RequiredAsterisk />
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Enter 12-digit UPI Transaction ID"
+                      maxLength={12}
+                      inputMode="numeric"
+                      autoComplete="off"
+                      value={
+                        field.value !== undefined && field.value !== null
+                          ? String(field.value)
+                          : ""
+                      }
+                      onChange={(e) => {
+                        const raw = e.target.value
+                          .replace(/\D/g, "")
+                          .slice(0, 12);
+                        field.onChange(raw === "" ? undefined : Number(raw));
+                      }}
+                      onBlur={field.onBlur}
+                      disabled={isPending}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
 
           <FormField
             control={form.control}

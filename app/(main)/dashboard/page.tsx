@@ -618,6 +618,7 @@ export default function DashboardPage() {
                   <TableHead>College</TableHead>
                   <TableHead>Contact</TableHead>
                   <TableHead>Payment Mode</TableHead>
+                  <TableHead>Transaction ID</TableHead>
                   <TableHead>Amount</TableHead>
                   <TableHead>Date</TableHead>
                   <TableHead>Status</TableHead>
@@ -652,6 +653,12 @@ export default function DashboardPage() {
                           registration.players[0]?.contactNumber)}
                     </TableCell>
                     <TableCell>{registration.paymentMode || "N/A"}</TableCell>
+                    <TableCell>
+                      {registration.paymentMode === "ONLINE" &&
+                      registration.transactionId
+                        ? registration.transactionId
+                        : "—"}
+                    </TableCell>
                     <TableCell>₹{registration.amount}</TableCell>
                     <TableCell>
                       {new Date(registration.createdAt).toLocaleDateString()}

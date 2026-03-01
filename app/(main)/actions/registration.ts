@@ -116,6 +116,10 @@ export async function createRegistration(
       eventType: eventTypeMap[formData.events],
       paymentScreenshot: uploadResult.url!,
       paymentMode: formData.paymentMode,
+      transactionId:
+        formData.paymentMode === "ONLINE" && formData.transactionId != null
+          ? String(formData.transactionId)
+          : null,
       amount,
       department: departmentMap[formData.department] as Department,
       class: formData.class,

@@ -263,6 +263,15 @@ const baseUserRegistrationFormSchema = z
         (file) => file.type.startsWith("image/"),
         "File must be an image"
       ),
+    transactionId: z
+      .number()
+      .refine(
+        (n) =>
+          n === undefined ||
+          (Number.isInteger(n) && n >= 100_000_000_000 && n <= 999_999_999_999),
+        { message: "Transaction ID must be exactly 12 digits" }
+      )
+      .optional(),
   })
   .and(
     // Merge with event-specific schemas based on selection
@@ -413,6 +422,29 @@ export const userRegistrationFormSchema =
             code: z.ZodIssueCode.custom,
             path: ["participant4", "studentName"],
             message: "Member 4 name is required when team has 4 members",
+          });
+        }
+      }
+    }
+
+    if (data.paymentMode === "ONLINE") {
+      if (data.transactionId === undefined || data.transactionId === null) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["transactionId"],
+          message: "Transaction ID is required for online payment",
+        });
+      } else {
+        const n = data.transactionId;
+        if (
+          !Number.isInteger(n) ||
+          n < 100_000_000_000 ||
+          n > 999_999_999_999
+        ) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ["transactionId"],
+            message: "Transaction ID must be exactly 12 digits",
           });
         }
       }

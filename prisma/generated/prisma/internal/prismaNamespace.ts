@@ -1329,6 +1329,7 @@ export const RegistrationScalarFieldEnum = {
   collegeName: "collegeName",
   eventType: "eventType",
   paymentScreenshot: "paymentScreenshot",
+  transactionId: "transactionId",
   status: "status",
   paymentStatus: "paymentStatus",
   amount: "amount",

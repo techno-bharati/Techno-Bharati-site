@@ -43,6 +43,7 @@ export type RegistrationMinAggregateOutputType = {
   collegeName: string | null;
   eventType: $Enums.EventType | null;
   paymentScreenshot: string | null;
+  transactionId: string | null;
   status: $Enums.RegistrationStatus | null;
   paymentStatus: $Enums.PaymentStatus | null;
   amount: number | null;
@@ -71,6 +72,7 @@ export type RegistrationMaxAggregateOutputType = {
   collegeName: string | null;
   eventType: $Enums.EventType | null;
   paymentScreenshot: string | null;
+  transactionId: string | null;
   status: $Enums.RegistrationStatus | null;
   paymentStatus: $Enums.PaymentStatus | null;
   amount: number | null;
@@ -99,6 +101,7 @@ export type RegistrationCountAggregateOutputType = {
   collegeName: number;
   eventType: number;
   paymentScreenshot: number;
+  transactionId: number;
   status: number;
   paymentStatus: number;
   amount: number;
@@ -138,6 +141,7 @@ export type RegistrationMinAggregateInputType = {
   collegeName?: true;
   eventType?: true;
   paymentScreenshot?: true;
+  transactionId?: true;
   status?: true;
   paymentStatus?: true;
   amount?: true;
@@ -166,6 +170,7 @@ export type RegistrationMaxAggregateInputType = {
   collegeName?: true;
   eventType?: true;
   paymentScreenshot?: true;
+  transactionId?: true;
   status?: true;
   paymentStatus?: true;
   amount?: true;
@@ -194,6 +199,7 @@ export type RegistrationCountAggregateInputType = {
   collegeName?: true;
   eventType?: true;
   paymentScreenshot?: true;
+  transactionId?: true;
   status?: true;
   paymentStatus?: true;
   amount?: true;
@@ -317,6 +323,7 @@ export type RegistrationGroupByOutputType = {
   collegeName: string;
   eventType: $Enums.EventType;
   paymentScreenshot: string;
+  transactionId: string | null;
   status: $Enums.RegistrationStatus;
   paymentStatus: $Enums.PaymentStatus;
   amount: number;
@@ -366,6 +373,7 @@ export type RegistrationWhereInput = {
   collegeName?: Prisma.StringFilter<"Registration"> | string;
   eventType?: Prisma.EnumEventTypeFilter<"Registration"> | $Enums.EventType;
   paymentScreenshot?: Prisma.StringFilter<"Registration"> | string;
+  transactionId?: Prisma.StringNullableFilter<"Registration"> | string | null;
   status?:
     | Prisma.EnumRegistrationStatusFilter<"Registration">
     | $Enums.RegistrationStatus;
@@ -419,6 +427,7 @@ export type RegistrationOrderByWithRelationInput = {
   collegeName?: Prisma.SortOrder;
   eventType?: Prisma.SortOrder;
   paymentScreenshot?: Prisma.SortOrder;
+  transactionId?: Prisma.SortOrderInput | Prisma.SortOrder;
   status?: Prisma.SortOrder;
   paymentStatus?: Prisma.SortOrder;
   amount?: Prisma.SortOrder;
@@ -457,6 +466,7 @@ export type RegistrationWhereUniqueInput = Prisma.AtLeast<
     collegeName?: Prisma.StringFilter<"Registration"> | string;
     eventType?: Prisma.EnumEventTypeFilter<"Registration"> | $Enums.EventType;
     paymentScreenshot?: Prisma.StringFilter<"Registration"> | string;
+    transactionId?: Prisma.StringNullableFilter<"Registration"> | string | null;
     status?:
       | Prisma.EnumRegistrationStatusFilter<"Registration">
       | $Enums.RegistrationStatus;
@@ -516,6 +526,7 @@ export type RegistrationOrderByWithAggregationInput = {
   collegeName?: Prisma.SortOrder;
   eventType?: Prisma.SortOrder;
   paymentScreenshot?: Prisma.SortOrder;
+  transactionId?: Prisma.SortOrderInput | Prisma.SortOrder;
   status?: Prisma.SortOrder;
   paymentStatus?: Prisma.SortOrder;
   amount?: Prisma.SortOrder;
@@ -566,6 +577,10 @@ export type RegistrationScalarWhereWithAggregatesInput = {
   paymentScreenshot?:
     | Prisma.StringWithAggregatesFilter<"Registration">
     | string;
+  transactionId?:
+    | Prisma.StringNullableWithAggregatesFilter<"Registration">
+    | string
+    | null;
   status?:
     | Prisma.EnumRegistrationStatusWithAggregatesFilter<"Registration">
     | $Enums.RegistrationStatus;
@@ -640,6 +655,7 @@ export type RegistrationCreateInput = {
   collegeName: string;
   eventType: $Enums.EventType;
   paymentScreenshot: string;
+  transactionId?: string | null;
   status?: $Enums.RegistrationStatus;
   paymentStatus?: $Enums.PaymentStatus;
   amount?: number;
@@ -670,6 +686,7 @@ export type RegistrationUncheckedCreateInput = {
   collegeName: string;
   eventType: $Enums.EventType;
   paymentScreenshot: string;
+  transactionId?: string | null;
   status?: $Enums.RegistrationStatus;
   paymentStatus?: $Enums.PaymentStatus;
   amount?: number;
@@ -700,6 +717,10 @@ export type RegistrationUpdateInput = {
   collegeName?: Prisma.StringFieldUpdateOperationsInput | string;
   eventType?: Prisma.EnumEventTypeFieldUpdateOperationsInput | $Enums.EventType;
   paymentScreenshot?: Prisma.StringFieldUpdateOperationsInput | string;
+  transactionId?:
+    | Prisma.NullableStringFieldUpdateOperationsInput
+    | string
+    | null;
   status?:
     | Prisma.EnumRegistrationStatusFieldUpdateOperationsInput
     | $Enums.RegistrationStatus;
@@ -749,6 +770,10 @@ export type RegistrationUncheckedUpdateInput = {
   collegeName?: Prisma.StringFieldUpdateOperationsInput | string;
   eventType?: Prisma.EnumEventTypeFieldUpdateOperationsInput | $Enums.EventType;
   paymentScreenshot?: Prisma.StringFieldUpdateOperationsInput | string;
+  transactionId?:
+    | Prisma.NullableStringFieldUpdateOperationsInput
+    | string
+    | null;
   status?:
     | Prisma.EnumRegistrationStatusFieldUpdateOperationsInput
     | $Enums.RegistrationStatus;
@@ -804,6 +829,7 @@ export type RegistrationCreateManyInput = {
   collegeName: string;
   eventType: $Enums.EventType;
   paymentScreenshot: string;
+  transactionId?: string | null;
   status?: $Enums.RegistrationStatus;
   paymentStatus?: $Enums.PaymentStatus;
   amount?: number;
@@ -832,6 +858,10 @@ export type RegistrationUpdateManyMutationInput = {
   collegeName?: Prisma.StringFieldUpdateOperationsInput | string;
   eventType?: Prisma.EnumEventTypeFieldUpdateOperationsInput | $Enums.EventType;
   paymentScreenshot?: Prisma.StringFieldUpdateOperationsInput | string;
+  transactionId?:
+    | Prisma.NullableStringFieldUpdateOperationsInput
+    | string
+    | null;
   status?:
     | Prisma.EnumRegistrationStatusFieldUpdateOperationsInput
     | $Enums.RegistrationStatus;
@@ -876,6 +906,10 @@ export type RegistrationUncheckedUpdateManyInput = {
   collegeName?: Prisma.StringFieldUpdateOperationsInput | string;
   eventType?: Prisma.EnumEventTypeFieldUpdateOperationsInput | $Enums.EventType;
   paymentScreenshot?: Prisma.StringFieldUpdateOperationsInput | string;
+  transactionId?:
+    | Prisma.NullableStringFieldUpdateOperationsInput
+    | string
+    | null;
   status?:
     | Prisma.EnumRegistrationStatusFieldUpdateOperationsInput
     | $Enums.RegistrationStatus;
@@ -939,6 +973,7 @@ export type RegistrationCountOrderByAggregateInput = {
   collegeName?: Prisma.SortOrder;
   eventType?: Prisma.SortOrder;
   paymentScreenshot?: Prisma.SortOrder;
+  transactionId?: Prisma.SortOrder;
   status?: Prisma.SortOrder;
   paymentStatus?: Prisma.SortOrder;
   amount?: Prisma.SortOrder;
@@ -972,6 +1007,7 @@ export type RegistrationMaxOrderByAggregateInput = {
   collegeName?: Prisma.SortOrder;
   eventType?: Prisma.SortOrder;
   paymentScreenshot?: Prisma.SortOrder;
+  transactionId?: Prisma.SortOrder;
   status?: Prisma.SortOrder;
   paymentStatus?: Prisma.SortOrder;
   amount?: Prisma.SortOrder;
@@ -1000,6 +1036,7 @@ export type RegistrationMinOrderByAggregateInput = {
   collegeName?: Prisma.SortOrder;
   eventType?: Prisma.SortOrder;
   paymentScreenshot?: Prisma.SortOrder;
+  transactionId?: Prisma.SortOrder;
   status?: Prisma.SortOrder;
   paymentStatus?: Prisma.SortOrder;
   amount?: Prisma.SortOrder;
@@ -1397,6 +1434,7 @@ export type RegistrationCreateWithoutUserInput = {
   collegeName: string;
   eventType: $Enums.EventType;
   paymentScreenshot: string;
+  transactionId?: string | null;
   status?: $Enums.RegistrationStatus;
   paymentStatus?: $Enums.PaymentStatus;
   amount?: number;
@@ -1426,6 +1464,7 @@ export type RegistrationUncheckedCreateWithoutUserInput = {
   collegeName: string;
   eventType: $Enums.EventType;
   paymentScreenshot: string;
+  transactionId?: string | null;
   status?: $Enums.RegistrationStatus;
   paymentStatus?: $Enums.PaymentStatus;
   amount?: number;
@@ -1470,6 +1509,7 @@ export type RegistrationCreateWithoutVerifiedByInput = {
   collegeName: string;
   eventType: $Enums.EventType;
   paymentScreenshot: string;
+  transactionId?: string | null;
   status?: $Enums.RegistrationStatus;
   paymentStatus?: $Enums.PaymentStatus;
   amount?: number;
@@ -1499,6 +1539,7 @@ export type RegistrationUncheckedCreateWithoutVerifiedByInput = {
   collegeName: string;
   eventType: $Enums.EventType;
   paymentScreenshot: string;
+  transactionId?: string | null;
   status?: $Enums.RegistrationStatus;
   paymentStatus?: $Enums.PaymentStatus;
   amount?: number;
@@ -1578,6 +1619,7 @@ export type RegistrationScalarWhereInput = {
   collegeName?: Prisma.StringFilter<"Registration"> | string;
   eventType?: Prisma.EnumEventTypeFilter<"Registration"> | $Enums.EventType;
   paymentScreenshot?: Prisma.StringFilter<"Registration"> | string;
+  transactionId?: Prisma.StringNullableFilter<"Registration"> | string | null;
   status?:
     | Prisma.EnumRegistrationStatusFilter<"Registration">
     | $Enums.RegistrationStatus;
@@ -1645,6 +1687,7 @@ export type RegistrationCreateWithoutTeamLeaderInput = {
   collegeName: string;
   eventType: $Enums.EventType;
   paymentScreenshot: string;
+  transactionId?: string | null;
   status?: $Enums.RegistrationStatus;
   paymentStatus?: $Enums.PaymentStatus;
   amount?: number;
@@ -1674,6 +1717,7 @@ export type RegistrationUncheckedCreateWithoutTeamLeaderInput = {
   collegeName: string;
   eventType: $Enums.EventType;
   paymentScreenshot: string;
+  transactionId?: string | null;
   status?: $Enums.RegistrationStatus;
   paymentStatus?: $Enums.PaymentStatus;
   amount?: number;
@@ -1711,6 +1755,7 @@ export type RegistrationCreateWithoutTeamMembersInput = {
   collegeName: string;
   eventType: $Enums.EventType;
   paymentScreenshot: string;
+  transactionId?: string | null;
   status?: $Enums.RegistrationStatus;
   paymentStatus?: $Enums.PaymentStatus;
   amount?: number;
@@ -1740,6 +1785,7 @@ export type RegistrationUncheckedCreateWithoutTeamMembersInput = {
   collegeName: string;
   eventType: $Enums.EventType;
   paymentScreenshot: string;
+  transactionId?: string | null;
   status?: $Enums.RegistrationStatus;
   paymentStatus?: $Enums.PaymentStatus;
   amount?: number;
@@ -1797,6 +1843,10 @@ export type RegistrationUpdateWithoutTeamLeaderInput = {
   collegeName?: Prisma.StringFieldUpdateOperationsInput | string;
   eventType?: Prisma.EnumEventTypeFieldUpdateOperationsInput | $Enums.EventType;
   paymentScreenshot?: Prisma.StringFieldUpdateOperationsInput | string;
+  transactionId?:
+    | Prisma.NullableStringFieldUpdateOperationsInput
+    | string
+    | null;
   status?:
     | Prisma.EnumRegistrationStatusFieldUpdateOperationsInput
     | $Enums.RegistrationStatus;
@@ -1845,6 +1895,10 @@ export type RegistrationUncheckedUpdateWithoutTeamLeaderInput = {
   collegeName?: Prisma.StringFieldUpdateOperationsInput | string;
   eventType?: Prisma.EnumEventTypeFieldUpdateOperationsInput | $Enums.EventType;
   paymentScreenshot?: Prisma.StringFieldUpdateOperationsInput | string;
+  transactionId?:
+    | Prisma.NullableStringFieldUpdateOperationsInput
+    | string
+    | null;
   status?:
     | Prisma.EnumRegistrationStatusFieldUpdateOperationsInput
     | $Enums.RegistrationStatus;
@@ -1916,6 +1970,10 @@ export type RegistrationUpdateWithoutTeamMembersInput = {
   collegeName?: Prisma.StringFieldUpdateOperationsInput | string;
   eventType?: Prisma.EnumEventTypeFieldUpdateOperationsInput | $Enums.EventType;
   paymentScreenshot?: Prisma.StringFieldUpdateOperationsInput | string;
+  transactionId?:
+    | Prisma.NullableStringFieldUpdateOperationsInput
+    | string
+    | null;
   status?:
     | Prisma.EnumRegistrationStatusFieldUpdateOperationsInput
     | $Enums.RegistrationStatus;
@@ -1964,6 +2022,10 @@ export type RegistrationUncheckedUpdateWithoutTeamMembersInput = {
   collegeName?: Prisma.StringFieldUpdateOperationsInput | string;
   eventType?: Prisma.EnumEventTypeFieldUpdateOperationsInput | $Enums.EventType;
   paymentScreenshot?: Prisma.StringFieldUpdateOperationsInput | string;
+  transactionId?:
+    | Prisma.NullableStringFieldUpdateOperationsInput
+    | string
+    | null;
   status?:
     | Prisma.EnumRegistrationStatusFieldUpdateOperationsInput
     | $Enums.RegistrationStatus;
@@ -2018,6 +2080,7 @@ export type RegistrationCreateWithoutPlayersInput = {
   collegeName: string;
   eventType: $Enums.EventType;
   paymentScreenshot: string;
+  transactionId?: string | null;
   status?: $Enums.RegistrationStatus;
   paymentStatus?: $Enums.PaymentStatus;
   amount?: number;
@@ -2047,6 +2110,7 @@ export type RegistrationUncheckedCreateWithoutPlayersInput = {
   collegeName: string;
   eventType: $Enums.EventType;
   paymentScreenshot: string;
+  transactionId?: string | null;
   status?: $Enums.RegistrationStatus;
   paymentStatus?: $Enums.PaymentStatus;
   amount?: number;
@@ -2104,6 +2168,10 @@ export type RegistrationUpdateWithoutPlayersInput = {
   collegeName?: Prisma.StringFieldUpdateOperationsInput | string;
   eventType?: Prisma.EnumEventTypeFieldUpdateOperationsInput | $Enums.EventType;
   paymentScreenshot?: Prisma.StringFieldUpdateOperationsInput | string;
+  transactionId?:
+    | Prisma.NullableStringFieldUpdateOperationsInput
+    | string
+    | null;
   status?:
     | Prisma.EnumRegistrationStatusFieldUpdateOperationsInput
     | $Enums.RegistrationStatus;
@@ -2152,6 +2220,10 @@ export type RegistrationUncheckedUpdateWithoutPlayersInput = {
   collegeName?: Prisma.StringFieldUpdateOperationsInput | string;
   eventType?: Prisma.EnumEventTypeFieldUpdateOperationsInput | $Enums.EventType;
   paymentScreenshot?: Prisma.StringFieldUpdateOperationsInput | string;
+  transactionId?:
+    | Prisma.NullableStringFieldUpdateOperationsInput
+    | string
+    | null;
   status?:
     | Prisma.EnumRegistrationStatusFieldUpdateOperationsInput
     | $Enums.RegistrationStatus;
@@ -2206,6 +2278,7 @@ export type RegistrationCreateManyUserInput = {
   collegeName: string;
   eventType: $Enums.EventType;
   paymentScreenshot: string;
+  transactionId?: string | null;
   status?: $Enums.RegistrationStatus;
   paymentStatus?: $Enums.PaymentStatus;
   amount?: number;
@@ -2233,6 +2306,7 @@ export type RegistrationCreateManyVerifiedByInput = {
   collegeName: string;
   eventType: $Enums.EventType;
   paymentScreenshot: string;
+  transactionId?: string | null;
   status?: $Enums.RegistrationStatus;
   paymentStatus?: $Enums.PaymentStatus;
   amount?: number;
@@ -2260,6 +2334,10 @@ export type RegistrationUpdateWithoutUserInput = {
   collegeName?: Prisma.StringFieldUpdateOperationsInput | string;
   eventType?: Prisma.EnumEventTypeFieldUpdateOperationsInput | $Enums.EventType;
   paymentScreenshot?: Prisma.StringFieldUpdateOperationsInput | string;
+  transactionId?:
+    | Prisma.NullableStringFieldUpdateOperationsInput
+    | string
+    | null;
   status?:
     | Prisma.EnumRegistrationStatusFieldUpdateOperationsInput
     | $Enums.RegistrationStatus;
@@ -2308,6 +2386,10 @@ export type RegistrationUncheckedUpdateWithoutUserInput = {
   collegeName?: Prisma.StringFieldUpdateOperationsInput | string;
   eventType?: Prisma.EnumEventTypeFieldUpdateOperationsInput | $Enums.EventType;
   paymentScreenshot?: Prisma.StringFieldUpdateOperationsInput | string;
+  transactionId?:
+    | Prisma.NullableStringFieldUpdateOperationsInput
+    | string
+    | null;
   status?:
     | Prisma.EnumRegistrationStatusFieldUpdateOperationsInput
     | $Enums.RegistrationStatus;
@@ -2362,6 +2444,10 @@ export type RegistrationUncheckedUpdateManyWithoutUserInput = {
   collegeName?: Prisma.StringFieldUpdateOperationsInput | string;
   eventType?: Prisma.EnumEventTypeFieldUpdateOperationsInput | $Enums.EventType;
   paymentScreenshot?: Prisma.StringFieldUpdateOperationsInput | string;
+  transactionId?:
+    | Prisma.NullableStringFieldUpdateOperationsInput
+    | string
+    | null;
   status?:
     | Prisma.EnumRegistrationStatusFieldUpdateOperationsInput
     | $Enums.RegistrationStatus;
@@ -2414,6 +2500,10 @@ export type RegistrationUpdateWithoutVerifiedByInput = {
   collegeName?: Prisma.StringFieldUpdateOperationsInput | string;
   eventType?: Prisma.EnumEventTypeFieldUpdateOperationsInput | $Enums.EventType;
   paymentScreenshot?: Prisma.StringFieldUpdateOperationsInput | string;
+  transactionId?:
+    | Prisma.NullableStringFieldUpdateOperationsInput
+    | string
+    | null;
   status?:
     | Prisma.EnumRegistrationStatusFieldUpdateOperationsInput
     | $Enums.RegistrationStatus;
@@ -2462,6 +2552,10 @@ export type RegistrationUncheckedUpdateWithoutVerifiedByInput = {
   collegeName?: Prisma.StringFieldUpdateOperationsInput | string;
   eventType?: Prisma.EnumEventTypeFieldUpdateOperationsInput | $Enums.EventType;
   paymentScreenshot?: Prisma.StringFieldUpdateOperationsInput | string;
+  transactionId?:
+    | Prisma.NullableStringFieldUpdateOperationsInput
+    | string
+    | null;
   status?:
     | Prisma.EnumRegistrationStatusFieldUpdateOperationsInput
     | $Enums.RegistrationStatus;
@@ -2513,6 +2607,10 @@ export type RegistrationUncheckedUpdateManyWithoutVerifiedByInput = {
   collegeName?: Prisma.StringFieldUpdateOperationsInput | string;
   eventType?: Prisma.EnumEventTypeFieldUpdateOperationsInput | $Enums.EventType;
   paymentScreenshot?: Prisma.StringFieldUpdateOperationsInput | string;
+  transactionId?:
+    | Prisma.NullableStringFieldUpdateOperationsInput
+    | string
+    | null;
   status?:
     | Prisma.EnumRegistrationStatusFieldUpdateOperationsInput
     | $Enums.RegistrationStatus;
@@ -2616,6 +2714,7 @@ export type RegistrationSelect<
     collegeName?: boolean;
     eventType?: boolean;
     paymentScreenshot?: boolean;
+    transactionId?: boolean;
     status?: boolean;
     paymentStatus?: boolean;
     amount?: boolean;
@@ -2656,6 +2755,7 @@ export type RegistrationSelectCreateManyAndReturn<
     collegeName?: boolean;
     eventType?: boolean;
     paymentScreenshot?: boolean;
+    transactionId?: boolean;
     status?: boolean;
     paymentStatus?: boolean;
     amount?: boolean;
@@ -2693,6 +2793,7 @@ export type RegistrationSelectUpdateManyAndReturn<
     collegeName?: boolean;
     eventType?: boolean;
     paymentScreenshot?: boolean;
+    transactionId?: boolean;
     status?: boolean;
     paymentStatus?: boolean;
     amount?: boolean;
@@ -2726,6 +2827,7 @@ export type RegistrationSelectScalar = {
   collegeName?: boolean;
   eventType?: boolean;
   paymentScreenshot?: boolean;
+  transactionId?: boolean;
   status?: boolean;
   paymentStatus?: boolean;
   amount?: boolean;
@@ -2757,6 +2859,7 @@ export type RegistrationOmit<
   | "collegeName"
   | "eventType"
   | "paymentScreenshot"
+  | "transactionId"
   | "status"
   | "paymentStatus"
   | "amount"
@@ -2826,6 +2929,7 @@ export type $RegistrationPayload<
       collegeName: string;
       eventType: $Enums.EventType;
       paymentScreenshot: string;
+      transactionId: string | null;
       status: $Enums.RegistrationStatus;
       paymentStatus: $Enums.PaymentStatus;
       amount: number;
@@ -3510,6 +3614,7 @@ export interface RegistrationFieldRefs {
   readonly collegeName: Prisma.FieldRef<"Registration", "String">;
   readonly eventType: Prisma.FieldRef<"Registration", "EventType">;
   readonly paymentScreenshot: Prisma.FieldRef<"Registration", "String">;
+  readonly transactionId: Prisma.FieldRef<"Registration", "String">;
   readonly status: Prisma.FieldRef<"Registration", "RegistrationStatus">;
   readonly paymentStatus: Prisma.FieldRef<"Registration", "PaymentStatus">;
   readonly amount: Prisma.FieldRef<"Registration", "Float">;

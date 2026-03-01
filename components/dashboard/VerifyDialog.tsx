@@ -194,6 +194,10 @@ export function VerifyDialog({
                         </SelectContent>
                       </Select>
                     </div>
+                    {registration.paymentMode === "ONLINE" &&
+                      registration.transactionId && (
+                        <p>Transaction ID: {registration.transactionId}</p>
+                      )}
                     <p>Department: {registration.department}</p>
                     <p>Class: {registration.class}</p>
                   </div>
