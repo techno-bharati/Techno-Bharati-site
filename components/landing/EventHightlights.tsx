@@ -184,7 +184,7 @@ export default function EventHightlights() {
             onClick={() => router.push("/gallery")}
           >
             View Full Gallery
-            <ArrowRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform duration-200" />
+            <ArrowRight className="h-4 w-4 group-hover:-rotate-45 transition-transform duration-200" />
           </Button>
         </div>
       </motion.div>
