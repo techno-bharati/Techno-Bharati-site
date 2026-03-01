@@ -1,39 +1,63 @@
-type ProgressiveBlurProps = {
-  className?: string;
-  backgroundColor?: string;
-  position?: "top" | "bottom";
-  height?: string;
-  blurAmount?: string;
+"use client";
+import { cn } from "@/lib/utils";
+import { HTMLMotionProps, motion } from "motion/react";
+
+export const GRADIENT_ANGLES = {
+  top: 0,
+  right: 90,
+  bottom: 180,
+  left: 270,
 };
 
-const ProgressiveBlur = ({
-  className = "",
-  backgroundColor = "#f5f4f3",
-  position = "top",
-  height = "150px",
-  blurAmount = "4px",
-}: ProgressiveBlurProps) => {
-  const isTop = position === "top";
+export type ProgressiveBlurProps = {
+  direction?: keyof typeof GRADIENT_ANGLES;
+  blurLayers?: number;
+  className?: string;
+  blurIntensity?: number;
+} & HTMLMotionProps<"div">;
+
+export function ProgressiveBlur({
+  direction = "bottom",
+  blurLayers = 8,
+  className,
+  blurIntensity = 0.25,
+  ...props
+}: ProgressiveBlurProps) {
+  const layers = Math.max(blurLayers, 2);
+  const segmentSize = 1 / (blurLayers + 1);
 
   return (
-    <div
-      className={`pointer-events-none left-0 w-full select-none ${className}`}
-      style={{
-        [isTop ? "top" : "bottom"]: 0,
-        height,
-        background: isTop
-          ? `linear-gradient(to top, transparent, ${backgroundColor})`
-          : `linear-gradient(to bottom, transparent, ${backgroundColor})`,
-        maskImage: isTop
-          ? `linear-gradient(to bottom, ${backgroundColor} 50%, transparent)`
-          : `linear-gradient(to top, ${backgroundColor} 50%, transparent)`,
-        WebkitBackdropFilter: `blur(${blurAmount})`,
-        backdropFilter: `blur(${blurAmount})`,
-        WebkitUserSelect: "none",
-        userSelect: "none",
-      }}
-    />
-  );
-};
+    <div className={cn("relative", className)}>
+      {Array.from({ length: layers }).map((_, index) => {
+        const angle = GRADIENT_ANGLES[direction];
+        const gradientStops = [
+          index * segmentSize,
+          (index + 1) * segmentSize,
+          (index + 2) * segmentSize,
+          (index + 3) * segmentSize,
+        ].map(
+          (pos, posIndex) =>
+            `rgba(255, 255, 255, ${posIndex === 1 || posIndex === 2 ? 1 : 0}) ${pos * 100}%`
+        );
 
-export { ProgressiveBlur };
+        const gradient = `linear-gradient(${angle}deg, ${gradientStops.join(
+          ", "
+        )})`;
+
+        return (
+          <motion.div
+            key={index}
+            className="pointer-events-none absolute inset-0 rounded-[inherit]"
+            style={{
+              maskImage: gradient,
+              WebkitMaskImage: gradient,
+              backdropFilter: `blur(${index * blurIntensity}px)`,
+              WebkitBackdropFilter: `blur(${index * blurIntensity}px)`,
+            }}
+            {...props}
+          />
+        );
+      })}
+    </div>
+  );
+}
