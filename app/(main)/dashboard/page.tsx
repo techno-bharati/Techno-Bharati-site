@@ -24,7 +24,19 @@ import { Button } from "@/components/ui/button";
 import { VerifyDialog } from "@/components/dashboard/VerifyDialog";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { LogOut, Trash2, Download, Lock } from "lucide-react";
+import {
+  LogOut,
+  Trash2,
+  Download,
+  Lock,
+  TrendingUp,
+  LayoutGrid,
+  IndianRupee,
+  Users,
+  CalendarCheck,
+  ChevronDown,
+  ChevronUp,
+} from "lucide-react";
 import { DeleteConfirmDialog } from "@/components/dashboard/DeleteConfirmDialog";
 import { ChangePasswordDialog } from "@/components/dashboard/ChangePasswordDialog";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -32,6 +44,9 @@ import DashboardLoading, {
   StatsCardSkeleton,
   RegistrationsTableSkeleton,
 } from "./loading";
+import { Registration } from "@/prisma/generated/prisma/client";
+import { EventSelectDropdown } from "@/components/dashboard/EventSelectDropdown";
+import { DepartmentBreakdownChart } from "@/components/dashboard/DepartmentBreakdownChart";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -55,6 +70,9 @@ export default function DashboardPage() {
     useState(false);
   const [selectedEvent, setSelectedEvent] = useState<string | null>("all");
   const [paymentModeFilter, setPaymentModeFilter] = useState<string>("all");
+  const [statusSort, setStatusSort] = useState<
+    "PENDING_FIRST" | "CONFIRMED_FIRST"
+  >("PENDING_FIRST");
 
   const { data: adminData, isLoading: isLoadingAdmin } = useQuery({
     queryKey: ["adminDetails"],
@@ -107,14 +125,11 @@ export default function DashboardPage() {
   });
 
   const getEventOptionsForDepartment = (dept: string | null) => {
-    // Map departments to their event types
     const map: Record<string, { value: string; label: string }[]> = {
       all: [
-        { value: "STARTUP_SPHERE", label: "Startup Sphere" },
         { value: "FACE_TO_FACE", label: "Face To Face" },
         { value: "PYTHON_FRONTIERS", label: "Python Frontiers" },
         { value: "BGMI", label: "BGMI" },
-        { value: "AI_TALES", label: "AI Tales" },
         { value: "ENTC_PROJECT_EXPO", label: "ENTC Project Expo" },
         { value: "ENTC_DIGITAL_DANGAL", label: "Digital Dangal" },
         { value: "ENTC_SNAP_AND_SHINE", label: "Snap & Shine" },
@@ -127,6 +142,7 @@ export default function DashboardPage() {
         { value: "GE_GAMES_BUNDLE", label: "GE Games Bundle" },
         { value: "FREEFIRE", label: "FreeFire" },
         { value: "CE_MODEL_MAKING", label: "Model Making" },
+        { value: "CE_BATTLE_OF_BRAINS", label: "Battle Of Brains" },
         { value: "CE_CAD_MASTER", label: "CAD Master" },
         { value: "CE_VIDEOGRAPHY", label: "Videography" },
         { value: "CSE_CODEFUSION", label: "CODEFUSION" },
@@ -137,11 +153,9 @@ export default function DashboardPage() {
         { value: "MECH_IPL_AUCTION", label: "Mech IPL Auction" },
       ],
       AIML: [
-        { value: "STARTUP_SPHERE", label: "Startup Sphere" },
         { value: "FACE_TO_FACE", label: "Face To Face" },
         { value: "PYTHON_FRONTIERS", label: "Python Frontiers" },
         { value: "BGMI", label: "BGMI" },
-        { value: "AI_TALES", label: "AI Tales" },
       ],
       CSE: [
         { value: "CSE_CODEFUSION", label: "CODEFUSION" },
@@ -159,6 +173,7 @@ export default function DashboardPage() {
       ],
       CIVIL: [
         { value: "CE_MODEL_MAKING", label: "Model Making" },
+        { value: "CE_BATTLE_OF_BRAINS", label: "Battle Of Brains" },
         { value: "CE_CAD_MASTER", label: "CAD Master" },
         { value: "CE_VIDEOGRAPHY", label: "Videography" },
       ],
@@ -187,9 +202,23 @@ export default function DashboardPage() {
     todayRegistrations: 0,
     eventBreakdown: {} as Record<string, number>,
     totalParticipants: 0,
+    departmentBreakdown: {} as Record<string, number>,
   };
 
   const safeRegistrations = registrationsData?.registrations ?? [];
+
+  const eventAdminRegistrations =
+    adminRole === "EVENT_ADMIN" && adminEventType
+      ? safeRegistrations.filter((reg: any) => reg.eventType === adminEventType)
+      : [];
+
+  const eventAdminConfirmed = eventAdminRegistrations.filter(
+    (reg: any) => reg.status === "CONFIRMED"
+  ).length;
+
+  const eventAdminPending = eventAdminRegistrations.filter(
+    (reg: any) => reg.status === "PENDING"
+  ).length;
 
   const filteredRegistrations = safeRegistrations.filter((reg: any) => {
     const matchesSearch =
@@ -209,6 +238,17 @@ export default function DashboardPage() {
       (paymentModeFilter === "OFFLINE" && reg.paymentMode === "OFFLINE");
 
     return matchesSearch && matchesEvent && matchesPaymentMode;
+  });
+
+  const sortedRegistrations = [...filteredRegistrations].sort((a, b) => {
+    if (statusSort === "PENDING_FIRST") {
+      if (a.status === "PENDING" && b.status !== "PENDING") return -1;
+      if (a.status !== "PENDING" && b.status === "PENDING") return 1;
+    } else {
+      if (a.status === "CONFIRMED" && b.status !== "CONFIRMED") return -1;
+      if (a.status !== "CONFIRMED" && b.status === "CONFIRMED") return 1;
+    }
+    return 0;
   });
 
   const handleLogout = async () => {
@@ -305,429 +345,488 @@ export default function DashboardPage() {
     exportMutation.mutate();
   };
 
-  const handleRowClick = (registration: any) => {
+  const handleRowClick = (registration: Registration) => {
     setSelectedRegistration(registration);
   };
 
   return (
-    <div className="container mx-auto px-4 py-6 space-y-5">
-      <div className="flex flex-col gap-6 mb-6 sm:flex-row sm:items-center sm:justify-between">
-        {isLoadingAdmin ? (
-          <>
-            <Skeleton className="h-8 w-32" />
-            <Skeleton className="h-10 w-24" />
-          </>
-        ) : (
-          <>
-            <div className="space-y-1">
-              <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
-              <p className="text-muted-foreground">Welcome back, {adminName}</p>
-            </div>
-            <div className="flex flex-wrap items-center gap-2">
-              <Button
-                variant="outline"
-                onClick={handleExport}
-                className="w-full sm:w-auto gap-2 rounded-xl"
-                disabled={exportMutation.isPending}
-              >
-                <Download className="h-4 w-4" />
-                <span className="hidden sm:inline">
-                  {exportMutation.isPending
-                    ? "Exporting..."
-                    : "Export to Excel"}
-                </span>
-                <span className="sm:hidden">Export</span>
-              </Button>
-              <Button
-                variant="outline"
-                onClick={() => setChangePasswordDialogOpen(true)}
-                className="w-full sm:w-auto gap-2 rounded-xl"
-              >
-                <Lock className="h-4 w-4" />
-                <span className="hidden sm:inline">Change Password</span>
-                <span className="sm:hidden">Password</span>
-              </Button>
-              <Button
-                variant="outline"
-                onClick={handleLogout}
-                className="w-full sm:w-auto gap-2 rounded-xl"
-              >
-                <LogOut className="h-4 w-4" />
-                <span>Logout</span>
-              </Button>
-            </div>
-          </>
-        )}
-      </div>
-
-      {registrationsError && (
-        <Card className="rounded-xl border-destructive/30">
-          <CardHeader className="py-4">
-            <CardTitle className="text-sm text-destructive">
-              Couldn&apos;t load registrations
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="pt-0">
-            <div className="text-sm text-muted-foreground">
-              {registrationsError.message}
-            </div>
-            <div className="mt-3">
-              <Button variant="outline" size="sm" onClick={() => refetch()}>
-                Retry
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:space-x-4">
-        {adminRole === "SUPER_ADMIN" && (
-          <Select
-            value={departmentFilter}
-            onValueChange={(value) => {
-              setDepartmentFilter(value);
-              // Reset event filter whenever department changes
-              setEventFilter("all");
-              setSelectedEvent("all");
-            }}
-          >
-            <SelectTrigger className="w-full sm:w-[200px] rounded-xl">
-              <SelectValue placeholder="Filter by department" />
-            </SelectTrigger>
-            <SelectContent className="rounded-xl">
-              <SelectItem value="all">All Departments</SelectItem>
-              <SelectItem value="AIML">AIML</SelectItem>
-              <SelectItem value="CSE">CSE</SelectItem>
-              <SelectItem value="MECHANICAL">Mechanical</SelectItem>
-              <SelectItem value="CIVIL">Civil</SelectItem>
-              <SelectItem value="ENTC">ENTC</SelectItem>
-              <SelectItem value="GENERAL_ENGINEERING">
-                General Engineering
-              </SelectItem>
-            </SelectContent>
-          </Select>
-        )}
-        {(adminRole === "SUPER_ADMIN" || adminRole === "DEPARTMENT_ADMIN") && (
-          <Select
-            defaultValue="all"
-            value={eventFilter}
-            onValueChange={(value) => {
-              setEventFilter(value);
-              setSelectedEvent(value === "all" ? "all" : value);
-            }}
-          >
-            <SelectTrigger className="w-full sm:w-[200px] rounded-xl">
-              <SelectValue placeholder="Filter by event" />
-            </SelectTrigger>
-            <SelectContent className="rounded-xl">
-              <SelectItem value="all">All Events</SelectItem>
-              {getEventOptionsForDepartment(
-                adminRole === "SUPER_ADMIN" ? departmentFilter : adminDepartment
-              ).map((opt) => (
-                <SelectItem key={opt.value} value={opt.value}>
-                  {opt.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        )}
-        <Select
-          defaultValue="all"
-          onValueChange={(value) => {
-            setPaymentModeFilter(value);
-          }}
-        >
-          <SelectTrigger className="w-full sm:w-[180px] rounded-xl">
-            <SelectValue placeholder="Filter by payment mode" />
-          </SelectTrigger>
-          <SelectContent className="rounded-xl">
-            <SelectItem value="all">All Payment Modes</SelectItem>
-            <SelectItem value="ONLINE">Online Payments</SelectItem>
-            <SelectItem value="OFFLINE">Offline Payments</SelectItem>
-          </SelectContent>
-        </Select>
-        <Input
-          placeholder="Search registrations..."
-          className="w-full sm:max-w-sm rounded-xl"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-      </div>
-
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {isLoadingRegistrations ? (
-          <>
-            <StatsCardSkeleton />
-            <StatsCardSkeleton />
-          </>
-        ) : (
-          <>
-            {adminRole === "EVENT_ADMIN" ? (
-              <div className="grid gap-4 col-span-full lg:grid-cols-2">
-                <Card className="lg:col-span-1 rounded-xl">
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      {adminEventType?.replace(/_/g, " ")} Registrations
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">
-                      {registrationsData?.stats.eventBreakdown?.[
-                        adminEventType || ""
-                      ] || 0}
-                    </div>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      Total registrations for your event
-                    </p>
-                  </CardContent>
-                </Card>
-                <Card className="lg:col-span-1 rounded-xl">
-                  <CardHeader>
-                    <CardTitle>Total Revenue</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">
-                      ₹{registrationsData?.stats.totalRevenueForEvent}
-                    </div>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      Total revenue from confirmed registrations for this event
-                    </p>
-                  </CardContent>
-                </Card>
+    <div className="min-h-screen bg-background">
+      <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+        {/* header  */}
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          {isLoadingAdmin ? (
+            <>
+              <Skeleton className="h-9 w-48" />
+              <Skeleton className="h-10 w-64" />
+            </>
+          ) : (
+            <>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-0.5">
+                  Admin Panel
+                </p>
+                <h1 className="text-2xl font-bold text-foreground">
+                  Welcome, {adminName}
+                </h1>
               </div>
-            ) : (
-              <>
-                <Card className="rounded-xl">
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 rounded-xl">
-                    <CardTitle className="text-sm font-medium">
-                      Total Registrations
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">
-                      {safeStats.totalRegistrations}
-                    </div>
-                    <div className="text-xs text-muted-foreground mt-1">
-                      {Object.entries(safeStats.eventBreakdown || {}).map(
-                        ([event, count]) => (
-                          <div key={event}>
-                            {event.replace(/_/g, " ")}: {count as number}
-                          </div>
-                        )
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-                <Card className="rounded-xl">
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      Verified Revenue
-                    </CardTitle>
-                    <span className="text-xs text-muted-foreground">
-                      (From verified entries only)
-                    </span>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold text-black dark:text-white">
-                      ₹{safeStats.totalRevenue}
-                    </div>
-                    <div className="mt-3 pt-3 border-t">
-                      <div className="flex justify-between mt-2">
-                        <div className="text-sm text-muted-foreground">
-                          Online Payments
-                        </div>
-                        <div className="text-xl font-semibold text-black dark:text-white">
-                          ₹
-                          {(safeStats.totalRevenue || 0) -
-                            (safeStats.offlineRevenue || 0)}
-                        </div>
-                      </div>
-                      <div className="flex justify-between">
-                        <div className="text-sm text-muted-foreground">
-                          Offline Payments
-                        </div>
-                        <div className="text-xl font-semibold text-black dark:text-white">
-                          ₹{safeStats.offlineRevenue || 0}
-                        </div>
-                      </div>
-                    </div>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      Total revenue from verified registrations
-                    </p>
-                  </CardContent>
-                </Card>
-                <Card className="rounded-xl">
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      Active Events
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">
-                      {safeStats.activeEvents}
-                    </div>
-                  </CardContent>
-                </Card>
-                <Card className="rounded-xl">
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      Registration Stats
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="border-b pb-3">
-                      <div className="text-sm font-medium text-muted-foreground">
-                        Today's Registrations
-                      </div>
-                      <div className="text-2xl font-bold">
-                        {safeStats.todayRegistrations}
-                      </div>
-                    </div>
-                    <div>
-                      <div className="text-sm font-medium text-muted-foreground">
-                        Total Participants
-                      </div>
-                      <div className="text-2xl font-bold">
-                        {safeStats.totalParticipants}
-                      </div>
-                      <p className="text-xs text-muted-foreground mt-1">
-                        Across all events
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
-              </>
-            )}
-          </>
-        )}
-      </div>
+              <div className="flex flex-wrap items-center gap-2">
+                <Button
+                  variant="outline"
+                  onClick={handleExport}
+                  className="gap-2 rounded-xl h-9 text-sm"
+                  disabled={exportMutation.isPending}
+                >
+                  <Download className="h-3.5 w-3.5" />
+                  {exportMutation.isPending ? "Exporting..." : "Export Excel"}
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => setChangePasswordDialogOpen(true)}
+                  className="gap-2 rounded-xl h-9 text-sm"
+                >
+                  <Lock className="h-3.5 w-3.5" />
+                  <span className="hidden sm:inline">Change Password</span>
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={handleLogout}
+                  className="gap-2 rounded-xl h-9 text-sm"
+                >
+                  <LogOut className="h-3.5 w-3.5" />
+                  Logout
+                </Button>
+              </div>
+            </>
+          )}
+        </div>
 
-      {isLoadingRegistrations ? (
-        <RegistrationsTableSkeleton />
-      ) : (
-        <Card className="rounded-xl">
-          <CardHeader>
-            <CardTitle>Registrations</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Name/Team</TableHead>
-                  <TableHead>Event</TableHead>
-                  <TableHead>College</TableHead>
-                  <TableHead>Contact</TableHead>
-                  <TableHead>Payment Mode</TableHead>
-                  <TableHead>Transaction ID</TableHead>
-                  <TableHead>Amount</TableHead>
-                  <TableHead>Date</TableHead>
-                  <TableHead>Status</TableHead>
-                  {(adminRole === "SUPER_ADMIN" ||
-                    adminRole === "DEPARTMENT_ADMIN" ||
-                    adminRole === "EVENT_ADMIN") && (
-                    <TableHead className="w-[140px]">Actions</TableHead>
+        {/* error banner */}
+        {registrationsError && (
+          <div className="flex items-center justify-between bg-destructive/10 border border-destructive/30 text-destructive rounded-xl px-4 py-3 text-sm">
+            <span>{registrationsError.message}</span>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => refetch()}
+              className="text-destructive hover:text-destructive"
+            >
+              Retry
+            </Button>
+          </div>
+        )}
+
+        {/* filters row */}
+        <div className="flex flex-wrap gap-2">
+          {adminRole === "SUPER_ADMIN" && (
+            <Select
+              value={departmentFilter}
+              onValueChange={(value) => {
+                setDepartmentFilter(value);
+                setEventFilter("all");
+                setSelectedEvent("all");
+              }}
+            >
+              <SelectTrigger className="w-[180px] rounded-xl h-9 text-sm">
+                <SelectValue placeholder="Department" />
+              </SelectTrigger>
+              <SelectContent className="rounded-xl">
+                <SelectItem value="all">All Departments</SelectItem>
+                <SelectItem value="AIML">AIML</SelectItem>
+                <SelectItem value="CSE">CSE</SelectItem>
+                <SelectItem value="MECHANICAL">Mechanical</SelectItem>
+                <SelectItem value="CIVIL">Civil</SelectItem>
+                <SelectItem value="ENTC">ENTC</SelectItem>
+                <SelectItem value="GENERAL_ENGINEERING">
+                  General Engineering
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          )}
+          {(adminRole === "SUPER_ADMIN" ||
+            adminRole === "DEPARTMENT_ADMIN") && (
+            <EventSelectDropdown
+              value={eventFilter}
+              onValueChange={(value) => {
+                setEventFilter(value);
+                setSelectedEvent(value === "all" ? "all" : value);
+              }}
+              adminRole={adminRole}
+              departmentFilter={departmentFilter}
+              adminDepartment={adminDepartment}
+            />
+          )}
+          <Select defaultValue="all" onValueChange={setPaymentModeFilter}>
+            <SelectTrigger className="w-[160px] rounded-xl h-9 text-sm">
+              <SelectValue placeholder="Payment Mode" />
+            </SelectTrigger>
+            <SelectContent className="rounded-xl">
+              <SelectItem value="all">All Payments</SelectItem>
+              <SelectItem value="ONLINE">Online</SelectItem>
+              <SelectItem value="OFFLINE">Offline</SelectItem>
+            </SelectContent>
+          </Select>
+          <div className="relative flex-1 min-w-[200px]">
+            <Input
+              placeholder="Search name, team, college..."
+              className="rounded-xl h-9 text-sm pl-3"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </div>
+        </div>
+
+        {isLoadingRegistrations ? (
+          <div className="grid gap-3 grid-cols-2 lg:grid-cols-4">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <Skeleton key={i} className="h-28 rounded-2xl" />
+            ))}
+          </div>
+        ) : adminRole === "EVENT_ADMIN" ? (
+          <div className="grid gap-3 grid-cols-1 sm:grid-cols-2">
+            <StatCard
+              icon={<CalendarCheck className="h-5 w-5" />}
+              label={`${adminEventType?.replace(/_/g, " ")} Registrations`}
+              value={
+                registrationsData?.stats.eventBreakdown?.[
+                  adminEventType || ""
+                ] || 0
+              }
+              sub={
+                <span className="flex flex-col text-xs text-muted-foreground">
+                  <span>
+                    Confirmed:{" "}
+                    <span className="font-semibold">{eventAdminConfirmed}</span>
+                  </span>
+                  <span>
+                    Pending:{" "}
+                    <span className="font-semibold">{eventAdminPending}</span>
+                  </span>
+                </span>
+              }
+            />
+            <StatCard
+              icon={<IndianRupee className="h-5 w-5" />}
+              label="Total Revenue"
+              value={`₹${registrationsData?.stats.totalRevenueForEvent || 0}`}
+              sub="From confirmed entries"
+            />
+          </div>
+        ) : (
+          <div className="grid gap-3 grid-cols-2 lg:grid-cols-4">
+            <StatCard
+              icon={<Users className="h-5 w-5" />}
+              label="Total Registrations"
+              value={safeStats.totalRegistrations}
+              sub={
+                <span className="text-lg capitalize">
+                  {safeStats.todayRegistrations} today
+                </span>
+              }
+            />
+            <StatCard
+              icon={<IndianRupee className="h-5 w-5" />}
+              label="Verified Revenue"
+              value={`₹${safeStats.totalRevenue}`}
+              sub={
+                <span className="flex flex-col gap-0.5 text-base">
+                  <span className="flex justify-between">
+                    <span>Online</span>
+                    <span className="font-semibold text-foreground">
+                      ₹
+                      {(safeStats.totalRevenue || 0) -
+                        (safeStats.offlineRevenue || 0)}
+                    </span>
+                  </span>
+                  <span className="flex justify-between">
+                    <span>Offline</span>
+                    <span className="font-semibold text-foreground">
+                      ₹{safeStats.offlineRevenue || 0}
+                    </span>
+                  </span>
+                  <span className="text-xs">
+                    Total revenue from verified registrations
+                  </span>
+                </span>
+              }
+            />
+            <StatCard
+              icon={<LayoutGrid className="h-5 w-5" />}
+              label="Active Events"
+              value={safeStats.activeEvents}
+              sub="Running now"
+            />
+            <StatCard
+              icon={<TrendingUp className="h-5 w-5" />}
+              label="Total Participants"
+              value={safeStats.totalParticipants}
+              sub="Across all events"
+            />
+          </div>
+        )}
+
+        {/* chart area */}
+        {adminRole !== "EVENT_ADMIN" && !isLoadingRegistrations && (
+          <div className="grid gap-3 grid-cols-1 lg:grid-cols-2 w-full">
+            <Card className="rounded-2xl border bg-card col-span-1">
+              <CardHeader className="pb-2 pt-4 px-5">
+                <CardTitle className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+                  Event Breakdown
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="px-5 pb-4">
+                <div className="space-y-2 max-h-52 overflow-y-auto pr-1">
+                  {Object.entries(safeStats.eventBreakdown || {}).map(
+                    ([event, count]) => (
+                      <div
+                        key={event}
+                        className="flex items-center justify-between text-sm"
+                      >
+                        <span className="text-muted-foreground truncate max-w-[70%]">
+                          {event.replace(/_/g, " ")}
+                        </span>
+                        <span className="font-semibold tabular-nums">
+                          {count as number}
+                        </span>
+                      </div>
+                    )
                   )}
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredRegistrations?.map((registration: any) => (
-                  <TableRow
-                    key={registration.id}
-                    className="cursor-pointer hover:bg-muted/50"
-                    onClick={() => handleRowClick(registration)}
-                  >
-                    <TableCell>
-                      {registration.studentName ||
-                        registration.teamName ||
-                        registration.squadName}
-                    </TableCell>
-                    <TableCell>
-                      {registration.eventType.replace(/_/g, " ")}
-                    </TableCell>
-                    <TableCell>{registration.collegeName}</TableCell>
-                    <TableCell>
-                      {registration.contactNumber ||
-                        (registration.teamLeader &&
-                          registration.teamLeader.contactNumber) ||
-                        (registration.players &&
-                          registration.players[0]?.contactNumber)}
-                    </TableCell>
-                    <TableCell>{registration.paymentMode || "N/A"}</TableCell>
-                    <TableCell>
-                      {registration.paymentMode === "ONLINE" &&
-                      registration.transactionId
-                        ? registration.transactionId
-                        : "—"}
-                    </TableCell>
-                    <TableCell>₹{registration.amount}</TableCell>
-                    <TableCell>
-                      {new Date(registration.createdAt).toLocaleDateString()}
-                    </TableCell>
-                    <TableCell>
-                      <Badge
-                        variant={
-                          registration.status === "CONFIRMED"
-                            ? "success"
-                            : registration.status === "PENDING"
-                              ? "warning"
-                              : "destructive"
+                </div>
+              </CardContent>
+            </Card>
+            <DepartmentBreakdownChart
+              departmentBreakdown={safeStats.departmentBreakdown}
+            />
+          </div>
+        )}
+
+        {/* registrations table */}
+        {isLoadingRegistrations ? (
+          <RegistrationsTableSkeleton />
+        ) : (
+          <Card className="rounded-2xl border bg-card">
+            <CardHeader className="px-5 pt-5 pb-3 flex flex-row items-center justify-between">
+              <CardTitle className="text-base font-semibold">
+                Registrations
+                <span className="ml-2 text-xs font-normal text-muted-foreground">
+                  ({filteredRegistrations.length} shown)
+                </span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="px-0 pb-0">
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow className="border-b bg-muted/40 hover:bg-muted/40">
+                      <TableHead className="pl-5 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                        Name / Team
+                      </TableHead>
+                      <TableHead className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                        Event
+                      </TableHead>
+                      <TableHead className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                        College
+                      </TableHead>
+                      <TableHead className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                        Contact
+                      </TableHead>
+                      <TableHead className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                        Payment
+                      </TableHead>
+                      <TableHead className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                        Txn ID
+                      </TableHead>
+                      <TableHead className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                        Amount
+                      </TableHead>
+                      <TableHead className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                        Date
+                      </TableHead>
+                      <TableHead
+                        className="text-xs font-semibold uppercase tracking-wide text-muted-foreground cursor-pointer select-none hover:text-foreground transition-colors"
+                        onClick={() =>
+                          setStatusSort((prev) =>
+                            prev === "PENDING_FIRST"
+                              ? "CONFIRMED_FIRST"
+                              : "PENDING_FIRST"
+                          )
                         }
                       >
-                        {registration.status}
-                      </Badge>
-                    </TableCell>
-                    {(adminRole === "SUPER_ADMIN" ||
-                      adminRole === "DEPARTMENT_ADMIN" ||
-                      adminRole === "EVENT_ADMIN") && (
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleRowClick(registration);
-                            }}
-                            disabled={registration.status === "CONFIRMED"}
-                          >
-                            Verify
-                          </Button>
-                          <Button
-                            variant="destructive"
-                            size="sm"
-                            onClick={(e) => handleDelete(registration, e)}
-                            className="px-2"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </TableCell>
+                        <span className="flex items-center gap-1">
+                          Status
+                          {statusSort === "PENDING_FIRST" ? (
+                            <ChevronDown className="h-3 w-3" />
+                          ) : (
+                            <ChevronUp className="h-3 w-3" />
+                          )}
+                        </span>
+                      </TableHead>
+                      {(adminRole === "SUPER_ADMIN" ||
+                        adminRole === "DEPARTMENT_ADMIN" ||
+                        adminRole === "EVENT_ADMIN") && (
+                        <TableHead className="text-xs font-semibold uppercase tracking-wide text-muted-foreground pr-5">
+                          Actions
+                        </TableHead>
+                      )}
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredRegistrations.length === 0 ? (
+                      <TableRow>
+                        <TableCell
+                          colSpan={10}
+                          className="text-center text-muted-foreground py-16 text-sm"
+                        >
+                          No registrations found
+                        </TableCell>
+                      </TableRow>
+                    ) : (
+                      sortedRegistrations.map((registration: any) => (
+                        <TableRow
+                          key={registration.id}
+                          className="cursor-pointer hover:bg-muted/40 transition-colors border-b border-border/50"
+                          onClick={() => handleRowClick(registration)}
+                        >
+                          <TableCell className="pl-5 font-medium text-sm">
+                            {registration.studentName ||
+                              registration.teamName ||
+                              registration.squadName}
+                          </TableCell>
+                          <TableCell className="text-sm text-muted-foreground">
+                            {registration.eventType.replace(/_/g, " ")}
+                          </TableCell>
+                          <TableCell className="text-sm text-muted-foreground max-w-[140px] truncate">
+                            {registration.collegeName}
+                          </TableCell>
+                          <TableCell className="text-sm text-muted-foreground">
+                            {registration.contactNumber ||
+                              registration.teamLeader?.contactNumber ||
+                              registration.players?.[0]?.contactNumber}
+                          </TableCell>
+                          <TableCell>
+                            <span
+                              className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold ${
+                                registration.paymentMode === "ONLINE"
+                                  ? "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300"
+                                  : registration.paymentMode === "OFFLINE"
+                                    ? "bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-300"
+                                    : "bg-muted text-muted-foreground"
+                              }`}
+                            >
+                              {registration.paymentMode || "N/A"}
+                            </span>
+                          </TableCell>
+                          <TableCell className="text-sm font-mono text-muted-foreground">
+                            {registration.paymentMode === "ONLINE" &&
+                            registration.transactionId
+                              ? registration.transactionId
+                              : "—"}
+                          </TableCell>
+                          <TableCell className="text-sm font-semibold">
+                            ₹{registration.amount}
+                          </TableCell>
+                          <TableCell className="text-sm text-muted-foreground">
+                            {new Date(
+                              registration.createdAt
+                            ).toLocaleDateString()}
+                          </TableCell>
+                          <TableCell>
+                            <Badge
+                              variant={
+                                registration.status === "CONFIRMED"
+                                  ? "success"
+                                  : registration.status === "PENDING"
+                                    ? "warning"
+                                    : "destructive"
+                              }
+                              className="text-xs"
+                            >
+                              {registration.status}
+                            </Badge>
+                          </TableCell>
+                          {(adminRole === "SUPER_ADMIN" ||
+                            adminRole === "DEPARTMENT_ADMIN" ||
+                            adminRole === "EVENT_ADMIN") && (
+                            <TableCell className="pr-5">
+                              <div className="flex items-center gap-1.5">
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  className="h-7 text-xs rounded-lg px-2.5"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleRowClick(registration);
+                                  }}
+                                  disabled={registration.status === "CONFIRMED"}
+                                >
+                                  Verify
+                                </Button>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  className="h-7 w-7 p-0 rounded-lg text-destructive hover:text-destructive hover:bg-destructive/10"
+                                  onClick={(e) => handleDelete(registration, e)}
+                                >
+                                  <Trash2 className="h-3.5 w-3.5" />
+                                </Button>
+                              </div>
+                            </TableCell>
+                          )}
+                        </TableRow>
+                      ))
                     )}
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
-      )}
+                  </TableBody>
+                </Table>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
-      <VerifyDialog
-        open={!!selectedRegistration}
-        onOpenChange={(open) => !open && setSelectedRegistration(null)}
-        registration={selectedRegistration}
-      />
-
-      <DeleteConfirmDialog
-        open={deleteDialogOpen}
-        onOpenChange={setDeleteDialogOpen}
-        onConfirm={confirmDelete}
-        registrationDetails={registrationToDelete}
-      />
-
-      <ChangePasswordDialog
-        open={changePasswordDialogOpen}
-        onOpenChange={setChangePasswordDialogOpen}
-      />
+        {/* dialogs */}
+        <VerifyDialog
+          open={!!selectedRegistration}
+          onOpenChange={(open) => !open && setSelectedRegistration(null)}
+          registration={selectedRegistration}
+        />
+        <DeleteConfirmDialog
+          open={deleteDialogOpen}
+          onOpenChange={setDeleteDialogOpen}
+          onConfirm={confirmDelete}
+          registrationDetails={registrationToDelete}
+        />
+        <ChangePasswordDialog
+          open={changePasswordDialogOpen}
+          onOpenChange={setChangePasswordDialogOpen}
+        />
+      </div>
     </div>
+  );
+}
+
+function StatCard({
+  icon,
+  label,
+  value,
+  sub,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: string | number;
+  sub?: React.ReactNode;
+}) {
+  return (
+    <Card className="rounded-2xl border bg-card">
+      <CardContent className="p-5">
+        <div className="flex items-center justify-between mb-3">
+          <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+            {label}
+          </p>
+          <div className={`p-2 rounded-xl bg-muted`}>{icon}</div>
+        </div>
+        <p className="text-2xl font-bold text-foreground tabular-nums">
+          {value}
+        </p>
+        {sub && <div className="mt-2 text-xs text-muted-foreground">{sub}</div>}
+      </CardContent>
+    </Card>
   );
 }
