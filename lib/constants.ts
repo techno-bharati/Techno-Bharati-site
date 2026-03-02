@@ -134,7 +134,7 @@ export const CSE_AIML_EVENTS: Event[] = [
     modalData: {
       eventName: "Python Frontiers",
       description:
-        "A high-intensity inter-college coding battle designed to push your Python skills to the limit. Solve real-world challenges, optimize your code, and prove your supremacy in the coding arena!",
+        "Python Frontiers is a high-intensity inter-college coding competition crafted to challenge your logical thinking, problem-solving ability, and mastery of Python. Participants will tackle real-world scenarios, optimize solutions under time constraints, and compete against some of the brightest minds to claim the title of Python champion.",
       rules: [
         "Group entries are not allowed for event",
         "Round 1: Aptitude, 60 MCQ- 60 minutes",
@@ -169,7 +169,7 @@ export const CSE_AIML_EVENTS: Event[] = [
     modalData: {
       eventName: "Face To Face",
       description:
-        "The AIML Department of Bharati Vidyapeeth's College of Engineering, Kolhapur presents Face to Face, an engaging competition as part of Techno Bharti 2026- Infusion AI! ",
+        "Face To Face is a structured mock interview competition designed to simulate real-world hiring processes. Participants will go through aptitude evaluation, group discussions, and technical as well as personal interviews conducted by industry experts. This event aims to enhance confidence, communication skills, and interview readiness.",
       rules: [
         "Group entries are not allowed for this event",
         "Participants must bring hard copy of their updated resume",
@@ -327,7 +327,8 @@ export const MECH_EVENTS: Event[] = [
     icon: "/event-card/mech/ipl-auction.png",
     modalData: {
       eventName: "Mech IPL Auction",
-      description: "Showcase your innovative engineering projects...",
+      description:
+        "Mech IPL Auction is a strategic team-based competition inspired by the IPL bidding format. Participants will build their ultimate squad using a virtual budget, analyze player strengths, and make smart bidding decisions under time pressure. The event tests strategic thinking, decision-making skills, and teamwork in a dynamic auction environment.",
       rules: [
         "Team Composition: Each team must consist of a minimum of 3 members and       a maximum of 4 members, with one Team Leader. ",
         " Bidding Process: Teams will bid on players using a virtual budget, with each bid having a countdown timer. The highest bidder wins the player.",
@@ -353,7 +354,8 @@ export const MECH_EVENTS: Event[] = [
     icon: "/event-card/mech/junk-yard.png",
     modalData: {
       eventName: "Mech Junk Yard",
-      description: "Showcase your innovative engineering projects...",
+      description:
+        "Mech Junk Yard challenges teams to transform raw materials and scrap into innovative functional models within a limited time. Participants must think creatively, apply engineering concepts, and work collaboratively to design and present their unique creation. The event evaluates creativity, practicality, and presentation skills.",
       rules: [
         "Team Size: Each team can consist of maximum 3 member’s charges will be 100rs for each participant",
         "Phase I: Idea exploration: Teams will be given [15-30] minutes to think and select their raw materials from the designated 'theme'",
@@ -380,7 +382,8 @@ export const MECH_EVENTS: Event[] = [
     icon: "/event-card/mech/project-expo.png",
     modalData: {
       eventName: "Mech Project Expo",
-      description: "Showcase your innovative engineering projects...",
+      description:
+        "Mech Project Expo is a platform for students to showcase their innovative projects, research ideas, and working prototypes. Teams will present their concepts to a panel of judges, demonstrating technical knowledge, problem-solving ability, and real-world application. The event encourages innovation, practical implementation, and confident presentation.",
       rules: [
         "The project expo is open to B.Tech students (all years )",
         "Each team should consist of max. 5 and min. 2 members",
@@ -412,7 +415,8 @@ export const ENTC_EVENTS: Event[] = [
     icon: "/event-card/entc/project-expo.png",
     modalData: {
       eventName: "ENTC Project Expo",
-      description: "Showcase your innovative engineering projects...",
+      description:
+        "Project Expo is a platform for aspiring engineers to present their innovative hardware and software-based projects. Participants will demonstrate their technical expertise, problem-solving approach, and real-world applications of electronics and communication concepts before a panel of judges. The event encourages creativity, research-oriented thinking, and practical implementation.",
       rules: [
         "Students must carry a valid ID card of their College/University",
         "Registration is not accepted until the fee receipt is shown",
@@ -444,7 +448,8 @@ export const ENTC_EVENTS: Event[] = [
     icon: "/event-card/entc/digital-dangal.png",
     modalData: {
       eventName: "Digital Dangal",
-      description: "A competitive digital challenge...",
+      description:
+        "Digital Dangal is an electrifying technical competition designed to test your coding speed, logical thinking, and core programming fundamentals. Through a quiz round followed by an intense coding battle, participants will compete to showcase their technical accuracy and problem-solving efficiency under time constraints.",
       rules: [
         "Students must carry a valid ID card of their College/University",
         "Report before half an hour of event time for first round",
@@ -480,7 +485,8 @@ export const ENTC_EVENTS: Event[] = [
     icon: "/event-card/entc/snap-shine.png",
     modalData: {
       eventName: "Snap & Shine",
-      description: "Capture the best moments...",
+      description:
+        "Snap & Shine is a creative reel-making competition that challenges participants to capture, edit, and present engaging content within a limited time frame. Based on an on-the-spot topic, contestants must showcase originality, storytelling skills, and visual creativity to make their reel stand out.",
       rules: [
         "The reel must be created within the given 45-minute time limit",
         "Participants must strictly adhere to the topic provided",
@@ -515,7 +521,7 @@ export const GENERAL_ENGINEERING_EVENTS: Event[] = [
     modalData: {
       eventName: "Techno Science Quiz",
       description:
-        "A MCQ-based quiz testing scientific and technical knowledge. Quiz will be accessed via link shared in classroom.",
+        "Techno Science Quiz is an MCQ-based competitive quiz designed to evaluate participants' scientific knowledge and technical awareness. The event challenges first-year students to apply conceptual understanding, logical reasoning, and quick thinking in a structured digital quiz format.",
       rules: [
         "The quiz is MCQ-based and will be accessed using the link shared in the classroom",
         "Only for first year students",
@@ -544,7 +550,7 @@ export const GENERAL_ENGINEERING_EVENTS: Event[] = [
     modalData: {
       eventName: "Poster Competition",
       description:
-        "Create innovative posters on scientific and technological themes. Topics include: Indian Knowledge Systems (IKS) in Agriculture, Future of Education, Artificial Intelligence in Daily Life, Digital India, Science in Everyday Life, Water for a Sustainable Future, Utilization of Solar Energy, The Role of AI in Climate Change Predictions, Scientific Innovations That Changed the World, AI in Disaster Management & Rescue.",
+        "Poster Competition invites students to creatively present scientific and technological concepts through visually engaging and informative posters. Participants will explore contemporary themes and communicate innovative ideas effectively through design, research, and presentation skills.",
       rules: [
         "Participation can be individual or team (max 2 students",
         "Posters must be original and based on science, technology, or innovation",
@@ -574,7 +580,8 @@ export const GENERAL_ENGINEERING_EVENTS: Event[] = [
     icon: "/event-card/gs/scitech-expo.jpg",
     modalData: {
       eventName: "SciTech Model Expo 2K26",
-      description: "ask for the event description",
+      description:
+        "SciTech Model Expo 2K26 provides a platform for students to showcase innovative science and technology-based models. Participants will demonstrate practical understanding, creativity, and real-world application of engineering concepts through working or static models before a panel of judges.",
       rules: [
         "Models must be student-made and based on science or technology concepts",
         "Both working and static models are allowed; readymade models are not permitted.",
@@ -603,7 +610,7 @@ export const GENERAL_ENGINEERING_EVENTS: Event[] = [
     modalData: {
       eventName: "FreeFire",
       description:
-        "Welcome to the ultimate FreeFire Battle Squad Tournament! Get ready to showcase your skills, strategy, and teamwork in an intense battle royale competition. Compete against top squads and fight for glory and exciting rewards!",
+        "Welcome to the ultimate FreeFire Champion's Battle Squad Tournament! Get ready to showcase your skills, strategy, and teamwork in an intense battle royale competition. Compete against top squads and fight for glory and exciting rewards!",
       rules: [
         "Only registered players are allowed to participate.",
         "Players must join the custom room within the given time; late entries will not be allowed.",
@@ -643,7 +650,8 @@ export const CIVIL_EVENTS: Event[] = [
     icon: "/event-card/civil/model-making.png",
     modalData: {
       eventName: "Model Making",
-      description: "ask for the event description",
+      description:
+        "Model Making is a structural design competition where participants must construct a stable and efficient tower model using Popsicle sticks within specified constraints. The event tests creativity, precision, structural understanding, and practical application of basic civil engineering principles under defined design parameters.",
       rules: [
         "Problem Statement: Design and construct a tower model using Popsicle (ice-cream) sticks as per the given rules",
         "Materials Allowed: Popsicle sticks only",
@@ -678,7 +686,8 @@ export const CIVIL_EVENTS: Event[] = [
     icon: "/event-card/civil/battle-of-brains.png",
     modalData: {
       eventName: "Battle of Brains",
-      description: "ask for",
+      description:
+        "Battle of Brains is an engaging quiz competition designed to test participants' knowledge, presence of mind, and teamwork. Through multiple competitive rounds including rapid fire and buzzer challenges, teams will compete to prove their intellectual dominance and strategic thinking abilities.",
       rules: [
         "2 Members per Team (No Changes Allowed)",
         "Registered Teams Only",
@@ -714,7 +723,8 @@ export const CIVIL_EVENTS: Event[] = [
     icon: "/event-card/civil/cad-master.png",
     modalData: {
       eventName: "CAD Master",
-      description: "ask for the event description",
+      description:
+        "CAD Master is a technical drafting competition that evaluates participants’ proficiency in computer-aided design. From aptitude screening to hands-on architectural drawing, contestants will demonstrate their precision, planning skills, and command over Autodesk AutoCAD in designing a complete residential layout.",
       rules: [
         "ROUND 1: Aptitude Test (Elimination)",
         "Basic CAD Knowledge",
@@ -750,7 +760,8 @@ export const CIVIL_EVENTS: Event[] = [
     icon: "/event-card/civil/videography.png",
     modalData: {
       eventName: "Videography",
-      description: "ask for the event description",
+      description:
+        "Videography is a creative competition that challenges participants to produce an original short video within a limited time. The event focuses on storytelling, visual presentation, editing skills, and creativity, allowing contestants to showcase their perspective through engaging and impactful content.",
       rules: [
         "Each team can have maximum two participants",
         "Competition will be conducted in single round",
@@ -906,12 +917,10 @@ export const calculateGeneralEngineeringGamesFee = (gamesCount: number) => {
 };
 
 export const eventImages = [
-  "/event/event-3.jpg",
-  "/event/event-7.jpg",
   "/event/event-12.jpeg",
-  "/event/event-15.jpeg",
+  "/event/event-14.jpeg",
   "/event/event-18.jpeg",
-  "/event/event-21.jpeg",
+  "/event/event-19.jpeg",
   "/event/event-24.jpeg",
   "/event/event-28.jpeg",
   "/event/event-33.jpeg",
