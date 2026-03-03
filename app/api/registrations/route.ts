@@ -212,7 +212,7 @@ export async function GET(req: Request) {
         offlineRevenue: stats[4]._sum.amount || 0,
         activeEvents: stats[2].length,
         todayRegistrations: stats[3],
-        eventBreakdown: stats[2].reduce(
+        eventBreakdown: (stats[2] ?? []).reduce(
           (acc, curr) => {
             if (curr._count && typeof curr._count === "object") {
               acc[curr.eventType] = curr._count._all ?? 0;
@@ -222,9 +222,13 @@ export async function GET(req: Request) {
           {} as Record<string, number>
         ),
         totalParticipants,
-        departmentBreakdown: stats[5].reduce(
+        departmentBreakdown: (stats[5] ?? []).reduce(
           (acc, curr) => {
-            if (curr._count && typeof curr._count === "object") {
+            if (
+              curr.department &&
+              curr._count &&
+              typeof curr._count === "object"
+            ) {
               acc[curr.department] = curr._count._all ?? 0;
             }
             return acc;

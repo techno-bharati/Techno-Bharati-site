@@ -96,9 +96,12 @@ function CustomLegend({
 export function DepartmentBreakdownChart({
   departmentBreakdown,
 }: DepartmentBreakdownProps) {
-  const total = Object.values(departmentBreakdown).reduce((a, b) => a + b, 0);
+  const total = Object.values(departmentBreakdown ?? {}).reduce(
+    (a, b) => a + b,
+    0
+  );
 
-  const data = Object.entries(departmentBreakdown)
+  const data = Object.entries(departmentBreakdown ?? {})
     .filter(([, count]) => count > 0)
     .sort(([, a], [, b]) => b - a)
     .map(([dept, count]) => ({
