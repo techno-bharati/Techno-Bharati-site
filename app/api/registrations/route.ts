@@ -8,15 +8,8 @@ import {
   Department,
 } from "@/prisma/generated/prisma/client";
 
-/** Fallback: event types per department when Event table is empty or not seeded. */
 const DEPARTMENT_EVENT_TYPES: Partial<Record<Department, EventType[]>> = {
-  AIML: [
-    EventType.STARTUP_SPHERE,
-    EventType.FACE_TO_FACE,
-    EventType.PYTHON_FRONTIERS,
-    EventType.BGMI,
-    EventType.AI_TALES,
-  ],
+  AIML: [EventType.FACE_TO_FACE, EventType.PYTHON_FRONTIERS, EventType.BGMI],
   GENERAL_ENGINEERING: [
     EventType.GE_TECHNO_SCIENCE_QUIZ,
     EventType.GE_POSTER_COMPETITION,
@@ -52,6 +45,40 @@ interface JWTPayload {
   role: AdminRole;
   eventType: EventType | null;
   department: string | null;
+}
+
+function getRegistrationParticipants(reg: {
+  eventType: EventType;
+  studentName?: string | null;
+  numberOfTeamMembers?: number | null;
+  teamLeader?: unknown | null;
+  teamMembers?: unknown[] | null;
+  players?: unknown[] | null;
+}): number {
+  if (
+    reg.eventType === EventType.BGMI ||
+    reg.eventType === EventType.FREEFIRE
+  ) {
+    const players = reg.players?.length ?? 0;
+    // If player rows are missing for a squad, fall back to expected squad size.
+    return players > 0 ? players : 4;
+  }
+
+  const memberCount = reg.teamMembers?.length ?? 0;
+  const hasStudent = reg.studentName ? 1 : 0;
+  const hasTeamLeader = reg.teamLeader ? 1 : 0;
+  const leaderCount = Math.max(hasStudent, hasTeamLeader);
+
+  const fromRelations = leaderCount + memberCount;
+  if (fromRelations > 0) return fromRelations;
+
+  const fromDeclaredSize =
+    typeof reg.numberOfTeamMembers === "number" && reg.numberOfTeamMembers > 0
+      ? reg.numberOfTeamMembers
+      : 0;
+  if (fromDeclaredSize > 0) return fromDeclaredSize;
+
+  return 1;
 }
 
 export async function GET(req: Request) {
@@ -139,72 +166,40 @@ export async function GET(req: Request) {
       prisma.$transaction([
         prisma.registration.count({ where }),
         prisma.registration.aggregate({
-          where: {
-            ...where,
-            status: "CONFIRMED",
-          },
+          where: { ...where, status: "CONFIRMED" },
           _sum: { amount: true },
         }),
         prisma.registration.groupBy({
           by: ["eventType"],
           where,
-          _count: {
-            _all: true,
-          },
-          orderBy: {
-            eventType: "asc",
-          },
+          _count: { _all: true },
+          orderBy: { eventType: "asc" },
         }),
         prisma.registration.count({
           where: {
             ...where,
-            createdAt: {
-              gte: new Date(new Date().setHours(0, 0, 0, 0)),
-            },
+            createdAt: { gte: new Date(new Date().setHours(0, 0, 0, 0)) },
           },
         }),
         prisma.registration.aggregate({
-          where,
-          _sum: {
-            numberOfTeamMembers: true,
-          },
-        }),
-        prisma.registration.count({
-          where: {
-            ...where,
-            OR: [
-              { eventType: "FACE_TO_FACE" },
-              { eventType: "PYTHON_FRONTIERS" },
-              { eventType: "AI_TALES" },
-            ],
-          },
-        }),
-        prisma.player.count(),
-        prisma.registration.aggregate({
-          where: {
-            ...where,
-            status: "CONFIRMED",
-            paymentMode: "OFFLINE",
-          },
+          where: { ...where, status: "CONFIRMED", paymentMode: "OFFLINE" },
           _sum: { amount: true },
+        }),
+        prisma.registration.groupBy({
+          by: ["department"],
+          where,
+          _count: { _all: true },
+          orderBy: { department: "asc" },
         }),
       ]),
     ]);
 
-    let totalParticipants = 0;
+    const totalParticipants = registrations.reduce(
+      (sum, reg) => sum + getRegistrationParticipants(reg),
+      0
+    );
 
-    if (!eventType || eventType === "all") {
-      totalParticipants =
-        (stats[4]._sum.numberOfTeamMembers || 0) + stats[5] + stats[6];
-    } else if (eventType === "STARTUP_SPHERE") {
-      totalParticipants = stats[4]._sum.numberOfTeamMembers || 0;
-    } else if (eventType === "BGMI" || eventType === "FREEFIRE") {
-      totalParticipants = stats[0] * 4;
-    } else {
-      totalParticipants = stats[0];
-    }
-
-    const offlineRevenue = stats[7]._sum.amount || 0;
+    const offlineRevenue = stats[4]._sum.amount || 0;
 
     const totalRevenueForEvent = stats[1]._sum.amount || 0;
 
@@ -213,8 +208,8 @@ export async function GET(req: Request) {
       stats: {
         totalRegistrations: stats[0],
         totalRevenue: stats[1]._sum.amount || 0,
-        totalRevenueForEvent,
-        offlineRevenue: offlineRevenue,
+        totalRevenueForEvent: stats[1]._sum.amount || 0,
+        offlineRevenue: stats[4]._sum.amount || 0,
         activeEvents: stats[2].length,
         todayRegistrations: stats[3],
         eventBreakdown: stats[2].reduce(
@@ -227,16 +222,21 @@ export async function GET(req: Request) {
           {} as Record<string, number>
         ),
         totalParticipants,
+        departmentBreakdown: stats[5].reduce(
+          (acc, curr) => {
+            if (curr._count && typeof curr._count === "object") {
+              acc[curr.department] = curr._count._all ?? 0;
+            }
+            return acc;
+          },
+          {} as Record<string, number>
+        ),
       },
     });
   } catch (error) {
     console.error("Registration fetch error:", error);
     const message = error instanceof Error ? error.message : String(error);
 
-    // If the DB hasn't been migrated to include some EventType values yet
-    // (common when filtering by a department that has no registrations),
-    // Postgres can throw: invalid input value for enum "EventType": "..."
-    // In that case, return a safe empty payload so the dashboard doesn't break.
     if (
       message.toLowerCase().includes("invalid input value for enum") &&
       message.includes("EventType")
@@ -252,6 +252,7 @@ export async function GET(req: Request) {
           todayRegistrations: 0,
           eventBreakdown: {} as Record<string, number>,
           totalParticipants: 0,
+          departmentBreakdown: {} as Record<string, number>,
         },
       });
     }
