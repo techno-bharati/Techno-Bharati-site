@@ -66,6 +66,7 @@ export default function AdminLoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="admin@technobharati.com"
                 required
+                disabled={isLoading}
               />
             </div>
             <div className="space-y-2">
@@ -79,11 +80,13 @@ export default function AdminLoginPage() {
                   placeholder="••••••••"
                   className="pr-10"
                   required
+                  disabled={isLoading}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword((prev) => !prev)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                  disabled={isLoading}
                 >
                   {showPassword ? (
                     <EyeOff className="h-4 w-4" />
