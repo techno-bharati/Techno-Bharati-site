@@ -124,75 +124,6 @@ export default function DashboardPage() {
     },
   });
 
-  const getEventOptionsForDepartment = (dept: string | null) => {
-    const map: Record<string, { value: string; label: string }[]> = {
-      all: [
-        { value: "FACE_TO_FACE", label: "Face To Face" },
-        { value: "PYTHON_FRONTIERS", label: "Python Frontiers" },
-        { value: "BGMI", label: "BGMI" },
-        { value: "ENTC_PROJECT_EXPO", label: "ENTC Project Expo" },
-        { value: "ENTC_DIGITAL_DANGAL", label: "Digital Dangal" },
-        { value: "ENTC_SNAP_AND_SHINE", label: "Snap & Shine" },
-        { value: "GE_TECHNO_SCIENCE_QUIZ", label: "Techno Science Quiz" },
-        { value: "GE_POSTER_COMPETITION", label: "Poster Competition" },
-        {
-          value: "GE_SCITECH_MODEL_EXPO",
-          label: "SciTech Model Expo 2K26",
-        },
-        { value: "GE_GAMES_BUNDLE", label: "GE Games Bundle" },
-        { value: "FREEFIRE", label: "FreeFire" },
-        { value: "CE_MODEL_MAKING", label: "Model Making" },
-        { value: "CE_BATTLE_OF_BRAINS", label: "Battle Of Brains" },
-        { value: "CE_CAD_MASTER", label: "CAD Master" },
-        { value: "CE_VIDEOGRAPHY", label: "Videography" },
-        { value: "CSE_CODEFUSION", label: "CODEFUSION" },
-        { value: "CSE_PROJECT_EXPO", label: "Project Expo" },
-        { value: "CSE_TREASURE_HUNT", label: "Treasure Hunt" },
-        { value: "MECH_PROJECT_EXPO", label: "Mech Project Expo" },
-        { value: "MECH_JUNK_YARD", label: "Mech Junk Yard" },
-        { value: "MECH_IPL_AUCTION", label: "Mech IPL Auction" },
-      ],
-      AIML: [
-        { value: "FACE_TO_FACE", label: "Face To Face" },
-        { value: "PYTHON_FRONTIERS", label: "Python Frontiers" },
-        { value: "BGMI", label: "BGMI" },
-      ],
-      CSE: [
-        { value: "CSE_CODEFUSION", label: "CODEFUSION" },
-        { value: "CSE_PROJECT_EXPO", label: "Project Expo" },
-        { value: "CSE_TREASURE_HUNT", label: "Treasure Hunt" },
-      ],
-      GENERAL_ENGINEERING: [
-        { value: "GE_TECHNO_SCIENCE_QUIZ", label: "Techno Science Quiz" },
-        { value: "GE_POSTER_COMPETITION", label: "Poster Competition" },
-        {
-          value: "GE_SCITECH_MODEL_EXPO",
-          label: "SciTech Model Expo 2K26",
-        },
-        { value: "FREEFIRE", label: "FreeFire" },
-      ],
-      CIVIL: [
-        { value: "CE_MODEL_MAKING", label: "Model Making" },
-        { value: "CE_BATTLE_OF_BRAINS", label: "Battle Of Brains" },
-        { value: "CE_CAD_MASTER", label: "CAD Master" },
-        { value: "CE_VIDEOGRAPHY", label: "Videography" },
-      ],
-      ENTC: [
-        { value: "ENTC_PROJECT_EXPO", label: "Project Expo" },
-        { value: "ENTC_DIGITAL_DANGAL", label: "Digital Dangal" },
-        { value: "ENTC_SNAP_AND_SHINE", label: "Snap & Shine" },
-      ],
-      MECHANICAL: [
-        { value: "MECH_PROJECT_EXPO", label: "Project Expo" },
-        { value: "MECH_JUNK_YARD", label: "Junk Yard" },
-        { value: "MECH_IPL_AUCTION", label: "IPL Auction" },
-      ],
-    };
-
-    if (!dept || dept === "all") return map.all;
-    return map[dept] || map.all;
-  };
-
   const safeStats = registrationsData?.stats ?? {
     totalRegistrations: 0,
     totalRevenue: 0,
@@ -310,8 +241,10 @@ export default function DashboardPage() {
   };
 
   const exportMutation = useMutation({
-    mutationFn: async () => {
-      const res = await fetch("/api/registrations/export");
+    mutationFn: async (queryString: string) => {
+      const res = await fetch(
+        `/api/registrations/export${queryString ? `?${queryString}` : ""}`
+      );
       if (!res.ok) {
         throw new Error("Export failed");
       }
@@ -342,7 +275,22 @@ export default function DashboardPage() {
   });
 
   const handleExport = () => {
-    exportMutation.mutate();
+    const params = new URLSearchParams();
+
+    if (selectedEvent && selectedEvent !== "all") {
+      params.append("eventType", selectedEvent);
+    }
+    if (departmentFilter && departmentFilter !== "all") {
+      params.append("department", departmentFilter);
+    }
+    if (paymentModeFilter && paymentModeFilter !== "all") {
+      params.append("paymentMode", paymentModeFilter);
+    }
+    if (search) {
+      params.append("search", search);
+    }
+
+    exportMutation.mutate(params.toString());
   };
 
   const handleRowClick = (registration: Registration) => {
@@ -549,52 +497,103 @@ export default function DashboardPage() {
                 </span>
               }
             />
-            <StatCard
-              icon={<LayoutGrid className="h-5 w-5" />}
-              label="Active Events"
-              value={safeStats.activeEvents}
-              sub="Running now"
-            />
+            {adminRole === "SUPER_ADMIN" && (
+              <StatCard
+                icon={<LayoutGrid className="h-5 w-5" />}
+                label="Active Events"
+                value={safeStats.activeEvents}
+                sub="Running now"
+              />
+            )}
             <StatCard
               icon={<TrendingUp className="h-5 w-5" />}
               label="Total Participants"
               value={safeStats.totalParticipants}
               sub="Across all events"
             />
+            {adminRole === "DEPARTMENT_ADMIN" && !isLoadingRegistrations && (
+              <Card className="rounded-2xl border bg-card col-span-1">
+                <CardHeader className="pb-2 pt-4 px-5">
+                  <CardTitle className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+                    Event Breakdown
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="px-5 pb-4">
+                  <div className="space-y-2 max-h-52 overflow-y-auto pr-1">
+                    {Object.entries(safeStats.eventBreakdown || {}).map(
+                      ([event, count]) => (
+                        <div
+                          key={event}
+                          className="flex items-center justify-between text-sm"
+                        >
+                          <span className="text-muted-foreground truncate max-w-[70%]">
+                            {event.replace(/_/g, " ")}
+                          </span>
+                          <span className="font-semibold tabular-nums">
+                            {count as number}
+                          </span>
+                        </div>
+                      )
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
           </div>
         )}
 
         {/* chart area */}
         {adminRole !== "EVENT_ADMIN" && !isLoadingRegistrations && (
           <div className="grid gap-3 grid-cols-1 lg:grid-cols-2 w-full">
-            <Card className="rounded-2xl border bg-card col-span-1">
-              <CardHeader className="pb-2 pt-4 px-5">
-                <CardTitle className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
-                  Event Breakdown
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="px-5 pb-4">
-                <div className="space-y-2 max-h-52 overflow-y-auto pr-1">
-                  {Object.entries(safeStats.eventBreakdown || {}).map(
-                    ([event, count]) => (
-                      <div
-                        key={event}
-                        className="flex items-center justify-between text-sm"
-                      >
-                        <span className="text-muted-foreground truncate max-w-[70%]">
-                          {event.replace(/_/g, " ")}
-                        </span>
-                        <span className="font-semibold tabular-nums">
-                          {count as number}
-                        </span>
-                      </div>
-                    )
-                  )}
-                </div>
-              </CardContent>
-            </Card>
+            {adminRole === "SUPER_ADMIN" && (
+              <Card className="rounded-2xl border bg-card col-span-1">
+                <CardHeader className="pb-2 pt-4 px-5">
+                  <CardTitle className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+                    Event Breakdown
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="px-5 pb-4">
+                  <div className="space-y-2 max-h-52 overflow-y-auto pr-1">
+                    {Object.entries(safeStats.eventBreakdown || {}).map(
+                      ([event, count]) => (
+                        <div
+                          key={event}
+                          className="flex items-center justify-between text-sm"
+                        >
+                          <span className="text-muted-foreground truncate max-w-[70%]">
+                            {event.replace(/_/g, " ")}
+                          </span>
+                          <span className="font-semibold tabular-nums">
+                            {count as number}
+                          </span>
+                        </div>
+                      )
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
             <DepartmentBreakdownChart
-              departmentBreakdown={safeStats.departmentBreakdown}
+              departmentBreakdown={
+                adminRole === "SUPER_ADMIN"
+                  ? departmentFilter === "all"
+                    ? safeStats.departmentBreakdown
+                    : (safeStats.eventBreakdown as Record<string, number>)
+                  : // DEPARTMENT_ADMIN: show events within their department
+                    eventFilter === "all"
+                    ? (safeStats.eventBreakdown as Record<string, number>)
+                    : {
+                        [eventFilter]:
+                          (safeStats.eventBreakdown as Record<string, number>)[
+                            eventFilter
+                          ] ?? 0,
+                      }
+              }
+              selectedDepartment={
+                adminRole === "SUPER_ADMIN"
+                  ? departmentFilter
+                  : (adminDepartment ?? "")
+              }
             />
           </div>
         )}

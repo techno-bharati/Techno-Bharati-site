@@ -26,13 +26,91 @@ const DEPT_LABELS: Record<string, string> = {
   MECHANICAL: "Mechanical",
   CIVIL: "Civil",
   ENTC: "ENTC",
-  GENERAL_ENGINEERING: "Gen. Eng.",
+  GENERAL_ENGINEERING: "General Engineering",
   OTHER: "Other",
 };
+
+const EVENT_COLORS: Record<string, string> = {
+  STARTUP_SPHERE: "#6366f1",
+  FACE_TO_FACE: "#22c55e",
+  PYTHON_FRONTIERS: "#0ea5e9",
+  BGMI: "#f59e0b",
+  AI_TALES: "#a855f7",
+
+  ENTC_PROJECT_EXPO: "#3b82f6",
+  ENTC_DIGITAL_DANGAL: "#14b8a6",
+  ENTC_SNAP_AND_SHINE: "#ef4444",
+
+  GE_TECHNO_SCIENCE_QUIZ: "#8b5cf6",
+  GE_POSTER_COMPETITION: "#f97316",
+  GE_SCITECH_MODEL_EXPO: "#10b981",
+  GE_GAMES_BUNDLE: "#06b6d4",
+  FREEFIRE: "#eab308",
+
+  CE_MODEL_MAKING: "#f43f5e",
+  CE_BATTLE_OF_BRAINS: "#22c55e",
+  CE_CAD_MASTER: "#0ea5e9",
+  CE_VIDEOGRAPHY: "#a855f7",
+
+  CSE_CODEFUSION: "#3b82f6",
+  CSE_PROJECT_EXPO: "#10b981",
+  CSE_TREASURE_HUNT: "#f59e0b",
+
+  MECH_PROJECT_EXPO: "#f97316",
+  MECH_JUNK_YARD: "#ef4444",
+  MECH_IPL_AUCTION: "#06b6d4",
+};
+
+const EVENT_LABELS: Record<string, string> = {
+  STARTUP_SPHERE: "Startup Sphere",
+  FACE_TO_FACE: "Face To Face",
+  PYTHON_FRONTIERS: "Python Frontiers",
+  BGMI: "BGMI",
+  AI_TALES: "AI Tales",
+
+  ENTC_PROJECT_EXPO: "Project Expo",
+  ENTC_DIGITAL_DANGAL: "Digital Dangal",
+  ENTC_SNAP_AND_SHINE: "Snap & Shine",
+
+  GE_TECHNO_SCIENCE_QUIZ: "Techno Science Quiz",
+  GE_POSTER_COMPETITION: "Poster Competition",
+  GE_SCITECH_MODEL_EXPO: "SciTech Model Expo",
+  GE_GAMES_BUNDLE: "Games Bundle",
+  FREEFIRE: "FreeFire",
+
+  CE_MODEL_MAKING: "Model Making",
+  CE_BATTLE_OF_BRAINS: "Battle Of Brains",
+  CE_CAD_MASTER: "CAD Master",
+  CE_VIDEOGRAPHY: "Videography",
+
+  CSE_CODEFUSION: "CODEFUSION",
+  CSE_PROJECT_EXPO: "Project Expo",
+  CSE_TREASURE_HUNT: "Treasure Hunt",
+
+  MECH_PROJECT_EXPO: "Project Expo",
+  MECH_JUNK_YARD: "Junk Yard",
+  MECH_IPL_AUCTION: "IPL Auction",
+};
+
+function getKeyLabel(key: string) {
+  return (
+    DEPT_LABELS[key] ??
+    EVENT_LABELS[key] ??
+    key
+      .replace(/_/g, " ")
+      .toLowerCase()
+      .replace(/\b\w/g, (c) => c.toUpperCase())
+  );
+}
+
+function getKeyColor(key: string) {
+  return DEPT_COLORS[key] ?? EVENT_COLORS[key] ?? "#71717a";
+}
 
 interface DepartmentBreakdownProps {
   // expects: { AIML: 12, CSE: 8, MECHANICAL: 5, ... }
   departmentBreakdown: Record<string, number>;
+  selectedDepartment?: string;
 }
 
 interface CustomTooltipProps {
@@ -49,9 +127,7 @@ function CustomTooltip({ active, payload }: CustomTooltipProps) {
   const { dept, count, percentage } = payload[0].payload;
   return (
     <div className="bg-popover border border-border rounded-xl px-3 py-2 shadow-lg text-sm">
-      <p className="font-semibold text-foreground">
-        {DEPT_LABELS[dept] ?? dept}
-      </p>
+      <p className="font-semibold text-foreground">{getKeyLabel(dept)}</p>
       <p className="text-muted-foreground">{count} registrations</p>
       <p className="text-muted-foreground">{percentage}% of total</p>
     </div>
@@ -73,10 +149,10 @@ function CustomLegend({
           <div className="flex items-center gap-2 min-w-0">
             <span
               className="shrink-0 h-2.5 w-2.5 rounded-full"
-              style={{ backgroundColor: DEPT_COLORS[item.dept] ?? "#71717a" }}
+              style={{ backgroundColor: getKeyColor(item.dept) }}
             />
             <span className="text-muted-foreground truncate">
-              {DEPT_LABELS[item.dept] ?? item.dept}
+              {getKeyLabel(item.dept)}
             </span>
           </div>
           <div className="flex items-center gap-2 shrink-0">
@@ -95,13 +171,13 @@ function CustomLegend({
 
 export function DepartmentBreakdownChart({
   departmentBreakdown,
+  selectedDepartment,
 }: DepartmentBreakdownProps) {
-  const total = Object.values(departmentBreakdown ?? {}).reduce(
-    (a, b) => a + b,
-    0
-  );
+  const filteredBreakdown = departmentBreakdown ?? {};
 
-  const data = Object.entries(departmentBreakdown ?? {})
+  const total = Object.values(filteredBreakdown).reduce((a, b) => a + b, 0);
+
+  const data = Object.entries(filteredBreakdown)
     .filter(([, count]) => count > 0)
     .sort(([, a], [, b]) => b - a)
     .map(([dept, count]) => ({
@@ -110,12 +186,17 @@ export function DepartmentBreakdownChart({
       percentage: total > 0 ? ((count / total) * 100).toFixed(1) : "0",
     }));
 
+  const selectedDeptLabel = selectedDepartment
+    ? (DEPT_LABELS[selectedDepartment] ?? selectedDepartment.replace(/_/g, " "))
+    : null;
+
   if (data.length === 0) {
     return (
       <Card className="rounded-2xl border bg-card">
         <CardHeader className="px-5 pt-5 pb-3">
           <CardTitle className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
             Department Breakdown
+            {selectedDeptLabel ? ` (${selectedDeptLabel})` : ""}
           </CardTitle>
         </CardHeader>
         <CardContent className="flex items-center justify-center h-40 text-sm text-muted-foreground">
@@ -131,6 +212,7 @@ export function DepartmentBreakdownChart({
         <div className="flex items-center justify-between">
           <CardTitle className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
             Department Breakdown
+            {selectedDeptLabel ? ` (${selectedDeptLabel})` : ""}
           </CardTitle>
           <span className="text-xs text-muted-foreground">{total} total</span>
         </div>
@@ -153,10 +235,7 @@ export function DepartmentBreakdownChart({
                   strokeWidth={0}
                 >
                   {data.map((entry) => (
-                    <Cell
-                      key={entry.dept}
-                      fill={DEPT_COLORS[entry.dept] ?? "#71717a"}
-                    />
+                    <Cell key={entry.dept} fill={getKeyColor(entry.dept)} />
                   ))}
                 </Pie>
                 <Tooltip content={<CustomTooltip />} />

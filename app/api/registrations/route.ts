@@ -39,6 +39,17 @@ const DEPARTMENT_EVENT_TYPES: Partial<Record<Department, EventType[]>> = {
   ],
 };
 
+const EVENT_TO_DEPARTMENT: Partial<Record<EventType, Department>> =
+  Object.entries(DEPARTMENT_EVENT_TYPES).reduce(
+    (acc, [dept, events]) => {
+      (events ?? []).forEach((eventType) => {
+        acc[eventType] = dept as Department;
+      });
+      return acc;
+    },
+    {} as Partial<Record<EventType, Department>>
+  );
+
 interface JWTPayload {
   sub: string;
   email: string;
@@ -83,7 +94,7 @@ function getRegistrationParticipants(reg: {
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
-  const eventType = searchParams.get("eventType") || null;
+  const eventTypeParam = searchParams.get("eventType") || null;
   const department = searchParams.get("department") || null;
 
   try {
@@ -102,11 +113,11 @@ export async function GET(req: Request) {
     const payload = verified.payload as unknown as JWTPayload;
 
     const where: Record<string, unknown> = {};
-
-    // Optional filter by eventType from query param
-    if (eventType && eventType !== "all") {
-      where.eventType = eventType as EventType;
-    }
+    const whereForEventsCard: Record<string, unknown> = {};
+    const eventTypeFilter =
+      eventTypeParam && eventTypeParam !== "all"
+        ? (eventTypeParam as EventType)
+        : null;
 
     // Helper: filter by event's department (from Event table), not student's department
     const departmentForFilter =
@@ -136,8 +147,24 @@ export async function GET(req: Request) {
         eventTypesForDept = DEPARTMENT_EVENT_TYPES[departmentForFilter]!;
       }
       if (eventTypesForDept.length > 0) {
-        where.eventType = { in: eventTypesForDept };
+        whereForEventsCard.eventType = { in: eventTypesForDept };
+
+        if (eventTypeFilter) {
+          // If a specific event is selected, narrow down to that event
+          // while still being constrained to the department's events.
+          if (eventTypesForDept.includes(eventTypeFilter)) {
+            where.eventType = eventTypeFilter;
+          } else {
+            // Invalid combination (shouldn't happen via UI); keep dept filter only.
+            where.eventType = { in: eventTypesForDept };
+          }
+        } else {
+          where.eventType = { in: eventTypesForDept };
+        }
       }
+    } else if (eventTypeFilter) {
+      // No department constraint: apply only the specific event filter.
+      where.eventType = eventTypeFilter;
     }
     // SUPER_ADMIN with no department filter: no extra where (sees all)
     // DEPARTMENT_ADMIN: already applied above via departmentForFilter
@@ -145,6 +172,7 @@ export async function GET(req: Request) {
     // EVENT_ADMIN is always locked to a single event, regardless of query param
     if (payload.role === AdminRole.EVENT_ADMIN && payload.eventType) {
       where.eventType = payload.eventType;
+      whereForEventsCard.eventType = payload.eventType;
     }
 
     const [registrations, stats] = await Promise.all([
@@ -171,7 +199,10 @@ export async function GET(req: Request) {
         }),
         prisma.registration.groupBy({
           by: ["eventType"],
-          where,
+          where:
+            Object.keys(whereForEventsCard).length > 0
+              ? whereForEventsCard
+              : where,
           _count: { _all: true },
           orderBy: { eventType: "asc" },
         }),
@@ -185,12 +216,6 @@ export async function GET(req: Request) {
           where: { ...where, status: "CONFIRMED", paymentMode: "OFFLINE" },
           _sum: { amount: true },
         }),
-        prisma.registration.groupBy({
-          by: ["department"],
-          where,
-          _count: { _all: true },
-          orderBy: { department: "asc" },
-        }),
       ]),
     ]);
 
@@ -202,6 +227,22 @@ export async function GET(req: Request) {
     const offlineRevenue = stats[4]._sum.amount || 0;
 
     const totalRevenueForEvent = stats[1]._sum.amount || 0;
+
+    const departmentBreakdown = (stats[2] ?? []).reduce(
+      (acc, curr) => {
+        const dept = EVENT_TO_DEPARTMENT[curr.eventType];
+        if (!dept) return acc;
+
+        const count =
+          curr._count && typeof curr._count === "object"
+            ? (curr._count._all ?? 0)
+            : 0;
+
+        acc[dept] = (acc[dept] ?? 0) + count;
+        return acc;
+      },
+      {} as Record<string, number>
+    );
 
     return NextResponse.json({
       registrations,
@@ -222,19 +263,7 @@ export async function GET(req: Request) {
           {} as Record<string, number>
         ),
         totalParticipants,
-        departmentBreakdown: (stats[5] ?? []).reduce(
-          (acc, curr) => {
-            if (
-              curr.department &&
-              curr._count &&
-              typeof curr._count === "object"
-            ) {
-              acc[curr.department] = curr._count._all ?? 0;
-            }
-            return acc;
-          },
-          {} as Record<string, number>
-        ),
+        departmentBreakdown,
       },
     });
   } catch (error) {

@@ -100,8 +100,6 @@ export function VerifyDialog({
           body: JSON.stringify({ registrationId: registration.id }),
         });
 
-        console.log("Verify Response:", verifyRes);
-
         if (!verifyRes.ok) {
           throw new Error("Failed to verify registration");
         }
