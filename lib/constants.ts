@@ -923,7 +923,7 @@ export const eventImages = [
   "/event/event-19.jpeg",
   "/event/event-24.jpeg",
   "/event/event-28.jpeg",
-  "/event/event-33.jpeg",
+  "/event/event-33.jpg",
   "/event/event-35.jpg",
 ];
 
