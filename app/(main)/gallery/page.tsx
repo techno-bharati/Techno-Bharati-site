@@ -135,6 +135,7 @@ function Lightbox({
             src={image.src}
             alt={image.category}
             fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             className="object-contain"
             priority
           />

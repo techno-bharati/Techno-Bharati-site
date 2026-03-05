@@ -120,7 +120,7 @@ export function Hero2() {
           </div>
         </motion.div>
 
-        <motion.p
+        <motion.div
           id="hero"
           initial={"initial"}
           variants={animation}
@@ -129,7 +129,7 @@ export function Hero2() {
           <TextShimmer spread={4} className="text-xl md:text-3xl">
             25th March, 2026
           </TextShimmer>
-        </motion.p>
+        </motion.div>
 
         <motion.div id="hero" initial={"initial"} variants={animation}>
           <Countdown />

@@ -24,7 +24,7 @@ export function Navigation2() {
   const navLinks = [
     { href: "/aboutus", label: "ABOUT US" },
     { href: "/events", label: "EVENTS" },
-    { href: "gallery", label: "GALLERY" },
+    { href: "/gallery", label: "GALLERY" },
     { href: "/sponsors", label: "SPONSORS" },
     { href: "/contactus", label: "CONTACT US" },
   ];

@@ -45,6 +45,7 @@ const EventCard = ({
               src={event.icon}
               alt={event.name}
               fill
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               className="object-contain transition-transform duration-500 group-hover:scale-105"
             />
             <span className="absolute bottom-3 left-3 text-xs font-semibold uppercase tracking-wide bg-primary text-primary-foreground px-2.5 py-1 rounded-full">
