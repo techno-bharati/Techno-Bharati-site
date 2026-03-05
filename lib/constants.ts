@@ -109,16 +109,9 @@ export interface Event {
   entryFee: string;
   type: string;
   icon?: string;
-  modalData: {
-    eventName: string;
-    description: string;
-    rules: string[];
-    registration: string[];
-    queries: Record<string, string>;
-  };
+  description: string;
 }
 
-// CSE (AIML) department events
 export const CSE_AIML_EVENTS: Event[] = [
   {
     id: 1,
@@ -131,29 +124,8 @@ export const CSE_AIML_EVENTS: Event[] = [
     entryFee: `${EVENT_FEES.PYTHON_FRONTIERS.amount} (per person)`,
     type: "Technical Event",
     icon: "/event-card/aiml/python-frontiers.jpeg",
-    modalData: {
-      eventName: "Python Frontiers",
-      description:
-        "Python Frontiers is a high-intensity inter-college coding competition crafted to challenge your logical thinking, problem-solving ability, and mastery of Python. Participants will tackle real-world scenarios, optimize solutions under time constraints, and compete against some of the brightest minds to claim the title of Python champion.",
-      rules: [
-        "Group entries are not allowed for event",
-        "Round 1: Aptitude, 60 MCQ- 60 minutes",
-        "Round 2: Coding, 2 questions – 1 hr 10 mins",
-        "Entry fee Rs. 100 per head",
-      ],
-      registration: [
-        "Participants must register before the deadline: 24th March 2026, 5:00 PM.",
-        "Individual entries only. Team participation is not allowed.",
-        "Spot registrations are allowed until 25th March 2026, 11:00 AM on the event day.",
-        "Entry fee: ₹100 (per person)",
-        "Participants must provide a valid email ID and contact number during registration.",
-        "Late registrations will not be entertained after the cutoff time.",
-      ],
-      queries: {
-        "mrs. k. p. kulkarni": "9284319582",
-        "abhishek dwivedi": "9721802017",
-      },
-    },
+    description:
+      "A high-intensity inter-college Python coding competition testing logical thinking and problem-solving ability through aptitude and coding rounds.",
   },
   {
     id: 2,
@@ -166,31 +138,8 @@ export const CSE_AIML_EVENTS: Event[] = [
     entryFee: `${EVENT_FEES.FACE_TO_FACE.amount} (per person)`,
     type: "Non-Technical Event",
     icon: "/event-card/aiml/face-to-face.jpeg",
-    modalData: {
-      eventName: "Face To Face",
-      description:
-        "Face To Face is a structured mock interview competition designed to simulate real-world hiring processes. Participants will go through aptitude evaluation, group discussions, and technical as well as personal interviews conducted by industry experts. This event aims to enhance confidence, communication skills, and interview readiness.",
-      rules: [
-        "Group entries are not allowed for this event",
-        "Participants must bring hard copy of their updated resume",
-        "Three Rounds:",
-        "I.	1st  round:  Aptitude Test",
-        "II. 2nd  round  Group Discussion",
-        "III.	3rd round is Technical and Personal Interview",
-      ],
-      registration: [
-        "Participants must register before the deadline: 25th March 2026, 5:00 PM.",
-        "Individual entries only. Team participation is not allowed.",
-        "Spot registrations are allowed until 25th March 2026, 11:00 AM on the event day.",
-        "Entry fee: ₹100 (per person)",
-        "Participants must provide a valid email ID and contact number during registration.",
-        "Late registrations will not be entertained after the cutoff time. ",
-      ],
-      queries: {
-        "Mr. N. S. Kadam": "8888596218",
-        "Ms. Samiksha Sawant": "7387700731",
-      },
-    },
+    description:
+      "A mock interview competition simulating real-world hiring processes through aptitude tests, group discussions, and technical & personal interviews.",
   },
   {
     id: 3,
@@ -203,33 +152,8 @@ export const CSE_AIML_EVENTS: Event[] = [
     entryFee: `${EVENT_FEES.BGMI.amount} (per team)`,
     type: "Non-Technical Event",
     icon: "/event-card/aiml/bgmi.jpeg",
-    modalData: {
-      eventName: "BGMI",
-      description:
-        "Welcome to the ultimate BGMI Battle Squad Tournament! Get ready to showcase your skills, strategy, and teamwork in an intense battle royale competition. Compete against top squads and fight for glory and exciting rewards!",
-      rules: [
-        "Only registered players are allowed to participate.",
-        "Players must join the custom room within the given time; late entries will not be allowed.",
-        "Internet issues are the player's responsibility. Matches will not be restarted due to disconnections.",
-        "Use of emulators, hacks, or third-party software is strictly prohibited and will lead to an instant ban.",
-      ],
-      registration: [
-        "Participants must register before the d'eadline: 27th February 2025, 5:00 PM.",
-        "Spot registrations are allowed until 28th February 2025, 11:00 AM on the event day.",
-        "Entry fee: ₹200 (per team)",
-        "Participants must provide a valid email ID and contact number during registration.",
-        "Late registrations will not be entertained after the cutoff time.",
-        "Registration Format:",
-        "🔹 Player Name",
-        "🔹 BGMI ID",
-        "🔹 Squad Name (if applicable)",
-        "🔹 Contact Number",
-      ],
-      queries: {
-        "Mr. S. A. Patil": "9604825500",
-        "Mr. Omkar Sawant": "9322265296",
-      },
-    },
+    description:
+      "An intense BGMI Battle Squad Tournament where teams compete in custom rooms to showcase strategy, skills, and teamwork for glory and rewards.",
   },
 ];
 
@@ -245,26 +169,8 @@ export const CSE_EVENTS: Event[] = [
     entryFee: `${EVENT_FEES.CSE_CODEFUSION.amount} (per person)`,
     type: "Technical Event",
     icon: "/event-card/cse/codefusion.png",
-    modalData: {
-      eventName: "CODEFUSION",
-      description:
-        "CODEFUSION is a multi-language coding competition where participants can choose their preferred programming language (C, C++, Java, Python) to solve algorithmic challenges. The event focuses on problem-solving versatility and coding efficiency across different programming paradigms.",
-      rules: [
-        "Maximum 2 participants per team",
-        "Round 1: Aptitude",
-        "Round 2: Coding",
-        "Entry Fee Rs. 100 per participant",
-      ],
-      registration: [
-        "Register through department website",
-        "Team registration must include both members' details",
-        "Entery Fee Rs. 100 per participant",
-      ],
-      queries: {
-        "Mrs. R. M. Mane": "8329363983",
-        "avishkar kamble": "9359984873",
-      },
-    },
+    description:
+      "CODEFUSION is a multi-language coding competition where participants can choose their preferred programming language (C, C++, Java, Python) to solve algorithmic challenges. The event focuses on problem-solving versatility and coding efficiency across different programming paradigms.",
   },
   {
     id: 2,
@@ -277,17 +183,8 @@ export const CSE_EVENTS: Event[] = [
     entryFee: "100",
     type: "Technical Event",
     icon: "/event-card/cse/project-expo.png",
-    modalData: {
-      eventName: "Project Expo",
-      description:
-        "Project Expo showcases innovative software and hardware projects developed by students. This event provides a platform for students to demonstrate their technical skills, creativity, and practical implementation of computer science concepts in real-world applications.",
-      rules: ["Minmum presenstation time: 10 minutes"],
-      registration: ["Entry Fee Rs. 100 per participant"],
-      queries: {
-        "Mrs. R. V. Jadhav": "8446486709",
-        "subhan modak": "7507088006",
-      },
-    },
+    description:
+      "Project Expo showcases innovative software and hardware projects developed by students. This event provides a platform for students to demonstrate their technical skills, creativity, and practical implementation of computer science concepts in real-world applications.",
   },
   {
     id: 3,
@@ -300,19 +197,11 @@ export const CSE_EVENTS: Event[] = [
     entryFee: "100",
     type: "Non-Technical Event",
     icon: "/event-card/cse/treasure-hunt.png",
-    modalData: {
-      eventName: "Treasure Hunt",
-      description:
-        "Treasure Hunt is a team based game where two teams of 5 players each compete to win the game.",
-      rules: ["Maximum 5 participants"],
-      registration: ["Entry Fee Rs. 100 per participant"],
-      queries: {
-        "Mr. V. D. Chougule": "9762881167",
-        "Akshta Patil": "8530892178",
-      },
-    },
+    description:
+      "Treasure Hunt is a team-based game where two teams of 5 players each compete to win the game.",
   },
 ];
+
 export const MECH_EVENTS: Event[] = [
   {
     id: 1,
@@ -325,21 +214,8 @@ export const MECH_EVENTS: Event[] = [
     entryFee: "100",
     type: "Technical Event",
     icon: "/event-card/mech/ipl-auction.png",
-    modalData: {
-      eventName: "Mech IPL Auction",
-      description:
-        "Mech IPL Auction is a strategic team-based competition inspired by the IPL bidding format. Participants will build their ultimate squad using a virtual budget, analyze player strengths, and make smart bidding decisions under time pressure. The event tests strategic thinking, decision-making skills, and teamwork in a dynamic auction environment.",
-      rules: [
-        "Team Composition: Each team must consist of a minimum of 3 members and       a maximum of 4 members, with one Team Leader. ",
-        " Bidding Process: Teams will bid on players using a virtual budget, with each bid having a countdown timer. The highest bidder wins the player.",
-        "Evaluation: Teams will be evaluated based on their strategic choices and squad composition during the auction.",
-      ],
-      registration: [],
-      queries: {
-        "Mr.R.B.Lokapure": "9860259513",
-        "Pratik Toraskar": "7057855701",
-      },
-    },
+    description:
+      "Mech IPL Auction is a strategic team-based competition inspired by the IPL bidding format. Participants will build their ultimate squad using a virtual budget, analyze player strengths, and make smart bidding decisions under time pressure. The event tests strategic thinking, decision-making skills, and teamwork in a dynamic auction environment.",
   },
   {
     id: 2,
@@ -352,22 +228,8 @@ export const MECH_EVENTS: Event[] = [
     entryFee: "100",
     type: "Non-Technical Event",
     icon: "/event-card/mech/junk-yard.png",
-    modalData: {
-      eventName: "Mech Junk Yard",
-      description:
-        "Mech Junk Yard challenges teams to transform raw materials and scrap into innovative functional models within a limited time. Participants must think creatively, apply engineering concepts, and work collaboratively to design and present their unique creation. The event evaluates creativity, practicality, and presentation skills.",
-      rules: [
-        "Team Size: Each team can consist of maximum 3 member’s charges will be 100rs for each participant",
-        "Phase I: Idea exploration: Teams will be given [15-30] minutes to think and select their raw materials from the designated 'theme'",
-        "Phase II: The Build: Teams have [1-2] hours to assemble your model",
-        "Phase III: The Showdown: Teams will demonstrate their creations and the result will be decided by the respected judges on the basis of performance creative ideas and your presentation",
-      ],
-      registration: [],
-      queries: {
-        "Mr. A. R. Jadhav": "9503960959",
-        "Shubh Yadav": "7666014807",
-      },
-    },
+    description:
+      "Mech Junk Yard challenges teams to transform raw materials and scrap into innovative functional models within a limited time. Participants must think creatively, apply engineering concepts, and work collaboratively to design and present their unique creation. The event evaluates creativity, practicality, and presentation skills.",
   },
   {
     id: 3,
@@ -380,24 +242,8 @@ export const MECH_EVENTS: Event[] = [
     entryFee: "100",
     type: "Technical Event",
     icon: "/event-card/mech/project-expo.png",
-    modalData: {
-      eventName: "Mech Project Expo",
-      description:
-        "Mech Project Expo is a platform for students to showcase their innovative projects, research ideas, and working prototypes. Teams will present their concepts to a panel of judges, demonstrating technical knowledge, problem-solving ability, and real-world application. The event encourages innovation, practical implementation, and confident presentation.",
-      rules: [
-        "The project expo is open to B.Tech students (all years )",
-        "Each team should consist of max. 5 and min. 2 members",
-        "All participants must carry their college ID",
-        "Working model/prototype (if applicable)",
-        "5–10 minutes for presentation and 3–5 minutes for Q&A",
-        "Organizers reserve the right to modify rules if necessary",
-      ],
-      registration: [],
-      queries: {
-        "Dr. P. B. Patole": "7755900251",
-        "Avishkar Shelke": "9960994830",
-      },
-    },
+    description:
+      "Mech Project Expo is a platform for students to showcase their innovative projects, research ideas, and working prototypes. Teams will present their concepts to a panel of judges, demonstrating technical knowledge, problem-solving ability, and real-world application. The event encourages innovation, practical implementation, and confident presentation.",
   },
 ];
 
@@ -413,27 +259,8 @@ export const ENTC_EVENTS: Event[] = [
     entryFee: `${EVENT_FEES.ENTC_PROJECT_EXPO.amount} (per person)`,
     type: "Technical Event",
     icon: "/event-card/entc/project-expo.png",
-    modalData: {
-      eventName: "ENTC Project Expo",
-      description:
-        "Project Expo is a platform for aspiring engineers to present their innovative hardware and software-based projects. Participants will demonstrate their technical expertise, problem-solving approach, and real-world applications of electronics and communication concepts before a panel of judges. The event encourages creativity, research-oriented thinking, and practical implementation.",
-      rules: [
-        "Students must carry a valid ID card of their College/University",
-        "Registration is not accepted until the fee receipt is shown",
-        "Team size: Minimum 3 participants, Maximum 4 participants",
-        "The organizers will provide only electric power supply of 230V AC mains",
-        "Every team should report to the venue on time",
-        "Each team will have: 8–10 minutes for Project Presentation & 5 minutes for Q&A session",
-        "Judge's decision is final and binding",
-        "Project can be in the form of: Innovative working model Hardware + Software based project",
-        "All registered participants will receive certificates",
-      ],
-      registration: [],
-      queries: {
-        "Mr. R. R. Suryawanshi": "9960235165",
-        "Aditya Chougale": "9309582291",
-      },
-    },
+    description:
+      "Project Expo is a platform for aspiring engineers to present their innovative hardware and software-based projects. Participants will demonstrate their technical expertise, problem-solving approach, and real-world applications of electronics and communication concepts before a panel of judges. The event encourages creativity, research-oriented thinking, and practical implementation.",
   },
   {
     id: 2,
@@ -446,31 +273,8 @@ export const ENTC_EVENTS: Event[] = [
     entryFee: `${EVENT_FEES.ENTC_DIGITAL_DANGAL.amount} (per person)`,
     type: "Technical Event",
     icon: "/event-card/entc/digital-dangal.png",
-    modalData: {
-      eventName: "Digital Dangal",
-      description:
-        "Digital Dangal is an electrifying technical competition designed to test your coding speed, logical thinking, and core programming fundamentals. Through a quiz round followed by an intense coding battle, participants will compete to showcase their technical accuracy and problem-solving efficiency under time constraints.",
-      rules: [
-        "Students must carry a valid ID card of their College/University",
-        "Report before half an hour of event time for first round",
-        "Registration is not accepted until the fee receipt is shown",
-        "Each team can have maximum 2 participants",
-        "Contest will be conducted in two rounds",
-        "Round 1: Tech Dangal Quiz (MCQ Round) – Basics of C, C++, Python",
-        "Time limit for Round 1: 30 minutes",
-        "Top 5 groups are shortlisted for Round 2",
-        "Round 2: Code Dangal – Speed + logic coding competition",
-        "Allowed languages: C / C++ / Python",
-        "Internet not allowed in Round 2",
-        "Time limit for Round 2: 30 minutes",
-        "Output correctness + execution time decides winner",
-      ],
-      registration: [],
-      queries: {
-        "Ms. P. S. Mali": "9822253638",
-        "Tirtha Patil": "9529581163",
-      },
-    },
+    description:
+      "Digital Dangal is an electrifying technical competition designed to test your coding speed, logical thinking, and core programming fundamentals. Through a quiz round followed by an intense coding battle, participants will compete to showcase their technical accuracy and problem-solving efficiency under time constraints.",
   },
   {
     id: 3,
@@ -483,29 +287,11 @@ export const ENTC_EVENTS: Event[] = [
     entryFee: `${EVENT_FEES.ENTC_SNAP_AND_SHINE.amount} (per person)`,
     type: "Non-Technical Event",
     icon: "/event-card/entc/snap-shine.png",
-    modalData: {
-      eventName: "Snap & Shine",
-      description:
-        "Snap & Shine is a creative reel-making competition that challenges participants to capture, edit, and present engaging content within a limited time frame. Based on an on-the-spot topic, contestants must showcase originality, storytelling skills, and visual creativity to make their reel stand out.",
-      rules: [
-        "The reel must be created within the given 45-minute time limit",
-        "Participants must strictly adhere to the topic provided",
-        "Topic: Will be given on the spot",
-        "Reel duration should not be less than 1 minute and not exceed 2 minutes",
-        "Any inappropriate or copyrighted content may lead to disqualification",
-        "Judges' decision will be final",
-        "Judging Criteria: Creativity & Originality, Relevance to the Topic, Presentation & Editing, Impact & Engagement",
-        "Awards: Winner & Runner-Up (Based on Judges' Decision)",
-        "Quick Summary: Preparation Time: 45 Minutes, Reel Duration: 1 to 2 Minutes",
-      ],
-      registration: [],
-      queries: {
-        "Mr. A. R. Kittur": "9923855764",
-        "Varun Patil": "7066201121",
-      },
-    },
+    description:
+      "Snap & Shine is an exciting reel-making competition where participants create short cinematic videos based on given themes. Showcase your creativity, storytelling skills, and editing talent!",
   },
 ];
+
 export const GENERAL_ENGINEERING_EVENTS: Event[] = [
   {
     id: 1,
@@ -518,23 +304,8 @@ export const GENERAL_ENGINEERING_EVENTS: Event[] = [
     entryFee: "100",
     type: "Technical Event",
     icon: "/event-card/gs/techno-quiz.jpg",
-    modalData: {
-      eventName: "Techno Science Quiz",
-      description:
-        "Techno Science Quiz is an MCQ-based competitive quiz designed to evaluate participants' scientific knowledge and technical awareness. The event challenges first-year students to apply conceptual understanding, logical reasoning, and quick thinking in a structured digital quiz format.",
-      rules: [
-        "The quiz is MCQ-based and will be accessed using the link shared in the classroom",
-        "Only for first year students",
-        "Participants must use their own mobile phones and remain seated in their assigned places",
-        "Any malpractice or unfair activity will lead to immediate disqualification",
-        "The Judge's decision final and scores will not be disclosed",
-      ],
-      registration: [],
-      queries: {
-        "mr. ali shaikh": "8788559792",
-        "miss. sidhi kadam": "9226804220",
-      },
-    },
+    description:
+      "Techno Science Quiz is an MCQ-based competitive quiz designed to evaluate participants' scientific knowledge and technical awareness. The event challenges first-year students to apply conceptual understanding, logical reasoning, and quick thinking in a structured digital quiz format.",
   },
   {
     id: 2,
@@ -547,25 +318,8 @@ export const GENERAL_ENGINEERING_EVENTS: Event[] = [
     entryFee: "100",
     type: "Technical Event",
     icon: "/event-card/gs/poster.jpg",
-    modalData: {
-      eventName: "Poster Competition",
-      description:
-        "Poster Competition invites students to creatively present scientific and technological concepts through visually engaging and informative posters. Participants will explore contemporary themes and communicate innovative ideas effectively through design, research, and presentation skills.",
-      rules: [
-        "Participation can be individual or team (max 2 students",
-        "Posters must be original and based on science, technology, or innovation",
-        "Standard size: 18X24 (1.5 X 2 Ft.); include title, concept, and illustrations",
-        "Use safe and eco-friendly materials & colours",
-        "Presentation time: 3-5 minutes per participant/team",
-        "1st and 2nd year degree/diploma students participate only",
-        "Judge's decision is final",
-      ],
-      registration: [],
-      queries: {
-        "mr. gaurav andhale": "9356517617",
-        "mr. shaunak kulkarni": "9529820151",
-      },
-    },
+    description:
+      "Poster Competition invites students to creatively present scientific and technological concepts through visually engaging and informative posters. Participants will explore contemporary themes and communicate innovative ideas effectively through design, research, and presentation skills.",
   },
   {
     id: 3,
@@ -578,27 +332,12 @@ export const GENERAL_ENGINEERING_EVENTS: Event[] = [
     entryFee: "100",
     type: "Technical Event",
     icon: "/event-card/gs/scitech-expo.jpg",
-    modalData: {
-      eventName: "SciTech Model Expo 2K26",
-      description:
-        "SciTech Model Expo 2K26 provides a platform for students to showcase innovative science and technology-based models. Participants will demonstrate practical understanding, creativity, and real-world application of engineering concepts through working or static models before a panel of judges.",
-      rules: [
-        "Models must be student-made and based on science or technology concepts",
-        "Both working and static models are allowed; readymade models are not permitted.",
-        "Participants must clearly explain the model’s principle and application.",
-        "Use of safe, low-cost, and eco-friendly materials is encouraged.",
-        "Only 1st and 2nd year Degree and Diploma students are eligible to participate",
-      ],
-      registration: [],
-      queries: {
-        "miss. gaouri jangale": "9730875796",
-        "mr. suyash more": "9765152033",
-      },
-    },
+    description:
+      "SciTech Model Expo 2K26 provides a platform for students to showcase innovative science and technology-based models. Participants will demonstrate practical understanding, creativity, and real-world application of engineering concepts through working or static models before a panel of judges.",
   },
   {
     id: 4,
-    name: "FreeFire",
+    name: "Booyah Master",
     slug: "freefire",
     department: "General Engineering",
     date: "25th March 2026",
@@ -607,35 +346,11 @@ export const GENERAL_ENGINEERING_EVENTS: Event[] = [
     entryFee: `${EVENT_FEES.FREEFIRE.amount} (per team)`,
     type: "Non-Technical Event",
     icon: "/event-card/gs/freefire.jpg",
-    modalData: {
-      eventName: "FreeFire",
-      description:
-        "Welcome to the ultimate FreeFire Champion's Battle Squad Tournament! Get ready to showcase your skills, strategy, and teamwork in an intense battle royale competition. Compete against top squads and fight for glory and exciting rewards!",
-      rules: [
-        "Only registered players are allowed to participate.",
-        "Players must join the custom room within the given time; late entries will not be allowed.",
-        "Internet issues are the player's responsibility. Matches will not be restarted due to disconnections.",
-        "Use of emulators, hacks, or third-party software is strictly prohibited and will lead to an instant ban.",
-      ],
-      registration: [
-        "Participants must register before the deadline: 25th March 2026, 5:00 PM.",
-        "Spot registrations are allowed until 25th March 2026, 11:00 AM on the event day.",
-        "Entry fee: ₹100 (per team)",
-        "Participants must provide a valid email ID and contact number during registration.",
-        "Late registrations will not be entertained after the cutoff time.",
-        "Registration Format:",
-        "🔹 Player Name",
-        "🔹 FreeFire ID",
-        "🔹 Squad Name (if applicable)",
-        "🔹 Contact Number",
-      ],
-      queries: {
-        "Mr. Tejas Kadam": "8625961194",
-        "Mr. Soham Humbre": "8007267372  ",
-      },
-    },
+    description:
+      "Welcome to the ultimate FreeFire Champion's Battle Squad Tournament! Get ready to showcase your skills, strategy, and teamwork in an intense battle royale competition. Compete against top squads and fight for glory and exciting rewards!",
   },
 ];
+
 export const CIVIL_EVENTS: Event[] = [
   {
     id: 1,
@@ -648,30 +363,8 @@ export const CIVIL_EVENTS: Event[] = [
     entryFee: "100",
     type: "Technical Event",
     icon: "/event-card/civil/model-making.png",
-    modalData: {
-      eventName: "Model Making",
-      description:
-        "Model Making is a structural design competition where participants must construct a stable and efficient tower model using Popsicle sticks within specified constraints. The event tests creativity, precision, structural understanding, and practical application of basic civil engineering principles under defined design parameters.",
-      rules: [
-        "Problem Statement: Design and construct a tower model using Popsicle (ice-cream) sticks as per the given rules",
-        "Materials Allowed: Popsicle sticks only",
-        "Materials Allowed: Fevicol (synthetic resin adhesive) only",
-        "Materials Allowed: Thick cardboard for base and top",
-        "Materials Allowed: Sticks may be cut or trimmed",
-        "Use of any other material will lead to disqualification",
-        "Construction: Square plan throughout height",
-        "Plan Size: 100 mm × 100 mm (±5 mm)",
-        "Height: 300 mm (±5 mm)",
-        "Maximum Weight: 100 g (including cardboard)",
-        "Bracing: Single or double cross bracing allowed",
-      ],
-      registration: [],
-      queries: {
-        "Mr. Rajwardhan Ghorpadey": "9371936119",
-        "atharv vishnu patil": "9146205055",
-        "vedant rajesh chavan": "9607082006",
-      },
-    },
+    description:
+      "Model Making is a structural design competition where participants must construct a stable and efficient tower model using Popsicle sticks within specified constraints. The event tests creativity, precision, structural understanding, and practical application of basic civil engineering principles under defined design parameters.",
   },
   {
     id: 2,
@@ -684,31 +377,8 @@ export const CIVIL_EVENTS: Event[] = [
     entryFee: `${EVENT_FEES.CE_BATTLE_OF_BRAINS.amount} (per person)`,
     type: "Non-Technical Event",
     icon: "/event-card/civil/battle-of-brains.png",
-    modalData: {
-      eventName: "Battle of Brains",
-      description:
-        "Battle of Brains is an engaging quiz competition designed to test participants' knowledge, presence of mind, and teamwork. Through multiple competitive rounds including rapid fire and buzzer challenges, teams will compete to prove their intellectual dominance and strategic thinking abilities.",
-      rules: [
-        "2 Members per Team (No Changes Allowed)",
-        "Registered Teams Only",
-        "Report 15 Minutes Early",
-        "No Mobiles / Smart Gadgets",
-        "Quiz Master's Decision is Final",
-        "Misconduct = Disqualification",
-        "ROUND 1: Screening (MCQ Round)",
-        "ROUND 2: Rapid Fire",
-        "ROUND 3: Visual / Audio Round",
-        "Final Buzzer Round",
-        "Winner: Highest Total Score",
-        "Tie-Breaker: 3 Buzzer Questions",
-      ],
-      registration: [],
-      queries: {
-        "Ms. Ashwini Pujari": "7972101686",
-        "Ms. Yogita Katkar": "9699770988",
-        "Mr.Atharv Misal": "94211 84675",
-      },
-    },
+    description:
+      "Battle of Brains is an engaging quiz competition designed to test participants' knowledge, presence of mind, and teamwork. Through multiple competitive rounds including rapid fire and buzzer challenges, teams will compete to prove their intellectual dominance and strategic thinking abilities.",
   },
   {
     id: 3,
@@ -721,31 +391,8 @@ export const CIVIL_EVENTS: Event[] = [
     entryFee: "100",
     type: "Technical Event",
     icon: "/event-card/civil/cad-master.png",
-    modalData: {
-      eventName: "CAD Master",
-      description:
-        "CAD Master is a technical drafting competition that evaluates participants’ proficiency in computer-aided design. From aptitude screening to hands-on architectural drawing, contestants will demonstrate their precision, planning skills, and command over Autodesk AutoCAD in designing a complete residential layout.",
-      rules: [
-        "ROUND 1: Aptitude Test (Elimination)",
-        "Basic CAD Knowledge",
-        "30 MCQs | 30 Marks",
-        "Time: 30 Minutes",
-        "Offline Test",
-        "Venue: Digital Classroom (Civil Dept.)",
-        "Top Scorers Qualify",
-        "ROUND 2: Drawing Test",
-        "Design a Residential Building",
-        "Criteria (Plot Area, FSI, etc.) Given 15 Minutes Before",
-        "Draw: Floor Plan, Elevation & Section",
-        "Software: Autodesk AutoCAD",
-        "Time: 60 Minutes",
-      ],
-      registration: [],
-      queries: {
-        "Ms. Prajakta Patil": "8080158082",
-        "Mr. Pratik Khade": "8625834216",
-      },
-    },
+    description:
+      "CAD Master is a technical drafting competition that evaluates participants' proficiency in computer-aided design. From aptitude screening to hands-on architectural drawing, contestants will demonstrate their precision, planning skills, and command over Autodesk AutoCAD in designing a complete residential layout.",
   },
   {
     id: 4,
@@ -758,26 +405,8 @@ export const CIVIL_EVENTS: Event[] = [
     entryFee: `${EVENT_FEES.CE_VIDEOGRAPHY.amount} (per person)`,
     type: "Non-Technical Event",
     icon: "/event-card/civil/videography.png",
-    modalData: {
-      eventName: "Videography",
-      description:
-        "Videography is a creative competition that challenges participants to produce an original short video within a limited time. The event focuses on storytelling, visual presentation, editing skills, and creativity, allowing contestants to showcase their perspective through engaging and impactful content.",
-      rules: [
-        "Each team can have maximum two participants",
-        "Competition will be conducted in single round",
-        "The reel must be an original creation",
-        "The video should not exceed 60 seconds",
-        "Please use one medium of language for the reels/video",
-        "The submissions can be in English/Hindi/Marathi",
-        "Decision made by the judges will be final and abide on them",
-        "No interference will be tolerated",
-      ],
-      registration: [],
-      queries: {
-        "Abhishek Gadgil": "7058001775",
-        "Vikas Chavan": "7619338379",
-      },
-    },
+    description:
+      "Videography is a creative competition that challenges participants to produce an original short video within a limited time. The event focuses on storytelling, visual presentation, editing skills, and creativity, allowing contestants to showcase their perspective through engaging and impactful content.",
   },
 ];
 
@@ -928,7 +557,5 @@ export const eventImages = [
 ];
 
 export const Sponsors = [
-  { src: "/sponsers/sponser.jpeg", alt: "Sponsor 1", bg: false },
-  { src: "/sponsers/sponser2.jpeg", alt: "Sponsor 2", bg: false },
   { src: "/sponsers/gfg.png", alt: "GeeksForGeeks", bg: true },
 ];

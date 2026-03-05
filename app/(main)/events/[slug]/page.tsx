@@ -1,3 +1,4 @@
+import { getEventContent } from "@/lib/getEventContent";
 import EventDetailsPageContent from "./_components/EventDetailsPageContent";
 
 interface PageProps {
@@ -6,6 +7,7 @@ interface PageProps {
 
 export default async function EventDetailsPage({ params }: PageProps) {
   const { slug } = await params;
+  const content = getEventContent(slug);
 
-  return <EventDetailsPageContent slug={slug} />;
+  return <EventDetailsPageContent slug={slug} content={content} />;
 }

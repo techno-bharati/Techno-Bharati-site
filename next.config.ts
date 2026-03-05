@@ -13,6 +13,9 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  outputFileTracingIncludes: {
+    "/events/[slug]": ["./lib/content/event/**"],
+  },
 };
 
 export default nextConfig;
