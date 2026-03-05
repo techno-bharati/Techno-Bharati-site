@@ -83,6 +83,15 @@ export const EVENT_FEES: Record<string, EventFee> = {
     amount: 100,
     type: "per person",
   },
+  // General Engineering (Technical)
+  GE_POSTER_COMPETITION: {
+    amount: 100,
+    type: "per person",
+  },
+  GE_SCITECH_MODEL_EXPO: {
+    amount: 100,
+    type: "per person",
+  },
   //mech
   MECH_PROJECT_EXPO: {
     amount: 100,
@@ -478,6 +487,8 @@ export const getEventFeeByName = (eventName: string, teamSize?: number) => {
     "Battle of Brains": "CE_BATTLE_OF_BRAINS",
     "CAD Master": "CE_CAD_MASTER",
     Videography: "CE_VIDEOGRAPHY",
+    "Poster Competition": "GE_POSTER_COMPETITION",
+    "SciTech Model Expo 2K26": "GE_SCITECH_MODEL_EXPO",
     CODEFUSION: "CSE_CODEFUSION",
     "Project Expo": "CSE_PROJECT_EXPO",
     "Treasure Hunt": "CSE_TREASURE_HUNT",

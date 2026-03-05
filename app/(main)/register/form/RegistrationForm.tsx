@@ -226,8 +226,13 @@ const RegistrationForm = ({
     ? `${selectedEvent} Registration`
     : "Event Registration";
 
+  const isCodefusionStyleEvent =
+    selectedEvent === "CODEFUSION" ||
+    selectedEvent === "Poster Competition" ||
+    selectedEvent === "SciTech Model Expo 2K26";
+
   const getMembersCount = () => {
-    if (selectedEvent === "CODEFUSION") {
+    if (isCodefusionStyleEvent) {
       return codefusionHasSecondParticipant || !!codefusionParticipant2Name
         ? 2
         : 1;
@@ -264,12 +269,11 @@ const RegistrationForm = ({
     } else if (selectedEvent === "Mech IPL Auction") {
       const membersForFee = teamSize ?? 3;
       setTotalFee(membersForFee * 100);
-    } else if (
-      selectedEvent === "Techno Science Quiz" ||
-      selectedEvent === "Poster Competition" ||
-      selectedEvent === "SciTech Model Expo 2K26"
-    ) {
+    } else if (selectedEvent === "Techno Science Quiz") {
       setTotalFee(GENERAL_ENGINEERING_TECHNICAL_FEE);
+    } else if (isCodefusionStyleEvent) {
+      const membersForFee = getMembersCount();
+      setTotalFee(getEventFeeByName(selectedEvent!, membersForFee) ?? 0);
     } else if (
       selectedEvent === "Model Making" ||
       selectedEvent === "CAD Master"
@@ -489,13 +493,13 @@ const RegistrationForm = ({
   }, [selectedEvent, teamSize, form]);
 
   useEffect(() => {
-    const isCodefusion = selectedEvent === "CODEFUSION";
+    const isCodefusionStyle = isCodefusionStyleEvent;
     const isDigitalDangal = selectedEvent === "Digital Dangal";
     const isBattleOfBrains = selectedEvent === "Battle of Brains";
     const isVideography = selectedEvent === "Videography";
 
     // Reset toggle states when leaving their events
-    if (!isCodefusion) setCodefusionHasSecondParticipant(false);
+    if (!isCodefusionStyle) setCodefusionHasSecondParticipant(false);
     if (!isDigitalDangal) setEntcDigitalDangalSecondParticipant(false);
 
     // Battle of Brains & Videography: always require participant2 - initialize when selected
@@ -516,13 +520,13 @@ const RegistrationForm = ({
     }
 
     // Clear participant2 when it shouldn't be present for current event
-    if (!isCodefusion && !isDigitalDangal) {
+    if (!isCodefusionStyle && !isDigitalDangal) {
       form.setValue("participant2", undefined as any);
       return;
     }
 
     const shouldShowParticipant2 =
-      (isCodefusion && codefusionHasSecondParticipant) ||
+      (isCodefusionStyle && codefusionHasSecondParticipant) ||
       (isDigitalDangal && entcDigitalDangalSecondParticipant);
 
     if (!shouldShowParticipant2) {
@@ -533,6 +537,7 @@ const RegistrationForm = ({
     }
   }, [
     selectedEvent,
+    isCodefusionStyleEvent,
     codefusionHasSecondParticipant,
     entcDigitalDangalSecondParticipant,
     form,
@@ -740,8 +745,6 @@ const RegistrationForm = ({
             selectedEvent === "Digital Dangal" ||
             selectedEvent === "Snap & Shine" ||
             selectedEvent === "Techno Science Quiz" ||
-            selectedEvent === "Poster Competition" ||
-            selectedEvent === "SciTech Model Expo 2K26" ||
             selectedEvent === "Model Making" ||
             selectedEvent === "CAD Master") && (
             <>
@@ -1894,7 +1897,9 @@ const RegistrationForm = ({
           {(selectedEvent === "CODEFUSION" ||
             selectedEvent === "Digital Dangal" ||
             selectedEvent === "Battle of Brains" ||
-            selectedEvent === "Videography") && (
+            selectedEvent === "Videography" ||
+            selectedEvent === "Poster Competition" ||
+            selectedEvent === "SciTech Model Expo 2K26") && (
             <div className="space-y-4 md:col-span-2">
               {(selectedEvent === "Battle of Brains" ||
                 selectedEvent === "Videography") && (
@@ -1983,14 +1988,14 @@ const RegistrationForm = ({
                     <input
                       type="checkbox"
                       checked={
-                        selectedEvent === "CODEFUSION"
+                        isCodefusionStyleEvent
                           ? codefusionHasSecondParticipant
                           : entcDigitalDangalSecondParticipant
                       }
                       onChange={(e) => {
                         const checked = e.target.checked;
 
-                        if (selectedEvent === "CODEFUSION") {
+                        if (isCodefusionStyleEvent) {
                           setCodefusionHasSecondParticipant(checked);
                         } else {
                           setEntcDigitalDangalSecondParticipant(checked);
@@ -2032,8 +2037,9 @@ const RegistrationForm = ({
 
               {(selectedEvent === "Battle of Brains" ||
                 selectedEvent === "Videography" ||
-                codefusionHasSecondParticipant ||
-                entcDigitalDangalSecondParticipant) && (
+                (isCodefusionStyleEvent && codefusionHasSecondParticipant) ||
+                (selectedEvent === "Digital Dangal" &&
+                  entcDigitalDangalSecondParticipant)) && (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border rounded-xl">
                   <FormField
                     control={form.control}
@@ -2475,13 +2481,6 @@ const RegistrationForm = ({
             <div>
               <p className="text-lg font-semibold">
                 Total Registration Fee: ₹{totalFee}
-              </p>
-              <p className="text-sm text-muted-foreground">
-                {selectedEvent === "Startup Sphere"
-                  ? "Includes team leader and additional members"
-                  : selectedEvent === "General Engineering Games"
-                    ? "Bundle fee based on number of selected games"
-                    : "Per participant fee"}
               </p>
             </div>
             <Separator orientation="vertical" />

@@ -21,6 +21,14 @@ type TreasureHuntData = Extract<FormData, { events: "Treasure Hunt" }>;
 type ProjectExpoData = Extract<FormData, { events: "Project Expo" }>;
 type CodefusionData = Extract<FormData, { events: "CODEFUSION" }>;
 type DigitalDangalData = Extract<FormData, { events: "Digital Dangal" }>;
+type PosterCompetitionData = Extract<
+  FormData,
+  { events: "Poster Competition" }
+>;
+type SciTechModelExpoData = Extract<
+  FormData,
+  { events: "SciTech Model Expo 2K26" }
+>;
 type BattleOfBrainsData = Extract<FormData, { events: "Battle of Brains" }>;
 type VideographyData = Extract<FormData, { events: "Videography" }>;
 type GEGamesData = Extract<FormData, { events: "General Engineering Games" }>;
@@ -78,12 +86,14 @@ function calculateTotalFee(data: FormData): number {
     );
   }
 
-  if (
-    events === "Techno Science Quiz" ||
-    events === "Poster Competition" ||
-    events === "SciTech Model Expo 2K26"
-  ) {
+  if (events === "Techno Science Quiz") {
     return GENERAL_ENGINEERING_TECHNICAL_FEE;
+  }
+
+  if (events === "Poster Competition" || events === "SciTech Model Expo 2K26") {
+    const d = data as PosterCompetitionData | SciTechModelExpoData;
+    const teamSize = d.participant2 ? 2 : 1;
+    return getEventFeeByName(events, teamSize) ?? 0;
   }
 
   if (events === "Model Making" || events === "CAD Master") {
@@ -324,8 +334,14 @@ function buildRegistrationData(data: FormData, baseData: BaseData) {
     }
 
     case "CODEFUSION":
-    case "Digital Dangal": {
-      const d = data as CodefusionData | DigitalDangalData;
+    case "Digital Dangal":
+    case "Poster Competition":
+    case "SciTech Model Expo 2K26": {
+      const d = data as
+        | CodefusionData
+        | DigitalDangalData
+        | PosterCompetitionData
+        | SciTechModelExpoData;
       return {
         ...baseData,
         studentName: d.studentName,

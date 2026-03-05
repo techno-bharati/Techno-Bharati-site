@@ -195,6 +195,9 @@ const battleOfBrainsSchema = standardRegistrationSchema.extend({
   }),
 });
 
+const posterCompetitonSchema = codefusionSchema;
+const sciTechExpoSchema = codefusionSchema;
+
 // Add this before the main schema
 const paymentModeSchema = z.object({
   paymentMode: z.enum(["ONLINE", "OFFLINE"], {
@@ -302,10 +305,10 @@ const baseUserRegistrationFormSchema = z
         .merge(generalEngineeringTechnicalSchema),
       z
         .object({ events: z.literal("Poster Competition") })
-        .merge(generalEngineeringTechnicalSchema),
+        .merge(posterCompetitonSchema),
       z
         .object({ events: z.literal("SciTech Model Expo 2K26") })
-        .merge(generalEngineeringTechnicalSchema),
+        .merge(sciTechExpoSchema),
       z
         .object({ events: z.literal("General Engineering Games") })
         .merge(generalEngineeringGamesBundleSchema),
