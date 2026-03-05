@@ -26,10 +26,10 @@ description: Welcome to the ultimate BGMI Battle Squad Tournament! Get ready to 
 
 ## Queries
 
-#### Student Coordinator
-
-- **Mr. Omkar Sawant** — [9322265296](tel:9322265296)
-
 #### Faculty Coordinator
 
 - **Mr. S. A. Patil** — [9604825500](tel:9604825500)
+
+#### Student Coordinator
+
+- **Mr. Omkar Sawant** — [9322265296](tel:9322265296)

@@ -3,6 +3,7 @@ description: Mech Project Expo is a platform for students to showcase their inno
 ---
 
 ## Rules
+
 - Open to **B.Tech students (all years)**
 - **Team size:** Minimum 2 — Maximum 5 members
 - All participants must carry their **college ID**
@@ -12,8 +13,10 @@ description: Mech Project Expo is a platform for students to showcase their inno
 
 ## Queries
 
-#### Student Coordinator
-- **Mr. Avishkar Shelke** — [9960994830](tel:9960994830)
-
 #### Faculty Coordinator
+
 - **Dr. P. B. Patole** — [7755900251](tel:7755900251)
+
+#### Student Coordinator
+
+- **Mr. Avishkar Shelke** — [9960994830](tel:9960994830)

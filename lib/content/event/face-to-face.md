@@ -3,16 +3,20 @@ description: Face To Face is a structured mock interview competition designed to
 ---
 
 ## Rules
+
 - **Individual participation only** — group entries are not allowed
 - Participants must bring a **hard copy of their updated resume**
 
 ## Format
 
 ##### Round 1 — Aptitude Test
+
 ##### Round 2 — Group Discussion
+
 ##### Round 3 — Technical & Personal Interview
 
 ## Registration
+
 - Registration deadline: **25th March 2026, 5:00 PM**
 - Spot registrations allowed until: **25th March 2026, 11:00 AM**
 - **Individual entries only** — team participation is not allowed
@@ -22,8 +26,10 @@ description: Face To Face is a structured mock interview competition designed to
 
 ## Queries
 
-#### Student Coordinator
-- **Ms. Samiksha Sawant** — [7387700731](tel:7387700731)
-
 #### Faculty Coordinator
+
 - **Mr. N. S. Kadam** — [8888596218](tel:8888596218)
+
+#### Student Coordinator
+
+- **Ms. Samiksha Sawant** — [7387700731](tel:7387700731)

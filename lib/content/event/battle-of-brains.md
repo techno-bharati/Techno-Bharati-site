@@ -26,7 +26,12 @@ description: Battle of Brains is an engaging quiz competition designed to test p
 
 ## Queries
 
+#### Faculty Coordinator
+
 - **Mr. Nitish A. Mohite** — [8796312303](tel:8796312303)
+
+#### Student Coordinator
+
 - **Ms. Ashwini Pujari** — [7972101686](tel:7972101686)
 - **Ms. Yogita Katkar** — [9699770988](tel:9699770988)
 - **Mr. Atharv Misal** — [9421184675](tel:9421184675)

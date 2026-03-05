@@ -3,13 +3,16 @@ description: Project Expo showcases innovative software and hardware projects de
 ---
 
 ## Rules
+
 - **Minimum presentation time:** 10 minutes
 - **Entry fee:** ₹100 per participant
 
 ## Queries
 
-#### Student Coordinator
-- **Mr. Subhan Modak** — [7507088006](tel:7507088006)
-
 #### Faculty Coordinator
+
 - **Mrs. R. V. Jadhav** — [8446486709](tel:8446486709)
+
+#### Student Coordinator
+
+- **Mr. Subhan Modak** — [7507088006](tel:7507088006)

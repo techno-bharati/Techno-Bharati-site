@@ -21,6 +21,11 @@ description: Videography is a creative competition that challenges participants 
 
 ## Queries
 
+#### Faculty Coordinator
+
 - **Ms. Priya K. Figueredo** — [7030099260](tel:7030099260)
+
+#### Student Coordinator
+
 - **Abhishek Gadgil** — [7058001775](tel:7058001775)
 - **Vikas Chavan** — [7619338379](tel:7619338379)

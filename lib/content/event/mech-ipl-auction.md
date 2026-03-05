@@ -3,6 +3,7 @@ description: Mech IPL Auction is a strategic team-based competition inspired by 
 ---
 
 ## Rules
+
 - **Team size:** Minimum 3 — Maximum 4 members, with one **Team Leader**
 - Teams bid on players using a **virtual budget** — each bid has a **countdown timer**
 - **Highest bidder** wins the player
@@ -10,8 +11,10 @@ description: Mech IPL Auction is a strategic team-based competition inspired by 
 
 ## Queries
 
-#### Student Coordinator
-- **Mr. Pratik Toraskar** — [7057855701](tel:7057855701)
-
 #### Faculty Coordinator
+
 - **Mr. R. B. Lokapure** — [9860259513](tel:9860259513)
+
+#### Student Coordinator
+
+- **Mr. Pratik Toraskar** — [7057855701](tel:7057855701)

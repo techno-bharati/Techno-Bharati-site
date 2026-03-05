@@ -23,6 +23,11 @@ description: CAD Master is a technical drafting competition that evaluates parti
 
 ## Queries
 
+#### Faculty Coordinator
+
 - **Mr. Tiware V. S.** — [8668689117](tel:8668689117)
+
+#### Student Coordinator
+
 - **Ms. Prajakta Patil** — [8080158082](tel:8080158082)
 - **Mr. Pratik Khade** — [8625834216](tel:8625834216)

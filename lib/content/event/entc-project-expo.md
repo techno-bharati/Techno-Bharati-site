@@ -3,6 +3,7 @@ description: Project Expo is a platform for aspiring engineers to present their 
 ---
 
 ## Rules
+
 - Participants must carry a **valid College/University ID card**
 - Registration is not accepted without showing the **fee receipt**
 - **Team size:** Minimum 3 — Maximum 4 participants
@@ -14,5 +15,11 @@ description: Project Expo is a platform for aspiring engineers to present their 
 - All registered participants will receive **certificates**
 
 ## Queries
-- **Mr. Aditya S. Chougule** — [9309582291](tel:9309582291)
+
+#### Faculty Coordinator
+
 - **Mr. R. R. Suryawanshi** — [9960235165](tel:9960235165)
+
+#### Student Coordinator
+
+- **Mr. Aditya S. Chougule** — [9309582291](tel:9309582291)

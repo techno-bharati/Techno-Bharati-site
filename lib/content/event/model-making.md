@@ -18,7 +18,12 @@ description: Model Making is a structural design competition where participants 
 
 ## Queries
 
+#### Faculty Coordinator
+
 - **Mr. More M. M** — [9975762992](tel:9975762992)
+
+#### Student Coordinator
+
 - **Mr. Rajwardhan Ghorpadey** — [9371936119](tel:9371936119)
 - **Mr. Atharv Vishnu Patil** — [9146205055](tel:9146205055)
 - **Mr. Vedant Rajesh Chavan** — [9607082006](tel:9607082006)
