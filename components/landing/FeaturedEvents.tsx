@@ -197,12 +197,14 @@ export function FeaturedEvents() {
                   key={`${selectedDepartment}-${index}`}
                   className="h-[13rem] w-[26rem] shrink-0 bg-primary/10 backdrop-blur-sm p-6 rounded-xl border border-primary/10 hover:border-primary/20 flex flex-col justify-between transition-colors"
                 >
-                  <p className="text-sm text-muted-foreground">{event.type}</p>
+                  <p className="text-sm text-primary border border-border w-fit px-3 rounded-xl shadow-sm bg-primary/10">
+                    {event.type}
+                  </p>
 
                   <h2 className="text-xl font-semibold">{event.name}</h2>
 
                   <p className="text-sm text-muted-foreground line-clamp-3">
-                    {event.modalData.description}
+                    {event.description}
                   </p>
 
                   <p className="text-primary text-xs font-bold group-hover:underline uppercase group flex gap-1 items-center underline-offset-2">
