@@ -39,7 +39,7 @@ const fireFireBattleshipSchema = z.object({
           .min(1, "Player name is required"),
         bgmiId: z
           .string({ required_error: "BGMI ID is required" })
-          .min(1, "BGMI ID is required"),
+          .min(1, "Player ID is required"),
         email: z
           .string({ required_error: "Squad Leader email address is required" })
           .email("Invalid email address")
@@ -71,6 +71,7 @@ const standardRegistrationSchema = z.object({
   email: z
     .string({ required_error: "Email is required" })
     .email("Enter valid email address"),
+  teamName: z.string().optional(),
 });
 
 const participantSchema = z.object({
@@ -82,6 +83,7 @@ const participantSchema = z.object({
     .regex(indianPhoneRegex, "Enter valid contact number")
     .or(z.literal(""))
     .optional(),
+  email: z.string().email("Invalid email").or(z.literal("")).optional(),
 });
 
 const faceToFaceSchema = standardRegistrationSchema;
@@ -150,13 +152,21 @@ const mechProjectExpoSchema = standardRegistrationSchema.extend({
 });
 
 const codefusionSchema = standardRegistrationSchema.extend({
+  teamName: z
+    .string({ required_error: "Team name is required" })
+    .min(1, "Team name is required"),
   participant2: z
     .object({
       studentName: z.string().min(1, "Name is required"),
-      contactNumber: z
+      contactNumber: z.union([
+        z.literal(""),
+        z.string().regex(indianPhoneRegex, "Enter valid contact number"),
+      ]),
+      email: z
         .string()
-        .min(10, "Contact number must be at least 10 digits"),
-      email: z.string().email("Invalid email address"),
+        .email("Invalid email address")
+        .or(z.literal(""))
+        .optional(),
     })
     .optional(),
 });
@@ -184,19 +194,27 @@ const battleOfBrainsSchema = standardRegistrationSchema.extend({
     .min(1, "Team name is required"),
   participant2: z.object({
     studentName: z
-      .string({ required_error: "Participant 2 name is required" })
+      .string({ required_error: "Particiapnt 2 name is required" })
       .min(1, "Name is required"),
     contactNumber: z
-      .string({ required_error: "Participant 2 contact number is required" })
-      .regex(indianPhoneRegex, "Enter valid contact number"),
+      .string()
+      .regex(indianPhoneRegex, "Enter valid contact number")
+      .or(z.literal(""))
+      .optional(),
     email: z
       .string({ required_error: "Participant 2 email is required" })
-      .email("Invalid email address"),
+      .email("Invalid email address")
+      .or(z.literal(""))
+      .optional(),
   }),
 });
 
 const posterCompetitonSchema = codefusionSchema;
 const sciTechExpoSchema = codefusionSchema;
+const snapAndShineSchema = codefusionSchema;
+const modelmakingSchema = codefusionSchema;
+const videographySchema = codefusionSchema;
+const cadmasterSchema = codefusionSchema;
 
 // Add this before the main schema
 const paymentModeSchema = z.object({
@@ -244,6 +262,10 @@ const baseUserRegistrationFormSchema = z
         required_error: "Please select an event",
       }
     ),
+    participant2: participantSchema.optional(),
+    participant3: participantSchema.optional(),
+    participant4: participantSchema.optional(),
+    participant5: participantSchema.optional(),
     paymentMode: z.enum(["ONLINE", "OFFLINE"], {
       required_error: "Please select a payment mode",
     }),
@@ -297,9 +319,7 @@ const baseUserRegistrationFormSchema = z
       z
         .object({ events: z.literal("Digital Dangal") })
         .merge(entcDigitalDangalSchema),
-      z
-        .object({ events: z.literal("Snap & Shine") })
-        .merge(standardRegistrationSchema),
+      z.object({ events: z.literal("Snap & Shine") }).merge(snapAndShineSchema),
       z
         .object({ events: z.literal("Techno Science Quiz") })
         .merge(generalEngineeringTechnicalSchema),
@@ -312,16 +332,12 @@ const baseUserRegistrationFormSchema = z
       z
         .object({ events: z.literal("General Engineering Games") })
         .merge(generalEngineeringGamesBundleSchema),
-      z
-        .object({ events: z.literal("Model Making") })
-        .merge(civilTechnicalSchema),
+      z.object({ events: z.literal("Model Making") }).merge(modelmakingSchema),
       z
         .object({ events: z.literal("Battle of Brains") })
         .merge(battleOfBrainsSchema),
-      z.object({ events: z.literal("CAD Master") }).merge(civilTechnicalSchema),
-      z
-        .object({ events: z.literal("Videography") })
-        .merge(battleOfBrainsSchema),
+      z.object({ events: z.literal("CAD Master") }).merge(cadmasterSchema),
+      z.object({ events: z.literal("Videography") }).merge(videographySchema),
       z.object({ events: z.literal("CODEFUSION") }).merge(codefusionSchema),
       z.object({ events: z.literal("Project Expo") }).merge(projectExpoSchema),
       z

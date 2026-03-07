@@ -20,6 +20,7 @@ type FreeFireData = Extract<FormData, { events: "FreeFire" }>;
 type TreasureHuntData = Extract<FormData, { events: "Treasure Hunt" }>;
 type ProjectExpoData = Extract<FormData, { events: "Project Expo" }>;
 type CodefusionData = Extract<FormData, { events: "CODEFUSION" }>;
+
 type DigitalDangalData = Extract<FormData, { events: "Digital Dangal" }>;
 type PosterCompetitionData = Extract<
   FormData,
@@ -29,8 +30,11 @@ type SciTechModelExpoData = Extract<
   FormData,
   { events: "SciTech Model Expo 2K26" }
 >;
+type SnapAndShineData = Extract<FormData, { events: "Snap & Shine" }>;
 type BattleOfBrainsData = Extract<FormData, { events: "Battle of Brains" }>;
+type ModelMakingData = Extract<FormData, { events: "Model Making" }>;
 type VideographyData = Extract<FormData, { events: "Videography" }>;
+type CadMasterData = Extract<FormData, { events: "CAD Master" }>;
 type GEGamesData = Extract<FormData, { events: "General Engineering Games" }>;
 type MechJunkYardData = Extract<FormData, { events: "Mech Junk Yard" }>;
 type MechIplAuctionData = Extract<FormData, { events: "Mech IPL Auction" }>;
@@ -96,11 +100,11 @@ function calculateTotalFee(data: FormData): number {
     return getEventFeeByName(events, teamSize) ?? 0;
   }
 
-  if (events === "Model Making" || events === "CAD Master") {
-    return CIVIL_TECHNICAL_FEE;
-  }
+  // if (events === "Model Making" || events === "CAD Master") {
+  //   return CIVIL_TECHNICAL_FEE;
+  // }
 
-  if (events === "Battle of Brains" || events === "Videography") {
+  if (events === "Battle of Brains") {
     return getEventFeeByName(events, 2) ?? 0;
   }
 
@@ -114,8 +118,21 @@ function calculateTotalFee(data: FormData): number {
     return getEventFeeByName(events, 4) ?? 0;
   }
 
-  if (events === "CODEFUSION" || events === "Digital Dangal") {
-    const d = data as CodefusionData | DigitalDangalData;
+  if (
+    events === "CODEFUSION" ||
+    events === "Digital Dangal" ||
+    events === "Snap & Shine" ||
+    events === "Model Making" ||
+    events === "CAD Master" ||
+    events === "Videography"
+  ) {
+    const d = data as
+      | CodefusionData
+      | DigitalDangalData
+      | SnapAndShineData
+      | ModelMakingData
+      | CadMasterData
+      | VideographyData;
     const teamSize = d.participant2 ? 2 : 1;
     return getEventFeeByName(events, teamSize) ?? 0;
   }
@@ -320,6 +337,7 @@ function buildRegistrationData(data: FormData, baseData: BaseData) {
 
       return {
         ...baseData,
+        teamName: d.teamName ?? null,
         studentName: d.studentName,
         contactNumber: d.contactNumber,
         email: d.email,
@@ -335,18 +353,29 @@ function buildRegistrationData(data: FormData, baseData: BaseData) {
 
     case "CODEFUSION":
     case "Digital Dangal":
+    case "Snap & Shine":
     case "Poster Competition":
-    case "SciTech Model Expo 2K26": {
+    case "SciTech Model Expo 2K26":
+    case "CAD Master":
+    case "Model Making":
+    case "Videography": {
       const d = data as
         | CodefusionData
         | DigitalDangalData
+        | SnapAndShineData
         | PosterCompetitionData
-        | SciTechModelExpoData;
+        | SciTechModelExpoData
+        | VideographyData
+        | CadMasterData
+        | ModelMakingData;
+
       return {
         ...baseData,
+        teamName: d.teamName ?? null,
         studentName: d.studentName,
         contactNumber: d.contactNumber,
         email: d.email,
+        numberOfTeamMembers: d.participant2 ? 2 : 1,
         ...(d.participant2 && {
           teamMembers: {
             create: [
@@ -361,37 +390,24 @@ function buildRegistrationData(data: FormData, baseData: BaseData) {
       };
     }
 
-    case "Battle of Brains":
-    case "Videography": {
-      const d = data as BattleOfBrainsData | VideographyData;
+    case "Battle of Brains": {
+      const d = data as BattleOfBrainsData;
       return {
         ...baseData,
+        teamName: d.teamName ?? null,
         studentName: d.studentName,
         contactNumber: d.contactNumber,
         email: d.email,
-        teamName: d.teamName,
+        numberOfTeamMembers: 2,
         teamMembers: {
           create: [
             {
               studentName: d.participant2.studentName,
-              contactNumber: d.participant2.contactNumber,
+              contactNumber: d.participant2.contactNumber ?? "",
               email: d.participant2.email,
             },
           ],
         },
-      };
-    }
-
-    case "General Engineering Games": {
-      const d = data as GEGamesData;
-      return {
-        ...baseData,
-        studentName: d.studentName,
-        contactNumber: d.contactNumber,
-        email: d.email,
-        notes: `GE Games: ${d.selectedGames.join(", ")}${
-          d.groupName ? ` | Group: ${d.groupName}` : ""
-        }`,
       };
     }
 
@@ -478,9 +494,10 @@ function buildRegistrationData(data: FormData, baseData: BaseData) {
           contactNumber: string;
           email: string;
         }
-      >;
+      > & { teamName?: string };
       return {
         ...baseData,
+        teamName: d.teamName ?? null,
         studentName: d.studentName,
         contactNumber: d.contactNumber,
         email: d.email,

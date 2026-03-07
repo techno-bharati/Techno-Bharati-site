@@ -19,6 +19,7 @@ const DEPARTMENT_EVENT_TYPES: Partial<Record<Department, EventType[]>> = {
   ],
   CIVIL: [
     EventType.CE_MODEL_MAKING,
+    EventType.CE_BATTLE_OF_BRAINS,
     EventType.CE_CAD_MASTER,
     EventType.CE_VIDEOGRAPHY,
   ],
@@ -81,15 +82,13 @@ function getRegistrationParticipants(reg: {
   const leaderCount = Math.max(hasStudent, hasTeamLeader);
 
   const fromRelations = leaderCount + memberCount;
-  if (fromRelations > 0) return fromRelations;
-
   const fromDeclaredSize =
     typeof reg.numberOfTeamMembers === "number" && reg.numberOfTeamMembers > 0
       ? reg.numberOfTeamMembers
       : 0;
-  if (fromDeclaredSize > 0) return fromDeclaredSize;
 
-  return 1;
+  const count = Math.max(fromRelations, fromDeclaredSize, 1);
+  return count;
 }
 
 export async function GET(req: Request) {
@@ -119,7 +118,6 @@ export async function GET(req: Request) {
         ? (eventTypeParam as EventType)
         : null;
 
-    // Helper: filter by event's department (from Event table), not student's department
     const departmentForFilter =
       department &&
       department !== "all" &&
@@ -140,22 +138,17 @@ export async function GET(req: Request) {
       } catch {
         eventTypesForDept = [];
       }
-      if (
-        eventTypesForDept.length === 0 &&
-        DEPARTMENT_EVENT_TYPES[departmentForFilter]
-      ) {
-        eventTypesForDept = DEPARTMENT_EVENT_TYPES[departmentForFilter]!;
-      }
+      const deptEvents = DEPARTMENT_EVENT_TYPES[departmentForFilter] ?? [];
+      eventTypesForDept = [
+        ...new Set([...eventTypesForDept, ...deptEvents]),
+      ] as EventType[];
       if (eventTypesForDept.length > 0) {
         whereForEventsCard.eventType = { in: eventTypesForDept };
 
         if (eventTypeFilter) {
-          // If a specific event is selected, narrow down to that event
-          // while still being constrained to the department's events.
           if (eventTypesForDept.includes(eventTypeFilter)) {
             where.eventType = eventTypeFilter;
           } else {
-            // Invalid combination (shouldn't happen via UI); keep dept filter only.
             where.eventType = { in: eventTypesForDept };
           }
         } else {
@@ -163,13 +156,9 @@ export async function GET(req: Request) {
         }
       }
     } else if (eventTypeFilter) {
-      // No department constraint: apply only the specific event filter.
       where.eventType = eventTypeFilter;
     }
-    // SUPER_ADMIN with no department filter: no extra where (sees all)
-    // DEPARTMENT_ADMIN: already applied above via departmentForFilter
 
-    // EVENT_ADMIN is always locked to a single event, regardless of query param
     if (payload.role === AdminRole.EVENT_ADMIN && payload.eventType) {
       where.eventType = payload.eventType;
       whereForEventsCard.eventType = payload.eventType;

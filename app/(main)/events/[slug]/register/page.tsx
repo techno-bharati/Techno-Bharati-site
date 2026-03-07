@@ -1,14 +1,11 @@
-import RegistrationForm, {
-  EventNameOption,
-} from "@/app/(main)/register/form/RegistrationForm";
 import { notFound } from "next/navigation";
+import RegistrationForm from "./_components/RegistrationForm";
+import { EventNameOption } from "@/lib/types/registration";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
-// Map event detail slugs to the internal event names
-// used by the registration schema/backend.
 const slugToEventName: Record<string, EventNameOption> = {
   "startup-sphere": "Startup Sphere",
   "face-to-face": "Face To Face",
