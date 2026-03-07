@@ -203,7 +203,9 @@ export async function createRegistration(formData: CreateRegistrationInput) {
       transactionId:
         data.paymentMode === "ONLINE" && data.transactionId != null
           ? String(data.transactionId)
-          : null,
+          : data.paymentMode === "OFFLINE" && data.receiptNumber
+            ? data.receiptNumber
+            : null,
       amount,
       department: departmentMap[data.department],
       class: data.class,

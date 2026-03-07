@@ -109,13 +109,16 @@ export function ConfirmationEmail({ registration }: ConfirmationEmailProps) {
           })}
         />
         <InfoRow label="Payment Mode" value={registration.paymentMode} />
-        {registration.paymentMode === "ONLINE" &&
-          registration.transactionId && (
-            <InfoRow
-              label="Transaction ID"
-              value={registration.transactionId}
-            />
-          )}
+        {registration.transactionId && (
+          <InfoRow
+            label={
+              registration.paymentMode === "OFFLINE"
+                ? "Receipt Number"
+                : "Transaction ID"
+            }
+            value={registration.transactionId}
+          />
+        )}
       </Card>
 
       {renderParticipants()}

@@ -333,6 +333,7 @@ const baseUserRegistrationFormSchema = z
         { message: "Transaction ID must be exactly 12 digits" }
       )
       .optional(),
+    receiptNumber: z.string().optional(),
   })
   .and(
     // Merge with event-specific schemas based on selection
@@ -502,6 +503,16 @@ export const userRegistrationFormSchema =
             message: "Transaction ID must be exactly 12 digits",
           });
         }
+      }
+    }
+
+    if (data.paymentMode === "OFFLINE") {
+      if (!data.receiptNumber || !data.receiptNumber.trim()) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["receiptNumber"],
+          message: "Receipt number is required for offline payment",
+        });
       }
     }
   });

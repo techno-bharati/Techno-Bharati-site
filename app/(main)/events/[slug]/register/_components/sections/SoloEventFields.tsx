@@ -20,25 +20,6 @@ interface SoloEventFieldsProps {
 export function SoloEventFields({ form, isPending }: SoloEventFieldsProps) {
   return (
     <div className="space-y-4 md:col-span-2">
-      <FormField
-        control={form.control}
-        name="teamName"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Team Name (optional)</FormLabel>
-            <FormControl>
-              <Input
-                placeholder="Enter team name"
-                {...field}
-                value={field.value ?? ""}
-                disabled={isPending}
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-
       <div className="grid grid-cols-2 gap-4 border p-4 rounded-xl">
         <FormField
           control={form.control}

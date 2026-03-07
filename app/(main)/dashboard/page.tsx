@@ -632,7 +632,7 @@ export default function DashboardPage() {
                         Payment
                       </TableHead>
                       <TableHead className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                        Txn ID
+                        Txn / Receipt
                       </TableHead>
                       <TableHead className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                         Amount
@@ -715,10 +715,7 @@ export default function DashboardPage() {
                             </span>
                           </TableCell>
                           <TableCell className="text-sm font-mono text-muted-foreground">
-                            {registration.paymentMode === "ONLINE" &&
-                            registration.transactionId
-                              ? registration.transactionId
-                              : "—"}
+                            {registration.transactionId || "—"}
                           </TableCell>
                           <TableCell className="text-sm font-semibold">
                             ₹{registration.amount}

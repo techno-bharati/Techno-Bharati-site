@@ -417,7 +417,13 @@ export default function RegistrationForm({
                       form.setValue(
                         "transactionId",
                         undefined as unknown as number,
-                        { shouldValidate: true }
+                        { shouldValidate: true, shouldDirty: true }
+                      );
+                    } else {
+                      form.setValue(
+                        "receiptNumber",
+                        undefined as unknown as string,
+                        { shouldValidate: true, shouldDirty: true }
                       );
                     }
                   }}
@@ -446,7 +452,7 @@ export default function RegistrationForm({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    Transaction ID <RequiredAsterisk />
+                    UPI Transaction ID <RequiredAsterisk />
                   </FormLabel>
                   <FormControl>
                     <Input
@@ -466,6 +472,29 @@ export default function RegistrationForm({
                         field.onChange(raw === "" ? undefined : Number(raw));
                       }}
                       onBlur={field.onBlur}
+                      disabled={isPending}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
+
+          {paymentModeWatch === "OFFLINE" && (
+            <FormField
+              control={form.control}
+              name="receiptNumber"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    Receipt Number <RequiredAsterisk />
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Enter receipt number from college office"
+                      autoComplete="off"
+                      {...field}
                       disabled={isPending}
                     />
                   </FormControl>

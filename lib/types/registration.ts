@@ -70,6 +70,7 @@ export interface RegistrationFormValues {
   paymentMode: PaymentMode | undefined;
   payss: File | undefined;
   transactionId?: number;
+  receiptNumber?: string;
 
   studentName?: string;
   contactNumber?: string;
