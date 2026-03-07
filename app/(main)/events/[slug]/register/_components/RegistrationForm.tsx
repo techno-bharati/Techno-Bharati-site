@@ -255,7 +255,11 @@ export default function RegistrationForm({
           {isSoloEvent && <SoloEventFields form={form} isPending={isPending} />}
 
           {isSquadEvent && (
-            <SquadEventFields form={form} isPending={isPending} />
+            <SquadEventFields
+              form={form}
+              isPending={isPending}
+              selectedEvent={selectedEvent ?? undefined}
+            />
           )}
 
           {isDuoEvent && selectedEvent && (

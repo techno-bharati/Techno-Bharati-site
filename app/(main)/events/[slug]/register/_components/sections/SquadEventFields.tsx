@@ -16,9 +16,17 @@ import RequiredAsterisk from "@/components/RequiredAstrick";
 interface SquadEventFieldsProps {
   form: UseFormReturn<FormValues>;
   isPending: boolean;
+  selectedEvent?: "BGMI" | "FreeFire";
 }
 
-export function SquadEventFields({ form, isPending }: SquadEventFieldsProps) {
+export function SquadEventFields({
+  form,
+  isPending,
+  selectedEvent = "BGMI",
+}: SquadEventFieldsProps) {
+  const idLabel = selectedEvent === "FreeFire" ? "FreeFire ID" : "BGMI ID";
+  const idPlaceholder =
+    selectedEvent === "FreeFire" ? "Enter FreeFire ID" : "Enter BGMI ID";
   return (
     <>
       <FormField
@@ -78,11 +86,11 @@ export function SquadEventFields({ form, isPending }: SquadEventFieldsProps) {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      BGMI ID <RequiredAsterisk />
+                      {idLabel} <RequiredAsterisk />
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Enter BGMI ID"
+                        placeholder={idPlaceholder}
                         {...field}
                         disabled={isPending}
                       />
