@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { UseFormReturn } from "react-hook-form";
 import type { FormValues } from "@/hooks/useRegistrationForm";
 import RequiredAsterisk from "@/components/RequiredAstrick";
+import { PhoneOtpField } from "./PhoneOtpField";
 
 interface TeamLeaderFieldsProps {
   form: UseFormReturn<FormValues>;
@@ -42,24 +43,12 @@ export function TeamLeaderFields({ form, isPending }: TeamLeaderFieldsProps) {
           )}
         />
 
-        <FormField
-          control={form.control}
+        <PhoneOtpField
+          form={form}
           name="contactNumber"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>
-                Team Leader Contact Number <RequiredAsterisk />
-              </FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Enter contact number"
-                  {...field}
-                  disabled={isPending}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
+          label="Team Leader Contact Number"
+          isPending={isPending}
+          placeholder="Enter contact number"
         />
 
         <FormField

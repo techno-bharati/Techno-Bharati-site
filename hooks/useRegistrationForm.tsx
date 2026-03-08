@@ -71,6 +71,7 @@ export function useRegistrationForm({
       paymentMode: undefined,
       department: undefined,
       class: undefined,
+      primaryContactVerified: false,
     },
   });
 
@@ -299,6 +300,7 @@ export function useRegistrationForm({
           paymentMode: "ONLINE",
           department: undefined,
           class: undefined,
+          primaryContactVerified: false,
         });
       } else {
         toast.error("Something went wrong, please try again later.", {

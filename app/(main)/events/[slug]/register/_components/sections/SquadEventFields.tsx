@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { UseFormReturn } from "react-hook-form";
 import type { FormValues } from "@/hooks/useRegistrationForm";
 import RequiredAsterisk from "@/components/RequiredAstrick";
+import { PhoneOtpField } from "../PhoneOtpField";
 
 interface SquadEventFieldsProps {
   form: UseFormReturn<FormValues>;
@@ -123,24 +124,12 @@ export function SquadEventFields({
                     )}
                   />
 
-                  <FormField
-                    control={form.control}
+                  <PhoneOtpField
+                    form={form}
                     name="players.0.contactNumber"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>
-                          Contact Number <RequiredAsterisk />
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="Enter your contact number"
-                            {...field}
-                            disabled={isPending}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
+                    label="Contact Number"
+                    isPending={isPending}
+                    placeholder="Enter your contact number"
                   />
                 </>
               )}

@@ -334,6 +334,7 @@ const baseUserRegistrationFormSchema = z
       )
       .optional(),
     receiptNumber: z.string().optional(),
+    primaryContactVerified: z.boolean().optional(),
   })
   .and(
     // Merge with event-specific schemas based on selection
@@ -514,5 +515,18 @@ export const userRegistrationFormSchema =
           message: "Receipt number is required for offline payment",
         });
       }
+    }
+
+    // Require OTP verification for the primary contact number
+    const isSquadEvent = data.events === "BGMI" || data.events === "FreeFire";
+    if (!data.primaryContactVerified) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: isSquadEvent
+          ? ["players", 0, "contactNumber"]
+          : ["contactNumber"],
+        message:
+          "Please verify this contact number using OTP before submitting",
+      });
     }
   });

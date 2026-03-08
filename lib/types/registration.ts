@@ -71,6 +71,7 @@ export interface RegistrationFormValues {
   payss: File | undefined;
   transactionId?: number;
   receiptNumber?: string;
+  primaryContactVerified?: boolean;
 
   studentName?: string;
   contactNumber?: string;

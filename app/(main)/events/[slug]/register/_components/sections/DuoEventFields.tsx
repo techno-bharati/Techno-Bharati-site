@@ -16,6 +16,7 @@ import {
   CODEFUSION_STYLE_EVENTS,
   FIXED_PAIR_EVENTS,
 } from "@/hooks/useRegistrationForm";
+import { PhoneOtpField } from "../PhoneOtpField";
 
 interface DuoEventFieldsProps {
   form: UseFormReturn<FormValues>;
@@ -67,63 +68,53 @@ export function DuoEventFields({
         )}
       />
 
-      <div className="grid grid-cols-2 gap-4 border p-4 rounded-xl">
-        <FormField
-          control={form.control}
-          name="studentName"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>
-                Participant 1 Name <RequiredAsterisk />
-              </FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Enter your name"
-                  {...field}
-                  disabled={isPending}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border p-4 rounded-xl">
+        <div className="flex flex-col gap-4">
+          <FormField
+            control={form.control}
+            name="studentName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  Participant 1 Name <RequiredAsterisk />
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Enter your name"
+                    {...field}
+                    disabled={isPending}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  Participant 1 Email <RequiredAsterisk />
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Enter your email"
+                    {...field}
+                    disabled={isPending}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <PhoneOtpField
+          form={form}
           name="contactNumber"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>
-                Participant 1 Contact Number <RequiredAsterisk />
-              </FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Enter your contact number"
-                  {...field}
-                  disabled={isPending}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>
-                Participant 1 Email <RequiredAsterisk />
-              </FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Enter your email"
-                  {...field}
-                  disabled={isPending}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
+          label="Participant 1 Contact Number"
+          isPending={isPending}
+          placeholder="Enter your contact number"
         />
       </div>
 
