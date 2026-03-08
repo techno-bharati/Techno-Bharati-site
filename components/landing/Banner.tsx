@@ -35,12 +35,13 @@ const Banner = () => {
       ref={bannerRef}
       className="max-w-5xl mx-auto my-5 px-4"
     >
-      <Image
-        src={"/banner.png"}
+      <img
+        src={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/f_auto,q_auto,w_auto,dpr_auto/v1772962566/pl9hadguvdqgorhtbczr.jpg`}
         alt="banner"
         className="h-full w-full shadow-md rounded-2xl"
-        height={800}
-        width={800}
+        loading="eager"
+        fetchPriority="high"
+        decoding="async"
       />
     </motion.div>
   );

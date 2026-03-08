@@ -2,58 +2,65 @@
 
 import { motion, AnimatePresence } from "motion/react";
 import { useState, useCallback, useEffect } from "react";
-import { X, ZoomIn, Images, ChevronLeft, ChevronRight } from "lucide-react";
+import { X, ZoomIn, ChevronLeft, ChevronRight } from "lucide-react";
 import { zenDots } from "@/lib/fonts";
 import Image from "next/image";
 
+const CLOUD_THUMB = `https://res.cloudinary.com/dtxqfmc0h/image/upload/f_auto,q_auto,w_600`;
+const CLOUD_FULL = `https://res.cloudinary.com/dtxqfmc0h/image/upload/f_auto,q_100,w_1600`;
+
 const galleryData: Record<string, string[]> = {
   "techno bharati 2k25 inaugration ceremony": [
-    "/event/event-12.jpeg",
-    "/event/event-13.jpeg",
-    "/event/event-14.jpeg",
-    "/event/event-15.jpeg",
-    "/event/event-16.jpeg",
-    "/event/event-17.jpeg",
-    "/event/event-18.jpeg",
-    "/event/event-19.jpeg",
+    `${CLOUD_THUMB}/v1772945517/bwwnkluqf5cvstauotyr.jpg`,
+    `${CLOUD_THUMB}/v1772945517/sv3dvwjjsifampoqveck.jpg`,
+    `${CLOUD_THUMB}/v1772945511/t5iwc7uvn9i2uxdsj12w.jpg`,
+    `${CLOUD_THUMB}/v1772945511/jbpciej7pcw7tu0xjpwv.jpg`,
+    `${CLOUD_THUMB}/v1772945511/tfqziw0nyjnivalnzar2.jpg`,
+    `${CLOUD_THUMB}/v1772945512/ecysy4oyv20pcp9hsver.jpg`,
+    `${CLOUD_THUMB}/v1772945513/e4rnwk5rcbumrb6kghcg.jpg`,
+    `${CLOUD_THUMB}/v1772945513/uqebqqzzxiljuwqhw8db.jpg`,
   ],
-  "creanturous 2k25 inaugration": [
-    "/event/event-20.jpeg",
-    "/event/event-21.jpeg",
-    "/event/event-22.jpeg",
+  "mechanical department creanturous 2k25 inaugration": [
+    `${CLOUD_THUMB}/v1772945513/kczcqgrua7wdl8gwlfzs.jpg`,
+    `${CLOUD_THUMB}/v1772945514/a0wyqnw1qlobnvmfpfx7.jpg`,
+    `${CLOUD_THUMB}/v1772945514/zrkiyrvjdoj7ed1bpfu7.jpg`,
   ],
-  "civil department nirman 2k25 inaugration": ["/event/event-23.jpeg"],
+  "civil department nirman 2k25 inaugration": [
+    `${CLOUD_THUMB}/v1772945515/rb4s4gy0xyqusbfa69lg.jpg`,
+  ],
   "general engineering techno science expo 2k25 inugration": [
-    "/event/event-24.jpeg",
-    "/event/event-25.jpeg",
+    `${CLOUD_THUMB}/v1772945515/id8jd75whpxsudsjlwfk.jpg`,
+    `${CLOUD_THUMB}/v1772945515/oa21usf1xkpwtoqtqem8.jpg`,
   ],
-  "computer science coderace 2k25 inugration": ["/event/event-26.jpeg"],
+  "computer science coderace 2k25 inugration": [
+    `${CLOUD_THUMB}/v1772945515/tsviyo6tw5kmivudwk3k.jpg`,
+  ],
   "electronics and telecommunication techno spark 2k25 inugration": [
-    "/event/event-27.jpeg",
+    `${CLOUD_THUMB}/v1772945516/qqlgitjrhty4hpj4xsug.jpg`,
   ],
   "cse aiml infusion ai 2k25 inugration": [
-    "/event/event-28.jpeg",
-    "/event/event-33.jpg",
-    "/event/event-34.jpg",
-    "/event/event-35.jpg",
+    `${CLOUD_THUMB}/v1772945516/etvb4nmn86rc7eb6cnsz.jpg`,
+    `${CLOUD_THUMB}/v1772945518/ml1u70utttldkjtx6p1a.jpg`,
+    `${CLOUD_THUMB}/v1772945518/oicmt9akzqgxqteusw90.jpg`,
+    `${CLOUD_THUMB}/v1772945518/zrdqlzvimdzv5v1q6ra1.jpg`,
   ],
   other: [
-    "/event/event-1.jpeg",
-    "/event/event-2.jpeg",
-    "/event/event-3.jpg",
-    "/event/event-4.jpg",
-    "/event/event-5.jpg",
-    "/event/event-6.jpg",
-    "/event/event-7.jpg",
-    "/event/event-8.jpg",
-    "/event/event-9.jpg",
-    "/event/event-10.jpg",
-    "/event/event-11.jpg",
+    `${CLOUD_THUMB}/v1772945511/s6xg50icpyvjvbvdqepl.png`,
+    `${CLOUD_THUMB}/v1772945513/uvd4sw1tp1lxrafflior.png`,
+    `${CLOUD_THUMB}/v1772945511/tkmuqtpirhxoy09s8em7.jpg`,
+    `${CLOUD_THUMB}/v1772945513/wtvdzesfyluiywqthejv.jpg`,
+    `${CLOUD_THUMB}/v1772945513/oys7esljbqz8ehjbwooa.jpg`,
+    `${CLOUD_THUMB}/v1772945513/nu1bsaizqtxmow3eabnu.jpg`,
+    `${CLOUD_THUMB}/v1772945514/kijcgbzzamnemhb9tj6u.jpg`,
+    `${CLOUD_THUMB}/v1772945515/c0sppyg406gp7xwym9lx.jpg`,
+    `${CLOUD_THUMB}/v1772945516/tdbjhc5jigzghwzewnop.jpg`,
+    `${CLOUD_THUMB}/v1772945519/s4zmzl79gou3p07ckmqw.jpg`,
   ],
 };
 
 interface FlatImage {
   src: string;
+  fullSrc: string;
   category: string;
   globalIndex: number;
 }
@@ -62,7 +69,8 @@ function buildFlatList(data: Record<string, string[]>): FlatImage[] {
   const flat: FlatImage[] = [];
   for (const [category, srcs] of Object.entries(data)) {
     for (const src of srcs) {
-      flat.push({ src, category, globalIndex: flat.length });
+      const fullSrc = src.replace(CLOUD_THUMB, CLOUD_FULL);
+      flat.push({ src, fullSrc, category, globalIndex: flat.length });
     }
   }
   return flat;
@@ -85,6 +93,7 @@ function Lightbox({
   onNext,
   current,
   total,
+  allImages,
 }: {
   image: FlatImage;
   onClose: () => void;
@@ -92,6 +101,7 @@ function Lightbox({
   onNext: () => void;
   current: number;
   total: number;
+  allImages: FlatImage[];
 }) {
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -102,6 +112,21 @@ function Lightbox({
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
   }, [onClose, onPrev, onNext]);
+
+  // preload prev and next full res images
+  useEffect(() => {
+    const prevSrc = allImages[(current - 1 + total) % total]?.fullSrc;
+    const nextSrc = allImages[(current + 1) % total]?.fullSrc;
+
+    if (prevSrc) {
+      const prev = new window.Image();
+      prev.src = prevSrc;
+    }
+    if (nextSrc) {
+      const next = new window.Image();
+      next.src = nextSrc;
+    }
+  }, [current, total, allImages]);
 
   return (
     <motion.div
@@ -122,7 +147,7 @@ function Lightbox({
       </button>
 
       <motion.div
-        key={image.src}
+        key={image.fullSrc}
         initial={{ opacity: 0, scale: 0.93 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.93 }}
@@ -130,14 +155,15 @@ function Lightbox({
         className="relative max-w-4xl w-full rounded-2xl overflow-hidden shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="relative w-full aspect-video bg-black">
-          <Image
-            src={image.src}
+        <div className="relative w-full bg-black">
+          <img
+            key={image.fullSrc}
+            src={image.fullSrc}
             alt={image.category}
-            fill
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            className="object-contain"
-            priority
+            className="w-full h-auto object-contain max-h-[80vh]"
+            loading="eager"
+            fetchPriority="high"
+            decoding="sync"
           />
         </div>
 
@@ -287,12 +313,17 @@ export default function GalleryPage() {
                 }}
                 className="break-inside-avoid group relative rounded-xl overflow-hidden cursor-pointer shadow-sm hover:shadow-xl transition-shadow duration-300"
                 onClick={() => openLightbox(image.globalIndex)}
+                onMouseEnter={() => {
+                  // preload full res on hover so lightbox is instant
+                  const img = new window.Image();
+                  img.src = image.fullSrc;
+                }}
               >
-                <Image
+                <img
                   src={image.src}
                   alt={image.category}
-                  width={600}
-                  height={400}
+                  loading={index < 8 ? "eager" : "lazy"}
+                  decoding="async"
                   className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105"
                 />
 
@@ -332,6 +363,7 @@ export default function GalleryPage() {
             onNext={goNext}
             current={lightboxIndex}
             total={filteredImages.length}
+            allImages={filteredImages}
           />
         )}
       </AnimatePresence>

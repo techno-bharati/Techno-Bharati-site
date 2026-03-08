@@ -504,7 +504,6 @@ export const getEventFeeByName = (eventName: string, teamSize?: number) => {
   return calculateEventFee(eventType, teamSize);
 };
 
-/** Organizing department key for each event (used for department-specific payment QR). */
 export const EVENT_TO_ORGANIZING_DEPARTMENT: Record<
   string,
   keyof typeof EVENTS_BY_DEPARTMENT
@@ -534,7 +533,6 @@ export const EVENT_TO_ORGANIZING_DEPARTMENT: Record<
   "Mech IPL Auction": "MECH",
 };
 
-/** Payment QR code image path per organizing department. Add images under public/qr/ for each key. */
 export const PAYMENT_QR_BY_DEPARTMENT: Record<
   keyof typeof EVENTS_BY_DEPARTMENT,
   string
@@ -557,14 +555,14 @@ export const calculateGeneralEngineeringGamesFee = (gamesCount: number) => {
 };
 
 export const eventImages = [
-  "/event/event-12.jpeg",
-  "/event/event-14.jpeg",
-  "/event/event-18.jpeg",
-  "/event/event-19.jpeg",
-  "/event/event-24.jpeg",
-  "/event/event-28.jpeg",
-  "/event/event-33.jpg",
-  "/event/event-35.jpg",
+  `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/v1772945517/bwwnkluqf5cvstauotyr.jpg`,
+  `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/v1772945511/t5iwc7uvn9i2uxdsj12w.jpg`,
+  `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/v1772945513/e4rnwk5rcbumrb6kghcg.jpg`,
+  `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/v1772945513/uqebqqzzxiljuwqhw8db.jpg`,
+  `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/v1772945515/id8jd75whpxsudsjlwfk.jpg`,
+  `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/v1772945516/etvb4nmn86rc7eb6cnsz.jpg`,
+  `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/v1772945518/ml1u70utttldkjtx6p1a.jpg`,
+  `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/v1772945518/zrdqlzvimdzv5v1q6ra1.jpg`,
 ];
 
 export const Sponsors = [
