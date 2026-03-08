@@ -14,6 +14,32 @@ interface ConfirmationEmailProps {
   registration: RegistrationWithRelation;
 }
 
+const eventDepartmentMap: Record<string, string> = {
+  STARTUP_SPHERE: "AIML",
+  FACE_TO_FACE: "AIML",
+  PYTHON_FRONTIERS: "AIML",
+  BGMI: "AIML",
+  AI_TALES: "AIML",
+  ENTC_PROJECT_EXPO: "ENTC",
+  ENTC_DIGITAL_DANGAL: "ENTC",
+  ENTC_SNAP_AND_SHINE: "ENTC",
+  GE_TECHNO_SCIENCE_QUIZ: "GENERAL ENGINEERING",
+  GE_POSTER_COMPETITION: "GENERAL ENGINEERING",
+  GE_SCITECH_MODEL_EXPO: "GENERAL ENGINEERING",
+  GE_GAMES_BUNDLE: "GENERAL ENGINEERING",
+  FREEFIRE: "GENERAL ENGINEERING",
+  CE_MODEL_MAKING: "CIVIL",
+  CE_BATTLE_OF_BRAINS: "CIVIL",
+  CE_CAD_MASTER: "CIVIL",
+  CE_VIDEOGRAPHY: "CIVIL",
+  CSE_CODEFUSION: "CSE",
+  CSE_PROJECT_EXPO: "CSE",
+  CSE_TREASURE_HUNT: "CSE",
+  MECH_PROJECT_EXPO: "MECHANICAL",
+  MECH_JUNK_YARD: "MECHANICAL",
+  MECH_IPL_AUCTION: "MECHANICAL",
+};
+
 export function ConfirmationEmail({ registration }: ConfirmationEmailProps) {
   const eventName = registration.eventType.replace(/_/g, " ");
 
@@ -97,28 +123,19 @@ export function ConfirmationEmail({ registration }: ConfirmationEmailProps) {
 
       <Card title="Event Details">
         <InfoRow label="Event" value={eventName} />
-        <InfoRow label="College" value={registration.collegeName} />
-        <InfoRow label="Department" value={registration.department} />
-        <InfoRow label="Amount Paid" value={`₹${registration.amount}`} />
         <InfoRow
-          label="Date"
-          value={new Date(registration.createdAt).toLocaleDateString("en-IN", {
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-          })}
+          label="College"
+          value={"Bharati Vidyapeeth's College of Engineering, Kolhapur"}
         />
-        <InfoRow label="Payment Mode" value={registration.paymentMode} />
-        {registration.transactionId && (
-          <InfoRow
-            label={
-              registration.paymentMode === "OFFLINE"
-                ? "Receipt Number"
-                : "Transaction ID"
-            }
-            value={registration.transactionId}
-          />
-        )}
+        <InfoRow
+          label="Department"
+          value={
+            eventDepartmentMap[registration.eventType] ??
+            registration.department
+          }
+        />
+        <InfoRow label="Amount Paid" value={`₹${registration.amount}`} />
+        <InfoRow label="Date" value="25th March 2025" />
       </Card>
 
       {renderParticipants()}

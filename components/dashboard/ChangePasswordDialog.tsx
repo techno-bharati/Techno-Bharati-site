@@ -116,10 +116,11 @@ export function ChangePasswordDialog({
               variant="outline"
               onClick={() => onOpenChange(false)}
               disabled={isLoading}
+              className="rounded-xl"
             >
               Cancel
             </Button>
-            <Button type="submit" disabled={isLoading}>
+            <Button type="submit" disabled={isLoading} className="rounded-xl">
               {isLoading ? "Changing..." : "Change Password"}
             </Button>
           </DialogFooter>

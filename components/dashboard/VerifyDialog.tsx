@@ -35,6 +35,7 @@ import {
   IdCard,
   Trophy,
   IndianRupee,
+  BookCopy,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -348,7 +349,11 @@ export function VerifyDialog({
 
                     {registration.transactionId && (
                       <div className="flex items-center gap-3 p-3 bg-primary/5 border border-primary/20 rounded-xl">
-                        <IndianRupee className="w-4 h-4 text-primary" />
+                        {registration.paymentMode === "OFFLINE" ? (
+                          <BookCopy className="w-4 h-4 text-primary" />
+                        ) : (
+                          <IndianRupee className="w-4 h-4 text-primary" />
+                        )}
                         <div>
                           <p className="text-xs text-muted-foreground uppercase tracking-wide">
                             {registration.paymentMode === "OFFLINE"

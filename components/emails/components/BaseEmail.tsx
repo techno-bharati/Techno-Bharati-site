@@ -35,7 +35,7 @@ export function BaseEmail({ preview, children }: BaseEmailProps) {
           <Hr style={styles.hr} />
           <Section style={styles.footer}>
             <Text style={styles.footerText}>
-              This is an automated message from Techno Bharati 2025. Please do
+              This is an automated message from Techno Bharati 2026. Please do
               not reply to this email.
             </Text>
             <Text style={styles.footerText}>

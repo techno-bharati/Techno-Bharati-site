@@ -54,7 +54,7 @@ export function DeleteConfirmDialog({
           <Button
             variant="outline"
             onClick={() => onOpenChange(false)}
-            className="flex-1 sm:flex-none"
+            className="flex-1 sm:flex-none rounded-xl"
           >
             Cancel
           </Button>
@@ -64,7 +64,7 @@ export function DeleteConfirmDialog({
               onConfirm();
               onOpenChange(false);
             }}
-            className="flex-1 sm:flex-none"
+            className="flex-1 sm:flex-none rounded-xl"
           >
             Delete
           </Button>
