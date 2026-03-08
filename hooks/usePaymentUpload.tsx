@@ -3,6 +3,7 @@ import { toast } from "sonner";
 import { uploadImageClient } from "@/lib/uploadImageClient";
 
 const UPLOAD_DEBOUNCE_MS = 600;
+const MAX_SIZE_KB = 250;
 
 export interface UsePaymentUploadReturn {
   uploadedImageUrl: string | null;
@@ -36,8 +37,15 @@ export function usePaymentUpload(
 
     currentFileRef.current = file;
 
-    if (debounceRef.current) clearTimeout(debounceRef.current);
+    if (file.size > MAX_SIZE_KB * 1024) {
+      const errorMessage = `File size must be ${MAX_SIZE_KB}KB or less. Your file is ${(file.size / 1024).toFixed(0)}KB.`;
+      setUploadError(errorMessage);
+      toast.error(errorMessage);
+      setIsUploading(false);
+      return;
+    }
 
+    if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(async () => {
       debounceRef.current = null;
       const fileToUpload = currentFileRef.current;
