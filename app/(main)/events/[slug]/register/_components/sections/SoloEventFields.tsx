@@ -20,7 +20,7 @@ interface SoloEventFieldsProps {
 export function SoloEventFields({ form, isPending }: SoloEventFieldsProps) {
   return (
     <div className="space-y-4 md:col-span-2">
-      <div className="grid grid-cols-2 gap-4 border p-4 rounded-xl">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border p-4 rounded-xl">
         <FormField
           control={form.control}
           name="studentName"
