@@ -107,10 +107,11 @@ export function Footer() {
           <p className="tracking-tight">
             Developed & Managed by{" "}
             <Link
-              href={"/"}
+              href={"https://github.com/Harshalvk"}
               className="hover:underline underline-offset-4 hover:text-primary"
+              target="_blank"
             >
-              Team InfusionAI
+              Harshal
             </Link>
           </p>
         </div>
