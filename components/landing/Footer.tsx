@@ -31,7 +31,7 @@ export function Footer() {
       variants={animationVariants}
       initial={"initial"}
       animate={isFooterInView ? "animate" : "initial"}
-      className="relative border-t border-muted bg-background overflow-hidden max-w-7xl mx-auto"
+      className="relative border-t border-muted bg-background overflow-hidden "
     >
       <div className="absolute inset-0 pointer-events-none select-none">
         <div
@@ -43,7 +43,7 @@ export function Footer() {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center mb-8">
           <div className="space-y-3">
             <div className="flex justify-start space-x-6">
