@@ -31,7 +31,7 @@ export function Footer() {
       variants={animationVariants}
       initial={"initial"}
       animate={isFooterInView ? "animate" : "initial"}
-      className="relative border-t border-muted bg-background overflow-hidden"
+      className="relative border-t border-muted bg-background overflow-hidden max-w-7xl mx-auto"
     >
       <div className="absolute inset-0 pointer-events-none select-none">
         <div
