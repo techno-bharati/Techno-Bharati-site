@@ -2,6 +2,7 @@ import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { SignJWT } from "jose";
 import { cookies } from "next/headers";
+import bcrypt from "bcryptjs";
 
 const validateEmail = (email: string) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -39,13 +40,26 @@ export async function POST(req: Request) {
       );
     }
 
-    const isPasswordValid = password === admin.password;
+    const stored = admin.password ?? "";
+    const looksHashed = stored.startsWith("$2a$") || stored.startsWith("$2b$");
+
+    const isPasswordValid = looksHashed
+      ? await bcrypt.compare(password, stored)
+      : password === stored;
 
     if (!isPasswordValid) {
       return NextResponse.json(
         { error: "Invalid credentials" },
         { status: 401 }
       );
+    }
+
+    if (!looksHashed) {
+      const hashed = await bcrypt.hash(password, 10);
+      await prisma.admin.update({
+        where: { id: admin.id },
+        data: { password: hashed },
+      });
     }
 
     const jwtPayload = {
