@@ -11,9 +11,9 @@ description: Welcome to the ultimate BGMI Battle Squad Tournament! Get ready to 
 
 ## Registration
 
-- Registration deadline: **24th March 2026, 5:00 PM**.
+- Registration deadline: **23th March 2026**.
 - Spot registrations allowed until: **25th March 2026, 11:00 AM**.
-- **Entry fee: ₹200 per team**.
+- **Entry fee: ₹300 per team**.
 - Participants must provide a valid **email ID and contact number** during registration.
 - Late registrations will **not** be entertained after the cutoff time.
 

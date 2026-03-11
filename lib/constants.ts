@@ -25,7 +25,7 @@ export const EVENT_FEES: Record<string, EventFee> = {
     type: "per person",
   },
   BGMI: {
-    amount: 200,
+    amount: 300,
     type: "per team",
   },
   FREEFIRE: {
@@ -369,7 +369,7 @@ export const CIVIL_EVENTS: Event[] = [
     date: "25th March 2026",
     time: "9:15 AM - 4:15 PM",
     venue: "Bharati Vidyapeeth College of Engineering, Kolhapur",
-    entryFee: "100",
+    entryFee: `${EVENT_FEES.CE_MODEL_MAKING.amount} (per person)`,
     type: "Technical Event",
     icon: "/event-card/civil/model-making.png",
     description:
@@ -397,7 +397,7 @@ export const CIVIL_EVENTS: Event[] = [
     date: "25th March 2026",
     time: "9:15 AM - 4:15 PM",
     venue: "Bharati Vidyapeeth College of Engineering, Kolhapur",
-    entryFee: "100",
+    entryFee: `${EVENT_FEES.CE_CAD_MASTER.amount} (per person)`,
     type: "Technical Event",
     icon: "/event-card/civil/cad-master.png",
     description:
