@@ -160,10 +160,11 @@ const projectExpoSchema = standardRegistrationSchema.extend({
   numberOfTeamMembers: z
     .number()
     .min(2, "Minimum 2 team members are required")
-    .max(4, "Maximum 4 team members are allowed"),
+    .max(5, "Maximum 5 team members are allowed"),
   participant2: participantSchema,
   participant3: participantSchema.optional(),
   participant4: participantSchema.optional(),
+  participant5: participantSchema.optional(),
 });
 
 const mechJunkYardSchema = standardRegistrationSchema.extend({
@@ -191,19 +192,8 @@ const mechIplAuctionSchema = standardRegistrationSchema.extend({
   participant4: participantSchema.optional(),
 });
 
-const mechProjectExpoSchema = standardRegistrationSchema.extend({
-  teamName: z
-    .string({ required_error: "Team name is required" })
-    .min(1, "Team name is required"),
-  numberOfTeamMembers: z
-    .number()
-    .min(2, "Minimum 2 team members are required")
-    .max(5, "Maximum 5 team members are allowed"),
-  participant2: participantSchema,
-  participant3: participantSchema.optional(),
-  participant4: participantSchema.optional(),
-  participant5: participantSchema.optional(),
-});
+const mechProjectExpoSchema = projectExpoSchema;
+const cseProjectExpoSchema = projectExpoSchema;
 
 const codefusionSchema = standardRegistrationSchema.extend({
   teamName: z
@@ -239,7 +229,7 @@ const generalEngineeringGamesBundleSchema = z.object({
   email: z.string().email("Invalid email address"),
 });
 
-const entcProjectExpoSchema = mechIplAuctionSchema;
+const entcProjectExpoSchema = projectExpoSchema;
 const entcDigitalDangalSchema = codefusionSchema;
 
 const battleOfBrainsSchema = standardRegistrationSchema.extend({
@@ -394,7 +384,9 @@ const baseUserRegistrationFormSchema = z
       z.object({ events: z.literal("CAD Master") }).merge(cadmasterSchema),
       z.object({ events: z.literal("Videography") }).merge(videographySchema),
       z.object({ events: z.literal("CODEFUSION") }).merge(codefusionSchema),
-      z.object({ events: z.literal("Project Expo") }).merge(projectExpoSchema),
+      z
+        .object({ events: z.literal("Project Expo") })
+        .merge(cseProjectExpoSchema),
       z
         .object({ events: z.literal("Treasure Hunt") })
         .merge(treasureHuntSchema),

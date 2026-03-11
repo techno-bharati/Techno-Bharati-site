@@ -49,8 +49,6 @@ export function useRegistrationForm({
   const [mechIplHasFourthMember, setMechIplHasFourthMember] = useState(false);
   const [mechJunkYardHasThirdMember, setMechJunkYardHasThirdMember] =
     useState(false);
-  const [entcProjectExpoFourthMember, setEntcProjectExpoFourthMember] =
-    useState(false);
   const [paymentMode, setPaymentMode] = useState<"ONLINE" | "OFFLINE">(
     "ONLINE"
   );
@@ -104,11 +102,13 @@ export function useRegistrationForm({
   ]);
 
   useEffect(() => {
-    if (
-      selectedEvent !== "Treasure Hunt" &&
-      selectedEvent !== "Mech Project Expo"
-    )
-      return;
+    const dynamicEvents = [
+      "Treasure Hunt",
+      "Mech Project Expo",
+      "Project Expo",
+      "ENTC Project Expo",
+    ];
+    if (!selectedEvent || !dynamicEvents.includes(selectedEvent)) return;
 
     const maxMembers = teamSize ?? 1;
     const participantKeys = [
@@ -127,21 +127,6 @@ export function useRegistrationForm({
         });
       }
     });
-  }, [selectedEvent, teamSize, form]);
-
-  useEffect(() => {
-    if (selectedEvent !== "Project Expo") return;
-    const total = teamSize ?? 2;
-    if (total < 4)
-      form.setValue("participant4", undefined as unknown as ParticipantFields, {
-        shouldValidate: true,
-        shouldDirty: true,
-      });
-    if (total < 3)
-      form.setValue("participant3", undefined as unknown as ParticipantFields, {
-        shouldValidate: true,
-        shouldDirty: true,
-      });
   }, [selectedEvent, teamSize, form]);
 
   useEffect(() => {
@@ -203,20 +188,6 @@ export function useRegistrationForm({
   }, [selectedEvent, mechIplHasFourthMember, form]);
 
   useEffect(() => {
-    if (selectedEvent !== "ENTC Project Expo") {
-      setEntcProjectExpoFourthMember(false);
-      form.setValue("participant4", undefined as unknown as ParticipantFields);
-      return;
-    }
-    if (!entcProjectExpoFourthMember) {
-      form.setValue("participant4", undefined as unknown as ParticipantFields, {
-        shouldValidate: true,
-        shouldDirty: true,
-      });
-    }
-  }, [selectedEvent, entcProjectExpoFourthMember, form]);
-
-  useEffect(() => {
     if (selectedEvent !== "Mech Junk Yard") {
       setMechJunkYardHasThirdMember(false);
       form.setValue("participant3", undefined as unknown as ParticipantFields);
@@ -241,13 +212,8 @@ export function useRegistrationForm({
 
     switch (selectedEvent) {
       case "Project Expo":
-        setDefault(2);
-        break;
-      case "Mech Project Expo": {
-        const cur = form.getValues("numberOfTeamMembers");
-        if (!cur || cur < 2 || cur > 5) setDefault(2);
-        break;
-      }
+      case "Mech Project Expo":
+      case "ENTC Project Expo":
       case "Treasure Hunt": {
         const cur = form.getValues("numberOfTeamMembers");
         if (!cur || cur < 2 || cur > 5) setDefault(2);
@@ -259,11 +225,6 @@ export function useRegistrationForm({
         break;
       }
       case "Mech IPL Auction": {
-        const cur = form.getValues("numberOfTeamMembers");
-        if (!cur || cur < 3 || cur > 4) setDefault(3);
-        break;
-      }
-      case "ENTC Project Expo": {
         const cur = form.getValues("numberOfTeamMembers");
         if (!cur || cur < 3 || cur > 4) setDefault(3);
         break;
@@ -367,8 +328,6 @@ export function useRegistrationForm({
     setMechIplHasFourthMember,
     mechJunkYardHasThirdMember,
     setMechJunkYardHasThirdMember,
-    entcProjectExpoFourthMember,
-    setEntcProjectExpoFourthMember,
     onSubmit,
     onError,
   };

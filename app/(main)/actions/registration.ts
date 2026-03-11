@@ -300,7 +300,10 @@ function buildRegistrationData(data: FormData, baseData: BaseData) {
       };
     }
 
-    case "Treasure Hunt": {
+    case "Treasure Hunt":
+    case "Project Expo":
+    case "Mech Project Expo":
+    case "ENTC Project Expo": {
       const d = data as TreasureHuntData;
       const extras = [
         d.participant2,
@@ -323,39 +326,6 @@ function buildRegistrationData(data: FormData, baseData: BaseData) {
             })),
           },
         }),
-      };
-    }
-
-    case "Project Expo": {
-      const d = data as ProjectExpoData;
-      const total = d.numberOfTeamMembers;
-
-      if (total < 2 || total > 4)
-        throw new Error("Project Expo team size must be 2–4");
-      if (!d.participant2?.studentName)
-        throw new Error("Project Expo requires at least 2 members");
-      if (total >= 3 && !d.participant3?.studentName)
-        throw new Error("Project Expo requires member 3");
-      if (total >= 4 && !d.participant4?.studentName)
-        throw new Error("Project Expo requires member 4");
-
-      const members = [d.participant2, d.participant3, d.participant4]
-        .slice(0, total - 1)
-        .filter((p): p is NonNullable<typeof p> => !!p?.studentName);
-
-      return {
-        ...baseData,
-        teamName: d.teamName ?? null,
-        studentName: d.studentName,
-        contactNumber: d.contactNumber,
-        email: d.email,
-        numberOfTeamMembers: total,
-        teamMembers: {
-          create: members.map((p) => ({
-            studentName: p.studentName,
-            contactNumber: p.contactNumber ?? "",
-          })),
-        },
       };
     }
 
@@ -419,34 +389,6 @@ function buildRegistrationData(data: FormData, baseData: BaseData) {
       };
     }
 
-    case "Mech Project Expo": {
-      const d = data as MechProjectExpoData;
-      const total = d.numberOfTeamMembers;
-      const members = [
-        d.participant2,
-        d.participant3,
-        d.participant4,
-        d.participant5,
-      ]
-        .slice(0, total - 1)
-        .filter((p): p is NonNullable<typeof p> => !!p?.studentName);
-
-      return {
-        ...baseData,
-        studentName: d.studentName,
-        contactNumber: d.contactNumber,
-        email: d.email,
-        teamName: d.teamName,
-        numberOfTeamMembers: total,
-        teamMembers: {
-          create: members.map((p) => ({
-            studentName: p.studentName,
-            contactNumber: p.contactNumber ?? "",
-          })),
-        },
-      };
-    }
-
     case "Mech Junk Yard": {
       const d = data as MechJunkYardData;
       const total = d.numberOfTeamMembers;
@@ -470,8 +412,7 @@ function buildRegistrationData(data: FormData, baseData: BaseData) {
       };
     }
 
-    case "Mech IPL Auction":
-    case "ENTC Project Expo": {
+    case "Mech IPL Auction": {
       const d = data as MechIplAuctionData | EntcProjectExpoData;
       const total = d.numberOfTeamMembers;
       const members = [d.participant2, d.participant3, d.participant4]

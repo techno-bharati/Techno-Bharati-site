@@ -69,8 +69,6 @@ export default function RegistrationForm({
     setMechIplHasFourthMember,
     mechJunkYardHasThirdMember,
     setMechJunkYardHasThirdMember,
-    entcProjectExpoFourthMember,
-    setEntcProjectExpoFourthMember,
     onSubmit,
     onError,
   } = useRegistrationForm({ initialEvent, initialSelectedGames });
@@ -112,11 +110,10 @@ export default function RegistrationForm({
   const isVariableTeamEvent =
     selectedEvent === "Project Expo" ||
     selectedEvent === "Treasure Hunt" ||
-    selectedEvent === "Mech Project Expo";
-
-  const isFixedTeamEvent =
-    selectedEvent === "Mech IPL Auction" ||
+    selectedEvent === "Mech Project Expo" ||
     selectedEvent === "ENTC Project Expo";
+
+  const isFixedTeamEvent = selectedEvent === "Mech IPL Auction";
 
   const isMechJunkYard = selectedEvent === "Mech Junk Yard";
 
@@ -135,6 +132,21 @@ export default function RegistrationForm({
           : ""
       }`
     : "Payment QR";
+
+  const getEventDescription = () => {
+    switch (selectedEvent) {
+      case "Project Expo":
+        return "Minimum 2 and maximum 5 team members. Each participant is ₹100.";
+      case "ENTC Project Expo":
+        return "Minimum 2 and maximum 5 team members. Each participant is ₹100.";
+      case "Mech Project Expo":
+        return "Minimum 2 and maximum 5 team members. Each participant is ₹100.";
+      case "Treasure Hunt":
+        return "Minimum 2 and maximum 5 team members. Each participant is ₹100.";
+      default:
+        return "Minimum 2 and maximum 5 team members. Each participant is ₹100.";
+    }
+  };
 
   return (
     <div className="w-full max-w-7xl mx-auto text-lg md:text-xl">
@@ -323,19 +335,9 @@ export default function RegistrationForm({
             <VariableTeamEventFields
               form={form}
               isPending={isPending}
-              minMembers={selectedEvent === "Mech Project Expo" ? 2 : 2}
-              maxMembers={
-                selectedEvent === "Project Expo"
-                  ? 4
-                  : selectedEvent === "Mech Project Expo"
-                    ? 5
-                    : 5
-              }
-              description={
-                selectedEvent === "Project Expo"
-                  ? "Project Expo requires minimum 2 members and maximum 4 members per team."
-                  : "Minimum 2 and maximum of 5 team members allowed. Each participant is ₹100."
-              }
+              minMembers={2}
+              maxMembers={5}
+              description={getEventDescription()}
             />
           )}
 
@@ -344,15 +346,11 @@ export default function RegistrationForm({
               form={form}
               isPending={isPending}
               hasFourthMember={
-                selectedEvent === "Mech IPL Auction"
-                  ? mechIplHasFourthMember
-                  : entcProjectExpoFourthMember
+                selectedEvent === "Mech IPL Auction" && mechIplHasFourthMember
               }
               onToggleFourthMember={(checked) => {
                 if (selectedEvent === "Mech IPL Auction") {
                   setMechIplHasFourthMember(checked);
-                } else {
-                  setEntcProjectExpoFourthMember(checked);
                 }
                 form.setValue(
                   "numberOfTeamMembers",
