@@ -4,87 +4,48 @@ import { motion, AnimatePresence } from "motion/react";
 import { useState, useCallback, useEffect } from "react";
 import { X, ZoomIn, ChevronLeft, ChevronRight } from "lucide-react";
 import { zenDots } from "@/lib/fonts";
-import Image from "next/image";
 
 const CLOUD_THUMB = `https://res.cloudinary.com/dtxqfmc0h/image/upload/f_auto,q_auto,w_600`;
 const CLOUD_FULL = `https://res.cloudinary.com/dtxqfmc0h/image/upload/f_auto,q_100,w_1600`;
 
-const galleryData: Record<string, string[]> = {
-  "techno bharati 2k25 inaugration ceremony": [
-    `${CLOUD_THUMB}/v1772945517/bwwnkluqf5cvstauotyr.jpg`,
-    `${CLOUD_THUMB}/v1772945517/sv3dvwjjsifampoqveck.jpg`,
-    `${CLOUD_THUMB}/v1772945511/t5iwc7uvn9i2uxdsj12w.jpg`,
-    `${CLOUD_THUMB}/v1772945511/jbpciej7pcw7tu0xjpwv.jpg`,
-    `${CLOUD_THUMB}/v1772945511/tfqziw0nyjnivalnzar2.jpg`,
-    `${CLOUD_THUMB}/v1772945512/ecysy4oyv20pcp9hsver.jpg`,
-    `${CLOUD_THUMB}/v1772945513/e4rnwk5rcbumrb6kghcg.jpg`,
-    `${CLOUD_THUMB}/v1772945513/uqebqqzzxiljuwqhw8db.jpg`,
-  ],
-  "mechanical department creanturous 2k25 inaugration": [
-    `${CLOUD_THUMB}/v1772945513/kczcqgrua7wdl8gwlfzs.jpg`,
-    `${CLOUD_THUMB}/v1772945514/a0wyqnw1qlobnvmfpfx7.jpg`,
-    `${CLOUD_THUMB}/v1772945514/zrkiyrvjdoj7ed1bpfu7.jpg`,
-  ],
-  "civil department nirman 2k25 inaugration": [
-    `${CLOUD_THUMB}/v1772945515/rb4s4gy0xyqusbfa69lg.jpg`,
-  ],
-  "general engineering techno science expo 2k25 inugration": [
-    `${CLOUD_THUMB}/v1772945515/id8jd75whpxsudsjlwfk.jpg`,
-    `${CLOUD_THUMB}/v1772945515/oa21usf1xkpwtoqtqem8.jpg`,
-  ],
-  "computer science coderace 2k25 inugration": [
-    `${CLOUD_THUMB}/v1772945515/tsviyo6tw5kmivudwk3k.jpg`,
-  ],
-  "electronics and telecommunication techno spark 2k25 inugration": [
-    `${CLOUD_THUMB}/v1772945516/qqlgitjrhty4hpj4xsug.jpg`,
-  ],
-  "cse aiml infusion ai 2k25 inugration": [
-    `${CLOUD_THUMB}/v1772945516/etvb4nmn86rc7eb6cnsz.jpg`,
-    `${CLOUD_THUMB}/v1772945518/ml1u70utttldkjtx6p1a.jpg`,
-    `${CLOUD_THUMB}/v1772945518/oicmt9akzqgxqteusw90.jpg`,
-    `${CLOUD_THUMB}/v1772945518/zrdqlzvimdzv5v1q6ra1.jpg`,
-  ],
-  other: [
-    `${CLOUD_THUMB}/v1772945511/s6xg50icpyvjvbvdqepl.png`,
-    `${CLOUD_THUMB}/v1772945513/uvd4sw1tp1lxrafflior.png`,
-    `${CLOUD_THUMB}/v1772945511/tkmuqtpirhxoy09s8em7.jpg`,
-    `${CLOUD_THUMB}/v1772945513/wtvdzesfyluiywqthejv.jpg`,
-    `${CLOUD_THUMB}/v1772945513/oys7esljbqz8ehjbwooa.jpg`,
-    `${CLOUD_THUMB}/v1772945513/nu1bsaizqtxmow3eabnu.jpg`,
-    `${CLOUD_THUMB}/v1772945514/kijcgbzzamnemhb9tj6u.jpg`,
-    `${CLOUD_THUMB}/v1772945515/c0sppyg406gp7xwym9lx.jpg`,
-    `${CLOUD_THUMB}/v1772945516/tdbjhc5jigzghwzewnop.jpg`,
-    `${CLOUD_THUMB}/v1772945519/s4zmzl79gou3p07ckmqw.jpg`,
-  ],
-};
+const images = [
+  `${CLOUD_THUMB}/v1772945517/bwwnkluqf5cvstauotyr.jpg`,
+  `${CLOUD_THUMB}/v1772945517/sv3dvwjjsifampoqveck.jpg`,
+  `${CLOUD_THUMB}/v1772945511/t5iwc7uvn9i2uxdsj12w.jpg`,
+  `${CLOUD_THUMB}/v1772945511/jbpciej7pcw7tu0xjpwv.jpg`,
+  `${CLOUD_THUMB}/v1772945511/tfqziw0nyjnivalnzar2.jpg`,
+  `${CLOUD_THUMB}/v1772945512/ecysy4oyv20pcp9hsver.jpg`,
+  `${CLOUD_THUMB}/v1772945513/e4rnwk5rcbumrb6kghcg.jpg`,
+  `${CLOUD_THUMB}/v1772945513/uqebqqzzxiljuwqhw8db.jpg`,
+  `${CLOUD_THUMB}/v1772945513/kczcqgrua7wdl8gwlfzs.jpg`,
+  `${CLOUD_THUMB}/v1772945514/a0wyqnw1qlobnvmfpfx7.jpg`,
+  `${CLOUD_THUMB}/v1772945514/zrkiyrvjdoj7ed1bpfu7.jpg`,
+  `${CLOUD_THUMB}/v1772945515/rb4s4gy0xyqusbfa69lg.jpg`,
+  `${CLOUD_THUMB}/v1772945515/id8jd75whpxsudsjlwfk.jpg`,
+  `${CLOUD_THUMB}/v1772945515/oa21usf1xkpwtoqtqem8.jpg`,
+  `${CLOUD_THUMB}/v1772945515/tsviyo6tw5kmivudwk3k.jpg`,
+  `${CLOUD_THUMB}/v1772945516/qqlgitjrhty4hpj4xsug.jpg`,
+  `${CLOUD_THUMB}/v1772945516/etvb4nmn86rc7eb6cnsz.jpg`,
+  `${CLOUD_THUMB}/v1772945518/ml1u70utttldkjtx6p1a.jpg`,
+  `${CLOUD_THUMB}/v1772945518/oicmt9akzqgxqteusw90.jpg`,
+  `${CLOUD_THUMB}/v1772945518/zrdqlzvimdzv5v1q6ra1.jpg`,
+  `${CLOUD_THUMB}/v1772945511/s6xg50icpyvjvbvdqepl.png`,
+  `${CLOUD_THUMB}/v1772945513/uvd4sw1tp1lxrafflior.png`,
+  `${CLOUD_THUMB}/v1772945511/tkmuqtpirhxoy09s8em7.jpg`,
+  `${CLOUD_THUMB}/v1772945513/wtvdzesfyluiywqthejv.jpg`,
+  `${CLOUD_THUMB}/v1772945513/oys7esljbqz8ehjbwooa.jpg`,
+  `${CLOUD_THUMB}/v1772945513/nu1bsaizqtxmow3eabnu.jpg`,
+  `${CLOUD_THUMB}/v1772945514/kijcgbzzamnemhb9tj6u.jpg`,
+  `${CLOUD_THUMB}/v1772945515/c0sppyg406gp7xwym9lx.jpg`,
+  `${CLOUD_THUMB}/v1772945516/tdbjhc5jigzghwzewnop.jpg`,
+  `${CLOUD_THUMB}/v1772945519/s4zmzl79gou3p07ckmqw.jpg`,
+];
 
-interface FlatImage {
-  src: string;
-  fullSrc: string;
-  category: string;
-  globalIndex: number;
-}
-
-function buildFlatList(data: Record<string, string[]>): FlatImage[] {
-  const flat: FlatImage[] = [];
-  for (const [category, srcs] of Object.entries(data)) {
-    for (const src of srcs) {
-      const fullSrc = src.replace(CLOUD_THUMB, CLOUD_FULL);
-      flat.push({ src, fullSrc, category, globalIndex: flat.length });
-    }
-  }
-  return flat;
-}
-
-const flatImages = buildFlatList(galleryData);
-const categories = ["All", ...Object.keys(galleryData)];
-
-function prettify(str: string) {
-  return str
-    .split(" ")
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-    .join(" ");
-}
+const flatImages = images.map((src, index) => ({
+  src,
+  fullSrc: src.replace(CLOUD_THUMB, CLOUD_FULL),
+  index,
+}));
 
 function Lightbox({
   image,
@@ -93,15 +54,13 @@ function Lightbox({
   onNext,
   current,
   total,
-  allImages,
 }: {
-  image: FlatImage;
+  image: { src: string; fullSrc: string; index: number };
   onClose: () => void;
   onPrev: () => void;
   onNext: () => void;
   current: number;
   total: number;
-  allImages: FlatImage[];
 }) {
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -113,20 +72,19 @@ function Lightbox({
     return () => window.removeEventListener("keydown", handler);
   }, [onClose, onPrev, onNext]);
 
-  // preload prev and next full res images
+  // preload prev and next
   useEffect(() => {
-    const prevSrc = allImages[(current - 1 + total) % total]?.fullSrc;
-    const nextSrc = allImages[(current + 1) % total]?.fullSrc;
-
+    const prevSrc = flatImages[(current - 1 + total) % total]?.fullSrc;
+    const nextSrc = flatImages[(current + 1) % total]?.fullSrc;
     if (prevSrc) {
-      const prev = new window.Image();
-      prev.src = prevSrc;
+      const p = new window.Image();
+      p.src = prevSrc;
     }
     if (nextSrc) {
-      const next = new window.Image();
-      next.src = nextSrc;
+      const n = new window.Image();
+      n.src = nextSrc;
     }
-  }, [current, total, allImages]);
+  }, [current, total]);
 
   return (
     <motion.div
@@ -159,7 +117,7 @@ function Lightbox({
           <img
             key={image.fullSrc}
             src={image.fullSrc}
-            alt={image.category}
+            alt={`Gallery image ${current + 1}`}
             className="w-full h-auto object-contain max-h-[80vh]"
             loading="eager"
             fetchPriority="high"
@@ -168,12 +126,7 @@ function Lightbox({
         </div>
 
         <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent px-6 py-5">
-          <p
-            className={`text-white font-bold text-sm md:text-base ${zenDots.className} line-clamp-1`}
-          >
-            {prettify(image.category)}
-          </p>
-          <p className="text-white/50 text-xs mt-0.5">
+          <p className="text-white/50 text-xs">
             {current + 1} / {total}
           </p>
         </div>
@@ -212,39 +165,22 @@ function Lightbox({
 }
 
 export default function GalleryPage() {
-  const [activeCategory, setActiveCategory] = useState("All");
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
-
-  const filteredImages =
-    activeCategory === "All"
-      ? flatImages
-      : flatImages.filter((img) => img.category === activeCategory);
-
-  const openLightbox = (globalIndex: number) => {
-    const posInFiltered = filteredImages.findIndex(
-      (img) => img.globalIndex === globalIndex
-    );
-    setLightboxIndex(posInFiltered);
-  };
 
   const closeLightbox = useCallback(() => setLightboxIndex(null), []);
 
   const goPrev = useCallback(() => {
     setLightboxIndex((i) =>
-      i === null
-        ? null
-        : (i - 1 + filteredImages.length) % filteredImages.length
+      i === null ? null : (i - 1 + flatImages.length) % flatImages.length
     );
-  }, [filteredImages.length]);
+  }, []);
 
   const goNext = useCallback(() => {
-    setLightboxIndex((i) =>
-      i === null ? null : (i + 1) % filteredImages.length
-    );
-  }, [filteredImages.length]);
+    setLightboxIndex((i) => (i === null ? null : (i + 1) % flatImages.length));
+  }, []);
 
   const currentImage =
-    lightboxIndex !== null ? filteredImages[lightboxIndex] : null;
+    lightboxIndex !== null ? flatImages[lightboxIndex] : null;
 
   return (
     <div className="min-h-screen max-w-7xl mx-auto bg-background">
@@ -268,90 +204,42 @@ export default function GalleryPage() {
         </div>
       </section>
 
-      <section className="container mx-auto px-4 mb-10">
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2, duration: 0.5 }}
-        >
-          <div className="flex gap-2 overflow-x-auto pb-2 sm:flex-wrap sm:justify-center scrollbar-none">
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
-                className={`shrink-0 px-4 py-2 rounded-full text-xs md:text-sm font-semibold border transition-all duration-200 capitalize whitespace-nowrap sm:whitespace-normal sm:text-center ${
-                  activeCategory === cat
-                    ? "bg-primary text-primary-foreground border-primary shadow-md"
-                    : "bg-background text-muted-foreground border-border hover:border-primary/50 hover:text-foreground"
-                }`}
-              >
-                {cat === "All" ? "All Photos" : prettify(cat)}
-              </button>
-            ))}
-          </div>
-        </motion.div>
-      </section>
-
       <section className="container mx-auto px-4 pb-20">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeCategory}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-3 space-y-3"
-          >
-            {filteredImages.map((image, index) => (
-              <motion.div
-                key={image.src}
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  duration: 0.35,
-                  delay: Math.min(index * 0.04, 0.6),
-                }}
-                className="break-inside-avoid group relative rounded-xl overflow-hidden cursor-pointer shadow-sm hover:shadow-xl transition-shadow duration-300"
-                onClick={() => openLightbox(image.globalIndex)}
-                onMouseEnter={() => {
-                  // preload full res on hover so lightbox is instant
-                  const img = new window.Image();
-                  img.src = image.fullSrc;
-                }}
-              >
-                <img
-                  src={image.src}
-                  alt={image.category}
-                  loading={index < 8 ? "eager" : "lazy"}
-                  decoding="async"
-                  className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-3">
-                  <p
-                    className={`text-white font-bold text-xs ${zenDots.className} line-clamp-2`}
-                  >
-                    {prettify(image.category)}
-                  </p>
-                </div>
-
-                <div className="absolute top-2 right-2 bg-black/50 backdrop-blur-sm rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                  <ZoomIn className="h-3.5 w-3.5 text-white" />
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-        </AnimatePresence>
-
-        {filteredImages.length === 0 && (
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-center text-muted-foreground py-20 text-lg"
-          >
-            No images in this category.
-          </motion.p>
-        )}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3 }}
+          className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-3 space-y-3"
+        >
+          {flatImages.map((image, index) => (
+            <motion.div
+              key={image.src}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: 0.35,
+                delay: Math.min(index * 0.04, 0.6),
+              }}
+              className="break-inside-avoid group relative rounded-xl overflow-hidden cursor-pointer shadow-sm  transition-shadow duration-300"
+              onClick={() => setLightboxIndex(index)}
+              onMouseEnter={() => {
+                const img = new window.Image();
+                img.src = image.fullSrc;
+              }}
+            >
+              <img
+                src={image.src}
+                alt={`Gallery image ${index + 1}`}
+                loading={index < 8 ? "eager" : "lazy"}
+                decoding="async"
+                className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+              <div className="absolute top-2 right-2 bg-black/50 backdrop-blur-sm rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                <ZoomIn className="h-3.5 w-3.5 text-white" />
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
       </section>
 
       <AnimatePresence>
@@ -362,8 +250,7 @@ export default function GalleryPage() {
             onPrev={goPrev}
             onNext={goNext}
             current={lightboxIndex}
-            total={filteredImages.length}
-            allImages={filteredImages}
+            total={flatImages.length}
           />
         )}
       </AnimatePresence>
