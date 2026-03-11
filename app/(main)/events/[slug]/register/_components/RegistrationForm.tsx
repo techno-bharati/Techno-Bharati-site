@@ -490,9 +490,18 @@ export default function RegistrationForm({
                   </FormLabel>
                   <FormControl>
                     <Input
+                      maxLength={5}
+                      inputMode="numeric"
+                      pattern="[0-9]*"
                       placeholder="Enter receipt number from college office"
                       autoComplete="off"
                       {...field}
+                      onChange={(e) => {
+                        const value = e.target.value
+                          .replace(/\D/g, "")
+                          .slice(0, 5);
+                        field.onChange(value);
+                      }}
                       disabled={isPending}
                     />
                   </FormControl>
