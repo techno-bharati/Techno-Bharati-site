@@ -314,7 +314,15 @@ const baseUserRegistrationFormSchema = z
       required_error: "Please select a payment mode",
     }),
     department: z.enum(
-      ["AIML", "CSE", "MECHANICAL", "CIVIL", "ENTC", "OTHER"],
+      [
+        "AIML",
+        "CSE",
+        "MECHANICAL",
+        "CIVIL",
+        "ENTC",
+        "GENERAL ENGINEERING",
+        "OTHER",
+      ],
       {
         required_error: "Please select a department",
       }

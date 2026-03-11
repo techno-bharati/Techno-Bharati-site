@@ -218,6 +218,10 @@ export default function RegistrationForm({
                     <SelectItem value="MECHANICAL">MECHANICAL</SelectItem>
                     <SelectItem value="CIVIL">CIVIL</SelectItem>
                     <SelectItem value="ENTC">ENTC</SelectItem>
+                    <SelectItem value="GENERAL ENGINEERING">
+                      {" "}
+                      GENERAL ENGINEERING
+                    </SelectItem>
                     <SelectItem value="OTHER">OTHER</SelectItem>
                   </SelectContent>
                 </Select>

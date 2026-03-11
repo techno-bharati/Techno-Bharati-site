@@ -78,6 +78,7 @@ const departmentMap: Record<FormData["department"], Department> = {
   MECHANICAL: Department.MECHANICAL,
   CIVIL: Department.CIVIL,
   ENTC: Department.ENTC,
+  "GENERAL ENGINEERING": Department.GENERAL_ENGINEERING,
   OTHER: Department.OTHER,
 };
 
