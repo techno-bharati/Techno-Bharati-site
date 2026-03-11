@@ -285,11 +285,17 @@ function buildRegistrationData(data: FormData, baseData: BaseData) {
         email: d.players[0].email,
         contactNumber: d.players[0].contactNumber,
         players: {
-          create: d.players.map((p) => ({
-            playerName: p.playerName,
-            bgmiId: p.bgmiId,
-            contactNumber: p.contactNumber,
-          })),
+          create: data.players
+            .filter(
+              (p): p is { playerName: string; bgmiId: string } =>
+                !!p.playerName && !!p.bgmiId
+            )
+            .map((p, index) => ({
+              playerName: p.playerName ?? "",
+              bgmiId: p.bgmiId ?? "",
+              contactNumber:
+                index === 0 ? d.players[0].contactNumber : undefined,
+            })),
         },
       };
     }

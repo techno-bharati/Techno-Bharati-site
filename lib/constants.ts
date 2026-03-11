@@ -29,7 +29,7 @@ export const EVENT_FEES: Record<string, EventFee> = {
     type: "per team",
   },
   FREEFIRE: {
-    amount: 100,
+    amount: 500,
     type: "per team",
   },
   AI_TALES: {
@@ -158,7 +158,7 @@ export const CSE_AIML_EVENTS: Event[] = [
     date: "25th March 2026",
     time: "9:15 AM - 4:15 PM",
     venue: "Bharati Vidyapeeth College of Engineering, Kolhapur",
-    entryFee: `${EVENT_FEES.BGMI.amount} (per team)`,
+    entryFee: `${EVENT_FEES.BGMI.amount} (per squad)`,
     type: "Non-Technical Event",
     icon: "/event-card/aiml/bgmi.jpeg",
     description:
@@ -352,7 +352,7 @@ export const GENERAL_ENGINEERING_EVENTS: Event[] = [
     date: "25th March 2026",
     time: "9:15 AM - 4:15 PM",
     venue: "Bharati Vidyapeeth College of Engineering, Kolhapur",
-    entryFee: `${EVENT_FEES.FREEFIRE.amount} (per team)`,
+    entryFee: `${EVENT_FEES.FREEFIRE.amount} (per squad)`,
     type: "Non-Technical Event",
     icon: "/event-card/gs/freefire.jpg",
     description:

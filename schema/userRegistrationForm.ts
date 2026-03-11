@@ -63,40 +63,58 @@ const bgmiSchema = z.object({
     }),
 });
 
-const fireFireBattleshipSchema = z.object({
+const playerBase = z.object({
+  playerName: z.string().min(1, "Player name is required").optional(),
+  bgmiId: z.string().min(1, "FreeFire ID is required").optional(),
+  email: z
+    .string({ required_error: "Squad Leader email address is required" })
+    .email("Invalid email address")
+    .optional(),
+  contactNumber: z
+    .string({ required_error: "Squad Leader contact number is required" })
+    .regex(indianPhoneRegex, "Enter valid contact number")
+    .optional(),
+});
+
+const requiredPlayerSchema = z.object({
+  playerName: z
+    .string({ required_error: "Name is required" })
+    .min(1, "Player name is required"),
+
+  bgmiId: z
+    .string({ required_error: "FreeFire ID is required" })
+    .min(1, "FreeFire ID is required"),
+});
+
+const squadLeaderSchema = requiredPlayerSchema.extend({
+  email: z
+    .string({ required_error: "Squad Leader email address is required" })
+    .email("Invalid email address"),
+
+  contactNumber: z
+    .string({
+      required_error: "Squad Leader contact number is required",
+    })
+    .regex(indianPhoneRegex, "Enter valid contact number"),
+});
+
+const optionalPlayerSchema = z.object({
+  playerName: z.string().optional(),
+  bgmiId: z.string().optional(),
+});
+
+export const freeFireBattleshipSchema = z.object({
   squadName: z
     .string({ required_error: "Squad name is required" })
     .min(1, "Squad name is required"),
-  players: z
-    .array(
-      z.object({
-        playerName: z
-          .string({ required_error: "Name is required" })
-          .min(1, "Player name is required"),
-        bgmiId: z
-          .string({ required_error: "FreeFire ID is required" })
-          .min(1, "FreeFire ID is required"),
-        email: z
-          .string({ required_error: "Squad Leader email address is required" })
-          .email("Invalid email address")
-          .optional(),
-        contactNumber: z
-          .string({
-            required_error: "Squad Leader contact number is required",
-          })
-          .regex(indianPhoneRegex, "Enter valid contact number")
-          .optional(),
-      })
-    )
-    .length(4, "Exactly 4 players are required")
-    .refine((players) => !!players[0]?.email, {
-      message: "Squad leader's email is required",
-      path: [0, "email"],
-    })
-    .refine((players) => !!players[0]?.contactNumber, {
-      message: "Squad leader's contact number is required",
-      path: [0, "contactNumber"],
-    }),
+
+  players: z.tuple([
+    squadLeaderSchema,
+    requiredPlayerSchema,
+    requiredPlayerSchema,
+    requiredPlayerSchema,
+    optionalPlayerSchema,
+  ]),
 });
 
 const standardRegistrationSchema = z.object({
@@ -345,10 +363,10 @@ const baseUserRegistrationFormSchema = z
       z
         .object({ events: z.literal("Python Frontiers") })
         .merge(standardRegistrationSchema),
-      z.object({ events: z.literal("BGMI") }).merge(fireFireBattleshipSchema),
+      z.object({ events: z.literal("BGMI") }).merge(bgmiSchema),
       z
         .object({ events: z.literal("FreeFire") })
-        .merge(fireFireBattleshipSchema),
+        .merge(freeFireBattleshipSchema),
       z.object({ events: z.literal("AI Tales") }).merge(aiTalesSchema),
       z
         .object({ events: z.literal("ENTC Project Expo") })
