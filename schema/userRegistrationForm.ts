@@ -27,42 +27,6 @@ const startupSphereSchema = z.object({
     .optional(),
 });
 
-const bgmiSchema = z.object({
-  squadName: z
-    .string({ required_error: "Squad name is required" })
-    .min(1, "Squad name is required"),
-  players: z
-    .array(
-      z.object({
-        playerName: z
-          .string({ required_error: "Name is required" })
-          .min(1, "Player name is required"),
-        bgmiId: z
-          .string({ required_error: "BGMI ID is required" })
-          .min(1, "BGMI ID is required"),
-        email: z
-          .string({ required_error: "Squad Leader email address is required" })
-          .email("Invalid email address")
-          .optional(),
-        contactNumber: z
-          .string({
-            required_error: "Squad Leader contact number is required",
-          })
-          .regex(indianPhoneRegex, "Enter valid contact number")
-          .optional(),
-      })
-    )
-    .length(4, "Exactly 4 players are required")
-    .refine((players) => !!players[0]?.email, {
-      message: "Squad leader's email is required",
-      path: [0, "email"],
-    })
-    .refine((players) => !!players[0]?.contactNumber, {
-      message: "Squad leader's contact number is required",
-      path: [0, "contactNumber"],
-    }),
-});
-
 const playerBase = z.object({
   playerName: z.string().min(1, "Player name is required").optional(),
   bgmiId: z.string().min(1, "FreeFire ID is required").optional(),
@@ -114,6 +78,42 @@ export const freeFireBattleshipSchema = z.object({
     requiredPlayerSchema,
     requiredPlayerSchema,
     optionalPlayerSchema,
+  ]),
+});
+
+const bgmiRequiredPlayerSchema = z.object({
+  playerName: z
+    .string({ required_error: "Name is required" })
+    .min(1, "Player name is required"),
+  bgmiId: z
+    .string({ required_error: "BGMI ID is required" })
+    .min(1, "BGMI ID is required"),
+});
+
+const bgmiSquadLeaderSchema = bgmiRequiredPlayerSchema.extend({
+  email: z
+    .string({ required_error: "Squad Leader email address is required" })
+    .email("Invalid email address"),
+  contactNumber: z
+    .string({ required_error: "Squad Leader contact number is required" })
+    .regex(indianPhoneRegex, "Enter valid contact number"),
+});
+
+const bgmiOptionalPlayerSchema = z.object({
+  playerName: z.string().optional(),
+  bgmiId: z.string().optional(),
+});
+
+const bgmiSchema = z.object({
+  squadName: z
+    .string({ required_error: "Squad name is required" })
+    .min(1, "Squad name is required"),
+  players: z.tuple([
+    bgmiSquadLeaderSchema,
+    bgmiRequiredPlayerSchema,
+    bgmiRequiredPlayerSchema,
+    bgmiRequiredPlayerSchema,
+    bgmiOptionalPlayerSchema,
   ]),
 });
 

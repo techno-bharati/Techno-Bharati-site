@@ -14,7 +14,8 @@ import type { FormValues } from "@/hooks/useRegistrationForm";
 import RequiredAsterisk from "@/components/RequiredAstrick";
 
 interface SquadEventFieldsProps {
-  form: UseFormReturn<FormValues>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  form: UseFormReturn<any>;
   isPending: boolean;
   selectedEvent?: "BGMI" | "FreeFire";
 }
@@ -28,7 +29,6 @@ export function SquadEventFields({
   const idPlaceholder =
     selectedEvent === "FreeFire" ? "Enter FreeFire ID" : "Enter BGMI ID";
 
-  const playerCount = selectedEvent === "FreeFire" ? 5 : 4;
   return (
     <>
       <FormField
@@ -55,13 +55,11 @@ export function SquadEventFields({
         <h3 className="font-semibold">Squad Players</h3>
 
         <FormDescription>
-          {selectedEvent === "FreeFire"
-            ? "5 players required"
-            : "4 players required"}
+          4 players required · 5th player is optional
         </FormDescription>
 
         <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
-          {Array.from({ length: playerCount }).map((_, index) => {
+          {Array.from({ length: 5 }).map((_, index) => {
             const isOptionalPlayer = index === 4;
             return (
               <div key={index} className="space-y-4 p-4 border rounded-xl">
