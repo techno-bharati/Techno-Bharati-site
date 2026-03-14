@@ -11,7 +11,6 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { useState, useEffect } from "react";
 import {
   Select,
@@ -29,9 +28,7 @@ import {
   Building2,
   GraduationCap,
   CreditCard,
-  Calendar,
   CheckCircle2,
-  Receipt,
   IdCard,
   Trophy,
   IndianRupee,
@@ -44,14 +41,13 @@ import {
   TeamMember,
   Player,
 } from "@/prisma/generated/prisma/client";
-import { removeItem } from "motion/react";
 
 interface VerifyDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   registration: Registration & {
-    players?: Player[]; // For squad events
-    teamMembers?: TeamMember[]; // For team events
+    players?: Player[];
+    teamMembers?: TeamMember[];
   };
 }
 
@@ -90,73 +86,47 @@ export function VerifyDialog({
 
   const { mutate: verifyRegistration, isPending } = useMutation({
     mutationFn: async () => {
-      if (!registration) return;
+      const verifyRes = await fetch(`/api/registrations/verify`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ registrationId: registration.id }),
+      });
+      if (!verifyRes.ok) throw new Error("Failed to verify registration");
+      const verifiedRegistration = await verifyRes.json();
 
-      try {
-        const verifyRes = await fetch(`/api/registrations/verify`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ registrationId: registration.id }),
-        });
-
-        if (!verifyRes.ok) {
-          throw new Error("Failed to verify registration");
-        }
-
-        const verifiedRegistration = await verifyRes.json();
-
-        const emailRes = await fetch("/api/send-email", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ registration: verifiedRegistration }),
-        });
-
-        if (!emailRes.ok) {
-          console.error("Failed to send confirmation email");
-          toast.error(
-            "Registration verified but failed to send confirmation email"
-          );
-          return verifiedRegistration;
-        }
-
+      const emailRes = await fetch("/api/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ registration: verifiedRegistration }),
+      });
+      if (!emailRes.ok) {
+        toast.error(
+          "Registration verified but failed to send confirmation email"
+        );
         return verifiedRegistration;
-      } catch (error) {
-        console.error("Verification error:", error);
-        throw error;
       }
+      return verifiedRegistration;
     },
     onSuccess: () => {
       toast.success("Registration verified and confirmation email sent");
       queryClient.invalidateQueries({ queryKey: ["registrations"] });
       onOpenChange(false);
     },
-    onError: (error) => {
-      console.error("Verification error:", error);
-      toast.error("Failed to verify registration. Please try again.");
-    },
+    onError: () =>
+      toast.error("Failed to verify registration. Please try again."),
   });
 
   const { mutate: updatePaymentMode, isPending: isUpdating } = useMutation({
     mutationFn: async () => {
       const res = await fetch("/api/registrations/updatePaymentMode", {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           registrationId: registration.id,
           paymentMode: selectedPaymentMode,
         }),
       });
-
-      if (!res.ok) {
-        throw new Error("Failed to update payment mode");
-      }
-
+      if (!res.ok) throw new Error("Failed to update payment mode");
       return res.json();
     },
     onSuccess: () => {
@@ -164,10 +134,7 @@ export function VerifyDialog({
       queryClient.invalidateQueries({ queryKey: ["registrations"] });
       onOpenChange(false);
     },
-    onError: (error) => {
-      console.error("Error updating payment mode:", error);
-      toast.error("Failed to update payment mode");
-    },
+    onError: () => toast.error("Failed to update payment mode"),
   });
 
   if (!registration || !open) return null;
@@ -181,11 +148,8 @@ export function VerifyDialog({
     : [];
 
   const hasTeam = Boolean(registration.teamName) || teamMembers.length > 0;
-
   const isIndividual = !hasSquad && !hasTeam;
 
-  // For team events, treat the main registration as the team leader.
-  // Leader name comes from registration.studentName and contact from primary contact details.
   const primaryLeader = registration.studentName
     ? {
         id: "primary-leader",
@@ -215,26 +179,22 @@ export function VerifyDialog({
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="max-w-5xl xl:max-w-6xl h-[95vh] bg-background/95 backdrop-blur-sm flex flex-col overflow-hidden border shadow-2xl rounded-xl">
-          <DialogHeader className="flex-shrink-0 border-b pb-4">
+        <DialogContent className="max-w-5xl xl:max-w-6xl h-[95vh] bg-background/95 backdrop-blur-sm flex flex-col overflow-hidden border shadow-2xl rounded-xl p-0">
+          <DialogHeader className="flex-shrink-0 border-b px-6 py-4">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div>
-                  <DialogTitle className="text-2xl font-bold">
-                    Registration Details
-                  </DialogTitle>
-                </div>
-              </div>
+              <DialogTitle className="text-2xl font-bold">
+                Registration Details
+              </DialogTitle>
               <Badge
                 variant="outline"
-                className={`px-4 py-1.5 text-sm font-semibold mx-4 ${getStatusColor(registration.status)}`}
+                className={`px-4 py-1.5 mx-4 text-sm font-semibold ${getStatusColor(registration.status)}`}
               >
                 {registration.status}
               </Badge>
             </div>
           </DialogHeader>
 
-          <ScrollArea className="flex-grow px-1">
+          <div className="flex-1 overflow-y-auto">
             <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 p-6">
               <div className="xl:col-span-2 space-y-6">
                 <Card className="rounded-xl">
@@ -244,58 +204,65 @@ export function VerifyDialog({
                       Event Information
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4 rounded-xl">
-                    <div className="space-y-3">
-                      <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-xl">
-                        <Trophy className="w-4 h-4 text-muted-foreground" />
-                        <div>
-                          <p className="text-xs text-muted-foreground uppercase tracking-wide">
-                            Event Name
-                          </p>
-                          <p className="font-semibold text-lg">
-                            {registration.eventType.replace(/_/g, " ")}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-xl">
-                        <Building2 className="w-4 h-4 text-muted-foreground" />
-                        <div>
-                          <p className="text-xs text-muted-foreground uppercase tracking-wide">
-                            College
-                          </p>
-                          <p className="font-semibold capitalize">
-                            {registration.collegeName}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="space-y-3">
-                      <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-xl">
-                        <GraduationCap className="w-4 h-4 text-muted-foreground" />
-                        <div>
-                          <p className="text-xs text-muted-foreground uppercase tracking-wide">
-                            Department
-                          </p>
-                          <p className="font-semibold">
-                            {registration.department}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-xl">
-                        <IdCard className="w-4 h-4 text-muted-foreground" />
-                        <div>
-                          <p className="text-xs text-muted-foreground uppercase tracking-wide">
-                            Class
-                          </p>
-                          <p className="font-semibold capitalize">
-                            {registration.class}
-                          </p>
-                        </div>
+                  <CardContent>
+                    <div className="flex items-center gap-3 p-4 bg-primary/5 border border-primary/20 rounded-xl">
+                      <Trophy className="w-5 h-5 text-primary shrink-0" />
+                      <div>
+                        <p className="text-xs text-muted-foreground uppercase tracking-wide mb-0.5">
+                          Event Name
+                        </p>
+                        <p className="font-bold text-xl text-primary">
+                          {registration.eventType.replace(/_/g, " ")}
+                        </p>
                       </div>
                     </div>
                   </CardContent>
                 </Card>
-                {/* payment info card */}
+
+                <Card className="rounded-xl">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-lg flex items-center gap-2">
+                      <GraduationCap className="w-5 h-5 text-primary" />
+                      Student Details
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-xl">
+                      <Building2 className="w-4 h-4 text-muted-foreground mt-0.5 shrink-0" />
+                      <div>
+                        <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">
+                          College
+                        </p>
+                        <p className="font-semibold capitalize text-sm leading-snug">
+                          {registration.collegeName}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-xl">
+                      <GraduationCap className="w-4 h-4 text-muted-foreground mt-0.5 shrink-0" />
+                      <div>
+                        <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">
+                          Department
+                        </p>
+                        <p className="font-semibold text-sm">
+                          {registration.department}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-xl">
+                      <IdCard className="w-4 h-4 text-muted-foreground mt-0.5 shrink-0" />
+                      <div>
+                        <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">
+                          Year
+                        </p>
+                        <p className="font-semibold capitalize text-sm">
+                          {registration.class}
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
                 <Card className="rounded-xl">
                   <CardHeader className="pb-3">
                     <CardTitle className="text-lg flex items-center gap-2">
@@ -317,7 +284,7 @@ export function VerifyDialog({
                         <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">
                           Date
                         </p>
-                        <p className="font-semibold">
+                        <p className="font-semibold text-sm">
                           {new Date(registration.createdAt).toLocaleDateString(
                             "en-IN",
                             {
@@ -368,7 +335,7 @@ export function VerifyDialog({
                     )}
                   </CardContent>
                 </Card>
-                {/* participants info card */}
+
                 {isIndividual && (
                   <Card className="rounded-xl">
                     <CardHeader className="pb-3">
@@ -379,7 +346,7 @@ export function VerifyDialog({
                     </CardHeader>
                     <CardContent>
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div className="p-3 bg-muted/50 rounded-lg">
+                        <div className="p-3 bg-muted/50 rounded-xl">
                           <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">
                             Full Name
                           </p>
@@ -387,7 +354,7 @@ export function VerifyDialog({
                             {registration.studentName}
                           </p>
                         </div>
-                        <div className="p-3 bg-muted/50 rounded-lg">
+                        <div className="p-3 bg-muted/50 rounded-xl">
                           <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1 flex items-center gap-1">
                             <Mail className="w-3 h-3" /> Email
                           </p>
@@ -395,7 +362,7 @@ export function VerifyDialog({
                             {registration.email}
                           </p>
                         </div>
-                        <div className="p-3 bg-muted/50 rounded-lg">
+                        <div className="p-3 bg-muted/50 rounded-xl">
                           <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1 flex items-center gap-1">
                             <Phone className="w-3 h-3" /> Contact
                           </p>
@@ -407,7 +374,7 @@ export function VerifyDialog({
                     </CardContent>
                   </Card>
                 )}
-                {/* Squad info - BGMI/FreeFire events */}
+
                 {hasSquad && (
                   <Card className="rounded-xl">
                     <CardHeader className="pb-3">
@@ -427,8 +394,6 @@ export function VerifyDialog({
                           </p>
                         </div>
                       )}
-
-                      {/* Primary Contact - from registration (squad leader's main contact) */}
                       <div className="p-4 bg-muted/50 rounded-xl border border-muted">
                         <p className="text-xs text-muted-foreground uppercase tracking-wide mb-2">
                           Primary Contact (Squad Leader)
@@ -517,7 +482,7 @@ export function VerifyDialog({
                     </CardContent>
                   </Card>
                 )}
-                {/* team info card */}
+
                 {hasTeam && (
                   <Card className="rounded-xl">
                     <CardHeader className="pb-3">
@@ -539,7 +504,7 @@ export function VerifyDialog({
                           </div>
                         )}
                         {registration.startupCategory && (
-                          <div className="p-4 bg-muted/50 rounded-lg">
+                          <div className="p-4 bg-muted/50 rounded-xl">
                             <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">
                               Category
                             </p>
@@ -550,7 +515,6 @@ export function VerifyDialog({
                         )}
                       </div>
 
-                      {/* Primary Contact - from registration level */}
                       {(registration.email || registration.contactNumber) && (
                         <div className="p-4 bg-muted/50 rounded-xl border border-muted">
                           <p className="text-xs text-muted-foreground uppercase tracking-wide mb-2">
@@ -581,7 +545,6 @@ export function VerifyDialog({
                         </div>
                       )}
 
-                      {/* Team Members - All members including team leader in one list */}
                       {allTeamMembers.length > 0 && (
                         <div className="space-y-3">
                           <div className="flex items-center justify-between">
@@ -594,87 +557,88 @@ export function VerifyDialog({
                             </Badge>
                           </div>
                           <div className="grid gap-3">
-                            {allTeamMembers.map(
-                              (member: any, index: number) => {
-                                const isLeader = !!primaryLeader && index === 0;
-                                return (
-                                  <div
-                                    key={member.id ?? `member-${index}`}
-                                    className={`p-4 rounded-xl border ${
-                                      isLeader
-                                        ? "bg-primary/10 border-primary/30"
-                                        : "bg-muted/30 border-muted"
-                                    }`}
-                                  >
-                                    <div className="flex items-center gap-2 mb-3">
-                                      {isLeader ? (
-                                        <Badge className="bg-primary text-white">
-                                          Team Leader
-                                        </Badge>
-                                      ) : (
-                                        <Badge
-                                          variant="secondary"
-                                          className="text-xs"
-                                        >
-                                          Member {index + 1}
-                                        </Badge>
-                                      )}
+                            {allTeamMembers.map((member, index: number) => {
+                              const isLeader = !!primaryLeader && index === 0;
+                              return (
+                                <div
+                                  key={
+                                    "id" in member
+                                      ? member.id
+                                      : `member-${index}`
+                                  }
+                                  className={`p-4 rounded-xl border ${
+                                    isLeader
+                                      ? "bg-primary/10 border-primary/30"
+                                      : "bg-muted/30 border-muted"
+                                  }`}
+                                >
+                                  <div className="flex items-center gap-2 mb-3">
+                                    {isLeader ? (
+                                      <Badge className="bg-primary text-white text-xs">
+                                        Team Leader
+                                      </Badge>
+                                    ) : (
+                                      <Badge
+                                        variant="secondary"
+                                        className="text-xs"
+                                      >
+                                        Member {index + 1}
+                                      </Badge>
+                                    )}
+                                  </div>
+                                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <div>
+                                      <p className="text-xs text-muted-foreground">
+                                        Name
+                                      </p>
+                                      <p className="font-semibold">
+                                        {member.studentName || "N/A"}
+                                      </p>
                                     </div>
-                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                      <div>
-                                        <p className="text-xs text-muted-foreground">
-                                          Name
-                                        </p>
-                                        <p className="font-semibold">
-                                          {member.studentName || "N/A"}
-                                        </p>
-                                      </div>
-                                      <div>
-                                        <p className="text-xs text-muted-foreground flex items-center gap-1">
-                                          <Mail className="w-3 h-3" /> Email
-                                        </p>
-                                        <p className="font-semibold text-sm break-all">
-                                          {member.email ||
-                                            (isLeader && registration.email) ||
-                                            "N/A"}
-                                        </p>
-                                      </div>
-                                      <div>
-                                        <p className="text-xs text-muted-foreground flex items-center gap-1">
-                                          <Phone className="w-3 h-3" /> Contact
-                                        </p>
-                                        <p className="font-semibold">
-                                          {member.contactNumber ||
-                                            (isLeader &&
-                                              registration.contactNumber) ||
-                                            "N/A"}
-                                        </p>
-                                      </div>
+                                    <div>
+                                      <p className="text-xs text-muted-foreground flex items-center gap-1">
+                                        <Mail className="w-3 h-3" /> Email
+                                      </p>
+                                      <p className="font-semibold text-sm break-all">
+                                        {member.email ||
+                                          (isLeader && registration.email) ||
+                                          "N/A"}
+                                      </p>
+                                    </div>
+                                    <div>
+                                      <p className="text-xs text-muted-foreground flex items-center gap-1">
+                                        <Phone className="w-3 h-3" /> Contact
+                                      </p>
+                                      <p className="font-semibold">
+                                        {member.contactNumber ||
+                                          (isLeader &&
+                                            registration.contactNumber) ||
+                                          "N/A"}
+                                      </p>
                                     </div>
                                   </div>
-                                );
-                              }
-                            )}
+                                </div>
+                              );
+                            })}
                           </div>
                         </div>
                       )}
                     </CardContent>
                   </Card>
-                )}{" "}
+                )}
               </div>
 
-              {/* Right Column - Payment Screenshot */}
               <div className="xl:col-span-1">
-                <Card className="shadow-sm sticky top-0 rounded-xl">
+                <Card className="sticky top-0 rounded-xl">
                   <CardHeader className="pb-3">
                     <CardTitle className="text-lg flex items-center gap-2">
                       <IndianRupee className="w-5 h-5 text-primary" />
                       Payment Screenshot
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="rounded-xl">
+                  <CardContent>
                     <div
-                      className="relative aspect-[3/4] w-full bg-muted rounded-lg overflow-hidden cursor-pointer group border-2 border-dashed border-muted-foreground/25 hover:border-primary/50 transition-colors"
+                      className="relative aspect-[3/4] w-full bg-zinc-800 rounded-xl overflow-hidden cursor-pointer group border border-zinc-700 hover:border-primary/60 transition-colors"
                       onClick={() => setShowImageDialog(true)}
                     >
                       <Image
@@ -684,20 +648,20 @@ export function VerifyDialog({
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                         className="object-contain p-2 group-hover:scale-105 transition-transform duration-300"
                       />
-                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
-                        <p className="text-white opacity-0 group-hover:opacity-100 transition-opacity font-semibold drop-shadow-lg">
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-end justify-center pb-4">
+                        <p className="text-white text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity bg-black/60 px-3 py-1.5 rounded-full">
                           Click to enlarge
                         </p>
                       </div>
                     </div>
-                    <p className="text-xs text-muted-foreground text-center mt-3">
+                    <p className="text-xs text-zinc-500 text-center mt-3">
                       Click image to view in full size
                     </p>
                   </CardContent>
                 </Card>
               </div>
             </div>
-          </ScrollArea>
+          </div>
 
           <div className="flex-shrink-0 border-t bg-muted/30">
             <DialogFooter className="p-6 gap-3">
@@ -775,8 +739,8 @@ export function VerifyDialog({
               strokeLinecap="round"
               strokeLinejoin="round"
             >
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
             </svg>
           </button>
         </DialogContent>
