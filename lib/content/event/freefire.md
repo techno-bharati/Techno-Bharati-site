@@ -11,18 +11,21 @@ description: Welcome to the ultimate FreeFire Champion's Battle Squad Tournament
 
 ## Registration
 
-- Registration deadline: **25th March 2026, 5:00 PM**
-- Spot registrations allowed until: **25th March 2026, 11:00 AM**
-- **Entry fee: ₹100 per team**
+- **Entry fee: ₹500 per squad**
 - Participants must provide a valid **email ID and contact number** during registration
 - Late registrations will **not** be entertained after the cutoff time
 
-#### Registration Format
+## Registration Format
 
 - Player Name
 - FreeFire ID
 - Squad Name _(if applicable)_
 - Contact Number
+
+## Rounds
+
+- Qualifiers Round: **March 21, 2026**
+- Final Round: **March 25, 2026** (Open only to teams that qualified on March 21st)
 
 ## Queries
 

@@ -15,7 +15,7 @@ description: Python Frontiers is a high-intensity inter-college coding competiti
 
 ##### Round 2 — Coding
 
-- **2 questions** | Time limit: **1 hour 10 minutes**
+- **2 questions** | Time limit: **1 hour 15 minutes**
 
 ## Registration
 
