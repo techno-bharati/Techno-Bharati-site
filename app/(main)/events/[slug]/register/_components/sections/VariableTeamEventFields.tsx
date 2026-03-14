@@ -50,7 +50,7 @@ export function VariableTeamEventFields({
   );
 
   return (
-    <>
+    <div className="space-y-3">
       <FormField
         control={form.control}
         name="teamName"
@@ -126,6 +126,6 @@ export function VariableTeamEventFields({
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }

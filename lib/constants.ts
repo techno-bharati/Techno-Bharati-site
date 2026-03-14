@@ -92,6 +92,10 @@ export const EVENT_FEES: Record<string, EventFee> = {
     amount: 100,
     type: "per person",
   },
+  GE_TECHNO_SCIENCE_QUIZ: {
+    amount: 100,
+    type: "per person",
+  },
   //mech
   MECH_PROJECT_EXPO: {
     amount: 100,
@@ -189,7 +193,7 @@ export const CSE_EVENTS: Event[] = [
     date: "25th March 2026",
     time: "9:15 AM - 4:15 PM",
     venue: "Bharati Vidyapeeth College of Engineering, Kolhapur",
-    entryFee: "100",
+    entryFee: `${EVENT_FEES.CSE_PROJECT_EXPO.amount} (per person)`,
     type: "Technical Event",
     icon: "/event-card/cse/project-expo.png",
     description:
@@ -203,7 +207,7 @@ export const CSE_EVENTS: Event[] = [
     date: "25th March 2026",
     time: "9:15 AM - 4:15 PM",
     venue: "Bharati Vidyapeeth College of Engineering, Kolhapur",
-    entryFee: "100",
+    entryFee: "100 (per person)",
     type: "Non-Technical Event",
     icon: "/event-card/cse/treasure-hunt.png",
     description:
