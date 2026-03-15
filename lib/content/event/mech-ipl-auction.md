@@ -17,4 +17,4 @@ description: Mech IPL Auction is a strategic team-based competition inspired by 
 
 #### Student Coordinator
 
-- **Mr. Pratik Toraskar** — [7057855701](tel:7057855701)
+- **Mr. Nitin Desai** — [8432825001](tel:8432825001)
