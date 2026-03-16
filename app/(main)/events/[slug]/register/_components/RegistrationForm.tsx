@@ -71,9 +71,7 @@ function Section({
         <Separator className="flex-1" />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {children}
-      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">{children}</div>
     </div>
   );
 }
