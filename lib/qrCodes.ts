@@ -57,7 +57,7 @@ const EVENT_QR_DEPARTMENT: Partial<Record<EventName, QRDepartment>> = {
   "Mech IPL Auction": "mech",
 };
 
-const SINGLE_QR_DEPARTMENTS = new Set<QRDepartment>(["civil", "entc"]);
+const SINGLE_QR_DEPARTMENTS = new Set<QRDepartment>(["civil", "entc", "aiml"]);
 
 const VALID_AMOUNTS = [100, 200, 300, 400, 500] as const;
 
