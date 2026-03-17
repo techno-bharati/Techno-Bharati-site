@@ -601,7 +601,7 @@ export default function RegistrationForm({
                   setPaymentMode("OFFLINE");
                   form.setValue(
                     "transactionId",
-                    undefined as unknown as number,
+                    undefined as unknown as string,
                     { shouldValidate: true }
                   );
                 }}
@@ -636,7 +636,7 @@ export default function RegistrationForm({
                           const raw = e.target.value
                             .replace(/\D/g, "")
                             .slice(0, 12);
-                          field.onChange(raw === "" ? undefined : Number(raw));
+                          field.onChange(raw === "" ? undefined : raw);
                         }}
                         onBlur={field.onBlur}
                         disabled={isPending}

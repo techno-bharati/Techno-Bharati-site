@@ -10,7 +10,11 @@ import {
   CIVIL_TECHNICAL_FEE,
   getEventFeeByName,
 } from "@/lib/constants";
-import { EventType, Department } from "@/prisma/generated/prisma/client";
+import {
+  EventType,
+  Department,
+  Prisma,
+} from "@/prisma/generated/prisma/client";
 
 type FormData = z.infer<typeof userRegistrationFormSchema>;
 
@@ -45,6 +49,18 @@ type CreateRegistrationInput = Omit<FormData, "payss"> & {
   payss?: File;
   paymentScreenshotUrl?: string;
 };
+
+type CreateRegistrationResult =
+  | { success: true; data: { id: string } }
+  | {
+      success: false;
+      error: string;
+      code?:
+        | "DUPLICATE_TRANSACTION_ID"
+        | "DUPLICATE_RECEIPT_NUMBER"
+        | "DUPLICATE_REGISTRATION"
+        | "UNIQUE_CONSTRAINT_FAILED";
+    };
 
 const eventTypeMap: Record<FormData["events"], EventType> = {
   "Startup Sphere": EventType.STARTUP_SPHERE,
@@ -177,7 +193,19 @@ function calculateTotalFee(data: FormData): number {
   return getEventFeeByName(events, 1) ?? 0;
 }
 
-export async function createRegistration(formData: CreateRegistrationInput) {
+function normalizeTransactionLikeId(value: string | null | undefined): string {
+  if (!value) return "";
+  return value.trim().replace(/\s+/g, "").toUpperCase();
+}
+
+function normalizePersonName(value: string | null | undefined): string {
+  if (!value) return "";
+  return value.trim().replace(/\s+/g, " ");
+}
+
+export async function createRegistration(
+  formData: CreateRegistrationInput
+): Promise<CreateRegistrationResult> {
   try {
     let paymentScreenshotUrl: string;
     if (formData.paymentScreenshotUrl) {
@@ -196,21 +224,107 @@ export async function createRegistration(formData: CreateRegistrationInput) {
 
     const amount = calculateTotalFee(data);
 
+    const rawTransactionLikeId =
+      data.paymentMode === "ONLINE" && data.transactionId != null
+        ? String(data.transactionId)
+        : data.paymentMode === "OFFLINE" && data.receiptNumber
+          ? data.receiptNumber
+          : null;
+
+    const normalizedTransactionLikeId =
+      normalizeTransactionLikeId(rawTransactionLikeId);
+
     const baseData = {
       collegeName: data.collegeName,
       eventType: eventTypeMap[data.events],
       paymentScreenshot: paymentScreenshotUrl,
       paymentMode: data.paymentMode,
-      transactionId:
-        data.paymentMode === "ONLINE" && data.transactionId != null
-          ? String(data.transactionId)
-          : data.paymentMode === "OFFLINE" && data.receiptNumber
-            ? data.receiptNumber
-            : null,
+      transactionId: normalizedTransactionLikeId
+        ? normalizedTransactionLikeId
+        : null,
       amount,
       department: departmentMap[data.department],
       class: data.class,
     };
+    if (baseData.transactionId) {
+      const existingByTxn = await prisma.registration.findFirst({
+        where: {
+          eventType: baseData.eventType,
+          transactionId: baseData.transactionId,
+        },
+        select: { id: true, createdAt: true, paymentMode: true },
+      });
+
+      if (existingByTxn) {
+        const isOffline = data.paymentMode === "OFFLINE";
+        return {
+          success: false,
+          code: isOffline
+            ? "DUPLICATE_RECEIPT_NUMBER"
+            : "DUPLICATE_TRANSACTION_ID",
+          error: isOffline
+            ? "This receipt number is already used for this event."
+            : "This transaction ID is already used for this event.",
+        };
+      }
+    }
+
+    const eventType = baseData.eventType;
+    const transactionLikeId = baseData.transactionId;
+
+    if (transactionLikeId) {
+      const studentName = normalizePersonName(
+        (data as { studentName?: string | null }).studentName
+      );
+      const teamLeaderName = normalizePersonName(
+        (data as { teamLeader?: { studentName?: string | null } | null })
+          .teamLeader?.studentName
+      );
+      const squadLeaderEmail = String(
+        (data as { email?: string | null }).email ?? ""
+      ).trim();
+
+      const or: Array<Record<string, unknown>> = [];
+      if (studentName) {
+        or.push({
+          studentName: { equals: studentName, mode: "insensitive" },
+        });
+      }
+      if (teamLeaderName) {
+        or.push({
+          teamLeader: {
+            is: {
+              studentName: { equals: teamLeaderName, mode: "insensitive" },
+            },
+          },
+        });
+      }
+      if (squadLeaderEmail) {
+        or.push({
+          email: { equals: squadLeaderEmail, mode: "insensitive" },
+        });
+      }
+
+      if (or.length > 0) {
+        const existingSamePerson = await prisma.registration.findFirst({
+          where: {
+            eventType,
+            transactionId: transactionLikeId,
+            OR: or,
+          },
+          select: { id: true },
+        });
+
+        if (existingSamePerson) {
+          return {
+            success: false,
+            code: "DUPLICATE_REGISTRATION",
+            error:
+              "A registration for this event already exists with the same payment reference.",
+          };
+        }
+      }
+    }
 
     try {
       const registration = await prisma.registration.create({
@@ -223,12 +337,40 @@ export async function createRegistration(formData: CreateRegistrationInput) {
       return { success: true, data: { id: registration.id } };
     } catch (error) {
       console.error("Registration error:", error);
+
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === "P2002"
+      ) {
+        const targetRaw = error.meta?.target;
+        const target = Array.isArray(targetRaw)
+          ? (targetRaw as string[])
+          : typeof targetRaw === "string"
+            ? [targetRaw]
+            : [];
+
+        if (target.includes("transactionId")) {
+          return {
+            success: false,
+            code: "DUPLICATE_TRANSACTION_ID",
+            error:
+              "This UPI Transaction ID has already been used. Please use a different payment.",
+          };
+        }
+
+        const isOffline = data.paymentMode === "OFFLINE";
+        return {
+          success: false,
+          code: "UNIQUE_CONSTRAINT_FAILED",
+          error: isOffline
+            ? "Receipt number in your offline payment is already used in another registration. Please verify it and try again."
+            : "UPI Transaction ID in your online payment is already used in another registration. Please verify it and try again.",
+        };
+      }
+
       return {
         success: false,
-        error:
-          error instanceof Error
-            ? error.message
-            : "Failed to create registration",
+        error: "Failed to create registration. Please try again.",
       };
     }
   } catch (error) {

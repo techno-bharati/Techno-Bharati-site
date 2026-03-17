@@ -341,13 +341,9 @@ const baseUserRegistrationFormSchema = z
         "File must be an image"
       ),
     transactionId: z
-      .number()
-      .refine(
-        (n) =>
-          n === undefined ||
-          (Number.isInteger(n) && n >= 100_000_000_000 && n <= 999_999_999_999),
-        { message: "Transaction ID must be exactly 12 digits" }
-      )
+      .string()
+      .regex(/^\d{1,12}$/, "Transaction ID must be numeric")
+      .max(12, { message: "Transaction ID must be exactly 12 digits" })
       .optional(),
     receiptNumber: z.string().optional(),
   })
@@ -502,25 +498,18 @@ export const userRegistrationFormSchema =
     }
 
     if (data.paymentMode === "ONLINE") {
-      if (data.transactionId === undefined || data.transactionId === null) {
+      if (!data.transactionId) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           path: ["transactionId"],
           message: "Transaction ID is required for online payment",
         });
-      } else {
-        const n = data.transactionId;
-        if (
-          !Number.isInteger(n) ||
-          n < 100_000_000_000 ||
-          n > 999_999_999_999
-        ) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            path: ["transactionId"],
-            message: "Transaction ID must be exactly 12 digits",
-          });
-        }
+      } else if (!/^\d{12}$/.test(String(data.transactionId))) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["transactionId"],
+          message: "Transaction ID must be exactly 12 digits",
+        });
       }
     }
 

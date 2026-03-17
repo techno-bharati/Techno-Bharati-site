@@ -457,6 +457,7 @@ export type RegistrationOrderByWithRelationInput = {
 export type RegistrationWhereUniqueInput = Prisma.AtLeast<
   {
     id?: string;
+    transactionId?: string;
     teamLeaderId?: string;
     AND?: Prisma.RegistrationWhereInput | Prisma.RegistrationWhereInput[];
     OR?: Prisma.RegistrationWhereInput[];
@@ -466,7 +467,6 @@ export type RegistrationWhereUniqueInput = Prisma.AtLeast<
     collegeName?: Prisma.StringFilter<"Registration"> | string;
     eventType?: Prisma.EnumEventTypeFilter<"Registration"> | $Enums.EventType;
     paymentScreenshot?: Prisma.StringFilter<"Registration"> | string;
-    transactionId?: Prisma.StringNullableFilter<"Registration"> | string | null;
     status?:
       | Prisma.EnumRegistrationStatusFilter<"Registration">
       | $Enums.RegistrationStatus;
@@ -516,7 +516,7 @@ export type RegistrationWhereUniqueInput = Prisma.AtLeast<
       Prisma.UserWhereInput
     > | null;
   },
-  "id" | "teamLeaderId"
+  "id" | "teamLeaderId" | "transactionId"
 >;
 
 export type RegistrationOrderByWithAggregationInput = {

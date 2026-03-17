@@ -262,9 +262,69 @@ export function useRegistrationForm({
           class: undefined,
         });
       } else {
-        toast.error("Something went wrong, please try again later.", {
-          id: "form-submit",
-        });
+        const code = (data as { code?: string }).code;
+        switch (code) {
+          case "DUPLICATE_TRANSACTION_ID":
+            toast.error(
+              "This UPI Transaction ID has already been used for a registration.",
+              {
+                id: "form-submit",
+                description:
+                  "Each payment can only be used once. If you paid again, please contact support.",
+                duration: 6000,
+              }
+            );
+            return;
+
+          case "DUPLICATE_RECEIPT_NUMBER":
+            toast.error("This receipt number has already been used.", {
+              id: "form-submit",
+              description:
+                "If you believe this is a mistake, please contact the registration desk.",
+              duration: 6000,
+            });
+            return;
+
+          case "DUPLICATE_REGISTRATION":
+            toast.error(
+              "A registration already exists with this payment reference.",
+              {
+                id: "form-submit",
+                description:
+                  "You may have already registered for this event. Check your email for a confirmation.",
+                duration: 6000,
+              }
+            );
+            return;
+
+          case "UNIQUE_CONSTRAINT_FAILED":
+            toast.error(
+              "Some of the information you entered is already used in another registration.",
+              {
+                id: "form-submit",
+                description:
+                  "Please double-check your payment details and try again.",
+                duration: 6000,
+              }
+            );
+            return;
+
+          default:
+            {
+              const rawMessage = data.error ?? "Something went wrong.";
+              const sanitizedMessage =
+                /prisma\.registration\.create\(\)|Unique constraint failed/i.test(
+                  rawMessage
+                )
+                  ? "Something went wrong while creating your registration. Please try again."
+                  : rawMessage;
+
+              toast.error(sanitizedMessage, {
+                id: "form-submit",
+              });
+            }
+            return;
+        }
       }
     },
     onError: (error: Error) => {
@@ -289,9 +349,7 @@ export function useRegistrationForm({
       if (!uploadedImageUrl) {
         const msg = uploadError
           ? "Please select the image again to retry upload"
-          : isUploading
-            ? "Please wait for the image to finish uploading"
-            : "Please wait for the image to finish uploading";
+          : "Please wait for the image to finish uploading";
         toast.error(msg, { id: "form-submit" });
         return;
       }
