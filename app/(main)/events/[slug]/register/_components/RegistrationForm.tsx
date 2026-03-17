@@ -254,7 +254,7 @@ export default function RegistrationForm({
                   </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="e.g. Bharati Vidyapeeth's College of Engineering"
+                      placeholder="Enter your college name"
                       {...field}
                       disabled={isPending}
                     />
