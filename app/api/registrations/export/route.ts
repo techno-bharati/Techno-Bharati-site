@@ -7,18 +7,37 @@ import {
   AdminRole,
   EventType,
   Department,
+  Registration,
+  TeamMember,
+  Player,
 } from "@/prisma/generated/prisma/client";
+import { Prisma } from "@/prisma/generated/prisma/client";
 
 interface JWTPayload {
   sub: string;
   email: string;
   role: AdminRole;
   eventType: EventType | null;
-  department: string | null;
+  department: Department | null;
 }
 
+type VerifiedBy = { name: string | null; email: string } | null;
+
+type RegistrationWithRelations = Registration & {
+  players: Player[];
+  teamMembers: TeamMember[];
+  teamLeader: TeamMember | null;
+  verifiedBy: VerifiedBy;
+};
+
 const DEPARTMENT_EVENT_TYPES: Partial<Record<Department, EventType[]>> = {
-  AIML: [EventType.FACE_TO_FACE, EventType.PYTHON_FRONTIERS, EventType.BGMI],
+  AIML: [
+    EventType.FACE_TO_FACE,
+    EventType.PYTHON_FRONTIERS,
+    EventType.BGMI,
+    EventType.AI_TALES,
+    EventType.STARTUP_SPHERE,
+  ],
   GENERAL_ENGINEERING: [
     EventType.GE_TECHNO_SCIENCE_QUIZ,
     EventType.GE_POSTER_COMPETITION,
@@ -30,6 +49,7 @@ const DEPARTMENT_EVENT_TYPES: Partial<Record<Department, EventType[]>> = {
     EventType.CE_MODEL_MAKING,
     EventType.CE_CAD_MASTER,
     EventType.CE_VIDEOGRAPHY,
+    EventType.CE_BATTLE_OF_BRAINS,
   ],
   CSE: [
     EventType.CSE_CODEFUSION,
@@ -48,146 +68,139 @@ const DEPARTMENT_EVENT_TYPES: Partial<Record<Department, EventType[]>> = {
   ],
 };
 
-// Clean sheet name: "CSE_CODEFUSION" → "CSE Codefusion" (max 31 chars for Excel)
+const SQUAD_EVENT_TYPES = new Set<EventType>([
+  EventType.BGMI,
+  EventType.FREEFIRE,
+]);
+
+const TEAM_EVENT_TYPES = new Set<EventType>([
+  EventType.STARTUP_SPHERE,
+  EventType.ENTC_PROJECT_EXPO,
+  EventType.ENTC_DIGITAL_DANGAL,
+  EventType.CSE_CODEFUSION,
+  EventType.CSE_PROJECT_EXPO,
+  EventType.CSE_TREASURE_HUNT,
+  EventType.CE_MODEL_MAKING,
+  EventType.CE_CAD_MASTER,
+  EventType.CE_VIDEOGRAPHY,
+  EventType.CE_BATTLE_OF_BRAINS,
+  EventType.MECH_PROJECT_EXPO,
+  EventType.MECH_JUNK_YARD,
+  EventType.MECH_IPL_AUCTION,
+  EventType.GE_SCITECH_MODEL_EXPO,
+  EventType.GE_POSTER_COMPETITION,
+]);
+
 function toSheetName(eventType: string): string {
   return eventType
     .replace(/_/g, " ")
     .toLowerCase()
     .replace(/\b\w/g, (c) => c.toUpperCase())
-    .slice(0, 31);
+    .slice(0, 31); // Excel sheet name limit
 }
 
-// Squad events (BGMI, FreeFire)
-function mapSquadReg(reg: any) {
+function mapSquadReg(reg: RegistrationWithRelations): Record<string, string> {
+  const p = reg.players;
   return {
-    "Registration ID": reg.id,
     "College Name": reg.collegeName,
-    "Squad Name": reg.squadName || "",
-    Status: reg.status,
-    "Payment Mode": reg.paymentMode || "",
-    "Transaction ID": reg.transactionId || "",
+    Year: reg.class ?? "",
+    "Squad Name": reg.squadName ?? "",
+    "Payment Mode": reg.paymentMode,
+    "Transaction ID / Receipt Number": reg.transactionId?.toString() ?? "",
     Amount: `₹${reg.amount}`,
-    // Player 1 (Leader)
-    "Player 1 Name": reg.players?.[0]?.playerName || "",
-    "Player 1 Game ID": reg.players?.[0]?.bgmiId || "",
-    "Player 1 Contact":
-      reg.players?.[0]?.contactNumber || reg.contactNumber || "",
-    // Player 2
-    "Player 2 Name": reg.players?.[1]?.playerName || "",
-    "Player 2 Game ID": reg.players?.[1]?.bgmiId || "",
-    "Player 2 Contact": reg.players?.[1]?.contactNumber || "",
-    // Player 3
-    "Player 3 Name": reg.players?.[2]?.playerName || "",
-    "Player 3 Game ID": reg.players?.[2]?.bgmiId || "",
-    "Player 3 Contact": reg.players?.[2]?.contactNumber || "",
-    // Player 4
-    "Player 4 Name": reg.players?.[3]?.playerName || "",
-    "Player 4 Game ID": reg.players?.[3]?.bgmiId || "",
-    "Player 4 Contact": reg.players?.[3]?.contactNumber || "",
-    "Verified By": reg.verifiedBy?.name || "Not Verified",
-    "Verified At": reg.verifiedAt
-      ? new Date(reg.verifiedAt).toLocaleString()
-      : "",
+    // player 1 (Squad Leader)
+    "Player 1 Name": p[0]?.playerName ?? "",
+    "Player 1 Game ID": p[0]?.bgmiId ?? "",
+    "Player 1 Contact": p[0]?.contactNumber ?? reg.contactNumber ?? "",
+    // player 2
+    "Player 2 Name": p[1]?.playerName ?? "",
+    "Player 2 Game ID": p[1]?.bgmiId ?? "",
+    "Player 2 Contact": p[1]?.contactNumber ?? "",
+    // player 3
+    "Player 3 Name": p[2]?.playerName ?? "",
+    "Player 3 Game ID": p[2]?.bgmiId ?? "",
+    "Player 3 Contact": p[2]?.contactNumber ?? "",
+    // player 4
+    "Player 4 Name": p[3]?.playerName ?? "",
+    "Player 4 Game ID": p[3]?.bgmiId ?? "",
+    "Player 4 Contact": p[3]?.contactNumber ?? "",
     "Registered At": new Date(reg.registrationDate).toLocaleString(),
-    Notes: reg.notes || "",
+    Notes: reg.notes ?? "",
   };
 }
 
-// Team events (with teamLeader + teamMembers)
-function mapTeamReg(reg: any) {
+function mapTeamReg(reg: RegistrationWithRelations): Record<string, string> {
+  const m = reg.teamMembers;
   return {
-    "Registration ID": reg.id,
     "College Name": reg.collegeName,
-    "Team Name": reg.teamName || "",
-    "Team Size": reg.numberOfTeamMembers || "",
+    Year: reg.class ?? "",
+    "Team Name": reg.teamName ?? "",
+    "Team Size": reg.numberOfTeamMembers?.toString() ?? "",
     Status: reg.status,
-    "Payment Mode": reg.paymentMode || "",
-    "Transaction ID": reg.transactionId || "",
+    "Payment Mode": reg.paymentMode,
+    "Transaction ID / Receipt Number": reg.transactionId?.toString() ?? "",
     Amount: `₹${reg.amount}`,
-    // Leader
-    "Leader Name": reg.teamLeader?.studentName || reg.studentName || "",
-    "Leader Contact": reg.teamLeader?.contactNumber || reg.contactNumber || "",
-    "Leader Email": reg.teamLeader?.email || reg.email || "",
-    // Members
-    "Member 1 Name": reg.teamMembers?.[0]?.studentName || "",
-    "Member 1 Contact": reg.teamMembers?.[0]?.contactNumber || "",
-    "Member 1 Email": reg.teamMembers?.[0]?.email || "",
-    "Member 2 Name": reg.teamMembers?.[1]?.studentName || "",
-    "Member 2 Contact": reg.teamMembers?.[1]?.contactNumber || "",
-    "Member 2 Email": reg.teamMembers?.[1]?.email || "",
-    "Member 3 Name": reg.teamMembers?.[2]?.studentName || "",
-    "Member 3 Contact": reg.teamMembers?.[2]?.contactNumber || "",
-    "Member 3 Email": reg.teamMembers?.[2]?.email || "",
-    "Member 4 Name": reg.teamMembers?.[3]?.studentName || "",
-    "Member 4 Contact": reg.teamMembers?.[3]?.contactNumber || "",
-    "Member 4 Email": reg.teamMembers?.[3]?.email || "",
-    "Verified By": reg.verifiedBy?.name || "Not Verified",
-    "Verified At": reg.verifiedAt
-      ? new Date(reg.verifiedAt).toLocaleString()
-      : "",
+    // leader — prefer teamLeader relation; fall back to registration-level fields
+    "Leader Name": reg.teamLeader?.studentName ?? reg.studentName ?? "",
+    "Leader Contact": reg.teamLeader?.contactNumber ?? reg.contactNumber ?? "",
+    "Leader Email": reg.teamLeader?.email ?? reg.email ?? "",
+    // members
+    "Member 1 Name": m[0]?.studentName ?? "",
+    "Member 1 Contact": m[0]?.contactNumber ?? "",
+    "Member 1 Email": m[0]?.email ?? "",
+    "Member 2 Name": m[1]?.studentName ?? "",
+    "Member 2 Contact": m[1]?.contactNumber ?? "",
+    "Member 2 Email": m[1]?.email ?? "",
+    "Member 3 Name": m[2]?.studentName ?? "",
+    "Member 3 Contact": m[2]?.contactNumber ?? "",
+    "Member 3 Email": m[2]?.email ?? "",
+    "Member 4 Name": m[3]?.studentName ?? "",
+    "Member 4 Contact": m[3]?.contactNumber ?? "",
+    "Member 4 Email": m[3]?.email ?? "",
     "Registered At": new Date(reg.registrationDate).toLocaleString(),
-    Notes: reg.notes || "",
+    Notes: reg.notes ?? "",
   };
 }
 
-// Solo events
-function mapSoloReg(reg: any) {
+function mapSoloReg(reg: RegistrationWithRelations): Record<string, string> {
   return {
-    "Registration ID": reg.id,
     "College Name": reg.collegeName,
-    "Student Name": reg.studentName || "",
-    "Contact Number": reg.contactNumber || "",
-    Email: reg.email || "",
+    Year: reg.class ?? "",
+    "Student Name": reg.studentName ?? "",
+    "Contact Number": reg.contactNumber ?? "",
+    Email: reg.email ?? "",
     Status: reg.status,
-    "Payment Mode": reg.paymentMode || "",
-    "Transaction ID": reg.transactionId || "",
+    "Payment Mode": reg.paymentMode,
+    "Transaction ID / Receipt Number": reg.transactionId?.toString() ?? "",
     Amount: `₹${reg.amount}`,
-    "Verified By": reg.verifiedBy?.name || "Not Verified",
-    "Verified At": reg.verifiedAt
-      ? new Date(reg.verifiedAt).toLocaleString()
-      : "",
+    "Verified By": reg.verifiedBy?.name ?? "Not Verified",
     "Registered At": new Date(reg.registrationDate).toLocaleString(),
-    Notes: reg.notes || "",
+    Notes: reg.notes ?? "",
   };
 }
 
-const SQUAD_EVENTS = ["BGMI", "FREEFIRE", "GE_GAMES_BUNDLE"];
-const TEAM_EVENTS = [
-  "FACE_TO_FACE",
-  "PYTHON_FRONTIERS",
-  "ENTC_PROJECT_EXPO",
-  "ENTC_DIGITAL_DANGAL",
-  "CSE_CODEFUSION",
-  "CSE_PROJECT_EXPO",
-  "CSE_TREASURE_HUNT",
-  "CE_MODEL_MAKING",
-  "CE_CAD_MASTER",
-  "CE_VIDEOGRAPHY",
-  "CE_BATTLE_OF_BRAINS",
-  "MECH_PROJECT_EXPO",
-  "MECH_JUNK_YARD",
-  "MECH_IPL_AUCTION",
-  "GE_SCITECH_MODEL_EXPO",
-];
-
-function mapReg(reg: any) {
-  if (SQUAD_EVENTS.includes(reg.eventType)) return mapSquadReg(reg);
-  if (TEAM_EVENTS.includes(reg.eventType)) return mapTeamReg(reg);
+function mapReg(reg: RegistrationWithRelations): Record<string, string> {
+  if (SQUAD_EVENT_TYPES.has(reg.eventType)) return mapSquadReg(reg);
+  if (TEAM_EVENT_TYPES.has(reg.eventType)) return mapTeamReg(reg);
   return mapSoloReg(reg);
 }
 
-function appendSheet(wb: XLSX.WorkBook, data: any[], sheetName: string) {
+function appendSheet(
+  wb: XLSX.WorkBook,
+  data: Record<string, string>[],
+  sheetName: string
+): void {
   if (!data.length) return;
   const ws = XLSX.utils.json_to_sheet(data);
   ws["!cols"] = Object.keys(data[0]).map(() => ({ wch: 22 }));
   XLSX.utils.book_append_sheet(wb, ws, sheetName);
 }
 
-export async function GET(req: Request) {
+export async function GET(req: Request): Promise<NextResponse> {
   try {
     const { searchParams } = new URL(req.url);
     const eventTypeParam = searchParams.get("eventType");
-    const department = searchParams.get("department");
+    const departmentParam = searchParams.get("department");
     const paymentMode = searchParams.get("paymentMode");
     const search = searchParams.get("search");
 
@@ -203,7 +216,7 @@ export async function GET(req: Request) {
     );
     const payload = verified.payload as unknown as JWTPayload;
 
-    const where: Record<string, unknown> = {};
+    const where: Prisma.RegistrationWhereInput = {};
 
     if (payload.role === AdminRole.EVENT_ADMIN && payload.eventType) {
       where.eventType = payload.eventType;
@@ -212,32 +225,31 @@ export async function GET(req: Request) {
         where.eventType = eventTypeParam as EventType;
       }
 
-      const departmentForFilter =
-        department &&
-        department !== "all" &&
-        payload.role === AdminRole.SUPER_ADMIN
-          ? (department as Department)
+      const resolvedDept: Department | null =
+        payload.role === AdminRole.SUPER_ADMIN &&
+        departmentParam &&
+        departmentParam !== "all"
+          ? (departmentParam as Department)
           : payload.role === AdminRole.DEPARTMENT_ADMIN && payload.department
-            ? (payload.department as Department)
+            ? payload.department
             : null;
 
-      if (departmentForFilter) {
+      if (resolvedDept) {
         let eventTypesForDept: EventType[] = [];
         try {
-          const eventsForDept = await prisma.event.findMany({
-            where: { department: departmentForFilter },
+          const rows = await prisma.event.findMany({
+            where: { department: resolvedDept },
             select: { eventType: true },
           });
-          eventTypesForDept = eventsForDept.map((e) => e.eventType);
+          eventTypesForDept = rows.map((r) => r.eventType);
         } catch {
           eventTypesForDept = [];
         }
-        if (
-          !eventTypesForDept.length &&
-          DEPARTMENT_EVENT_TYPES[departmentForFilter]
-        ) {
-          eventTypesForDept = DEPARTMENT_EVENT_TYPES[departmentForFilter]!;
+
+        if (!eventTypesForDept.length) {
+          eventTypesForDept = DEPARTMENT_EVENT_TYPES[resolvedDept] ?? [];
         }
+
         if (eventTypesForDept.length) {
           where.eventType = { in: eventTypesForDept };
         }
@@ -257,7 +269,7 @@ export async function GET(req: Request) {
       ];
     }
 
-    const registrations = await prisma.registration.findMany({
+    const registrations = (await prisma.registration.findMany({
       where,
       include: {
         teamLeader: true,
@@ -266,21 +278,17 @@ export async function GET(req: Request) {
         verifiedBy: { select: { name: true, email: true } },
       },
       orderBy: { createdAt: "desc" },
-    });
+    })) satisfies RegistrationWithRelations[];
 
-    // Group by eventType
-    const grouped = registrations.reduce(
-      (acc, reg) => {
-        if (!acc[reg.eventType]) acc[reg.eventType] = [];
-        acc[reg.eventType].push(reg);
-        return acc;
-      },
-      {} as Record<string, typeof registrations>
-    );
+    const grouped = registrations.reduce<
+      Record<string, RegistrationWithRelations[]>
+    >((acc, reg) => {
+      (acc[reg.eventType] ??= []).push(reg);
+      return acc;
+    }, {});
 
     const wb = XLSX.utils.book_new();
 
-    // Sort event types alphabetically for consistent sheet order
     Object.keys(grouped)
       .sort()
       .forEach((eventType) => {
@@ -288,7 +296,6 @@ export async function GET(req: Request) {
         appendSheet(wb, data, toSheetName(eventType));
       });
 
-    // Nothing matched filters
     if (!Object.keys(grouped).length) {
       const ws = XLSX.utils.json_to_sheet([
         { Message: "No registrations found for the selected filters." },
@@ -302,7 +309,9 @@ export async function GET(req: Request) {
       headers: {
         "Content-Type":
           "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        "Content-Disposition": `attachment; filename=registrations-${new Date().toISOString().split("T")[0]}.xlsx`,
+        "Content-Disposition": `attachment; filename=registrations-${
+          new Date().toISOString().split("T")[0]
+        }.xlsx`,
       },
     });
   } catch (error) {
