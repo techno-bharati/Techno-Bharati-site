@@ -111,7 +111,7 @@ function calculateTotalFee(data: FormData): number {
     return GENERAL_ENGINEERING_TECHNICAL_FEE;
   }
 
-  if (events === "Poster Competition" || events === "SciTech Model Expo 2K26") {
+  if (events === "Poster Competition") {
     const d = data as PosterCompetitionData | SciTechModelExpoData;
     const teamSize = d.participant2 ? 2 : 1;
     return getEventFeeByName(events, teamSize) ?? 0;
@@ -156,6 +156,11 @@ function calculateTotalFee(data: FormData): number {
 
   if (events === "Project Expo") {
     const d = data as ProjectExpoData;
+    return getEventFeeByName(events, d.numberOfTeamMembers) ?? 0;
+  }
+
+  if (events === "SciTech Model Expo 2K26") {
+    const d = data as SciTechModelExpoData;
     return getEventFeeByName(events, d.numberOfTeamMembers) ?? 0;
   }
 
@@ -446,7 +451,8 @@ function buildRegistrationData(data: FormData, baseData: BaseData) {
     case "Treasure Hunt":
     case "Project Expo":
     case "Mech Project Expo":
-    case "ENTC Project Expo": {
+    case "ENTC Project Expo":
+    case "SciTech Model Expo 2K26": {
       const d = data as TreasureHuntData;
       const extras = [
         d.participant2,
@@ -476,7 +482,6 @@ function buildRegistrationData(data: FormData, baseData: BaseData) {
     case "Digital Dangal":
     case "Snap & Shine":
     case "Poster Competition":
-    case "SciTech Model Expo 2K26":
     case "CAD Master":
     case "Model Making":
     case "Videography": {

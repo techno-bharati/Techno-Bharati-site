@@ -19,7 +19,6 @@ export const CODEFUSION_STYLE_EVENTS: EventName[] = [
   "CODEFUSION",
   "Snap & Shine",
   "Poster Competition",
-  "SciTech Model Expo 2K26",
   "CAD Master",
   "Videography",
   "Model Making",
@@ -107,6 +106,7 @@ export function useRegistrationForm({
       "Mech Project Expo",
       "Project Expo",
       "ENTC Project Expo",
+      "SciTech Model Expo 2k26",
     ];
     if (!selectedEvent || !dynamicEvents.includes(selectedEvent)) return;
 
@@ -214,6 +214,7 @@ export function useRegistrationForm({
       case "Project Expo":
       case "Mech Project Expo":
       case "ENTC Project Expo":
+      case "SciTech Model Expo 2K26":
       case "Treasure Hunt": {
         const cur = form.getValues("numberOfTeamMembers");
         if (!cur || cur < 2 || cur > 5) setDefault(2);

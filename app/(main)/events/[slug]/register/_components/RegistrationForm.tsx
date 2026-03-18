@@ -191,7 +191,8 @@ export default function RegistrationForm({
     selectedEvent === "Project Expo" ||
     selectedEvent === "Treasure Hunt" ||
     selectedEvent === "Mech Project Expo" ||
-    selectedEvent === "ENTC Project Expo";
+    selectedEvent === "ENTC Project Expo" ||
+    selectedEvent === "SciTech Model Expo 2K26";
   const isFixedTeamEvent = selectedEvent === "Mech IPL Auction";
   const isMechJunkYard = selectedEvent === "Mech Junk Yard";
   const hasParticipantSection =

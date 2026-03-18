@@ -194,6 +194,7 @@ const mechIplAuctionSchema = standardRegistrationSchema.extend({
 
 const mechProjectExpoSchema = projectExpoSchema;
 const cseProjectExpoSchema = projectExpoSchema;
+const sciTechExpoSchema = projectExpoSchema;
 
 const codefusionSchema = standardRegistrationSchema.extend({
   teamName: z
@@ -254,7 +255,6 @@ const battleOfBrainsSchema = standardRegistrationSchema.extend({
 });
 
 const posterCompetitonSchema = codefusionSchema;
-const sciTechExpoSchema = codefusionSchema;
 const snapAndShineSchema = codefusionSchema;
 const modelmakingSchema = codefusionSchema;
 const videographySchema = codefusionSchema;
