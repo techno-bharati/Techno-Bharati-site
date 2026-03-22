@@ -74,7 +74,7 @@ export function Sponsors() {
             className="flex gap-12 w-max"
             animate={{ x: ["0%", "-50%"] }}
             transition={{
-              duration: 18,
+              duration: 60,
               ease: "linear",
               repeat: Infinity,
             }}
