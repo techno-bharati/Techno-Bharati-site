@@ -571,4 +571,17 @@ export const eventImages = [
 
 export const Sponsors = [
   { src: "/sponsers/gfg.png", alt: "GeeksForGeeks", bg: true },
+  { src: "/sponsers/true.jpeg", alt: "Truecode", bg: true },
+  { src: "/sponsers/aditya.jpeg", alt: "Aditya Constructions", bg: true },
+  { src: "/sponsers/ankur.jpeg", alt: "Ankur Sevekari", bg: true },
+  { src: "/sponsers/esport.jpeg", alt: "Marathi Esports Community", bg: true },
+  { src: "/sponsers/mane.jpeg", alt: "Mane Engineers & Developers", bg: true },
+  {
+    src: "/sponsers/shivaji.jpeg",
+    alt: "Shivaj Contractor & Developer",
+    bg: true,
+  },
+  { src: "/sponsers/softron.jpeg", alt: "Softron", bg: true },
+  { src: "/sponsers/study.jpeg", alt: "Study Smart", bg: true },
+  { src: "/sponsers/wallstar.jpeg", alt: "Wallstar", bg: true },
 ];
