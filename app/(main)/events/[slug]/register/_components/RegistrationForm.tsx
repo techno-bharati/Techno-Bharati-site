@@ -44,7 +44,6 @@ import { SquadEventFields } from "./sections/SquadEventFields";
 import { DuoEventFields } from "./sections/DuoEventFields";
 import { VariableTeamEventFields } from "./sections/VariableTeamEventFields";
 import { FixedTeamEventFields } from "./sections/FixedTeamEventFields";
-import { MechJunkYardFields } from "./sections/MechJunkYardFields";
 import { PaymentQR } from "@/components/PaymentQr";
 
 function Section({
@@ -149,8 +148,6 @@ export default function RegistrationForm({
     setEntcDigitalDangalSecondParticipant,
     mechIplHasFourthMember,
     setMechIplHasFourthMember,
-    mechJunkYardHasThirdMember,
-    setMechJunkYardHasThirdMember,
     onSubmit,
     onError,
   } = useRegistrationForm({ initialEvent, initialSelectedGames });
@@ -475,32 +472,13 @@ export default function RegistrationForm({
                   />
                 )}
 
-                {isMechJunkYard && (
-                  <MechJunkYardFields
+                {isMechJunkYard && selectedEvent && (
+                  <VariableTeamEventFields
                     form={form}
                     isPending={isPending}
-                    hasThirdMember={mechJunkYardHasThirdMember}
-                    onToggleThirdMember={(checked) => {
-                      setMechJunkYardHasThirdMember(checked);
-                      form.setValue(
-                        "numberOfTeamMembers",
-                        (checked ? 3 : 2) as unknown as never,
-                        {
-                          shouldValidate: true,
-                          shouldDirty: true,
-                        }
-                      );
-                      if (!checked)
-                        form.setValue(
-                          "participant3",
-                          undefined as unknown as {
-                            studentName: string;
-                            contactNumber: string;
-                            email?: string;
-                          },
-                          { shouldValidate: true, shouldDirty: true }
-                        );
-                    }}
+                    minMembers={1}
+                    maxMembers={3}
+                    description="Minimum 1 and maximum 3 team members. Each participant is ₹100."
                   />
                 )}
               </div>

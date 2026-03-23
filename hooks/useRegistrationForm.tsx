@@ -46,8 +46,6 @@ export function useRegistrationForm({
     setEntcDigitalDangalSecondParticipant,
   ] = useState(false);
   const [mechIplHasFourthMember, setMechIplHasFourthMember] = useState(false);
-  const [mechJunkYardHasThirdMember, setMechJunkYardHasThirdMember] =
-    useState(false);
   const [paymentMode, setPaymentMode] = useState<"ONLINE" | "OFFLINE">(
     "ONLINE"
   );
@@ -107,6 +105,7 @@ export function useRegistrationForm({
       "Project Expo",
       "ENTC Project Expo",
       "SciTech Model Expo 2k26",
+      "Mech Junk Yard",
     ];
     if (!selectedEvent || !dynamicEvents.includes(selectedEvent)) return;
 
@@ -188,20 +187,6 @@ export function useRegistrationForm({
   }, [selectedEvent, mechIplHasFourthMember, form]);
 
   useEffect(() => {
-    if (selectedEvent !== "Mech Junk Yard") {
-      setMechJunkYardHasThirdMember(false);
-      form.setValue("participant3", undefined as unknown as ParticipantFields);
-      return;
-    }
-    if (!mechJunkYardHasThirdMember) {
-      form.setValue("participant3", undefined as unknown as ParticipantFields, {
-        shouldValidate: true,
-        shouldDirty: true,
-      });
-    }
-  }, [selectedEvent, mechJunkYardHasThirdMember, form]);
-
-  useEffect(() => {
     if (!selectedEvent) return;
 
     const setDefault = (value: number) =>
@@ -226,7 +211,7 @@ export function useRegistrationForm({
       }
       case "Mech Junk Yard": {
         const cur = form.getValues("numberOfTeamMembers");
-        if (!cur || cur < 2 || cur > 3) setDefault(2);
+        if (!cur || cur < 1 || cur > 3) setDefault(1);
         break;
       }
       case "Mech IPL Auction": {
@@ -389,8 +374,6 @@ export function useRegistrationForm({
     setEntcDigitalDangalSecondParticipant,
     mechIplHasFourthMember,
     setMechIplHasFourthMember,
-    mechJunkYardHasThirdMember,
-    setMechJunkYardHasThirdMember,
     onSubmit,
     onError,
   };

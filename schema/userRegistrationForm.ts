@@ -173,9 +173,9 @@ const mechJunkYardSchema = standardRegistrationSchema.extend({
     .min(3, "Team name should be atleast 3 characters long"),
   numberOfTeamMembers: z
     .number()
-    .min(2, "Minimum 2 team members are required")
+    .min(1, "Minimum 1 team member is required")
     .max(3, "Maximum 3 team members are allowed"),
-  participant2: participantSchema,
+  participant2: participantSchema.optional(),
   participant3: participantSchema.optional(),
 });
 
@@ -482,6 +482,16 @@ export const userRegistrationFormSchema =
 
     if (data.events === "Mech Junk Yard") {
       const total = data.numberOfTeamMembers;
+      if (total >= 2) {
+        if (!data.participant2 || !data.participant2.studentName?.trim()) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ["participant2", "studentName"],
+            message:
+              "Member 2 name is required when team has 2 or more members",
+          });
+        }
+      }
       if (total >= 3) {
         if (!data.participant3 || !data.participant3.studentName?.trim()) {
           ctx.addIssue({
