@@ -192,7 +192,19 @@ const mechIplAuctionSchema = standardRegistrationSchema.extend({
   participant4: participantSchema.optional(),
 });
 
-const mechProjectExpoSchema = projectExpoSchema;
+const mechProjectExpoSchema = standardRegistrationSchema.extend({
+  teamName: z
+    .string({ required_error: "Team name is required" })
+    .min(1, "Team name is required"),
+  numberOfTeamMembers: z
+    .number()
+    .min(1, "Minimum 1 team members are required")
+    .max(5, "Maximum 5 team members are allowed"),
+  participant2: participantSchema.optional(),
+  participant3: participantSchema.optional(),
+  participant4: participantSchema.optional(),
+  participant5: participantSchema.optional(),
+});
 const cseProjectExpoSchema = projectExpoSchema;
 const sciTechExpoSchema = projectExpoSchema;
 

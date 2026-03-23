@@ -212,7 +212,9 @@ export default function RegistrationForm({
   const getEventDescription = () =>
     selectedEvent === "Project Expo"
       ? "Minimum 2 and maximum 5 team members. Each participant is ₹100."
-      : "Minimum 2 and maximum 5 team members. Each participant is ₹100.";
+      : selectedEvent === "Mech Project Expo"
+        ? "Minimum 1 and maximum 5 team members. Each participant is ₹100"
+        : "Minimum 2 and maximum 5 team members. Each participant is ₹100";
 
   const paymentStep = hasParticipantSection ? 3 : 2;
 
@@ -434,7 +436,7 @@ export default function RegistrationForm({
                   <VariableTeamEventFields
                     form={form}
                     isPending={isPending}
-                    minMembers={2}
+                    minMembers={selectedEvent === "Mech Project Expo" ? 1 : 2}
                     maxMembers={selectedEvent === "Project Expo" ? 5 : 5}
                     description={getEventDescription()}
                   />

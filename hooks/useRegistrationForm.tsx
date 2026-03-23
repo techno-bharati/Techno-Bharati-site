@@ -212,12 +212,16 @@ export function useRegistrationForm({
 
     switch (selectedEvent) {
       case "Project Expo":
-      case "Mech Project Expo":
       case "ENTC Project Expo":
       case "SciTech Model Expo 2K26":
       case "Treasure Hunt": {
         const cur = form.getValues("numberOfTeamMembers");
         if (!cur || cur < 2 || cur > 5) setDefault(2);
+        break;
+      }
+      case "Mech Project Expo": {
+        const cur = form.getValues("numberOfTeamMembers");
+        if (!cur || cur < 1 || cur > 5) setDefault(1);
         break;
       }
       case "Mech Junk Yard": {
