@@ -458,7 +458,7 @@ export function VerifyDialog({
                                       </div>
                                       <div>
                                         <p className="text-xs text-muted-foreground">
-                                          BGMI ID
+                                          ID
                                         </p>
                                         <p className="font-mono font-semibold text-primary">
                                           {player.bgmiId}
